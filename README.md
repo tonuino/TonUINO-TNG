@@ -4,7 +4,13 @@ Die DIY Musikbox (nicht nur) für Kinder
 
 # Change Log
 
-## Version 3.0 (xx.xx.xxxx) noch WIP
+## Version 3.1 (13.10.2022)
+- Unterstützung für alle Platinen der Leiterkartenpiraten hinzugefügt (über einfaches #define in der TonUINO.ino konfigurierbar)
+  - TonUINO Classic
+  - All-in-One
+  - All-in-One Plus
+
+## Version 3.0 (xx.xx.xxxx) - by Boerge1
 - vollständiges Refactoring mit State Machine
 - Die Main-Loop läuft jetzt stabil mit 50 ms
 - Neues Feature: neuer Mode: Hörbuch einzeln (nur ein Titel wird gespielt und Fortschritt gespeichert
