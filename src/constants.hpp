@@ -3,6 +3,16 @@
 
 #include <Arduino.h>
 
+// Select the right PCB by uncommenting one of the following lines
+// Bitte die passende Platine durch entfernen der Kommentare in einer der folgenden Zeilen auswählen
+//#define TonUINO_Classic
+//#define ALLinONE
+//#define ALLinONE_Plus
+
+// uncomment the below line to enable five button support (already enabled for AiO and AiO+)
+// um dedizierte Lauter-/Leiserknöpfe zu haben bitte die nächste Zeile auskommentieren (Standard bei AiO und AiO+)
+//#define FIVEBUTTONS
+
 // ####### helper for level ############################
 
 enum class level : uint8_t

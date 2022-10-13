@@ -6,25 +6,23 @@
 #include "src/logger.hpp"
 #include "src/constants.hpp"
 
-// Select the right PCB by uncommenting one of the following lines
-// Bitte die passende Platine durch entfernen der Kommentare in einer der folgenden Zeilen auswählen
-//#define TonUINO_Classic
-//#define ALLinONE
-//#define ALLinONE_Plus
-
-// uncomment the below line to enable five button support (already enabled for AiO and AiO+)
-// um dedizierte Lauter-/Leiserknöpfe zu haben bitte die nächste Zeile auskommentieren (Standard bei AiO und AiO+)
-//#define FIVEBUTTONS
-
 /*
    _____         _____ _____ _____ _____
   |_   _|___ ___|  |  |     |   | |     |
     | | | . |   |  |  |-   -| | | |  |  |
     |_| |___|_|_|_____|_____|_|___|_____|
-    TonUINO Version 3.0 - refactored by Boerge1
+    TonUINO Version 3.1 - refactored by Boerge1
 
     created by Thorsten Voß and licensed under GNU/GPL.
     Information and contribution at https://tonuino.de.
+*/
+
+/*
+Please select your TonUINO PCB (Classic, AiO or AiO+) in file constants.hpp
+Right now you must use an older version of the DFPlayer Mini Mp3 by Makuna library (1.0.7)!
+
+Bitte wählt eure TonUINO-Platine (Classic, AiO oder AiO+) in der Datei constands.hpp
+Aktuell wird nur eine ältere Version der DFPlayer Mini Mp3 by Makuna Bibliothek (1.0.7) unterstützt!
 */
 
 void setup()
@@ -36,7 +34,7 @@ void setup()
   LOG(init_log, s_error, F("|_   _|___ ___|  |  |     |   | |     |"));
   LOG(init_log, s_error, F("  | | | . |   |  |  |-   -| | | |  |  |"));
   LOG(init_log, s_error, F("  |_| |___|_|_|_____|_____|_|___|_____|"));
-  LOG(init_log, s_error, F("TonUINO Version 3.0 - refactored by Boerge1\n"));
+  LOG(init_log, s_error, F("TonUINO Version 3.1 - refactored by Boerge1\n"));
   LOG(init_log, s_error, F("created by Thorsten Voß and licensed under GNU/GPL."));
   LOG(init_log, s_error, F("Information and contribution at https://tonuino.de.\n"));
 
