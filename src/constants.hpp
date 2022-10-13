@@ -119,6 +119,8 @@ inline constexpr uint8_t shutdownPin = 27;
 inline constexpr levelType shutdownPinType = levelType::activeHigh;
 inline constexpr uint8_t ampEnablePin = 19;
 inline constexpr levelType ampEnablePinType = levelType::activeLow;
+inline constexpr uint8_t usbAccessPin = 20;
+inline constexpr levelType usbAccessPinType = levelType::activeHigh;
 inline constexpr uint8_t openAnalogPin = A7;
 inline constexpr unsigned long cycleTime = 50;
 #endif /* ALLinONE_Plus */
@@ -166,6 +168,8 @@ inline constexpr uint8_t shutdownPin = 7;
 inline constexpr levelType shutdownPinType = levelType::activeHigh;
 inline constexpr uint8_t ampEnablePin = 8;
 inline constexpr levelType ampEnablePinType = levelType::activeLow;
+inline constexpr uint8_t usbAccessPin = A5;
+inline constexpr levelType usbAccessPinType = levelType::activeHigh;
 inline constexpr uint8_t openAnalogPin = A0;
 inline constexpr unsigned long cycleTime = 50;
 #endif /* ALLinONE */

@@ -24,6 +24,14 @@ void Tonuino::setup()
   pinMode(shutdownPin, OUTPUT);
   digitalWrite(shutdownPin, getLevel(shutdownPinType, level::active));
 
+#if defined ALLinONE || defined ALLinONE_Plus
+  pinMode(ampEnablePin, OUTPUT);
+  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
+
+  pinMode(usbAccessPin, OUTPUT);
+  digitalWrite(usbAccessPin, getLevel(usbAccessPinType, level::inactive));
+#endif
+
   // load Settings from EEPROM
   settings.loadSettingsFromFlash();
 
