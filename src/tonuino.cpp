@@ -19,10 +19,10 @@ namespace
 
 void Tonuino::setup()
 {
-  randomSeed(generateRamdomSeed());
-
   pinMode(shutdownPin, OUTPUT);
   digitalWrite(shutdownPin, getLevel(shutdownPinType, level::active));
+
+  randomSeed(generateRamdomSeed());
 
 #if defined ALLinONE || defined ALLinONE_Plus
   pinMode(ampEnablePin, OUTPUT);
