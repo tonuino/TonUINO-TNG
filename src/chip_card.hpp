@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <MFRC522.h>
+
 #include "constants.hpp"
 
 enum class mode_t : uint8_t
@@ -44,9 +45,9 @@ struct folderSettings
   {
     return folder == rhs.folder &&
                    mode == rhs.mode &&
-                   (mode == mode_t::hoerspiel || mode == mode_t::album || mode == mode_t::party || mode == mode_t::einzel)
-               ? true
-               : (special == rhs.special && special2 == rhs.special2);
+                   (mode == mode_t::hoerspiel_vb || mode == mode_t::album_vb || mode == mode_t::party_vb)
+               ? (special == rhs.special && special2 == rhs.special2)
+               : true;
   }
 };
 
