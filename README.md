@@ -9,6 +9,7 @@ Die DIY Musikbox (nicht nur) für Kinder
   - TonUINO Classic
   - All-in-One
   - All-in-One Plus
+  - fix for NTAG213
 
 ## Version 3.0 (xx.xx.xxxx) - by Boerge1
 - vollständiges Refactoring mit State Machine

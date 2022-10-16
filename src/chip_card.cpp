@@ -146,7 +146,7 @@ bool Chip_card::readCard(nfcTagObject &nfcTag)
     for (byte block = 8, bufpos = 0; block <= 11; ++block, bufpos += 4)
     {
       byte size2 = sizeof(buffer2);
-      status = static_cast<MFRC522::StatusCode>(mfrc522.MIFARE_Read(8, buffer2, &size2));
+      status = static_cast<MFRC522::StatusCode>(mfrc522.MIFARE_Read(block, buffer2, &size2));
       if (status != MFRC522::STATUS_OK)
       {
         LOG(card_log, s_debug, str_MIFARE_Read(), block, str_failed(), printStatusCode(mfrc522, status));
@@ -257,9 +257,9 @@ void Chip_card::sleepCard()
 
 void Chip_card::initCard()
 {
-  SPI.begin();                                                    // Init SPI bus
-  mfrc522.PCD_Init();                                             // Init MFRC522
-  LOG_CODE(card_log, s_debug, mfrc522.PCD_DumpVersionToSerial()); // Show details of PCD - MFRC522 Card Reader
+  SPI.begin();                                                   // Init SPI bus
+  mfrc522.PCD_Init();                                            // Init MFRC522
+  LOG_CODE(card_log, s_info, mfrc522.PCD_DumpVersionToSerial()); // Show details of PCD - MFRC522 Card Reader
 }
 
 void Chip_card::stopCard()
