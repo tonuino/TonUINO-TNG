@@ -1148,6 +1148,9 @@ void Admin_Entry::entry()
   tonuino.disableStandbyTimer();
   tonuino.resetActiveModifier();
 
+  while (!buttons.isNoButton())
+    buttons.getButtonRaw();
+
   numberOfOptions = 13;
   startMessage = lastCurrentValue == 0 ? mp3Tracks::t_900_admin : mp3Tracks::t_919_continue_admin;
   messageOffset = mp3Tracks::t_900_admin;
