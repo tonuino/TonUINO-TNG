@@ -2,9 +2,7 @@
 #define SRC_CHIP_CARD_HPP_
 
 #include <stdint.h>
-
 #include <MFRC522.h>
-
 #include "constants.hpp"
 
 enum class mode_t : uint8_t
@@ -41,12 +39,14 @@ struct folderSettings
   mode_t mode;
   uint8_t special;
   uint8_t special2;
+
   bool operator==(const folderSettings &rhs) const
   {
     return folder == rhs.folder &&
-           mode == rhs.mode &&
-           special == rhs.special &&
-           special2 == rhs.special2;
+                   mode == rhs.mode &&
+                   (mode == mode_t::hoerspiel || mode == mode_t::album || mode == mode_t::party || mode == mode_t::einzel)
+               ? true
+               : (special == rhs.special && special2 == rhs.special2);
   }
 };
 
