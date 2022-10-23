@@ -3,13 +3,15 @@
 
 #include <Arduino.h>
 #include <DFMiniMp3.h>
+
 #include "constants.hpp"
-#ifdef DFPlayerUsesSoftwareSerial
-#include <SoftwareSerial.h>
-#endif /* DFPlayerUsesSoftwareSerial  */
 #include "settings.hpp"
 #include "queue.hpp"
 #include "timer.hpp"
+
+#ifdef DFPlayerUsesSoftwareSerial // make sure to include "constants.hpp" before this line!
+#include <SoftwareSerial.h>
+#endif /* DFPlayerUsesSoftwareSerial  */
 
 enum class mp3Tracks : uint16_t
 {

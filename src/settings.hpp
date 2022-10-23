@@ -2,10 +2,10 @@
 #define SRC_SETTINGS_HPP_
 
 #include <Arduino.h>
+#include <EEPROM.h>
 
 #include "array.hpp"
 #include "chip_card.hpp"
-#include <EEPROM.h>
 
 // admin settings stored in eeprom
 struct Settings

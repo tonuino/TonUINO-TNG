@@ -17,3 +17,4 @@ const __FlashStringHelper *getSeverityName(severity sev)
   }
   return F("unknown");
 }
+ 

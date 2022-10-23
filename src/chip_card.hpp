@@ -44,10 +44,10 @@ struct folderSettings
   bool operator==(const folderSettings &rhs) const
   {
     return folder == rhs.folder &&
-                   mode == rhs.mode &&
-                   (mode == mode_t::hoerspiel_vb || mode == mode_t::album_vb || mode == mode_t::party_vb)
-               ? (special == rhs.special && special2 == rhs.special2)
-               : true;
+           mode == rhs.mode &&
+           ((mode == mode_t::hoerspiel_vb || mode == mode_t::album_vb || mode == mode_t::party_vb)
+                ? (special == rhs.special && special2 == rhs.special2)
+                : true);
   }
 };
 
