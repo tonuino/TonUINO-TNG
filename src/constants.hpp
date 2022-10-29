@@ -15,15 +15,13 @@
 
 // ####### helper for level ############################
 
-enum class level : uint8_t
-{
+enum class level : uint8_t {
   inactive,
-  active,
+  active  ,
 };
-enum class levelType : uint8_t
-{
+enum class levelType : uint8_t {
   activeHigh,
-  activeLow,
+  activeLow ,
 };
 
 inline constexpr int getLevel(levelType t, level l) { return (l == level::inactive) ? (t == levelType::activeHigh ? LOW : HIGH)
@@ -35,44 +33,45 @@ inline constexpr int getLevel(levelType t, level l) { return (l == level::inacti
 // uncomment the below line to enable five button support
 //#define FIVEBUTTONS
 
-inline constexpr uint32_t buttonLongPress = 1000; // timeout for long press button in ms
-inline constexpr uint8_t buttonPausePin = A0;
-inline constexpr uint8_t buttonUpPin = A1;
-inline constexpr uint8_t buttonDownPin = A2;
+inline constexpr uint32_t  buttonLongPress = 1000; // timeout for long press button in ms
+inline constexpr uint8_t   buttonPausePin  = A0;
+inline constexpr uint8_t   buttonUpPin     = A1;
+inline constexpr uint8_t   buttonDownPin   = A2;
 
 #ifdef FIVEBUTTONS
-inline constexpr uint8_t buttonFourPin = A3;
-inline constexpr uint8_t buttonFivePin = A4;
+inline constexpr uint8_t   buttonFourPin   = A3;
+inline constexpr uint8_t   buttonFivePin   = A4;
 #endif
 
-inline constexpr levelType buttonPinType = levelType::activeLow;
-inline constexpr uint32_t buttonDbTime = 25; // Debounce time in milliseconds (default 25ms)
+inline constexpr levelType buttonPinType   = levelType::activeLow;
+inline constexpr uint32_t  buttonDbTime    = 25; // Debounce time in milliseconds (default 25ms)
 
 // ####### chip_card ###################################
 
-inline constexpr uint32_t cardCookie = 0x1337b347;
-inline constexpr uint8_t cardVersion = 0x02;
-inline constexpr byte mfrc522_RSTPin = 9;
-inline constexpr byte mfrc522_SSPin = 10;
-inline constexpr uint8_t cardRemoveDelay = 3;
+inline constexpr uint32_t cardCookie      = 0x1337b347;
+inline constexpr uint8_t  cardVersion     = 0x02;
+inline constexpr byte     mfrc522_RSTPin  =  9;
+inline constexpr byte     mfrc522_SSPin   = 10;
+inline constexpr uint8_t  cardRemoveDelay =  3;
 
 // ####### mp3 #########################################
 
-inline constexpr uint8_t maxTracksInFolder = 255;
 #define DFPlayerUsesSoftwareSerial
-inline constexpr uint8_t dfPlayer_receivePin = 2;
-inline constexpr uint8_t dfPlayer_transmitPin = 3;
-inline constexpr uint8_t dfPlayer_busyPin = 4;
-inline constexpr levelType dfPlayer_busyPinType = levelType::activeHigh;
-inline constexpr unsigned long dfPlayer_timeUntilStarts = 500;
 #define CHECK_MISSING_ONPLAYFINISHED
+
+inline constexpr uint8_t       maxTracksInFolder        = 255;
+inline constexpr uint8_t       dfPlayer_receivePin      = 2;
+inline constexpr uint8_t       dfPlayer_transmitPin     = 3;
+inline constexpr uint8_t       dfPlayer_busyPin         = 4;
+inline constexpr levelType     dfPlayer_busyPinType     = levelType::activeHigh;
+inline constexpr unsigned long dfPlayer_timeUntilStarts = 500;
 
 // ####### tonuino #####################################
 
-inline constexpr uint8_t shutdownPin = 7;
-inline constexpr levelType shutdownPinType = levelType::activeHigh;
-inline constexpr uint8_t openAnalogPin = A7;
-inline constexpr unsigned long cycleTime = 50;
+inline constexpr uint8_t       shutdownPin     = 7;
+inline constexpr levelType     shutdownPinType = levelType::activeHigh;
+inline constexpr uint8_t       openAnalogPin   = A7;
+inline constexpr unsigned long cycleTime       = 50;
 #endif /* TonUINO_Classic */
 
 #ifdef ALLinONE_Plus
@@ -81,48 +80,49 @@ inline constexpr unsigned long cycleTime = 50;
 // uncomment the below line to enable five button support
 #define FIVEBUTTONS
 
-inline constexpr uint32_t buttonLongPress = 1000; // timeout for long press button in ms
-inline constexpr uint8_t buttonPausePin = A0;
-inline constexpr uint8_t buttonUpPin = A2;
-inline constexpr uint8_t buttonDownPin = A1;
+inline constexpr uint32_t  buttonLongPress = 1000; // timeout for long press button in ms
+inline constexpr uint8_t   buttonPausePin  = A0;
+inline constexpr uint8_t   buttonUpPin     = A2;
+inline constexpr uint8_t   buttonDownPin   = A1;
 
 #ifdef FIVEBUTTONS
-inline constexpr uint8_t buttonFourPin = A4;
-inline constexpr uint8_t buttonFivePin = A3;
+inline constexpr uint8_t   buttonFourPin   = A4;
+inline constexpr uint8_t   buttonFivePin   = A3;
 #endif
 
-inline constexpr levelType buttonPinType = levelType::activeLow;
-inline constexpr uint32_t buttonDbTime = 25; // Debounce time in milliseconds (default 25ms)
+inline constexpr levelType buttonPinType   = levelType::activeLow;
+inline constexpr uint32_t  buttonDbTime    = 25; // Debounce time in milliseconds (default 25ms)
 
 // ####### chip_card ###################################
 
-inline constexpr uint32_t cardCookie = 0x1337b347;
-inline constexpr uint8_t cardVersion = 0x02;
-inline constexpr byte mfrc522_RSTPin = 11;
-inline constexpr byte mfrc522_SSPin = 7;
-inline constexpr uint8_t cardRemoveDelay = 3;
+inline constexpr uint32_t cardCookie      = 0x1337b347;
+inline constexpr uint8_t  cardVersion     = 0x02;
+inline constexpr byte     mfrc522_RSTPin  = 11;
+inline constexpr byte     mfrc522_SSPin   =  7;
+inline constexpr uint8_t  cardRemoveDelay =  3;
 
 // ####### mp3 #########################################
 
-inline constexpr uint8_t maxTracksInFolder = 255;
-// inline constexpr uint8_t dfPlayer_receivePin = 2;
-// inline constexpr uint8_t dfPlayer_transmitPin = 3;
-inline constexpr uint8_t dfPlayer_busyPin = 13;
-inline constexpr levelType dfPlayer_busyPinType = levelType::activeHigh;
-inline constexpr unsigned long dfPlayer_timeUntilStarts = 500;
 #define DFPlayerUsesHardwareSerial
-inline constexpr HardwareSerial &dfPlayer_serial = Serial3;
 //#define CHECK_MISSING_ONPLAYFINISHED
+
+inline constexpr uint8_t        maxTracksInFolder        = 255;
+// inline constexpr uint8_t        dfPlayer_receivePin      =  2;
+// inline constexpr uint8_t        dfPlayer_transmitPin     =  3;
+inline constexpr uint8_t        dfPlayer_busyPin         = 13;
+inline constexpr levelType      dfPlayer_busyPinType     = levelType::activeHigh;
+inline constexpr unsigned long  dfPlayer_timeUntilStarts = 500;
+inline constexpr HardwareSerial &dfPlayer_serial         = Serial3;
 // ####### tonuino #####################################
 
-inline constexpr uint8_t shutdownPin = 27;
-inline constexpr levelType shutdownPinType = levelType::activeHigh;
-inline constexpr uint8_t ampEnablePin = 19;
-inline constexpr levelType ampEnablePinType = levelType::activeLow;
-inline constexpr uint8_t usbAccessPin = 20;
-inline constexpr levelType usbAccessPinType = levelType::activeHigh;
-inline constexpr uint8_t openAnalogPin = A7;
-inline constexpr unsigned long cycleTime = 50;
+inline constexpr uint8_t       shutdownPin      = 27;
+inline constexpr levelType     shutdownPinType  = levelType::activeHigh;
+inline constexpr uint8_t       ampEnablePin     = 19;
+inline constexpr levelType     ampEnablePinType = levelType::activeLow;
+inline constexpr uint8_t       usbAccessPin     = 20;
+inline constexpr levelType     usbAccessPinType = levelType::activeHigh;
+inline constexpr uint8_t       openAnalogPin    = A7;
+inline constexpr unsigned long cycleTime        = 50;
 #endif /* ALLinONE_Plus */
 
 #ifdef ALLinONE
@@ -131,47 +131,48 @@ inline constexpr unsigned long cycleTime = 50;
 // uncomment the below line to enable five button support
 #define FIVEBUTTONS
 
-inline constexpr uint32_t buttonLongPress = 1000; // timeout for long press button in ms
-inline constexpr uint8_t buttonPausePin = A0;
-inline constexpr uint8_t buttonUpPin = A2;
-inline constexpr uint8_t buttonDownPin = A1;
+inline constexpr uint32_t  buttonLongPress = 1000; // timeout for long press button in ms
+inline constexpr uint8_t   buttonPausePin  = A0;
+inline constexpr uint8_t   buttonUpPin     = A2;
+inline constexpr uint8_t   buttonDownPin   = A1;
 
 #ifdef FIVEBUTTONS
-inline constexpr uint8_t buttonFourPin = A4;
-inline constexpr uint8_t buttonFivePin = A3;
+inline constexpr uint8_t   buttonFourPin   = A4;
+inline constexpr uint8_t   buttonFivePin   = A3;
 #endif
 
-inline constexpr levelType buttonPinType = levelType::activeLow;
-inline constexpr uint32_t buttonDbTime = 25; // Debounce time in milliseconds (default 25ms)
+inline constexpr levelType buttonPinType   = levelType::activeLow;
+inline constexpr uint32_t  buttonDbTime    = 25; // Debounce time in milliseconds (default 25ms)
 
 // ####### chip_card ###################################
 
-inline constexpr uint32_t cardCookie = 0x1337b347;
-inline constexpr uint8_t cardVersion = 0x02;
-inline constexpr byte mfrc522_RSTPin = 9;
-inline constexpr byte mfrc522_SSPin = 10;
-inline constexpr uint8_t cardRemoveDelay = 3;
+inline constexpr uint32_t cardCookie      = 0x1337b347;
+inline constexpr uint8_t  cardVersion     = 0x02;
+inline constexpr byte     mfrc522_RSTPin  =  9;
+inline constexpr byte     mfrc522_SSPin   = 10;
+inline constexpr uint8_t  cardRemoveDelay =  3;
 
 // ####### mp3 #########################################
 
-inline constexpr uint8_t maxTracksInFolder = 255;
-inline constexpr uint8_t dfPlayer_receivePin = 2;
-inline constexpr uint8_t dfPlayer_transmitPin = 3;
-inline constexpr uint8_t dfPlayer_busyPin = 4;
-inline constexpr levelType dfPlayer_busyPinType = levelType::activeHigh;
-inline constexpr unsigned long dfPlayer_timeUntilStarts = 500;
 #define DFPlayerUsesSoftwareSerial
 //#define CHECK_MISSING_ONPLAYFINISHED
+
+inline constexpr uint8_t       maxTracksInFolder        = 255;
+inline constexpr uint8_t       dfPlayer_receivePin      = 2;
+inline constexpr uint8_t       dfPlayer_transmitPin     = 3;
+inline constexpr uint8_t       dfPlayer_busyPin         = 4;
+inline constexpr levelType     dfPlayer_busyPinType     = levelType::activeHigh;
+inline constexpr unsigned long dfPlayer_timeUntilStarts = 500;
 // ####### tonuino #####################################
 
-inline constexpr uint8_t shutdownPin = 7;
-inline constexpr levelType shutdownPinType = levelType::activeHigh;
-inline constexpr uint8_t ampEnablePin = 8;
-inline constexpr levelType ampEnablePinType = levelType::activeLow;
-inline constexpr uint8_t usbAccessPin = A5;
-inline constexpr levelType usbAccessPinType = levelType::activeHigh;
-inline constexpr uint8_t openAnalogPin = A0;
-inline constexpr unsigned long cycleTime = 50;
+inline constexpr uint8_t       shutdownPin      = 7;
+inline constexpr levelType     shutdownPinType  = levelType::activeHigh;
+inline constexpr uint8_t       ampEnablePin     = 8;
+inline constexpr levelType     ampEnablePinType = levelType::activeLow;
+inline constexpr uint8_t       usbAccessPin     = A5;
+inline constexpr levelType     usbAccessPinType = levelType::activeHigh;
+inline constexpr uint8_t       openAnalogPin    = A0;
+inline constexpr unsigned long cycleTime        = 50;
 #endif /* ALLinONE */
 
 #endif /* SRC_CONSTANTS_HPP_ */
