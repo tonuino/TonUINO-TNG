@@ -3,24 +3,20 @@
 
 #include <Arduino.h>
 
-void Timer::start(unsigned long timeout)
-{
+void Timer::start(unsigned long timeout) {
   expireTime = millis() + timeout;
   active = true;
 }
-bool Timer::isExpired()
-{
+bool Timer::isExpired() {
   if (not active)
     return true;
-  if (expireTime <= millis())
-  {
+  if (expireTime <= millis()) {
     active = false;
     return true;
   }
   return false;
 }
 
-void Timer::stop()
-{
+void Timer::stop() {
   active = false;
 }

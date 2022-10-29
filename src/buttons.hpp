@@ -7,40 +7,37 @@
 #include "settings.hpp"
 #include "constants.hpp"
 
-enum class buttonRaw : uint8_t
-{
-  none,
-  pause,
+enum class buttonRaw : uint8_t {
+  none     ,
+  pause    ,
   pauseLong,
-  up,
-  upLong,
-  down,
-  downLong,
-  allLong,
+  up       ,
+  upLong   ,
+  down     ,
+  downLong ,
+  allLong  ,
 #ifdef FIVEBUTTONS
-  four,
-  five,
+  four     ,
+  five     ,
 #endif
-  start,
+  start    ,
 };
 
-enum class buttonCmd : uint8_t
-{
-  none,
-  admin,
-  pause,
-  track,
-  volume_up,
+enum class buttonCmd : uint8_t {
+  none       ,
+  admin      ,
+  pause      ,
+  track      ,
+  volume_up  ,
   volume_down,
-  next,
-  previous,
-  start,
+  next       ,
+  previous   ,
+  start      ,
 };
 
-class Buttons
-{
+class Buttons {
 public:
-  Buttons(const Settings &settings);
+  Buttons(const Settings& settings);
 
   buttonRaw getButtonRaw();
   buttonCmd getButtonCmd(buttonRaw b);
@@ -49,20 +46,21 @@ public:
   bool isNoButton();
 
 private:
+
   void readButtons();
 
   Button buttonPause;
-  Button buttonUp;
-  Button buttonDown;
+  Button buttonUp   ;
+  Button buttonDown ;
 #ifdef FIVEBUTTONS
-  Button buttonFour;
-  Button buttonFive;
+  Button  buttonFour;
+  Button  buttonFive;
 #endif
   bool ignorePauseButton = false;
-  bool ignoreUpButton = false;
-  bool ignoreDownButton = false;
+  bool ignoreUpButton    = false;
+  bool ignoreDownButton  = false;
 
-  const Settings &settings;
+  const Settings& settings;
 };
 
 #endif /* SRC_BUTTONS_HPP_ */

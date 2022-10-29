@@ -2,9 +2,8 @@
 #define SRC_ARRAY_HPP_
 
 template <class T, uint8_t N>
-struct array
-{
-  static_assert(N <= 0xff);
+struct array {
+  static_assert(N<=0xff);
   // Storage
   T data[N];
 
@@ -21,8 +20,7 @@ struct array
   const T *end() const { return &data[N]; }
 
   // Comparisons
-  bool operator==(const array<T, N> &rhs) const
-  {
+  bool operator==(const array<T, N> &rhs) const {
     if (this == &rhs)
       return true;
     for (uint8_t i = 0; i < N; i++)
@@ -30,12 +28,10 @@ struct array
         return false;
     return true;
   }
-  bool operator!=(const array<T, N> &rhs) const
-  {
+  bool operator!=(const array<T, N> &rhs) const {
     return !(*this == rhs);
   }
-  array &operator=(const array &rhs)
-  {
+  array& operator=(const array &rhs) {
     if (this != &rhs)
       for (uint8_t i = 0; i < N; i++)
         (*this)[i] = rhs[i];
