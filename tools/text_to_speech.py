@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Converts text into spoken language saved to an mp3 file.
 
@@ -59,6 +59,7 @@ def textToSpeech(text, targetFile, lang='de', useAmazon=False, useGoogleKey=None
     print('\nGenerating: ' + targetFile + ' - ' + text)
     if useAmazon:
         response = subprocess.check_output(['aws', 'polly', 'synthesize-speech', '--output-format', 'mp3',
+            '--engine','neural',
             '--voice-id', amazonVoiceByLang[lang], '--text-type', 'ssml',
             '--text', '<speak><amazon:effect name="drc"><prosody rate=\"+10%\">' + text + '</prosody></amazon:effect></speak>',
             targetFile])
