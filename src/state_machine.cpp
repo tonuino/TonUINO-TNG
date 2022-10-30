@@ -125,7 +125,7 @@ protected:
 
 class Amin_BaseWriteCard: public VoiceMenu_tonuino {
 protected:
-  bool handleWriteCard(button_e const &b);
+  bool handleWriteCard(button_e const &b, bool return_to_idle = false);
 };
 
 class Admin_Allow: public VoiceMenu_tonuino
@@ -166,6 +166,7 @@ class Admin_NewCard: public Amin_BaseWriteCard
 public:
   void entry() final;
   void react(button_e const &) final;
+  static bool return_to_idle;
 private:
   enum subState: uint8_t {
     start_setupCard,
@@ -593,19 +594,29 @@ void WriteCard::react(button_e const &b) {
 // #######################################################
 
 bool Base::readCard() {
-  if (not chip_card.readCard(lastCardRead))
-    return false;
+  switch(chip_card.readCard(lastCardRead)) {
+  case Chip_card::readCardEvent::none : return false;
 
-  if (lastCardRead.nfcFolderSettings.folder == 0) {
-    if (lastCardRead.nfcFolderSettings.mode == mode_t::admin_card) {
-      LOG(state_log, s_debug, str_Base(), str_to(), str_Admin_Entry());
-      Admin_Entry::lastCurrentValue = 0;
-      transit<Admin_Entry>();
-      return false;
+  case Chip_card::readCardEvent::known:
+    if (lastCardRead.nfcFolderSettings.folder == 0) {
+      if (lastCardRead.nfcFolderSettings.mode == mode_t::admin_card) {
+        LOG(state_log, s_debug, str_Base(), str_to(), str_Admin_Entry());
+        Admin_Entry::lastCurrentValue = 0;
+        transit<Admin_Entry>();
+        return false;
+      }
+
+      if (tonuino.specialCard(lastCardRead))
+        return false;
     }
+    break;
 
-    if (tonuino.specialCard(lastCardRead))
-      return false;
+  case Chip_card::readCardEvent::empty:
+    LOG(state_log, s_debug, str_Base(), str_to(), str_Admin_NewCard());
+    Admin_NewCard::return_to_idle = true;
+    mp3.enqueueMp3FolderTrack(mp3Tracks::t_300_new_tag);
+    transit<Admin_NewCard>();
+    return false;
   }
 
   if (tonuino.getActiveModifier().handleRFID(lastCardRead))
@@ -899,11 +910,14 @@ void Admin_BaseSetting::saveAndTransit() {
   transit<Admin_End>();
 }
 
-bool Amin_BaseWriteCard::handleWriteCard(button_e const &b) {
+bool Amin_BaseWriteCard::handleWriteCard(button_e const &b, bool return_to_idle) {
   SM_writeCard::dispatch(b);
   if (SM_writeCard::is_in_state<finished_writeCard>()) {
     LOG(state_log, s_debug, str_Admin_BaseWriteCard(), str_to(), F("Idle or AdmEntry"));
-    transit<Admin_End>();
+    if (return_to_idle)
+      transit<Idle>();
+    else
+      transit<Admin_End>();
     return true;
   }
   else if (SM_writeCard::is_in_state<finished_abort_writeCard>()) {
@@ -1179,8 +1193,10 @@ void Admin_NewCard::react(button_e const &b) {
     current_subState = run_writeCard;
     break;
   case run_writeCard:
-    if (handleWriteCard(b))
+    if (handleWriteCard(b, return_to_idle)) {
+      return_to_idle = false;
       return;
+    }
     break;
   default:
     break;
@@ -1711,3 +1727,4 @@ bool      VoiceMenu<SMT>::previewStarted   ;
 nfcTagObject Base::lastCardRead{};
 uint8_t Admin_Entry::lastCurrentValue{};
 Admin_SimpleSetting::Type Admin_SimpleSetting::type{};
+bool Admin_NewCard::return_to_idle{false};

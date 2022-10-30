@@ -85,12 +85,18 @@ class Chip_card {
 public:
   Chip_card(Mp3 &mp3, Buttons &buttons);
 
-  bool readCard (      nfcTagObject &nfcTag);
-  bool writeCard(const nfcTagObject &nfcTag);
-  void sleepCard();
-  void initCard ();
-  cardEvent getCardEvent();
-  bool isCardRemoved() { return cardRemoved; }
+  enum class readCardEvent : uint8_t {
+    none ,
+    known,
+    empty,
+  };
+
+  readCardEvent readCard (      nfcTagObject &nfcTag);
+  bool writeCard         (const nfcTagObject &nfcTag);
+  void sleepCard         ();
+  void initCard          ();
+  cardEvent getCardEvent ();
+  bool isCardRemoved     () { return cardRemoved; }
 
 private:
   void stopCrypto1();
