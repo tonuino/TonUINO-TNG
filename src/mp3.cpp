@@ -11,20 +11,20 @@ const __FlashStringHelper* str_Volume() { return F("Volume: ") ; }
 
 uint16_t Mp3Notify::lastTrackFinished = 0;
 
-void Mp3Notify::OnError(uint16_t errorCode) {
+void Mp3Notify::OnError(DfMp3&, uint16_t errorCode) {
   // see DfMp3_Error for code meaning
   LOG(mp3_log, s_error, F("DfPlayer Error: "), errorCode);
 }
-void Mp3Notify::OnPlaySourceOnline  (DfMp3_PlaySources source) { PrintlnSourceAction(source, F("online"  )); }
-void Mp3Notify::OnPlaySourceInserted(DfMp3_PlaySources source) { PrintlnSourceAction(source, F("bereit"  )); }
-void Mp3Notify::OnPlaySourceRemoved (DfMp3_PlaySources source) { PrintlnSourceAction(source, F("entfernt")); }
+void Mp3Notify::OnPlaySourceOnline  (DfMp3&, DfMp3_PlaySources source) { PrintlnSourceAction(source, F("online"  )); }
+void Mp3Notify::OnPlaySourceInserted(DfMp3&, DfMp3_PlaySources source) { PrintlnSourceAction(source, F("bereit"  )); }
+void Mp3Notify::OnPlaySourceRemoved (DfMp3&, DfMp3_PlaySources source) { PrintlnSourceAction(source, F("entfernt")); }
 void Mp3Notify::PrintlnSourceAction(DfMp3_PlaySources source, const __FlashStringHelper* action) {
   if (source & DfMp3_PlaySources_Sd   ) LOG(mp3_log, s_debug, F("SD Karte "), action);
   if (source & DfMp3_PlaySources_Usb  ) LOG(mp3_log, s_debug, F("USB "     ), action);
   if (source & DfMp3_PlaySources_Flash) LOG(mp3_log, s_debug, F("Flash "   ), action);
 }
 
-void Mp3Notify::OnPlayFinished(DfMp3_PlaySources /*source*/, uint16_t track) {
+void Mp3Notify::OnPlayFinished(DfMp3&, DfMp3_PlaySources /*source*/, uint16_t track) {
   LOG(mp3_log, s_debug, F("Track beendet: "), track);
   if (track == lastTrackFinished)
     return;

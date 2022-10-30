@@ -11,9 +11,20 @@
 
 #ifdef DFPlayerUsesSoftwareSerial // make sure to include "constants.hpp" before this line!
 #include <SoftwareSerial.h>
-#endif /* DFPlayerUsesSoftwareSerial  */
+using SerialType = SoftwareSerial;
+#endif // DFPlayerUsesSoftwareSerial
+#ifdef DFPlayerUsesHardwareSerial
+using SerialType = HardwareSerial;
+#endif // DFPlayerUsesHardwareSerial
 
 //#define CHECK_MISSING_ONPLAYFINISHED
+
+// forward declare the notify class, just the name
+class Mp3Notify;
+
+// define a handy type using serial and our notify class
+using DfMp3 = DFMiniMp3<SerialType, Mp3Notify>;
+
 
 enum class mp3Tracks: uint16_t {
   t_0                          =   0,
@@ -121,11 +132,11 @@ enum class advertTracks: uint16_t {
 //
 class Mp3Notify {
 public:
-  static void OnError             (uint16_t errorCode);
-  static void OnPlayFinished      (DfMp3_PlaySources source, uint16_t track);
-  static void OnPlaySourceOnline  (DfMp3_PlaySources source);
-  static void OnPlaySourceInserted(DfMp3_PlaySources source);
-  static void OnPlaySourceRemoved (DfMp3_PlaySources source);
+  static void OnError             (DfMp3&, uint16_t errorCode);
+  static void OnPlayFinished      (DfMp3&, DfMp3_PlaySources source, uint16_t track);
+  static void OnPlaySourceOnline  (DfMp3&, DfMp3_PlaySources source);
+  static void OnPlaySourceInserted(DfMp3&, DfMp3_PlaySources source);
+  static void OnPlaySourceRemoved (DfMp3&, DfMp3_PlaySources source);
 
   static void ResetLastTrackFinished() { lastTrackFinished = 0; }
 private:
@@ -133,16 +144,9 @@ private:
   static uint16_t lastTrackFinished;
 };
 
-#ifdef DFPlayerUsesSoftwareSerial
-class Mp3: public DFMiniMp3<SoftwareSerial, Mp3Notify> {
+class Mp3: public DfMp3 {
 public:
-  using Base = DFMiniMp3<SoftwareSerial, Mp3Notify>;
-#endif /* DFPlayerUsesSoftwareSerial */
-#ifdef DFPlayerUsesHardwareSerial
-class Mp3 : public DFMiniMp3<HardwareSerial, Mp3Notify> {
-public:
-  using Base = DFMiniMp3<HardwareSerial, Mp3Notify>;
-#endif /* DFPlayerUsesHardwareSerial */
+  using Base = DfMp3;
 
   Mp3(const Settings& settings);
 
