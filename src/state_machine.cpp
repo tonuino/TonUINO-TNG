@@ -659,15 +659,13 @@ void Idle::react(button_e const &b) {
     transit<Admin_Allow>();
     return;
   case buttonCmd::pause:
+    tonuino.getActiveModifier().handlePause();
+    break;
   case buttonCmd::track:
-    if (tonuino.getActiveModifier().handlePause())
-      break;
     shortCut = 0;
     break;
   case buttonCmd::volume_up:
-    if (tonuino.getActiveModifier().handleVolumeUp())
-      break;
-    shortCut = 1;
+    tonuino.getActiveModifier().handleVolumeUp();
     break;
   case buttonCmd::next:
     if (tonuino.getActiveModifier().handleNextButton())
@@ -675,9 +673,7 @@ void Idle::react(button_e const &b) {
     shortCut = 1;
     break;
   case buttonCmd::volume_down:
-    if (tonuino.getActiveModifier().handleVolumeDown())
-      break;
-    shortCut = 2;
+    tonuino.getActiveModifier().handleVolumeDown();
     break;
   case buttonCmd::previous:
     if (tonuino.getActiveModifier().handlePreviousButton())
@@ -823,14 +819,10 @@ void Pause::react(button_e const &b) {
     transit<Play>();
     return;
   case buttonCmd::track:
-    if (tonuino.getActiveModifier().handlePause())
-      break;
     shortCut = 0;
     break;
   case buttonCmd::volume_up:
-    if (tonuino.getActiveModifier().handleVolumeUp())
-      break;
-    shortCut = 1;
+    tonuino.getActiveModifier().handleVolumeUp();
     break;
   case buttonCmd::next:
     if (tonuino.getActiveModifier().handleNextButton())
@@ -838,9 +830,7 @@ void Pause::react(button_e const &b) {
     shortCut = 1;
     break;
   case buttonCmd::volume_down:
-    if (tonuino.getActiveModifier().handleVolumeDown())
-      break;
-    shortCut = 2;
+    tonuino.getActiveModifier().handleVolumeDown();
     break;
   case buttonCmd::previous:
     if (tonuino.getActiveModifier().handlePreviousButton())
