@@ -40,6 +40,10 @@ Temporary Items
 /.pydevproject
 /.sproject
 /.settings
+/Classic/
+/Classic_5/
+/ALLinONE/
+/ALLinONE_plus/
 
 # VS code
 .pio
