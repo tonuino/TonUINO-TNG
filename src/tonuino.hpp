@@ -30,6 +30,7 @@ public:
   void setCard  (const nfcTagObject   &newCard) { myCard = newCard; setFolder(&myCard.nfcFolderSettings); }
   const nfcTagObject& getCard() const           { return myCard; }
   void setFolder(folderSettings *newFolder    ) { myFolder = newFolder; }
+  uint8_t getFolder()                           { return myFolder->folder; }
 
   Mp3&      getMp3      () { return mp3      ; }
   Buttons&  getButtons  () { return buttons  ; }

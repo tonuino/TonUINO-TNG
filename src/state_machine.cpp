@@ -622,7 +622,7 @@ void Base::handleShortcut(uint8_t shortCut) {
   if (shortCut < 3 && settings.shortCuts[shortCut].folder != 0) {
     if (settings.shortCuts[shortCut].mode != mode_t::repeat_last)
       tonuino.setFolder(&settings.shortCuts[shortCut]);
-    if (tonuino.getCard().nfcFolderSettings.folder != 0) {
+    if (tonuino.getFolder() != 0) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
       transit<StartPlay>();
     }
