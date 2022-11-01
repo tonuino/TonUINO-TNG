@@ -103,7 +103,7 @@ bool Chip_card::auth(MFRC522::PICC_Type piccType) {
   return true;
 }
 
-bool Chip_card::readCard(nfcTagObject &nfcTag) {
+Chip_card::readCardEvent Chip_card::readCard(nfcTagObject &nfcTag) {
   // Show some details of the PICC (that is: the tag/card)
   LOG(card_log, s_info, F("Card UID: "), dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size));
   const MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
@@ -113,7 +113,7 @@ bool Chip_card::readCard(nfcTagObject &nfcTag) {
   MFRC522::StatusCode status = MFRC522::STATUS_ERROR;
 
   if (not auth(piccType))
-    return false;
+    return readCardEvent::none;
 
   // Show the whole sector as it currently is
   // LOG(card_log, s_info, F("Current data in sector:"));
@@ -147,7 +147,7 @@ bool Chip_card::readCard(nfcTagObject &nfcTag) {
 
   if (status != MFRC522::STATUS_OK) {
     LOG(card_log, s_error, str_MIFARE_Read(), str_failed(), printStatusCode(mfrc522, status));
-    return false;
+    return readCardEvent::none;
   }
 
   LOG(card_log, s_info, F("Data on Card: "), dump_byte_array(buffer, 9));
@@ -156,9 +156,12 @@ bool Chip_card::readCard(nfcTagObject &nfcTag) {
   for (byte i = 0, shift = 24; i < 4; ++i, shift -= 8)
     tempCookie  += static_cast<uint32_t>(buffer[i]) << shift;
 
-  if (tempCookie != cardCookie)
-    return false;
-
+  if (tempCookie != cardCookie) {
+    if (tempCookie == 0)
+      return readCardEvent::empty;
+    else
+      return readCardEvent::none;
+  }
   const uint32_t version              = buffer[4];
   if (version == cardVersion) {
     nfcTag.nfcFolderSettings.folder   = buffer[5];
@@ -171,7 +174,7 @@ bool Chip_card::readCard(nfcTagObject &nfcTag) {
     nfcTag.nfcFolderSettings.folder   = 0;
     nfcTag.nfcFolderSettings.mode     = mode_t::none;
   }
-  return true;
+  return readCardEvent::known;
 }
 
 bool Chip_card::writeCard(const nfcTagObject &nfcTag) {
