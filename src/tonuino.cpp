@@ -133,7 +133,7 @@ void Tonuino::playFolder() {
     // Hörbuch Modus: kompletten Ordner spielen und Fortschritt merken (oder nur eine Datei)
     LOG(play_log, s_info, F("Hörbuch"));
     uint16_t startTrack = settings.readFolderSettingFromFlash(myFolder->folder);
-    if (startTrack == 0 | startTrack > numTracksInFolder)
+    if ((startTrack == 0) || (startTrack > numTracksInFolder))
       startTrack = 1;
     mp3.enqueueTrack(myFolder->folder, 1, numTracksInFolder, startTrack-1);
   }
