@@ -932,7 +932,7 @@ bool Amin_BaseWriteCard::handleWriteCard(button_e const &b, bool return_to_idle)
 
 void Admin_Allow::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_Allow());
-  current_subState = select_method;
+  current_subState = wait_for_no_button;
   tonuino.resetActiveModifier();
 }
 
@@ -945,6 +945,10 @@ void Admin_Allow::react(button_e const &b) {
     return;
 
   switch (current_subState) {
+  case wait_for_no_button:
+    if (buttons.isNoButton())
+      current_subState = select_method;
+    break;
   case select_method       :
     if      (settings.adminMenuLocked == 0) {
       current_subState = allow;
@@ -955,7 +959,7 @@ void Admin_Allow::react(button_e const &b) {
     else if (settings.adminMenuLocked == 2) {
       mp3.enqueueMp3FolderTrack(mp3Tracks::t_991_admin_pin);
       pin_number = 0;
-      current_subState = wait_for_no_button;
+      current_subState = get_pin;
     }
 //    else if (settings.adminMenuLocked == 3) {
 //      current_subState = start_match;
@@ -963,10 +967,6 @@ void Admin_Allow::react(button_e const &b) {
     else {
       current_subState = not_allow;
     }
-    break;
-  case wait_for_no_button:
-    if (buttons.isNoButton())
-      current_subState = get_pin;
     break;
   case get_pin             :
   {
@@ -1061,10 +1061,6 @@ void Admin_Entry::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_Entry());
   tonuino.disableStandbyTimer();
   tonuino.resetActiveModifier();
-
-  // TODO replace this because SM is hanging here
-  while (!buttons.isNoButton())
-    buttons.getButtonRaw();
 
   numberOfOptions   = 13;
   startMessage      = lastCurrentValue == 0 ? mp3Tracks::t_900_admin : mp3Tracks::t_919_continue_admin;
