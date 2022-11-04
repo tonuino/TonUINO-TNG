@@ -934,6 +934,7 @@ void Admin_Allow::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_Allow());
   current_subState = wait_for_no_button;
   tonuino.resetActiveModifier();
+  mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
 }
 
 void Admin_Allow::react(button_e const &b) {
