@@ -633,7 +633,7 @@ void Base::handleShortcut(uint8_t shortCut) {
   if (shortCut < 3 && settings.shortCuts[shortCut].folder != 0) {
     if (settings.shortCuts[shortCut].mode != mode_t::repeat_last)
       tonuino.setFolder(&settings.shortCuts[shortCut]);
-    if (tonuino.getCard().nfcFolderSettings.folder != 0) {
+    if (tonuino.getFolder() != 0) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
       transit<StartPlay>();
     }
@@ -664,40 +664,19 @@ void Idle::react(button_e const &b) {
   const buttonCmd cmd      = buttons.getButtonCmd(b.b);
   uint8_t         shortCut = 0xff;
 
+  switch(b.b) {
+  case buttonRaw::pauseLong: shortCut = 0; break;
+  case buttonRaw::upLong   : shortCut = 1; break;
+  case buttonRaw::downLong : shortCut = 2; break;
+  case buttonRaw::start    : shortCut = 3; break;
+  default                  :               break;
+  }
+
   switch (cmd) {
   case buttonCmd::admin:
     LOG(state_log, s_debug, str_Idle(), str_to(), str_Admin_Allow());
     transit<Admin_Allow>();
     return;
-  case buttonCmd::pause:
-  case buttonCmd::track:
-    if (tonuino.getActiveModifier().handlePause())
-      break;
-    shortCut = 0;
-    break;
-  case buttonCmd::volume_up:
-    if (tonuino.getActiveModifier().handleVolumeUp())
-      break;
-    shortCut = 1;
-    break;
-  case buttonCmd::next:
-    if (tonuino.getActiveModifier().handleNextButton())
-      break;
-    shortCut = 1;
-    break;
-  case buttonCmd::volume_down:
-    if (tonuino.getActiveModifier().handleVolumeDown())
-      break;
-    shortCut = 2;
-    break;
-  case buttonCmd::previous:
-    if (tonuino.getActiveModifier().handlePreviousButton())
-      break;
-    shortCut = 2;
-    break;
-  case buttonCmd::start:
-    shortCut = 3;
-    break;
   default:
     break;
   }
@@ -822,6 +801,14 @@ void Pause::react(button_e const &b) {
   const buttonCmd cmd      = buttons.getButtonCmd(b.b);
   uint8_t         shortCut = 99;
 
+  switch(b.b) {
+  case buttonRaw::pauseLong: shortCut = 0; break;
+  case buttonRaw::upLong   : shortCut = 1; break;
+  case buttonRaw::downLong : shortCut = 2; break;
+  case buttonRaw::start    : shortCut = 3; break;
+  default                  :               break;
+  }
+
   switch (cmd) {
   case buttonCmd::admin:
     LOG(state_log, s_debug, str_Pause(), str_to(), str_Admin_Allow());
@@ -833,31 +820,6 @@ void Pause::react(button_e const &b) {
     LOG(state_log, s_debug, str_Pause(), str_to(), str_Play());
     transit<Play>();
     return;
-  case buttonCmd::track:
-    if (tonuino.getActiveModifier().handlePause())
-      break;
-    shortCut = 0;
-    break;
-  case buttonCmd::volume_up:
-    if (tonuino.getActiveModifier().handleVolumeUp())
-      break;
-    shortCut = 1;
-    break;
-  case buttonCmd::next:
-    if (tonuino.getActiveModifier().handleNextButton())
-      break;
-    shortCut = 1;
-    break;
-  case buttonCmd::volume_down:
-    if (tonuino.getActiveModifier().handleVolumeDown())
-      break;
-    shortCut = 2;
-    break;
-  case buttonCmd::previous:
-    if (tonuino.getActiveModifier().handlePreviousButton())
-      break;
-    shortCut = 2;
-    break;
   default:
     break;
   }
