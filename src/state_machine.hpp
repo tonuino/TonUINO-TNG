@@ -80,7 +80,7 @@ class Base: public SM_tonuino
 {
 protected:
   bool readCard();
-  void handleShortcut(uint8_t shortCut);
+  bool handleShortcut(uint8_t shortCut);
   void handleReadCard();
   static nfcTagObject lastCardRead;
 };
