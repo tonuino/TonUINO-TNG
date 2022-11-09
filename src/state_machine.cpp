@@ -136,7 +136,6 @@ public:
 private:
   enum subState: uint8_t {
     select_method,
-    wait_for_no_button,
     get_pin,
 //    start_match,
 //    play_match_intro,
@@ -895,9 +894,8 @@ bool Amin_BaseWriteCard::handleWriteCard(command_e const &cmd_e, bool return_to_
 
 void Admin_Allow::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_Allow());
-  current_subState = wait_for_no_button;
+  current_subState = select_method;
   tonuino.resetActiveModifier();
-  mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
 }
 
 void Admin_Allow::react(command_e const &cmd_e) {
@@ -906,27 +904,15 @@ void Admin_Allow::react(command_e const &cmd_e) {
   }
 
   switch (current_subState) {
-  case wait_for_no_button:
-    if (tonuino.getButtons().isNoButton())
-      current_subState = select_method;
-    break;
   case select_method       :
-    if      (settings.adminMenuLocked == 0) {
-      current_subState = allow;
-    }
-    else if (settings.adminMenuLocked == 1) {
-      current_subState = not_allow;
-    }
-    else if (settings.adminMenuLocked == 2) {
-      mp3.enqueueMp3FolderTrack(mp3Tracks::t_991_admin_pin);
-      pin_number = 0;
-      current_subState = get_pin;
-    }
-//    else if (settings.adminMenuLocked == 3) {
-//      current_subState = start_match;
-//    }
-    else {
-      current_subState = not_allow;
+    switch (settings.adminMenuLocked) {
+    case 0 : current_subState = allow;       break;
+    case 1 : current_subState = not_allow;   break;
+    case 2 : mp3.enqueueMp3FolderTrack(mp3Tracks::t_991_admin_pin);
+             pin_number = 0;
+             current_subState = get_pin;     break;
+//    case 3 : current_subState = start_match; break;
+    default: current_subState = not_allow;   break;
     }
     break;
   case get_pin             :

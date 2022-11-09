@@ -30,6 +30,13 @@ Buttons::Buttons()
 commandRaw Buttons::getCommandRaw() {
   commandRaw ret = commandRaw::none;
   readButtons();
+
+  if (ignoreAll) {
+    if (isNoButton())
+      ignoreAll = false;
+    return commandRaw::none;
+  }
+
   if ((  buttonPause.pressedFor(buttonLongPress)
       || buttonUp   .pressedFor(buttonLongPress)
       || buttonDown .pressedFor(buttonLongPress)
@@ -38,6 +45,7 @@ commandRaw Buttons::getCommandRaw() {
      && buttonUp   .isPressed()
      && buttonDown .isPressed()) {
     ret = commandRaw::allLong;
+    ignoreAll = true;
   }
 
   else if (buttonPause.wasReleased()) {

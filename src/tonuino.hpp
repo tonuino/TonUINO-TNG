@@ -36,7 +36,6 @@ public:
 
   Mp3&      getMp3      () { return mp3      ; }
   Commands& getCommands () { return commands ; }
-  Buttons&  getButtons  () { return buttons  ; }
   Settings& getSettings () { return settings ; }
   Chip_card& getChipCard() { return chip_card; }
   static uint32_t generateRamdomSeed();
