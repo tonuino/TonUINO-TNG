@@ -629,15 +629,17 @@ bool Base::readCard() {
   return false;
 }
 
-void Base::handleShortcut(uint8_t shortCut) {
-  if (shortCut < 3 && settings.shortCuts[shortCut].folder != 0) {
+bool Base::handleShortcut(uint8_t shortCut) {
+  if (shortCut <= 3 && settings.shortCuts[shortCut].folder != 0) {
     if (settings.shortCuts[shortCut].mode != mode_t::repeat_last)
       tonuino.setFolder(&settings.shortCuts[shortCut]);
     if (tonuino.getFolder() != 0) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
       transit<StartPlay>();
+      return true;
     }
   }
+  return false;
 }
 
 void Base::handleReadCard() {
@@ -681,10 +683,8 @@ void Idle::react(button_e const &b) {
     break;
   }
 
-  if (shortCut == 3)
+  if (shortCut != 0xff && not handleShortcut(shortCut))
     mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
-
-  handleShortcut(shortCut);
 }
 
 void Idle::react(card_e const &c) {
