@@ -30,6 +30,13 @@ Buttons::Buttons(const Settings& settings)
 buttonRaw Buttons::getButtonRaw() {
   buttonRaw ret = buttonRaw::none;
   readButtons();
+
+  if (ignoreAll) {
+    if (isNoButton())
+      ignoreAll = false;
+    return buttonRaw::none;
+  }
+
   if ((  buttonPause.pressedFor(buttonLongPress)
       || buttonUp   .pressedFor(buttonLongPress)
       || buttonDown .pressedFor(buttonLongPress)
@@ -38,6 +45,7 @@ buttonRaw Buttons::getButtonRaw() {
      && buttonUp   .isPressed()
      && buttonDown .isPressed()) {
     ret = buttonRaw::allLong;
+    ignoreAll = true;
   }
 
   else if (buttonPause.wasReleased()) {

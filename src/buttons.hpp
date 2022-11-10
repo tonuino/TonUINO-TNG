@@ -59,6 +59,7 @@ private:
   bool ignorePauseButton = false;
   bool ignoreUpButton    = false;
   bool ignoreDownButton  = false;
+  bool ignoreAll         = false;
 
   const Settings& settings;
 };

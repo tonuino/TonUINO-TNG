@@ -136,7 +136,6 @@ public:
 private:
   enum subState: uint8_t {
     select_method,
-    wait_for_no_button,
     get_pin,
 //    start_match,
 //    play_match_intro,
@@ -908,27 +907,15 @@ void Admin_Allow::react(button_e const &b) {
 
   switch (current_subState) {
   case select_method       :
-    if      (settings.adminMenuLocked == 0) {
-      current_subState = allow;
+    switch (settings.adminMenuLocked) {
+    case 0 : current_subState = allow;       break;
+    case 1 : current_subState = not_allow;   break;
+    case 2 : mp3.enqueueMp3FolderTrack(mp3Tracks::t_991_admin_pin);
+             pin_number = 0;
+             current_subState = get_pin;     break;
+//    case 3 : current_subState = start_match; break;
+    default: current_subState = not_allow;   break;
     }
-    else if (settings.adminMenuLocked == 1) {
-      current_subState = not_allow;
-    }
-    else if (settings.adminMenuLocked == 2) {
-      mp3.enqueueMp3FolderTrack(mp3Tracks::t_991_admin_pin);
-      pin_number = 0;
-      current_subState = wait_for_no_button;
-    }
-//    else if (settings.adminMenuLocked == 3) {
-//      current_subState = start_match;
-//    }
-    else {
-      current_subState = not_allow;
-    }
-    break;
-  case wait_for_no_button:
-    if (buttons.isNoButton())
-      current_subState = get_pin;
     break;
   case get_pin             :
   {
@@ -1023,10 +1010,6 @@ void Admin_Entry::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_Entry());
   tonuino.disableStandbyTimer();
   tonuino.resetActiveModifier();
-
-  // TODO replace this because SM is hanging here
-  while (!buttons.isNoButton())
-    buttons.getButtonRaw();
 
   numberOfOptions   = 13;
   startMessage      = lastCurrentValue == 0 ? mp3Tracks::t_900_admin : mp3Tracks::t_919_continue_admin;
