@@ -20,6 +20,16 @@
 // 4: allLong    5: pause      6: pauseLong
 // 1:            2: down       3: downLong
 
+// uncomment the below line if you have support for the 3x3Buttons
+// um die Unterstützung für die 3x3 Buttons zu haben bitte in der nächste Zeile den Kommentar entfernen
+//#define BUTTONS3X3
+
+// uncomment the below line if you you want to have more short cuts for the 3x3Buttons in which you have to press
+// two buttons successively
+// um mehr Short Cuts bei den 3x3 Buttons zu haben indem zwei Buttons nacheinander gedrückt werden müssen
+// bitte in der nächste Zeile den Kommentar entfernen
+//#define BUTTONS3X3_PRESS_TWO
+
 // ####### helper for level ############################
 
 enum class level : uint8_t {
@@ -33,14 +43,34 @@ enum class levelType : uint8_t {
 
 inline constexpr int getLevel(levelType t, level l) { return (l == level::inactive) ? (t == levelType::activeHigh ? LOW : HIGH)
                                                                                     : (t == levelType::activeHigh ? HIGH : LOW); }
+#ifdef BUTTONS3X3
+#ifdef FIVEBUTTONS
+static_assert(false, "The 3x3 Button board doesn't have 5 Buttons");
+#endif
+inline constexpr uint8_t buttonExtSC_begin = 101;
+#ifdef BUTTONS3X3_PRESS_TWO
+inline constexpr uint8_t buttonExtSC_buttons = 81;
+#else // BUTTONS3X3_PRESS_TWO
+inline constexpr uint8_t buttonExtSC_buttons = 9;
+#endif // BUTTONS3X3_PRESS_TWO
+#endif // BUTTONS3X3
+
 
 #ifdef TonUINO_Classic
 // ####### buttons #####################################
 
 inline constexpr uint32_t  buttonLongPress = 1000; // timeout for long press button in ms
 inline constexpr uint8_t   buttonPausePin  = A0;
+
+#ifdef BUTTONS3X3
+inline constexpr uint8_t   button3x3Pin    = A2;
+inline constexpr uint8_t   buttonUpPin     = A3;
+inline constexpr uint8_t   buttonDownPin   = A4;
+inline constexpr uint32_t  button3x3DbTime = 50; // Debounce time in milliseconds (default 50ms)
+#else
 inline constexpr uint8_t   buttonUpPin     = A1;
 inline constexpr uint8_t   buttonDownPin   = A2;
+#endif
 
 #ifdef FIVEBUTTONS
 inline constexpr uint8_t   buttonFourPin   = A3;
@@ -81,12 +111,22 @@ inline constexpr unsigned long cycleTime       = 50;
 #ifdef ALLinONE_Plus
 // ####### buttons #####################################
 
-#define FIVEBUTTONS
-
 inline constexpr uint32_t  buttonLongPress = 1000; // timeout for long press button in ms
 inline constexpr uint8_t   buttonPausePin  = A0;
+
+#ifdef BUTTONS3X3
+#ifdef BUTTONS3X3_PRESS_TWO
+static_assert(false, "BUTTONS3X3_PRESS_TWO not possible for ALLinONE_Plus");
+#endif
+inline constexpr uint8_t   button3x3Pin    = A2;
+inline constexpr uint8_t   buttonUpPin     = A4;
+inline constexpr uint8_t   buttonDownPin   = A3;
+inline constexpr uint32_t  button3x3DbTime = 50; // Debounce time in milliseconds (default 50ms)
+#else
+#define FIVEBUTTONS
 inline constexpr uint8_t   buttonUpPin     = A2;
 inline constexpr uint8_t   buttonDownPin   = A1;
+#endif
 
 #ifdef FIVEBUTTONS
 inline constexpr uint8_t   buttonFourPin   = A4;
@@ -131,12 +171,19 @@ inline constexpr unsigned long cycleTime        = 50;
 #ifdef ALLinONE
 // ####### buttons #####################################
 
-#define FIVEBUTTONS
-
 inline constexpr uint32_t  buttonLongPress = 1000; // timeout for long press button in ms
 inline constexpr uint8_t   buttonPausePin  = A0;
+
+#ifdef BUTTONS3X3
+inline constexpr uint8_t   button3x3Pin    = A2;
+inline constexpr uint8_t   buttonUpPin     = A4;
+inline constexpr uint8_t   buttonDownPin   = A3;
+inline constexpr uint32_t  button3x3DbTime = 50; // Debounce time in milliseconds (default 50ms)
+#else
+#define FIVEBUTTONS
 inline constexpr uint8_t   buttonUpPin     = A2;
 inline constexpr uint8_t   buttonDownPin   = A1;
+#endif
 
 #ifdef FIVEBUTTONS
 inline constexpr uint8_t   buttonFourPin   = A4;

@@ -15,9 +15,9 @@ Commands::Commands(const Settings& settings, CommandSource* source1, CommandSour
 commandRaw Commands::getCommandRaw() {
   for (auto source: sources) {
     if (source != nullptr) {
-      const commandRaw c = source->getCommandRaw();
-      if (c != commandRaw::none)
-        return c;
+      const commandRaw ret = source->getCommandRaw();
+      if (ret != commandRaw::none)
+        return ret;
     }
   }
   return commandRaw::none;
@@ -27,19 +27,20 @@ command Commands::getCommand(commandRaw b) {
   command ret = command::none;
 
   switch (b) {
-  case commandRaw::none     : ret = command::none                                                                  ; break;
-  case commandRaw::pause    : ret = command::pause                                                                 ; break;
-  case commandRaw::pauseLong: ret = command::track                                                                 ; break;
+  case commandRaw::none     : ret = command::none                                                                ; break;
+  case commandRaw::pause    : ret = command::pause                                                               ; break;
+  case commandRaw::pauseLong: ret = command::track                                                               ; break;
   case commandRaw::up       : ret = (!settings.invertVolumeButtons) ? command::next        : command::volume_up  ; break;
   case commandRaw::upLong   : ret = (!settings.invertVolumeButtons) ? command::volume_up   : command::next       ; break;
   case commandRaw::down     : ret = (!settings.invertVolumeButtons) ? command::previous    : command::volume_down; break;
   case commandRaw::downLong : ret = (!settings.invertVolumeButtons) ? command::volume_down : command::previous   ; break;
-  case commandRaw::allLong  : ret = command::admin                                                                 ; break;
+  case commandRaw::allLong  : ret = command::admin                                                               ; break;
 #ifdef FIVEBUTTONS
   case commandRaw::four     : ret = (!settings.invertVolumeButtons) ? command::volume_up   : command::next       ; break;
   case commandRaw::five     : ret = (!settings.invertVolumeButtons) ? command::volume_down : command::previous   ; break;
 #endif
-  case commandRaw::start    : ret = command::start;                                                                ; break;
+  case commandRaw::start    : ret = command::start;                                                              ; break;
+  default                   :                                                                                    ; break;
   }
 
   if (ret != command::none) {
@@ -56,4 +57,10 @@ uint8_t Commands::getButtonCode(commandRaw b) {
   default               : return 0;
   }
 }
+
+#ifdef BUTTONS3X3
+bool Commands::isExtButton(commandRaw b) {
+  return b >= commandRaw::ext_begin && b < commandRaw::ext_end;
+}
+#endif
 

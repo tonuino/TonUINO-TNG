@@ -39,7 +39,11 @@ void Settings::resetSettings() {
   eq                   =  1;
   locked               = false;
   standbyTimer         =  0;
+#ifdef FIVEBUTTONS
+  invertVolumeButtons  = false;
+#else
   invertVolumeButtons  = true;
+#endif
   shortCuts[0].folder  =  0;
   shortCuts[1].folder  =  0;
   shortCuts[2].folder  =  0;
@@ -50,6 +54,11 @@ void Settings::resetSettings() {
   adminMenuPin[2]      =  1;
   adminMenuPin[3]      =  1;
   pauseWhenCardRemoved = false;
+
+#ifdef BUTTONS3X3
+  for (uint8_t i = 0; i < buttonExtSC_buttons; ++i)
+    extShortCuts[i].folder = 0;
+#endif // BUTTONS3X3
 
   writeSettingsToFlash();
 }
@@ -95,3 +104,16 @@ void Settings::writeFolderSettingToFlash(uint8_t folder, uint16_t track) {
 uint16_t Settings::readFolderSettingFromFlash(uint8_t folder) {
   return readByteFromFlash(folder);
 }
+
+folderSettings& Settings::getShortCut(uint8_t shortCut) {
+  if (shortCut > 0 && shortCut <= 4)
+    return shortCuts[shortCut];
+#ifdef BUTTONS3X3
+  else if (shortCut >= buttonExtSC_begin && shortCut < buttonExtSC_begin + buttonExtSC_buttons)
+    return extShortCuts[shortCut-buttonExtSC_begin];
+#endif
+
+  return shortCuts[0];
+}
+
+

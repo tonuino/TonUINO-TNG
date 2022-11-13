@@ -9,8 +9,11 @@
 
 // admin settings stored in eeprom
 struct Settings {
-  typedef array<folderSettings, 4> shortCuts_t;
-  typedef array<uint8_t       , 4> pin_t;
+  typedef array<folderSettings, 4                  > shortCuts_t;
+#ifdef BUTTONS3X3
+  typedef array<folderSettings, buttonExtSC_buttons> extShortCuts_t;
+#endif
+  typedef array<uint8_t       , 4                  > pin_t;
 
   void    writeByteToFlash (uint16_t address, uint8_t value);
   uint8_t readByteFromFlash(uint16_t address);
@@ -25,6 +28,8 @@ struct Settings {
   void     writeFolderSettingToFlash (uint8_t folder, uint16_t track);
   uint16_t readFolderSettingFromFlash(uint8_t folder);
 
+  folderSettings& getShortCut(uint8_t shortCut);
+
   uint32_t    cookie;
   byte        version;
   uint8_t     maxVolume;
@@ -38,6 +43,10 @@ struct Settings {
   uint8_t     adminMenuLocked;
   pin_t       adminMenuPin;
   bool        pauseWhenCardRemoved;
+
+#ifdef BUTTONS3X3
+  extShortCuts_t extShortCuts;
+#endif
 };
 
 // emulates EEPROM.put() .get() and .update() on LGT8F328P platform

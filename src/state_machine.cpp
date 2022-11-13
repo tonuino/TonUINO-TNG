@@ -630,9 +630,9 @@ bool Base::readCard() {
 }
 
 bool Base::handleShortcut(uint8_t shortCut) {
-  if (shortCut <= 3 && settings.shortCuts[shortCut].folder != 0) {
-    if (settings.shortCuts[shortCut].mode != mode_t::repeat_last)
-      tonuino.setFolder(&settings.shortCuts[shortCut]);
+  if (shortCut != 0 && settings.getShortCut(shortCut).folder != 0) {
+    if (settings.getShortCut(shortCut).mode != mode_t::repeat_last)
+      tonuino.setFolder(&settings.getShortCut(shortCut));
     if (tonuino.getFolder() != 0) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
       transit<StartPlay>();
@@ -664,15 +664,19 @@ void Idle::react(command_e const &cmd_e) {
   }
 
   const command cmd      = commands.getCommand(cmd_e.cmd_raw);
-  uint8_t       shortCut = 0xff;
+  uint8_t       shortCut = 0;
 
   switch(cmd_e.cmd_raw) {
-  case commandRaw::pauseLong: shortCut = 0; break;
-  case commandRaw::upLong   : shortCut = 1; break;
-  case commandRaw::downLong : shortCut = 2; break;
-  case commandRaw::start    : shortCut = 3; break;
+  case commandRaw::pauseLong: shortCut = 1; break;
+  case commandRaw::upLong   : shortCut = 2; break;
+  case commandRaw::downLong : shortCut = 3; break;
+  case commandRaw::start    : shortCut = 4; break;
   default                   :               break;
   }
+#ifdef BUTTONS3X3
+  if (Commands::isExtButton(cmd_e.cmd_raw))
+    shortCut = static_cast<uint8_t>(cmd_e.cmd_raw);
+#endif
 
   switch (cmd) {
   case command::admin:
@@ -683,7 +687,7 @@ void Idle::react(command_e const &cmd_e) {
     break;
   }
 
-  if (shortCut != 0xff && not handleShortcut(shortCut))
+  if (shortCut != 0 && not handleShortcut(shortCut))
     mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
 }
 
@@ -799,15 +803,19 @@ void Pause::react(command_e const &cmd_e) {
   }
 
   const command cmd      = commands.getCommand(cmd_e.cmd_raw);
-  uint8_t         shortCut = 99;
+  uint8_t         shortCut = 0;
 
   switch(cmd_e.cmd_raw) {
-  case commandRaw::pauseLong: shortCut = 0; break;
-  case commandRaw::upLong   : shortCut = 1; break;
-  case commandRaw::downLong : shortCut = 2; break;
-  case commandRaw::start    : shortCut = 3; break;
+  case commandRaw::pauseLong: shortCut = 1; break;
+  case commandRaw::upLong   : shortCut = 2; break;
+  case commandRaw::downLong : shortCut = 3; break;
+  case commandRaw::start    : shortCut = 4; break;
   default                   :               break;
   }
+#ifdef BUTTONS3X3
+  if (Commands::isExtButton(cmd_e.cmd_raw))
+    shortCut = static_cast<uint8_t>(cmd_e.cmd_raw);
+#endif
 
   switch (cmd) {
   case command::admin:
@@ -1309,17 +1317,22 @@ void Admin_ShortCut::react(command_e const &cmd_e) {
   if (isAbort(cmd_e))
     return;
 
-  if (shortcut == 0) {
-    if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
-      shortcut = currentValue;
-      current_subState = start_setupCard;
-    }
+  if ((shortcut == 0) && (cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+    shortcut = currentValue;
+    current_subState = start_setupCard;
   }
+#ifdef BUTTONS3X3
+  else if (Commands::isExtButton(cmd_e.cmd_raw)) {
+    shortcut = static_cast<uint8_t>(cmd_e.cmd_raw);
+    current_subState = start_setupCard;
+    LOG(state_log, s_info, F("shortcut set"), static_cast<int>(shortcut));
+  }
+#endif
   else {
     switch (current_subState) {
     case start_setupCard:
-      settings.shortCuts[shortcut-1].folder = 0;
-      settings.shortCuts[shortcut-1].mode = mode_t::none;
+      settings.getShortCut(shortcut).folder = 0;
+      settings.getShortCut(shortcut).mode = mode_t::none;
       settings.writeSettingsToFlash();
       SM_setupCard::start();
       current_subState = run_setupCard;
@@ -1335,7 +1348,7 @@ void Admin_ShortCut::react(command_e const &cmd_e) {
       }
       break;
     case end_setupCard:
-      settings.shortCuts[shortcut-1] = SM_setupCard::folder;
+      settings.getShortCut(shortcut) = SM_setupCard::folder;
       saveAndTransit();
       return;
     default:
