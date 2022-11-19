@@ -5,26 +5,37 @@
 
 namespace {
 
-const int startAddressAdminSettings = sizeof(folderSettings::folder) * 100;
+//  ############### EEPROM ################################
+//  Address       Usage
+//    0- 99       Folder Settings (Hoerbuch Fortschritt)
+//  100-137       AdminSettings (38 Byte)
+//  138-155       reserved (18 Byte)
+//  156-255       extra Shortcuts (100 Byte, max. 25 Shortcuts)
 
+constexpr uint16_t startAddressFolderSettings =   0;
+constexpr uint16_t startAddressAdminSettings  = 100;
+constexpr uint16_t startAddressExtraShortcuts = 156;
+constexpr uint16_t startAddressReserved       = 256;
+
+#ifdef BUTTONS3X3
+constexpr uint16_t maxExtraShortcuts = (startAddressReserved - startAddressExtraShortcuts) / sizeof(folderSettings);
+static_assert(buttonExtSC_buttons <= maxExtraShortcuts, "Too many ExtraShortCuts");
+#endif
 }
 
-void Settings::writeByteToFlash(uint16_t address, uint8_t value) {
-  EEPROM_put(address, value);
-}
-
-uint8_t Settings::readByteFromFlash(uint16_t address) {
-  return EEPROM.read(address);
-}
+#ifdef BUTTONS3X3
+folderSettings Settings::extShortCut{};
+#endif
 
 void Settings::clearEEPROM() {
   LOG(settings_log, s_info, F("clearEEPROM"));
-  for (uint16_t i = 0; i < sizeof(folderSettings::folder) * 100 + sizeof(this); i++) {
-    writeByteToFlash(i, 0);
+  for (uint16_t i = startAddressFolderSettings; i < startAddressReserved; ++i) {
+    EEPROM.write(i, '\0');
   }
 }
 
 void Settings::writeSettingsToFlash() {
+  static_assert(startAddressExtraShortcuts-startAddressAdminSettings > sizeof(Settings), "Settings to big");
   LOG(settings_log, s_debug, F("writeSettingsToFlash"));
   EEPROM_put(startAddressAdminSettings, *this);
 }
@@ -54,11 +65,6 @@ void Settings::resetSettings() {
   adminMenuPin[2]      =  1;
   adminMenuPin[3]      =  1;
   pauseWhenCardRemoved = false;
-
-#ifdef BUTTONS3X3
-  for (uint8_t i = 0; i < buttonExtSC_buttons; ++i)
-    extShortCuts[i].folder = 0;
-#endif // BUTTONS3X3
 
   writeSettingsToFlash();
 }
@@ -97,23 +103,47 @@ void Settings::loadSettingsFromFlash() {
   LOG(settings_log, s_info, F("Pause when card removed: "), pauseWhenCardRemoved);
 }
 
-void Settings::writeFolderSettingToFlash(uint8_t folder, uint16_t track) {
-  writeByteToFlash(folder, min(track, 0xffu));
+void Settings::writeFolderSettingToFlash(uint8_t folder, uint8_t track) {
+  EEPROM.write(folder, track);
 }
 
-uint16_t Settings::readFolderSettingFromFlash(uint8_t folder) {
-  return readByteFromFlash(folder);
+uint8_t Settings::readFolderSettingFromFlash(uint8_t folder) {
+  return EEPROM.read(folder);
 }
+
+void Settings::writeExtShortCutToFlash (uint8_t shortCut, const folderSettings& value) {
+  const int address = startAddressExtraShortcuts + shortCut * sizeof(folderSettings);
+  EEPROM_put(address, value);
+}
+
+void Settings::readExtShortCutFromFlash(uint8_t shortCut,       folderSettings& value) {
+  const int address = startAddressExtraShortcuts + shortCut * sizeof(folderSettings);
+  EEPROM_get(address, value);
+}
+
 
 folderSettings& Settings::getShortCut(uint8_t shortCut) {
   if (shortCut > 0 && shortCut <= 4)
     return shortCuts[shortCut];
 #ifdef BUTTONS3X3
-  else if (shortCut >= buttonExtSC_begin && shortCut < buttonExtSC_begin + buttonExtSC_buttons)
-    return extShortCuts[shortCut-buttonExtSC_begin];
+  else if (shortCut >= buttonExtSC_begin && shortCut < buttonExtSC_begin + buttonExtSC_buttons) {
+    readExtShortCutFromFlash(shortCut-buttonExtSC_begin, extShortCut);
+    return extShortCut;
+  }
 #endif
 
   return shortCuts[0];
 }
 
+void Settings::setShortCut(uint8_t shortCut, const folderSettings& value) {
+  if (shortCut > 0 && shortCut <= 4) {
+    shortCuts[shortCut] = value;
+    // writeSettingsToFlash(); -- will be done in state machine
+  }
+#ifdef BUTTONS3X3
+  else if (shortCut >= buttonExtSC_begin && shortCut < buttonExtSC_begin + buttonExtSC_buttons) {
+    writeExtShortCutToFlash(shortCut-buttonExtSC_begin, value);
+  }
+#endif
+}
 

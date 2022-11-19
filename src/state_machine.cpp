@@ -1317,17 +1317,19 @@ void Admin_ShortCut::react(command_e const &cmd_e) {
   if (isAbort(cmd_e))
     return;
 
-  if ((shortcut == 0) && (cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
-    shortcut = currentValue;
-    current_subState = start_setupCard;
-  }
+  if (shortcut == 0) {
+    if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+      shortcut = currentValue;
+      current_subState = start_setupCard;
+    }
 #ifdef BUTTONS3X3
-  else if (Commands::isExtButton(cmd_e.cmd_raw)) {
-    shortcut = static_cast<uint8_t>(cmd_e.cmd_raw);
-    current_subState = start_setupCard;
-    LOG(state_log, s_info, F("shortcut set"), static_cast<int>(shortcut));
-  }
+    else if (Commands::isExtButton(cmd_e.cmd_raw)) {
+      shortcut = static_cast<uint8_t>(cmd_e.cmd_raw);
+      current_subState = start_setupCard;
+      LOG(state_log, s_info, F("shortcut set"), static_cast<int>(shortcut));
+    }
 #endif
+  }
   else {
     switch (current_subState) {
     case start_setupCard:
@@ -1348,7 +1350,7 @@ void Admin_ShortCut::react(command_e const &cmd_e) {
       }
       break;
     case end_setupCard:
-      settings.getShortCut(shortcut) = SM_setupCard::folder;
+      settings.setShortCut(shortcut, SM_setupCard::folder);
       saveAndTransit();
       return;
     default:

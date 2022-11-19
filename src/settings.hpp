@@ -15,9 +15,6 @@ struct Settings {
 #endif
   typedef array<uint8_t       , 4                  > pin_t;
 
-  void    writeByteToFlash (uint16_t address, uint8_t value);
-  uint8_t readByteFromFlash(uint16_t address);
-
   void clearEEPROM();
 
   void writeSettingsToFlash();
@@ -25,10 +22,14 @@ struct Settings {
   void migrateSettings(int oldVersion);
   void loadSettingsFromFlash();
 
-  void     writeFolderSettingToFlash (uint8_t folder, uint16_t track);
-  uint16_t readFolderSettingFromFlash(uint8_t folder);
+  void    writeFolderSettingToFlash (uint8_t folder, uint8_t track);
+  uint8_t readFolderSettingFromFlash(uint8_t folder);
+
+  void    writeExtShortCutToFlash (uint8_t shortCut, const folderSettings& value);
+  void    readExtShortCutFromFlash(uint8_t shortCut,       folderSettings& value);
 
   folderSettings& getShortCut(uint8_t shortCut);
+  void            setShortCut(uint8_t shortCut, const folderSettings& value);
 
   uint32_t    cookie;
   byte        version;
@@ -45,7 +46,7 @@ struct Settings {
   bool        pauseWhenCardRemoved;
 
 #ifdef BUTTONS3X3
-  extShortCuts_t extShortCuts;
+  static folderSettings extShortCut;
 #endif
 };
 
