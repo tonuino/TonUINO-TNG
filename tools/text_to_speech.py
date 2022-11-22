@@ -40,22 +40,23 @@ Amazon Polly sounds best, Google text-to-speech is second, MacOS `say` sounds wo
 def addArgumentsToArgparser(argparser):
     argparser.add_argument('--lang', choices=['de', 'en'], default='de', help='The language (default: de)')
     argparser.add_argument('--use-say', action='store_true', default=None, help="If set, the MacOS tool `say` will be used.")
+    argparser.add_argument('--use-pyttsx', action='store_true', default=None, help="Text to Speech (TTS) library for Python 2 and 3. Works without internet connection or delay. Supports multiple TTS engines, including Sapi5, nsss, and espeak.")
     argparser.add_argument('--use-amazon', action='store_true', default=None, help="If set, Amazon Polly is used. If missing the MacOS tool `say` will be used.")
     argparser.add_argument('--use-google-key', type=str, default=None, help="The API key of the Google text-to-speech account to use.")
 
 
 def checkArgs(argparser, args):
-    if not args.use_say and not args.use_amazon and args.use_google_key is None:
-        print('ERROR: You have to provide one of the arguments `--use-say`, `--use-amazon` or `--use-google-key`\n')
+    if not args.use_say and not args.use_pyttsx and not args.use_amazon and not args.use_google_key:
+        print('ERROR: You have to provide one of the arguments `--use-say`, `--use-amazon`, `--use-google-key` or `--use-pyttsx`\n')
         argparser.print_help()
         sys.exit(2)
 
 
 def textToSpeechUsingArgs(text, targetFile, args):
-    textToSpeech(text, targetFile, lang=args.lang, useAmazon=args.use_amazon, useGoogleKey=args.use_google_key)
+    textToSpeech(text, targetFile, lang=args.lang, useAmazon=args.use_amazon, useGoogleKey=args.use_google_key, usePyttsx=args.use_pyttsx)
 
 
-def textToSpeech(text, targetFile, lang='de', useAmazon=False, useGoogleKey=None):
+def textToSpeech(text, targetFile, lang='de', useAmazon=False, useGoogleKey=None, usePyttsx=None):
     print('\nGenerating: ' + targetFile + ' - ' + text)
     if useAmazon:
         response = subprocess.check_output(['aws', 'polly', 'synthesize-speech', '--output-format', 'mp3',
@@ -80,9 +81,17 @@ def textToSpeech(text, targetFile, lang='de', useAmazon=False, useGoogleKey=None
         )
 
         mp3Data = base64.b64decode(responseJson['audioContent'])
-
         with open(targetFile, 'wb') as f:
             f.write(mp3Data)
+    elif usePyttsx:
+        # requirement: pip3 install pyttsx3
+        import pyttsx3;
+        engine = pyttsx3.init();
+        voices = engine.getProperty('voices')
+        engine.setProperty('voice', voices[0].id) #change index to change voices
+        engine.save_to_file(text, targetFile)
+        engine.runAndWait() 
+
     else:
         subprocess.call([ 'say', '-v', sayVoiceByLang[lang], '-o', 'temp.aiff', text ])
         subprocess.call([ 'ffmpeg', '-y', '-i', 'temp.aiff', '-acodec', 'libmp3lame', '-ab', '128k', '-ac', '1', targetFile ])
