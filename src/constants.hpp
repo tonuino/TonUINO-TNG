@@ -24,12 +24,6 @@
 // um die Unterstützung für die 3x3 Buttons zu haben bitte in der nächste Zeile den Kommentar entfernen
 //#define BUTTONS3X3
 
-// uncomment the below line if you you want to have more short cuts for the 3x3Buttons in which you have to press
-// two buttons successively
-// um mehr Short Cuts bei den 3x3 Buttons zu haben indem zwei Buttons nacheinander gedrückt werden müssen
-// bitte in der nächste Zeile den Kommentar entfernen
-//#define BUTTONS3X3_PRESS_TWO
-
 // ####### helper for level ############################
 
 enum class level : uint8_t {
@@ -47,12 +41,8 @@ inline constexpr int getLevel(levelType t, level l) { return (l == level::inacti
 #ifdef FIVEBUTTONS
 static_assert(false, "The 3x3 Button board doesn't have 5 Buttons");
 #endif
-inline constexpr uint8_t buttonExtSC_begin = 101;
-#ifdef BUTTONS3X3_PRESS_TWO
-inline constexpr uint8_t buttonExtSC_buttons = 81;
-#else // BUTTONS3X3_PRESS_TWO
-inline constexpr uint8_t buttonExtSC_buttons = 9;
-#endif // BUTTONS3X3_PRESS_TWO
+inline constexpr uint8_t buttonExtSC_begin   = 101;
+inline constexpr uint8_t buttonExtSC_buttons =  18;
 #endif // BUTTONS3X3
 
 
@@ -115,9 +105,6 @@ inline constexpr uint32_t  buttonLongPress = 1000; // timeout for long press but
 inline constexpr uint8_t   buttonPausePin  = A0;
 
 #ifdef BUTTONS3X3
-#ifdef BUTTONS3X3_PRESS_TWO
-static_assert(false, "BUTTONS3X3_PRESS_TWO not possible for ALLinONE_Plus");
-#endif
 inline constexpr uint8_t   button3x3Pin    = A2;
 inline constexpr uint8_t   buttonUpPin     = A4;
 inline constexpr uint8_t   buttonDownPin   = A3;

@@ -6,21 +6,31 @@
 
 //#define CALIBRATE3X3
 
+namespace {
+constexpr uint8_t numLevels = 9;
+constexpr uint16_t levels[numLevels+1] = {
+                                             0
+                                         ,  77
+                                         , 148
+                                         , 234
+                                         , 306
+                                         , 390
+                                         , 465
+                                         , 534
+                                         , 593
+                                         , 784
+                                         };
+}
+
 Buttons3x3::Buttons3x3()
 : CommandSource()
 , buttons(button3x3Pin)
 {
   buttons.setDebounceTime(button3x3DbTime);
-  buttons.setNoPressValue(784) ;
-  buttons.registerKey(1,   0);
-  buttons.registerKey(2,  77);
-  buttons.registerKey(3, 148);
-  buttons.registerKey(4, 234);
-  buttons.registerKey(5, 306);
-  buttons.registerKey(6, 390);
-  buttons.registerKey(7, 465);
-  buttons.registerKey(8, 534);
-  buttons.registerKey(9, 593);
+  buttons.setLongPressTime(buttonLongPress);
+  buttons.setNoPressValue(levels[numLevels]);
+  for (uint8_t i = 0; i < numLevels; ++i)
+    buttons.registerKey(i+1, levels[i], 9+i+1);
 }
 
 commandRaw Buttons3x3::getCommandRaw() {
@@ -33,17 +43,8 @@ commandRaw Buttons3x3::getCommandRaw() {
 #else
   const uint8_t button = buttons.getKey();
 
-  if (button > 0 && button < 10) {
-#ifdef BUTTONS3X3_PRESS_TWO
-    if (first_button == 0)
-      first_button = button;
-    else {
-      ret = static_cast<commandRaw>(static_cast<uint8_t>(commandRaw::ext_begin) + (first_button-1)*9 + button - 1);
-      first_button = 0;
-    }
-#else
+  if (button >= 1 && button <= buttonExtSC_buttons) {
     ret = static_cast<commandRaw>(static_cast<uint8_t>(commandRaw::ext_begin) + button - 1);
-#endif
   }
 
   if (ret != commandRaw::none) {
