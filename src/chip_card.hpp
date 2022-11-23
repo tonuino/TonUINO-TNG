@@ -64,7 +64,6 @@ enum class cardEvent : uint8_t {
 };
 
 class Mp3;     // forward declaration to not have to include it here
-class Buttons;
 
 class delayedSwitchOn {
 public:
@@ -83,7 +82,7 @@ private:
 
 class Chip_card {
 public:
-  Chip_card(Mp3 &mp3, Buttons &buttons);
+  Chip_card(Mp3 &mp3);
 
   enum class readCardEvent : uint8_t {
     none ,
@@ -105,7 +104,6 @@ private:
 
   MFRC522             mfrc522;
   Mp3                 &mp3;
-  Buttons             &buttons;
 
   delayedSwitchOn     cardRemovedSwitch;
   bool                cardRemoved = true;

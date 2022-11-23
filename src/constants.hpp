@@ -13,6 +13,13 @@
 // um dedizierte Lauter-/Leiserknöpfe zu haben bitte die nächste Zeile auskommentieren (Standard bei AiO und AiO+)
 //#define FIVEBUTTONS
 
+// uncomment the below line to enable serial input as additional command source
+// um den Serial Monitor als zusätzliche Kommandoquelle zu haben bitte in der nächste Zeile den Kommentar entfernen
+//#define SerialInputAsCommand
+// 7:            8: up         9: upLong
+// 4: allLong    5: pause      6: pauseLong
+// 1:            2: down       3: downLong
+
 // ####### helper for level ############################
 
 enum class level : uint8_t {
@@ -20,8 +27,8 @@ enum class level : uint8_t {
   active  ,
 };
 enum class levelType : uint8_t {
-  activeHigh,
-  activeLow ,
+  activeHigh, // normally open
+  activeLow , // normally closed
 };
 
 inline constexpr int getLevel(levelType t, level l) { return (l == level::inactive) ? (t == levelType::activeHigh ? LOW : HIGH)
@@ -29,9 +36,6 @@ inline constexpr int getLevel(levelType t, level l) { return (l == level::inacti
 
 #ifdef TonUINO_Classic
 // ####### buttons #####################################
-
-// uncomment the below line to enable five button support
-//#define FIVEBUTTONS
 
 inline constexpr uint32_t  buttonLongPress = 1000; // timeout for long press button in ms
 inline constexpr uint8_t   buttonPausePin  = A0;
@@ -77,7 +81,6 @@ inline constexpr unsigned long cycleTime       = 50;
 #ifdef ALLinONE_Plus
 // ####### buttons #####################################
 
-// uncomment the below line to enable five button support
 #define FIVEBUTTONS
 
 inline constexpr uint32_t  buttonLongPress = 1000; // timeout for long press button in ms
@@ -128,7 +131,6 @@ inline constexpr unsigned long cycleTime        = 50;
 #ifdef ALLinONE
 // ####### buttons #####################################
 
-// uncomment the below line to enable five button support
 #define FIVEBUTTONS
 
 inline constexpr uint32_t  buttonLongPress = 1000; // timeout for long press button in ms
@@ -163,6 +165,7 @@ inline constexpr uint8_t       dfPlayer_transmitPin     = 3;
 inline constexpr uint8_t       dfPlayer_busyPin         = 4;
 inline constexpr levelType     dfPlayer_busyPinType     = levelType::activeHigh;
 inline constexpr unsigned long dfPlayer_timeUntilStarts = 500;
+
 // ####### tonuino #####################################
 
 inline constexpr uint8_t       shutdownPin      = 7;
