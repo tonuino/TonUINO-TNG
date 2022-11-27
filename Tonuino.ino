@@ -19,10 +19,8 @@
 
 /*
 Please select your TonUINO PCB (Classic, AiO or AiO+) in file constants.hpp
-Right now you must use an older version of the DFPlayer Mini Mp3 by Makuna library (1.0.7)!
 
 Bitte wählt eure TonUINO-Platine (Classic, AiO oder AiO+) in der Datei constands.hpp
-Aktuell wird nur eine ältere Version der DFPlayer Mini Mp3 by Makuna Bibliothek (1.0.7) unterstützt!
 */
 
 void setup()
