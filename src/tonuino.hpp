@@ -20,8 +20,8 @@ public:
   void playFolder     ();
   void playTrackNumber();
 
-  void       nextTrack(bool fromOnPlayFinished = false);
-  void   previousTrack();
+  void       nextTrack(uint8_t tracks = 1, bool fromOnPlayFinished = false);
+  void   previousTrack(uint8_t tracks = 1);
 
   void resetActiveModifier   () { activeModifier = &noneModifier; }
   Modifier& getActiveModifier() { return *activeModifier; }
@@ -48,7 +48,7 @@ private:
 
   Settings             settings            {};
   Mp3                  mp3                 {settings};
-  Buttons              buttons             {};
+  Buttons              buttons             {settings};
 #ifdef SerialInputAsCommand
   SerialInput          serialInput         {};
 #endif

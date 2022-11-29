@@ -745,6 +745,11 @@ void Play::react(command_e const &cmd_e) {
       break;
     tonuino.nextTrack();
     break;
+  case command::next10:
+    if (tonuino.getActiveModifier().handleNextButton())
+      break;
+    tonuino.nextTrack(10);
+    break;
   case command::volume_down:
     if (tonuino.getActiveModifier().handleVolumeDown())
       break;
@@ -754,6 +759,11 @@ void Play::react(command_e const &cmd_e) {
     if (tonuino.getActiveModifier().handlePreviousButton())
       break;
     tonuino.previousTrack();
+    break;
+  case command::previous10:
+    if (tonuino.getActiveModifier().handlePreviousButton())
+      break;
+    tonuino.previousTrack(10);
     break;
   default:
     break;

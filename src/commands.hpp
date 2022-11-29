@@ -18,7 +18,9 @@ enum class commandRaw: uint8_t {
   allLong,
 #ifdef FIVEBUTTONS
   four,
+  fourLong,
   five,
+  fiveLong,
 #endif
   start,
 };
@@ -31,7 +33,9 @@ enum class command: uint8_t {
   volume_up,
   volume_down,
   next,
+  next10,
   previous,
+  previous10,
   start,
 };
 

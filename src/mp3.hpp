@@ -169,8 +169,8 @@ public:
   void enqueueMp3FolderTrack(uint16_t  track, bool playAfter = false);
   void enqueueMp3FolderTrack(mp3Tracks track, bool playAfter = false);
   void playCurrent();
-  void playNext();
-  void playPrevious();
+  void playNext(uint8_t tracks = 1);
+  void playPrevious(uint8_t tracks = 1);
   uint8_t getCurrentTrack() { return playing ? q.get(current_track) : 0; }
 
 #ifdef CHECK_MISSING_ONPLAYFINISHED

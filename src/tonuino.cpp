@@ -152,7 +152,7 @@ void Tonuino::playTrackNumber () {
 
 
 // Leider kann das Modul selbst keine Queue abspielen, daher müssen wir selbst die Queue verwalten
-void Tonuino::nextTrack(bool fromOnPlayFinished) {
+void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
   LOG(play_log, s_info, F("nextTrack"));
   if (activeModifier->handleNext())
     return;
@@ -162,16 +162,16 @@ void Tonuino::nextTrack(bool fromOnPlayFinished) {
     if (fromOnPlayFinished && myFolder->mode == mode_t::hoerbuch_1)
       mp3.clearFolderQueue();
   }
-  mp3.playNext();
+  mp3.playNext(tracks);
 }
 
-void Tonuino::previousTrack() {
+void Tonuino::previousTrack(uint8_t tracks) {
   LOG(play_log, s_info, F("previousTrack"));
   if (mp3.isPlayingFolder() && (myFolder->mode == mode_t::hoerbuch || myFolder->mode == mode_t::hoerbuch_1)) {
     const uint8_t trackToSave = (mp3.getCurrentTrack() > numTracksInFolder) ? mp3.getCurrentTrack()-1 : 1;
     settings.writeFolderSettingToFlash(myFolder->folder, trackToSave);
   }
-  mp3.playPrevious();
+  mp3.playPrevious(tracks);
 }
 
 // Funktionen für den Standby Timer (z.B. über Pololu-Switch oder Mosfet)

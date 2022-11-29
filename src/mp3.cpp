@@ -31,7 +31,7 @@ void Mp3Notify::OnPlayFinished(DfMp3&, DfMp3_PlaySources /*source*/, uint16_t tr
   else
     lastTrackFinished = track;
   delay(1);
-  Tonuino::getTonuino().nextTrack(true/*fromOnPlayFinished*/);
+  Tonuino::getTonuino().nextTrack(1/*tracks*/, true/*fromOnPlayFinished*/);
 }
 
 #ifdef DFPlayerUsesSoftwareSerial
@@ -94,14 +94,14 @@ void Mp3::playAdvertisement(advertTracks track, bool olnyIfIsPlaying) {
 }
 
 void Mp3::clearFolderQueue() {
-  LOG(mp3_log, s_info, F("clear folder"));
+  LOG(mp3_log, s_debug, F("clear folder"));
   if (playing == play_folder) playing = play_none;
   current_track  = 0;
   current_folder = 0;
   q.clear();
 }
 void Mp3::clearMp3Queue() {
-  LOG(mp3_log, s_info, F("clear mp3"));
+  LOG(mp3_log, s_debug, F("clear mp3"));
   if (playing == play_mp3) playing = play_none;
   mp3_track      = 0;
   mp3_track_next = 0;
@@ -138,7 +138,7 @@ void Mp3::enqueueMp3FolderTrack(mp3Tracks track, bool playAfter) {
 }
 
 void Mp3::playCurrent() {
-  LOG(mp3_log, s_info, F("play current"));
+  LOG(mp3_log, s_debug, F("play current"));
   if (current_folder == 0) { // maybe play mp3 track
     if (mp3_track != 0) {
       LOG(mp3_log, s_info, F("play mp3 "), mp3_track);
@@ -166,9 +166,11 @@ void Mp3::playCurrent() {
     }
   }
 }
-void Mp3::playNext() {
+void Mp3::playNext(uint8_t tracks) {
   if (playing == play_folder && current_track+1 < q.size()) {
-    ++current_track;
+    current_track += tracks;
+    if (current_track >= q.size())
+      current_track = q.size()-1;
     LOG(mp3_log, s_debug, F("playNext: "), current_track);
     playCurrent();
   }
@@ -182,9 +184,10 @@ void Mp3::playNext() {
     playing = play_none;
   }
 }
-void Mp3::playPrevious() {
+void Mp3::playPrevious(uint8_t tracks) {
   if (playing == play_folder && current_track > 0) {
-    --current_track;
+    tracks = min(tracks, current_track);
+    current_track -= tracks;
     LOG(mp3_log, s_debug, F("playPrevious: "), current_track);
     playCurrent();
   }
