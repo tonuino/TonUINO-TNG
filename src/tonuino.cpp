@@ -24,7 +24,7 @@ void Tonuino::setup() {
 
 #if defined ALLinONE || defined ALLinONE_Plus
   pinMode(ampEnablePin, OUTPUT);
-  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
+  disableAmplifier();
 
   pinMode(usbAccessPin, OUTPUT);
   digitalWrite(usbAccessPin, getLevel(usbAccessPinType, level::inactive));
@@ -50,9 +50,6 @@ void Tonuino::setup() {
   }
 
   SM_tonuino::start();
-#if defined ALLinONE || defined ALLinONE_Plus
-  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
-#endif
 
   // Start Shortcut "at Startup" - e.g. Welcome Sound
   SM_tonuino::dispatch(command_e(commandRaw::start));
@@ -195,9 +192,22 @@ void Tonuino::disableStandbyTimer() {
   }
 }
 
+void Tonuino::enableAmplifier() {
+#if defined ALLinONE || defined ALLinONE_Plus
+  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
+#endif
+}
+
+void Tonuino::disableAmplifier() {
+#if defined ALLinONE || defined ALLinONE_Plus
+  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
+#endif
+}
+
 void Tonuino::checkStandby() {
   if (standbyTimer.isActive() && standbyTimer.isExpired()) {
     LOG(standby_log, s_info, F("power off!"));
+    disableAmplifier();
     // enter sleep state
     digitalWrite(shutdownPin, getLevel(shutdownPinType, level::inactive));
     delay(500);
