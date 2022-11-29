@@ -29,6 +29,9 @@ public:
   void setStandbyTimer();
   void disableStandbyTimer();
 
+  void enableAmplifier();
+  void disableAmplifier();
+
   void setCard  (const nfcTagObject   &newCard) { myCard = newCard; setFolder(&myCard.nfcFolderSettings); }
   const nfcTagObject& getCard() const           { return myCard; }
   void setFolder(folderSettings *newFolder    ) { myFolder = newFolder; }

@@ -655,6 +655,7 @@ void Base::handleReadCard() {
 
 void Idle::entry() {
   LOG(state_log, s_info, str_enter(), str_Idle());
+  tonuino.disableAmplifier();
   tonuino.setStandbyTimer();
 }
 
@@ -707,6 +708,7 @@ void Idle::react(card_e const &c_e) {
 
 void Play::entry() {
   LOG(state_log, s_info, str_enter(), str_Play());
+  tonuino.enableAmplifier();
   tonuino.disableStandbyTimer();
   mp3.start();
 }
@@ -789,6 +791,7 @@ void Play::react(card_e const &c_e) {
 
 void Pause::entry() {
   LOG(state_log, s_info, str_enter(), str_Pause());
+  tonuino.disableAmplifier();
   tonuino.setStandbyTimer();
   mp3.pause();
 }
@@ -851,6 +854,7 @@ void Pause::react(card_e const &c_e) {
 // #######################################################
 
 void StartPlay::entry() {
+  tonuino.enableAmplifier();
   LOG(state_log, s_info, str_enter(), str_StartPlay());
   mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
 }
@@ -894,6 +898,7 @@ bool Amin_BaseWriteCard::handleWriteCard(command_e const &cmd_e, bool return_to_
 
 void Admin_Allow::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_Allow());
+  tonuino.enableAmplifier();
   current_subState = select_method;
   tonuino.resetActiveModifier();
 }
@@ -1009,6 +1014,7 @@ void Admin_Allow::react(command_e const &cmd_e) {
 
 void Admin_Entry::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_Entry());
+  tonuino.enableAmplifier();
   tonuino.disableStandbyTimer();
   tonuino.resetActiveModifier();
 
@@ -1107,6 +1113,7 @@ void Admin_Entry::react(command_e const &cmd_e) {
 // #######################################################
 
 void Admin_NewCard::entry() {
+  tonuino.enableAmplifier();
   LOG(state_log, s_info, str_enter(), str_Admin_NewCard());
   current_subState = start_setupCard;
 }
