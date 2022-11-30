@@ -119,6 +119,7 @@ void Tonuino::playFolder() {
     LOG(play_log, s_info, myFolder->special, str_bis(), myFolder->special2);
     mp3.enqueueTrack(myFolder->folder, myFolder->special, myFolder->special2);
     mp3.shuffleQueue();
+    mp3.setEndless();
     break;
 
   case mode_t::einzel:

@@ -165,6 +165,7 @@ public:
   // currentTrack             -> index in queue starting with 0
   void enqueueTrack(uint8_t folder, uint8_t firstTrack, uint8_t lastTrack, uint8_t currentTrack = 0);
   void enqueueTrack(uint8_t folder, uint8_t track);
+  void setEndless() { endless = true; }
   void shuffleQueue();
   void enqueueMp3FolderTrack(uint16_t  track, bool playAfter = false);
   void enqueueMp3FolderTrack(mp3Tracks track, bool playAfter = false);
@@ -199,6 +200,7 @@ private:
   track_queue          q{};
   uint8_t              current_folder{};
   size_t               current_track{};
+  bool                 endless{false};
 
   // mp3 queue
   uint16_t             mp3_track{};

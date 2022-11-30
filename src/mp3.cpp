@@ -109,6 +109,7 @@ void Mp3::clearMp3Queue() {
 void Mp3::enqueueTrack(uint8_t folder, uint8_t firstTrack, uint8_t lastTrack, uint8_t currentTrack) {
   clearAllQueue();
   current_folder = folder;
+  endless = false;
   for (uint8_t i = firstTrack; i<=lastTrack; ++i) {
     LOG(mp3_log, s_info, F("enqueue "), folder, F("-"), i);
     q.push(i);
@@ -167,10 +168,10 @@ void Mp3::playCurrent() {
   }
 }
 void Mp3::playNext(uint8_t tracks) {
-  if (playing == play_folder && current_track+1 < q.size()) {
+  if (playing == play_folder && (current_track+1 < q.size() || endless)) {
     current_track += tracks;
     if (current_track >= q.size())
-      current_track = q.size()-1;
+      current_track = endless ? current_track % q.size() : q.size()-1;
     LOG(mp3_log, s_debug, F("playNext: "), current_track);
     playCurrent();
   }
@@ -185,9 +186,9 @@ void Mp3::playNext(uint8_t tracks) {
   }
 }
 void Mp3::playPrevious(uint8_t tracks) {
-  if (playing == play_folder && current_track > 0) {
-    tracks = min(tracks, current_track);
-    current_track -= tracks;
+  if (playing == play_folder && (current_track > 0 || endless)) {
+    int current_track_tmp = static_cast<int>(current_track) - tracks;
+    current_track = endless ? (current_track_tmp%q.size()+q.size()) % q.size() : max(current_track_tmp, 0);
     LOG(mp3_log, s_debug, F("playPrevious: "), current_track);
     playCurrent();
   }
