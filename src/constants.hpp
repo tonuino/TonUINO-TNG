@@ -22,7 +22,7 @@
 
 // uncomment the below line to support the MH2024K16SS chip on the DfMiniMp3 player
 // um den Chip MH2024K16SS auf dem DfMiniMp3 Player zu ünterstützen bitte in der nächste Zeile den Kommentar entfernen
-#define DFMiniMp3_T_CHIP_VARIANT Mp3ChipMH2024K16SS
+//#define DFMiniMp3_T_CHIP_VARIANT Mp3ChipMH2024K16SS
 
 // ####### helper for level ############################
 
