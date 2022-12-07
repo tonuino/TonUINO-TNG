@@ -337,21 +337,33 @@ void VoiceMenu<SMT>::react(command_e const &cmd_e) {
 
   switch(cmd_e.cmd_raw) {
   case commandRaw::upLong:
+#ifdef FIVEBUTTONS
+  case commandRaw::fourLong:
+#endif
     currentValue = min(currentValue + 10, numberOfOptions);
     playCurrentValue();
     break;
 
   case commandRaw::up:
+#ifdef FIVEBUTTONS
+  case commandRaw::four:
+#endif
     currentValue = min(currentValue + 1, numberOfOptions);
     playCurrentValue();
     break;
 
   case commandRaw::downLong:
+#ifdef FIVEBUTTONS
+  case commandRaw::fiveLong:
+#endif
     currentValue = max(currentValue - 10, 1);
     playCurrentValue();
     break;
 
   case commandRaw::down:
+#ifdef FIVEBUTTONS
+  case commandRaw::five:
+#endif
     currentValue = max(currentValue - 1, 1);
     playCurrentValue();
     break;
