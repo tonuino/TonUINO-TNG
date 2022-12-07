@@ -20,7 +20,7 @@
 /*
 Please select your TonUINO PCB (Classic, AiO or AiO+) in file constants.hpp
 
-Bitte wählt eure TonUINO-Platine (Classic, AiO oder AiO+) in der Datei constands.hpp
+Bitte wählt eure TonUINO-Platine (Classic, AiO oder AiO+) in der Datei constants.hpp
 */
 
 void setup()
