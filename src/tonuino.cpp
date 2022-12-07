@@ -24,7 +24,7 @@ void Tonuino::setup() {
 
 #if defined ALLinONE || defined ALLinONE_Plus
   pinMode(ampEnablePin, OUTPUT);
-  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
+  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
 
   pinMode(usbAccessPin, OUTPUT);
   digitalWrite(usbAccessPin, getLevel(usbAccessPinType, level::inactive));
@@ -50,6 +50,10 @@ void Tonuino::setup() {
   }
 
   SM_tonuino::start();
+#if defined ALLinONE || defined ALLinONE_Plus
+  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
+#endif
+
   // Start Shortcut "at Startup" - e.g. Welcome Sound
   SM_tonuino::dispatch(command_e(commandRaw::start));
 }

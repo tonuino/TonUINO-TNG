@@ -23,8 +23,11 @@ using SerialType = HardwareSerial;
 class Mp3Notify;
 
 // define a handy type using serial and our notify class
+#ifdef DFMiniMp3_T_CHIP_VARIANT
+using DfMp3 = DFMiniMp3<SerialType, Mp3Notify, DFMiniMp3_T_CHIP_VARIANT>;
+#else
 using DfMp3 = DFMiniMp3<SerialType, Mp3Notify>;
-
+#endif
 
 enum class mp3Tracks: uint16_t {
   t_0                          =   0,
