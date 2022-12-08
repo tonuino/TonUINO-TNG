@@ -10,14 +10,14 @@
 three Button
 ============
                                                       vol/next-prev inverted
-           admin-menu  idle        pause       play        play
--------------------------------------------------------------------------
-pause      select                  play        pause       pause
-pauseLong  end adm     shortcut    shortcut    track#      track#
-up         next                                next        vol++
-upLong     next 10     shortcut    shortcut    vol++       next
-down       prev                                prev        vol--
-downLong   prev 10     shortcut    shortcut    vol--       prev
+           admin-menu  idle        pause       play         play
+--------------------------------------------------------------------------
+pause      select                  play        pause        pause
+pauseLong  end adm     shortcut    shortcut    track#       track#
+up         next                                next         vol++
+upLong     next 10     shortcut    shortcut    vol++ cont.  next
+down       prev                                prev         vol--
+downLong   prev 10     shortcut    shortcut    vol-- cont.  prev
 
 five Button
 ===========

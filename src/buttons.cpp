@@ -102,13 +102,18 @@ commandRaw Buttons::getCommandRaw() {
   case commandRaw::pauseLong: longPressFactor = 0xff;
                               ignoreRelease = true;
                               break;
+#ifdef FIVEBUTTONS
   case commandRaw::upLong   :
   case commandRaw::downLong : longPressFactor = 0xff;
                               ignoreRelease = true;
                               break;
-#ifdef FIVEBUTTONS
   case commandRaw::fourLong :
   case commandRaw::fiveLong : ++longPressFactor;
+                              ignoreRelease = true;
+                              break;
+#else
+  case commandRaw::upLong   :
+  case commandRaw::downLong : if (settings.invertVolumeButtons) longPressFactor = 0xff; else ++longPressFactor;
                               ignoreRelease = true;
                               break;
 #endif
