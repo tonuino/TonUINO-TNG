@@ -7,9 +7,8 @@ namespace {
 constexpr bool buttonPinIsActiveLow = (buttonPinType == levelType::activeLow);
 }
 
-Buttons::Buttons(const Settings& settings)
+Buttons::Buttons()
 : CommandSource()
-, settings(settings)
 //            pin             dbTime        puEnable              invert
 , buttonPause(buttonPausePin, buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
 , buttonUp   (buttonUpPin   , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
@@ -43,8 +42,6 @@ commandRaw Buttons::getCommandRaw() {
     return commandRaw::none;
   }
 
-  const uint32_t longPressTimout = longPressFactor * buttonLongPress;
-
   if ((  buttonPause.pressedFor(buttonLongPress)
       || buttonUp   .pressedFor(buttonLongPress)
       || buttonDown .pressedFor(buttonLongPress)
@@ -60,24 +57,31 @@ commandRaw Buttons::getCommandRaw() {
     ret = commandRaw::pause;
   }
 
-  else if (buttonPause.pressedFor(longPressTimout)) {
-    ret = commandRaw::pauseLong;
+  else if (buttonPause.pressedFor(longPressFactor * buttonLongPress)) {
+    if (longPressFactor == 1)
+      ret = commandRaw::pauseLong;
   }
 
   else if (buttonUp.wasReleased() && not ignoreRelease) {
     ret = commandRaw::up;
   }
 
-  else if (buttonUp.pressedFor(longPressTimout)) {
-    ret = commandRaw::upLong;
+  else if (buttonUp.pressedFor(longPressFactor * buttonLongPress)) {
+    if (longPressFactor == 1)
+      ret = commandRaw::upLong;
+    else
+      ret = commandRaw::upLongRepeat;
   }
 
   else if (buttonDown.wasReleased() && not ignoreRelease) {
     ret = commandRaw::down;
   }
 
-  else if (buttonDown.pressedFor(longPressTimout)) {
-    ret = commandRaw::downLong;
+  else if (buttonDown.pressedFor(longPressFactor * buttonLongPress)) {
+    if (longPressFactor == 1)
+      ret = commandRaw::downLong;
+    else
+      ret = commandRaw::downLongRepeat;
   }
 
 #ifdef FIVEBUTTONS
@@ -85,40 +89,41 @@ commandRaw Buttons::getCommandRaw() {
     ret = commandRaw::four;
   }
 
-  else if (buttonFour.pressedFor(longPressTimout)) {
-    ret = commandRaw::fourLong;
+  else if (buttonFour.pressedFor(longPressFactor * buttonLongPress)) {
+    if (longPressFactor == 1)
+      ret = commandRaw::fourLong;
+    else
+      ret = commandRaw::fourLongRepeat;
   }
 
   else if (buttonFive.wasReleased() && not ignoreRelease) {
     ret = commandRaw::five;
   }
 
-  else if (buttonFive.pressedFor(longPressTimout)) {
-    ret = commandRaw::fiveLong;
+  else if (buttonFive.pressedFor(longPressFactor * buttonLongPress)) {
+    if (longPressFactor == 1)
+      ret = commandRaw::fiveLong;
+    else
+      ret = commandRaw::fiveLongRepeat;
   }
 #endif
 
   switch (ret) {
-  case commandRaw::pauseLong: longPressFactor = 0xff;
-                              ignoreRelease = true;
-                              break;
+  case commandRaw::pauseLong     :
+  case commandRaw::upLong        :
+  case commandRaw::upLongRepeat  :
+  case commandRaw::downLong      :
+  case commandRaw::downLongRepeat:
 #ifdef FIVEBUTTONS
-  case commandRaw::upLong   :
-  case commandRaw::downLong : longPressFactor = 0xff;
-                              ignoreRelease = true;
-                              break;
-  case commandRaw::fourLong :
-  case commandRaw::fiveLong : ++longPressFactor;
-                              ignoreRelease = true;
-                              break;
-#else
-  case commandRaw::upLong   :
-  case commandRaw::downLong : if (settings.invertVolumeButtons) longPressFactor = 0xff; else ++longPressFactor;
-                              ignoreRelease = true;
-                              break;
+  case commandRaw::fourLong      :
+  case commandRaw::fourLongRepeat:
+  case commandRaw::fiveLong      :
+  case commandRaw::fiveLongRepeat:
 #endif
-  default:
-    break;
+                                   ++longPressFactor;
+                                   ignoreRelease = true;
+                                   break;
+  default                        : break;
   }
 
   if (ret != commandRaw::none) {

@@ -48,7 +48,7 @@ private:
 
   Settings             settings            {};
   Mp3                  mp3                 {settings};
-  Buttons              buttons             {settings};
+  Buttons              buttons             {};
 #ifdef SerialInputAsCommand
   SerialInput          serialInput         {};
 #endif

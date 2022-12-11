@@ -13,14 +13,18 @@ enum class commandRaw: uint8_t {
   pauseLong,
   up,
   upLong,
+  upLongRepeat,
   down,
   downLong,
+  downLongRepeat,
   allLong,
 #ifdef FIVEBUTTONS
   four,
   fourLong,
+  fourLongRepeat,
   five,
   fiveLong,
+  fiveLongRepeat,
 #endif
   start,
 };

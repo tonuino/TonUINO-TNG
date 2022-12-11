@@ -39,7 +39,7 @@ fiveLong   prev 10                             vol-- cont.
 
 class Buttons: public CommandSource {
 public:
-  Buttons(const Settings& settings);
+  Buttons();
 
   commandRaw getCommandRaw() override;
   bool isNoButton();
@@ -48,8 +48,6 @@ public:
 private:
 
   void readButtons();
-
-  const Settings& settings;
 
   Button buttonPause;
   Button buttonUp   ;

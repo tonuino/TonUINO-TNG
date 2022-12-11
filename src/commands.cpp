@@ -33,22 +33,27 @@ command Commands::getCommand(commandRaw b) {
   case commandRaw::allLong  : ret = command::admin                                                               ; break;
 
 #ifdef FIVEBUTTONS
-  case commandRaw::up       : ret = command::next                                                                ; break;
-  case commandRaw::upLong   : ret = command::next10                                                              ; break;
-  case commandRaw::down     : ret = command::previous                                                            ; break;
-  case commandRaw::downLong : ret = command::previous10                                                          ; break;
-  case commandRaw::four     : ret = command::volume_up                                                           ; break;
-  case commandRaw::fourLong : ret = command::volume_up                                                           ; break;
-  case commandRaw::five     : ret = command::volume_down                                                         ; break;
-  case commandRaw::fiveLong : ret = command::volume_down                                                         ; break;
+  case commandRaw::up             : ret = command::next                                                                ; break;
+  case commandRaw::upLong         : ret = command::next10                                                              ; break;
+  case commandRaw::down           : ret = command::previous                                                            ; break;
+  case commandRaw::downLong       : ret = command::previous10                                                          ; break;
+  case commandRaw::four           :
+  case commandRaw::fourLong       :
+  case commandRaw::fourLongRepeat : ret = command::volume_up                                                           ; break;
+  case commandRaw::five           :
+  case commandRaw::fiveLong       :
+  case commandRaw::fiveLongRepeat : ret = command::volume_down                                                         ; break;
 #else
-  case commandRaw::up       : ret = (!settings.invertVolumeButtons) ? command::next        : command::volume_up  ; break;
-  case commandRaw::upLong   : ret = (!settings.invertVolumeButtons) ? command::volume_up   : command::next       ; break;
-  case commandRaw::down     : ret = (!settings.invertVolumeButtons) ? command::previous    : command::volume_down; break;
-  case commandRaw::downLong : ret = (!settings.invertVolumeButtons) ? command::volume_down : command::previous   ; break;
+  case commandRaw::up             : ret = (!settings.invertVolumeButtons) ? command::next        : command::volume_up  ; break;
+  case commandRaw::upLong         : ret = (!settings.invertVolumeButtons) ? command::volume_up   : command::next       ; break;
+  case commandRaw::upLongRepeat   : ret = (!settings.invertVolumeButtons) ? command::volume_up   : command::none       ; break;
+  case commandRaw::down           : ret = (!settings.invertVolumeButtons) ? command::previous    : command::volume_down; break;
+  case commandRaw::downLong       : ret = (!settings.invertVolumeButtons) ? command::volume_down : command::previous   ; break;
+  case commandRaw::downLongRepeat : ret = (!settings.invertVolumeButtons) ? command::volume_down : command::none       ; break;
 #endif
 
-  case commandRaw::start    : ret = command::start;                                                                ; break;
+  case commandRaw::start          : ret = command::start;                                                              ; break;
+  default                         :                                                                                    ; break;
   }
 
   if (ret != command::none) {
