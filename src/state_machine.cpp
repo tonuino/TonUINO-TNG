@@ -663,6 +663,26 @@ void Base::handleReadCard() {
   }
 }
 
+bool Base::checkRawForSortcutAndShutdown(commandRaw cmd_raw) {
+  uint8_t shortCut = 0xff;
+  switch(cmd_raw) {
+  case commandRaw::updownLong: shortCut = 0      ; break;
+  case commandRaw::upLong    : shortCut = 1      ; break;
+  case commandRaw::downLong  : shortCut = 2      ; break;
+  case commandRaw::start     : shortCut = 3      ; break;
+  case commandRaw::pauseLong : tonuino.shutdown(); break;
+  default                    :                     break;
+  }
+  if (shortCut != 0xff) {
+    if (handleShortcut(shortCut))
+      return true;
+    else
+      mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
+  }
+  return false;
+}
+
+
 // #######################################################
 
 void Idle::entry() {
@@ -675,17 +695,10 @@ void Idle::react(command_e const &cmd_e) {
     LOG(state_log, s_debug, str_Idle(), F("::react(cmd_e) "), static_cast<int>(cmd_e.cmd_raw));
   }
 
+  if (checkRawForSortcutAndShutdown(cmd_e.cmd_raw))
+    return;
+
   const command cmd      = commands.getCommand(cmd_e.cmd_raw);
-  uint8_t       shortCut = 0xff;
-
-  switch(cmd_e.cmd_raw) {
-  case commandRaw::pauseLong: shortCut = 0; break;
-  case commandRaw::upLong   : shortCut = 1; break;
-  case commandRaw::downLong : shortCut = 2; break;
-  case commandRaw::start    : shortCut = 3; break;
-  default                   :               break;
-  }
-
   switch (cmd) {
   case command::admin:
     LOG(state_log, s_debug, str_Idle(), str_to(), str_Admin_Allow());
@@ -695,8 +708,6 @@ void Idle::react(command_e const &cmd_e) {
     break;
   }
 
-  if (shortCut != 0xff && not handleShortcut(shortCut))
-    mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
 }
 
 void Idle::react(card_e const &c_e) {
@@ -820,17 +831,10 @@ void Pause::react(command_e const &cmd_e) {
     LOG(state_log, s_debug, str_Pause(), F("::react(b) "), static_cast<int>(cmd_e.cmd_raw));
   }
 
+  if (checkRawForSortcutAndShutdown(cmd_e.cmd_raw))
+    return;
+
   const command cmd      = commands.getCommand(cmd_e.cmd_raw);
-  uint8_t         shortCut = 99;
-
-  switch(cmd_e.cmd_raw) {
-  case commandRaw::pauseLong: shortCut = 0; break;
-  case commandRaw::upLong   : shortCut = 1; break;
-  case commandRaw::downLong : shortCut = 2; break;
-  case commandRaw::start    : shortCut = 3; break;
-  default                   :               break;
-  }
-
   switch (cmd) {
   case command::admin:
     LOG(state_log, s_debug, str_Pause(), str_to(), str_Admin_Allow());
@@ -845,8 +849,6 @@ void Pause::react(command_e const &cmd_e) {
   default:
     break;
   }
-
-  handleShortcut(shortCut);
 }
 
 void Pause::react(card_e const &c_e) {
@@ -1051,8 +1053,8 @@ void Admin_Entry::entry() {
 }
 
 void Admin_Entry::react(command_e const &cmd_e) {
-  if (not chip_card.isCardRemoved())
-    return;
+//  if (not chip_card.isCardRemoved())
+//    return;
 
   if (cmd_e.cmd_raw != commandRaw::none) {
     LOG(state_log, s_debug, str_Admin_Entry(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));

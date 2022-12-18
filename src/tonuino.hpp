@@ -40,6 +40,8 @@ public:
   Chip_card& getChipCard() { return chip_card; }
   static uint32_t generateRamdomSeed();
 
+  void shutdown();
+
 private:
 
   void checkStandby();

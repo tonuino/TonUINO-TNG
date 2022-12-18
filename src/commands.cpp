@@ -51,8 +51,6 @@ command Commands::getCommand(commandRaw b) {
   case commandRaw::downLong       : ret = (!settings.invertVolumeButtons) ? command::volume_down : command::previous   ; break;
   case commandRaw::downLongRepeat : ret = (!settings.invertVolumeButtons) ? command::volume_down : command::none       ; break;
 #endif
-
-  case commandRaw::start          : ret = command::start;                                                              ; break;
   default                         :                                                                                    ; break;
   }
 

@@ -18,6 +18,7 @@ enum class commandRaw: uint8_t {
   downLong,
   downLongRepeat,
   allLong,
+  updownLong,
 #ifdef FIVEBUTTONS
   four,
   fourLong,
@@ -40,7 +41,6 @@ enum class command: uint8_t {
   next10,
   previous,
   previous10,
-  start,
 };
 
 class CommandSource {

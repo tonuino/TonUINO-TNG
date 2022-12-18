@@ -198,20 +198,24 @@ void Tonuino::disableStandbyTimer() {
 
 void Tonuino::checkStandby() {
   if (standbyTimer.isActive() && standbyTimer.isExpired()) {
-    LOG(standby_log, s_info, F("power off!"));
-    // enter sleep state
-    digitalWrite(shutdownPin, getLevel(shutdownPinType, level::inactive));
-    delay(500);
-
-    // http://discourse.voss.earth/t/intenso-s10000-powerbank-automatische-abschaltung-software-only/805
-    // powerdown to 27mA (powerbank switches off after 30-60s)
-    chip_card.sleepCard();
-    mp3.sleep();
-
-    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-    cli();  // Disable interrupts
-    sleep_mode();
+    shutdown();
   }
+}
+
+void Tonuino::shutdown() {
+  LOG(standby_log, s_info, F("power off!"));
+  // enter sleep state
+  digitalWrite(shutdownPin, getLevel(shutdownPinType, level::inactive));
+  delay(500);
+
+  // http://discourse.voss.earth/t/intenso-s10000-powerbank-automatische-abschaltung-software-only/805
+  // powerdown to 27mA (powerbank switches off after 30-60s)
+  chip_card.sleepCard();
+  mp3.sleep();
+
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  cli();  // Disable interrupts
+  sleep_mode();
 }
 
 bool Tonuino::specialCard(const nfcTagObject &nfcTag) {

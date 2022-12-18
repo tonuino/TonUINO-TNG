@@ -13,11 +13,12 @@ three Button
            admin-menu  idle        pause       play         play
 --------------------------------------------------------------------------
 pause      select                  play        pause        pause
-pauseLong  end adm     shortcut    shortcut    track#       track#
+pauseLong  end adm     shutdown    shutdown    track#       track#
 up         next                                next         vol++
-upLong     next 10     shortcut    shortcut    vol++ cont.  next
+upLong     next 10     shortcut2   shortcut2   vol++ cont.  next
 down       prev                                prev         vol--
-downLong   prev 10     shortcut    shortcut    vol-- cont.  prev
+downLong   prev 10     shortcut3   shortcut3   vol-- cont.  prev
+updownLong             shortcut1   shortcut1
 
 five Button
 ===========
@@ -26,11 +27,12 @@ vol/next-prev inverted has no effect for 5 Buttons
            admin-menu  idle        pause       play
 -----------------------------------------------------------
 pause      select                  play        pause
-pauseLong  end adm     shortcut    shortcut    track#
+pauseLong  end adm     shutdown    shutdown    track#
 up         next                                next
-upLong     next 10     shortcut    shortcut    next 10
+upLong     next 10     shortcut2   shortcut2   next 10
 down       prev                                prev
-downLong   prev 10     shortcut    shortcut    prev 10
+downLong   prev 10     shortcut2   shortcut3   prev 10
+updownLong             shortcut1   shortcut1
 four       next                                vol++
 fourLong   next 10                             vol++ cont.
 five       prev                                vol--
