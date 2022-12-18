@@ -1053,8 +1053,8 @@ void Admin_Entry::entry() {
 }
 
 void Admin_Entry::react(command_e const &cmd_e) {
-//  if (not chip_card.isCardRemoved())
-//    return;
+  if (not chip_card.isCardRemoved())
+    return;
 
   if (cmd_e.cmd_raw != commandRaw::none) {
     LOG(state_log, s_debug, str_Admin_Entry(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
