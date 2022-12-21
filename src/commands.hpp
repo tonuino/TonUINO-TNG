@@ -7,8 +7,43 @@
 #include "constants.hpp"
 #include "array.hpp"
 
+/*
+three Button
+============
+                                                      vol/next-prev inverted
+           admin-menu  idle        pause       play         play
+--------------------------------------------------------------------------
+pause      select                  play        pause        pause
+pauseLong  end adm     shutdown    shutdown    track#       track#
+up         next                                next         vol++
+upLong     next 10     shortcut2   shortcut2   vol++ cont.  next
+down       prev                                prev         vol--
+downLong   prev 10     shortcut3   shortcut3   vol-- cont.  prev
+updownLong             shortcut1   shortcut1
+
+five Button
+===========
+vol/next-prev inverted has no effect for 5 Buttons
+
+           admin-menu  idle        pause       play
+-----------------------------------------------------------
+pause      select                  play        pause
+pauseLong  end adm     shutdown    shutdown    track#
+up         next                                next
+upLong     next 10     shortcut2   shortcut2   next 10
+down       prev                                prev
+downLong   prev 10     shortcut2   shortcut3   prev 10
+updownLong             shortcut1   shortcut1
+four       next                                vol++
+fourLong   next 10                             vol++ cont.
+five       prev                                vol--
+fiveLong   prev 10                             vol-- cont.
+*/
+
 enum class commandRaw: uint8_t {
   none,
+  start,
+  allLong,
   pause,
   pauseLong,
   up,
@@ -17,7 +52,6 @@ enum class commandRaw: uint8_t {
   down,
   downLong,
   downLongRepeat,
-  allLong,
   updownLong,
 #ifdef FIVEBUTTONS
   four,
@@ -27,20 +61,36 @@ enum class commandRaw: uint8_t {
   fiveLong,
   fiveLongRepeat,
 #endif
-  start,
 };
 
 enum class command: uint8_t {
   none,
+  // play/pause/idle
   admin,
+  shutdown,
+  shortcut1,
+  shortcut2,
+  shortcut3,
+  start,
   pause,
   track,
   volume_up,
   volume_down,
+  // play/pause/idle/adm
   next,
   next10,
   previous,
   previous10,
+  // adm
+  select,
+  adm_end,
+};
+
+enum class state_for_command: uint8_t {
+  admin       = 0,
+  idle_pause  = 1,
+  play        = 2,
+  play_invert = 3,
 };
 
 class CommandSource {
@@ -53,7 +103,7 @@ public:
   Commands(const Settings& settings, CommandSource* source1, CommandSource* source2 = nullptr, CommandSource* source3 = nullptr);
 
   commandRaw getCommandRaw();
-  command    getCommand   (commandRaw b);
+  command    getCommand   (commandRaw b, state_for_command s);
 
   static uint8_t   getButtonCode(commandRaw b);
 

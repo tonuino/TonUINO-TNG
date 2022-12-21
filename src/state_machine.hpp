@@ -82,7 +82,7 @@ protected:
   bool readCard();
   bool handleShortcut(uint8_t shortCut);
   void handleReadCard();
-  bool checkRawForSortcutAndShutdown(commandRaw cmd_raw);
+  bool checkForShortcutAndShutdown(command cmd);
   static nfcTagObject lastCardRead;
 };
 
