@@ -58,7 +58,7 @@ public:
   virtual void entry(void) { };
   void         exit (void) { waitForPlayFinish = false; };
 
-  bool isAbort(command_e const &);
+  bool isAbort(command cmd);
 
   static folderSettings folder;
 protected:

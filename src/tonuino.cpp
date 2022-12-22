@@ -205,10 +205,6 @@ void Tonuino::checkStandby() {
 void Tonuino::shutdown() {
   LOG(standby_log, s_info, F("power off!"));
 
-  mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
-  mp3.loop();
-  delay(1000);
-
 #if defined ALLinONE || defined ALLinONE_Plus
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
 #endif
