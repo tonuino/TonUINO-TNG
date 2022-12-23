@@ -1,8 +1,24 @@
 # TonUINO
 Die DIY Musikbox (nicht nur) für Kinder
 
+# Anleitung zum Compilieren
+
+## Arduino IDE
+- die Datei 'platform.local.txt' muss in den avr Ordner kopiert werden. Dieser Ordner ist gewöhnlich folgender:
+
+  Windows:
+    C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6
+
+  Linux:
+    /usr/share/arduino/hardware/archlinux-arduino/avr
+
+## platform.io
+- geht out-of-the-box
 
 # Change Log
+
+## Version 3.1.1 (23.12.2022)
+- diverse Bug Fixes
 
 ## Version 3.1 (13.10.2022)
 - Unterstützung für alle Platinen der Leiterkartenpiraten hinzugefügt (über einfaches #define in der `src/constants.hpp` konfigurierbar)
