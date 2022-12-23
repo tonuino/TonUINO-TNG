@@ -1,24 +1,40 @@
 # TonUINO
 Die DIY Musikbox (nicht nur) für Kinder
 
+# Anleitung zum Compilieren
+
+## Arduino IDE
+- die Datei 'platform.local.txt' muss in den avr Ordner kopiert werden. Dieser Ordner ist gewöhnlich folgender:
+
+  Windows:
+    C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6
+
+  Linux:
+    /usr/share/arduino/hardware/archlinux-arduino/avr
+
+## platform.io
+- geht out-of-the-box
 
 # Change Log
 
+## Version 3.1.1 (23.12.2022)
+- diverse Bug Fixes
+
 ## Version 3.1 (13.10.2022)
-- Unterstützung für alle Platinen der Leiterkartenpiraten hinzugefügt (über einfaches #define in der TonUINO.ino konfigurierbar)
+- Unterstützung für alle Platinen der Leiterkartenpiraten hinzugefügt (über einfaches #define in der `src/constants.hpp` konfigurierbar)
   - TonUINO Classic
   - All-in-One
   - All-in-One Plus
   - fix for NTAG213
 
 ## Version 3.0 (xx.xx.xxxx) - by Boerge1
-- vollständiges Refactoring mit State Machine
+- vollständiges Refactoring mit State-Machine
 - Die Main-Loop läuft jetzt stabil mit 50 ms
-- Neues Feature: neuer Mode: Hörbuch einzeln (nur ein Titel wird gespielt und Fortschritt gespeichert
+- Neues Feature: neuer Mode: Hörbuch einzeln (nur ein Titel wird gespielt und Fortschritt gespeichert)
 - Neues Feature: Pause, wenn Karte entfernt wird (lässt sich per Einstellungen steuern)
-- Das Admin Menü wir nach einer Einstellung nicht verlassen (kann in der Software geändert leicht werden)
-- Das Admin Menü kan an jeder Stelle abgrbrochen werden
-- Viele weitere Verbesserungen und Bug Fixes
+- Das Admin-Menü wird nach einer Einstellung nicht verlassen (kann in der Software leicht geändert werden)
+- Das Admin-Menü kan an jeder Stelle abgebrochen werden
+- Viele weitere Verbesserungen und Bug-Fixes
 
 ## Version 2.1 (xx.xx.xxxx) noch WIP
 - Partymodus hat nun eine Queue -> jedes Lied kommt nur genau 1x vorkommt

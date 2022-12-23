@@ -40,12 +40,14 @@ struct folderSettings {
   uint8_t special;
   uint8_t special2;
   bool operator==(const folderSettings& rhs) const {
-    return   folder == rhs.folder
-          && mode   == rhs.mode
-          && ((  mode == mode_t::hoerspiel_vb
-              || mode == mode_t::album_vb
-              || mode == mode_t::party_vb) ? (special == rhs.special && special2 == rhs.special2) : true
-             );
+    if (folder != rhs.folder || mode != rhs.mode)
+      return false;
+    if (mode == mode_t::einzel && special != rhs.special)
+      return false;
+    if ((mode == mode_t::hoerspiel_vb || mode == mode_t::album_vb || mode == mode_t::party_vb) &&
+        (special != rhs.special || special2 == rhs.special2))
+      return false;
+    return true;
   }
 };
 
