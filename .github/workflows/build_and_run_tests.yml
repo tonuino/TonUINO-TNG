@@ -1,0 +1,24 @@
+name: build and run tests
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # install dependencies
+    - name: gtest
+      run: sudo apt-get update && sudo apt-get install -yq gtest
+    # build project
+    - name: mkdir
+      run: mkdir build
+    - name: cmake build
+      run: cmake -Bbuild -H.
+    - name: make
+      run: make all
+    # run tests
+    - name: run tests
+      run: make test
