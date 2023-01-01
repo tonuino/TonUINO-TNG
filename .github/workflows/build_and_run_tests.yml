@@ -10,15 +10,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     # install dependencies
-    - name: gtest
-      run: |
-        sudo apt-get update && sudo apt-get install -yq libgtest-dev cmake
-        #cd /usr/src/gtest
-        #sudo cmake CMakeLists.txt
-        #sudo make
-        #sudo cp lib/*.a /usr/lib
-        #sudo ln -s /usr/lib/libgtest.a /usr/local/lib/gtest/libgtest.a
-        #sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/gtest/libgtest_main.a
+    - name: dependencies
+      run: sudo apt-get update && sudo apt-get install -yq libgtest-dev cmake
     # build project
     - name: build
       run: |
