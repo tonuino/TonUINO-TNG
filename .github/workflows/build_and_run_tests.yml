@@ -1,1 +1,26 @@
-
+name: build and run tests
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    # install dependencies
+    - name: dependencies
+      run: sudo apt-get update && sudo apt-get install -yq libgtest-dev cmake
+    # build project
+    - name: build
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        make all
+    # run tests
+    - name: run tests
+      run: |
+        cd build
+        make test
