@@ -65,12 +65,26 @@ static const uint8_t A5 = PIN_A5;
 static const uint8_t A6 = PIN_A6;
 static const uint8_t A7 = PIN_A7;
 
-extern uint8_t pin_mode[A7+1];
-inline void pinMode(uint8_t pin, uint8_t mode) { if (pin < A7) pin_mode[pin] = mode;  }
-extern int pin_value[A7+1];
-inline int digitalRead(uint8_t pin) { if (pin < A0) return pin_value[pin]; return 0; }
-inline void digitalWrite(uint8_t pin, uint8_t val) { if (pin < A0) pin_value[pin] = val; }
+static const uint8_t max_pin = 32;
+
+extern uint8_t pin_mode[max_pin];
+extern int pin_value[max_pin];
+
+inline void pinMode(uint8_t pin, uint8_t mode) {
+  if (pin < max_pin) {
+    pin_mode[pin] = mode;
+    if (mode == INPUT_PULLUP)
+      pin_value[pin] = 1;
+  }
+}
+inline int digitalRead(uint8_t pin) { if (pin < max_pin) return pin_value[pin]; return 0; }
+inline void digitalWrite(uint8_t pin, uint8_t val) { if (pin < max_pin) pin_value[pin] = val; }
 inline int analogRead(uint8_t pin) { if (pin <= A7 && pin >= A0) return pin_value[pin]; return 0; }
+
+// test functions
+inline void press_button  (uint8_t pin) { if (pin < max_pin) pin_value[pin] = LOW; }
+inline void release_button(uint8_t pin) { if (pin < max_pin) pin_value[pin] = HIGH; }
+// test functions end
 
 #define set_sleep_mode(mode)
 #define cli()
@@ -128,7 +142,7 @@ class Print
   public:
     static std::stringstream s;
     static std::string get_output() { return s.str(); }
-    static void clear_output() { s.clear(); }
+    static void clear_output() { s.str(std::string());; }
 
     size_t write(uint8_t o) { s << o; return 1; }
     size_t write(const char *str) {

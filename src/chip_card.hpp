@@ -100,6 +100,9 @@ public:
   bool isCardRemoved     () { return cardRemoved; }
 
 private:
+  friend class tonuino_test_fixture;
+  friend class chip_card_test_fixture;
+
   void stopCrypto1();
   void stopCard   ();
   bool auth       (MFRC522::PICC_Type piccType);

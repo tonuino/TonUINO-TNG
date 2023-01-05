@@ -3,9 +3,7 @@
  * 
  * @authors Dr.Leong, Miguel Balboa, Søren Thing Andersen, Tom Clement, many more! See GitLog.
  * 
- * For more information read the README.
- * 
- * Please read this file for an overview and then MFRC522.cpp for comments on the specific functions.
+ * Boerge1: adapted for mocking in unit tests
  */
 #ifndef MFRC522_h
 #define MFRC522_h
@@ -103,36 +101,109 @@ public:
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Functions for manipulating the MFRC522
 	/////////////////////////////////////////////////////////////////////////////////////
-	void PCD_Init() {}
-	void PCD_AntennaOff() {}
+  bool called_Init = false;
+	void PCD_Init() { called_Init = true; }
+  bool called_AntennaOff = false;
+	void PCD_AntennaOff() { called_AntennaOff = true; }
 	
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Power control functions
 	/////////////////////////////////////////////////////////////////////////////////////
-	void PCD_SoftPowerDown() {}
-	void PCD_SoftPowerUp() {}
+  bool called_SoftPowerDown = false;
+	void PCD_SoftPowerDown() { called_SoftPowerDown = true; }
 	
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Functions for communicating with PICCs
 	/////////////////////////////////////////////////////////////////////////////////////
-	StatusCode PICC_RequestA(byte *bufferATQA, byte *bufferSize) { return STATUS_OK; }
-	StatusCode PICC_HaltA() { return STATUS_OK; }
+	bool called_PICC_RequestA = false;
+	StatusCode PICC_RequestA(byte *bufferATQA, byte *bufferSize) {
+	  if (!called_PCD_Authenticate && card_is_in) {
+	    called_PICC_RequestA = true;
+	    return STATUS_OK;
+	  }
+    called_PICC_RequestA = false;
+	  return STATUS_ERROR;
+	}
+
+	bool called_PICC_HaltA = false;
+	StatusCode PICC_HaltA() {
+	  called_PICC_HaltA = true;
+	  return STATUS_OK;
+	}
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Functions for communicating with MIFARE PICCs
 	/////////////////////////////////////////////////////////////////////////////////////
-	StatusCode PCD_Authenticate(byte command, byte blockAddr, MIFARE_Key *key, Uid *uid) { return STATUS_OK; }
-	void PCD_StopCrypto1() {}
-	StatusCode MIFARE_Read(byte blockAddr, byte *buffer, byte *bufferSize) { return STATUS_OK; }
-	StatusCode MIFARE_Write(byte blockAddr, byte *buffer, byte bufferSize) { return STATUS_OK; }
-	StatusCode PCD_NTAG216_AUTH(byte *passWord, byte pACK[]) { return STATUS_OK; }
+	bool called_PCD_Authenticate = false;
+	StatusCode PCD_Authenticate(byte command, byte blockAddr, MIFARE_Key *key, Uid *uid) {
+	  if (command == PICC_CMD_MF_AUTH_KEY_A && blockAddr == 7 && key->keyByte[0] == 0xff && uid->size != 0) {
+	    called_PCD_Authenticate = true;
+	    return STATUS_OK;
+	  }
+	  called_PCD_Authenticate = false;
+	  return STATUS_ERROR;
+	}
+	void PCD_StopCrypto1() {
+	  called_PCD_Authenticate = false;
+	}
+	StatusCode MIFARE_Read(byte blockAddr, byte *buffer, byte *bufferSize) {
+	  if (!called_PCD_Authenticate && blockAddr != 4 && *bufferSize != buffferSizeRead)
+	    return STATUS_ERROR;
+	  memcpy(buffer, t_buffer, buffferSizeRead);
+	  return STATUS_OK;
+	}
+	StatusCode MIFARE_Write(byte blockAddr, byte *buffer, byte bufferSize) {
+    if (!called_PCD_Authenticate && blockAddr != 4 && bufferSize != buffferSizeWrite)
+      return STATUS_ERROR;
+    memcpy(t_buffer, buffer, buffferSizeWrite);
+	  return STATUS_OK;
+	}
+	StatusCode PCD_NTAG216_AUTH(byte *passWord, byte pACK[]) {
+	  return STATUS_ERROR; // todo: implement UL
+	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Support functions
 	/////////////////////////////////////////////////////////////////////////////////////
 	static const __FlashStringHelper *GetStatusCodeName(StatusCode code) { return ""; }
-	static PICC_Type PICC_GetType(byte sak) { return PICC_TYPE_MIFARE_1K; }
-	static const __FlashStringHelper *PICC_GetTypeName(PICC_Type type) { return ""; }
+	static PICC_Type PICC_GetType(byte sak   ///< The SAK byte returned from PICC_Select().
+	                    ) {
+	  // http://www.nxp.com/documents/application_note/AN10833.pdf
+	  // 3.2 Coding of Select Acknowledge (SAK)
+	  // ignore 8-bit (iso14443 starts with LSBit = bit 1)
+	  // fixes wrong type for manufacturer Infineon (http://nfc-tools.org/index.php?title=ISO14443A)
+	  sak &= 0x7F;
+	  switch (sak) {
+	    case 0x04:  return PICC_TYPE_NOT_COMPLETE;  // UID not complete
+	    case 0x09:  return PICC_TYPE_MIFARE_MINI;
+	    case 0x08:  return PICC_TYPE_MIFARE_1K;
+	    case 0x18:  return PICC_TYPE_MIFARE_4K;
+	    case 0x00:  return PICC_TYPE_MIFARE_UL;
+	    case 0x10:
+	    case 0x11:  return PICC_TYPE_MIFARE_PLUS;
+	    case 0x01:  return PICC_TYPE_TNP3XXX;
+	    case 0x20:  return PICC_TYPE_ISO_14443_4;
+	    case 0x40:  return PICC_TYPE_ISO_18092;
+	    default:  return PICC_TYPE_UNKNOWN;
+	  }
+	} // End PICC_GetType()
+	static const __FlashStringHelper *PICC_GetTypeName(PICC_Type piccType ///< One of the PICC_Type enums.
+	                          ) {
+	  switch (piccType) {
+	    case PICC_TYPE_ISO_14443_4:   return F("PICC compliant with ISO/IEC 14443-4");
+	    case PICC_TYPE_ISO_18092:   return F("PICC compliant with ISO/IEC 18092 (NFC)");
+	    case PICC_TYPE_MIFARE_MINI:   return F("MIFARE Mini, 320 bytes");
+	    case PICC_TYPE_MIFARE_1K:   return F("MIFARE 1KB");
+	    case PICC_TYPE_MIFARE_4K:   return F("MIFARE 4KB");
+	    case PICC_TYPE_MIFARE_UL:   return F("MIFARE Ultralight or Ultralight C");
+	    case PICC_TYPE_MIFARE_PLUS:   return F("MIFARE Plus");
+	    case PICC_TYPE_MIFARE_DESFIRE:  return F("MIFARE DESFire");
+	    case PICC_TYPE_TNP3XXX:     return F("MIFARE TNP3XXX");
+	    case PICC_TYPE_NOT_COMPLETE:  return F("SAK indicates UID is not complete.");
+	    case PICC_TYPE_UNKNOWN:
+	    default:            return F("Unknown type");
+	  }
+	} // End PICC_GetTypeName()
 	
 	// Support functions for debuging
 	void PCD_DumpVersionToSerial() {}
@@ -140,7 +211,63 @@ public:
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Convenience functions - does not add extra functionality
 	/////////////////////////////////////////////////////////////////////////////////////
-	virtual bool PICC_ReadCardSerial() { return true; }
+	virtual bool PICC_ReadCardSerial() {
+	  if (card_is_in && called_PICC_RequestA) {
+	    called_PICC_RequestA = false;
+	    uid.size = 4;
+	    for (uint8_t i = 0; i < uid.size; ++i)
+	      uid.uidByte[i] = i+1;
+	    uid.sak = 0x08; // todo: implement other card types
+	    return true;
+	  }
+	  return false;
+	}
+
+	// implement MFRC522 with following usage:
+	// Chip_card::getCardEvent():
+	//   PICC_RequestA() if card in --> return STATUS_OK
+	//   PICC_ReadCardSerial() if card in --> init uid
+	// Chip_card::readCard()
+  //   PICC_GetType() --> PICC_TYPE_MIFARE_MINI, PICC_TYPE_MIFARE_1K, PICC_TYPE_MIFARE_4K or PICC_TYPE_MIFARE_UL
+	//   Chip_card::auth()
+	//     PCD_Authenticate() or PCD_NTAG216_AUTH()
+	//   MIFARE_Read() (for UL for more blocks) --> fills buffer
+	//   PCD_StopCrypto1()
+  // Chip_card::writeCard()
+  //   PICC_GetType() --> PICC_TYPE_MIFARE_MINI, PICC_TYPE_MIFARE_1K, PICC_TYPE_MIFARE_4K or PICC_TYPE_MIFARE_UL
+  //   Chip_card::auth()
+  //     PCD_Authenticate() or PCD_NTAG216_AUTH()
+  //   MIFARE_Write() (for UL for more blocks) --> fills buffer
+  //   PCD_StopCrypto1()
+
+	static constexpr size_t buffferSizeRead  = 18; // buffer size for read and write
+  static constexpr size_t buffferSizeWrite = 16; // buffer size for read and write
+  byte t_buffer[buffferSizeRead]{};
+
+  bool card_is_in{false};
+	void card_in(uint32_t cookie, uint8_t version, uint8_t folder, uint8_t mode, uint8_t special, uint8_t special2) {
+	  card_is_in    = true    ;
+	  byte coockie_4 = (cookie & 0x000000ff) >>  0;
+	  byte coockie_3 = (cookie & 0x0000ff00) >>  8;
+	  byte coockie_2 = (cookie & 0x00ff0000) >> 16;
+	  byte coockie_1 = (cookie & 0xff000000) >> 24;
+	  byte buffer[buffferSizeRead]{coockie_1, coockie_2, coockie_3, coockie_4,
+                                 version,
+                                 folder,
+                                 static_cast<uint8_t>(mode),
+                                 special,
+                                 special2,
+                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+             };
+	  memcpy(t_buffer, buffer, buffferSizeRead);
+	}
+	void card_out() {
+    card_is_in = false;
+    uid.size = 0;
+    uid.sak  = 0;
+    called_PICC_RequestA = false;
+	}
+	// todo: decode from t_buffer for testing write
 };
 
 #endif

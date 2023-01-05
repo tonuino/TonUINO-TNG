@@ -3,6 +3,9 @@ file(GLOB tonuino_sources ../src/*.cpp)
 file(GLOB test_tonuino_sources src/*.cpp)
 file(GLOB libs_tonuino_sources libs/*.cpp)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g")
+
 include_directories(../src libs)
 
 function(build_and_run_tests config_name)

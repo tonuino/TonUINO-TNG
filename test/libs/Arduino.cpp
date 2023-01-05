@@ -7,8 +7,8 @@
 #include <Arduino.h>
 
 unsigned long current_time = 0;
-uint8_t pin_mode[A7+1] = { LOW };
-int pin_value[A7+1] = { 0 };
+uint8_t pin_mode[max_pin] = { LOW };
+int pin_value[max_pin] = { 0 };
 
 HardwareSerial Serial;
 HardwareSerial Serial3;

@@ -3,7 +3,8 @@
 
 class SPIClass {
 public:
-  static void begin() {}
+  static bool called_begin;
+  static void begin() { called_begin = true; }
 };
 
 extern SPIClass SPI;

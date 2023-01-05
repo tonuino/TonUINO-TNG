@@ -27,6 +27,10 @@ Boerge1: adapted for mocking in unit tests
 -------------------------------------------------------------------------*/
 #pragma once
 
+#include <Arduino.h>
+
+#include <constants.hpp>
+
 enum DfMp3_Error
 {
     // from device
@@ -96,17 +100,72 @@ public:
     {
     }
 
+    bool called_begin = false;
     void begin(unsigned long baud = 9600)
     {
+      called_begin = true;
     }
 
+    bool df_playing = false;
+    bool df_playing_adv = false;
+    bool df_stopped = true;
+    uint16_t df_mp3_track = 0;
+    uint8_t df_folder = 0;
+    uint8_t df_folder_track = 0;
+    uint16_t df_adv_track = 0;
     void loop()
     {
+      if (called_stop) {
+        called_stop = false;
+        df_playing = false;
+        df_playing_adv = false;
+        df_stopped = true;
+        df_folder = 0;
+        df_folder_track = 0;
+        df_mp3_track = 0;
+        df_adv_track = 0;
+      }
+      if (called_start) {
+        called_start = false;
+        if (!df_stopped)
+          df_playing = true;
+      }
+      if (called_pause) {
+        called_pause = false;
+        df_playing = false;
+      }
+
+      pin_value[dfPlayer_busyPin] = df_playing && !called_end_adv;
+      called_end_adv = false;
+
+
+      if (called_end_track) {
+        called_end_track = false;
+        uint16_t replyArg = df_folder*255+(df_folder_track+df_mp3_track);
+        df_playing = false;
+        df_playing_adv = false;
+        df_stopped = true;
+        df_folder = 0;
+        df_folder_track = 0;
+        df_mp3_track = 0;
+        df_adv_track = 0;
+        T_NOTIFICATION_METHOD::OnPlayFinished(*this, DfMp3_PlaySources_Sd, replyArg);
+      }
+      if (error_code) {
+        uint16_t replyArg = error_code;
+        error_code = 0;
+        T_NOTIFICATION_METHOD::OnError(*this, replyArg);
+      }
     }
 
     // sd:/mp3/####track name
     void playMp3FolderTrack(uint16_t track)
     {
+      df_stopped = false;
+      called_start = true;
+      df_mp3_track = track;
+      df_folder = 0;
+      df_folder_track = 0;
     }
 
     // older devices: sd:/###/###track name
@@ -114,40 +173,99 @@ public:
     // folder and track numbers are zero padded
     void playFolderTrack(uint8_t folder, uint8_t track)
     {
+      df_stopped = false;
+      called_start = true;
+      df_folder = folder;
+      df_folder_track = track;
+      df_mp3_track = 0;
     }
 
     // 0- 30
+    uint8_t current_volume = 0;
     void setVolume(uint8_t volume)
     {
+      current_volume = volume;
     }
 
+    DfMp3_Eq current_eq = DfMp3_Eq_Normal;
     void setEq(DfMp3_Eq eq)
     {
+      current_eq = eq;
     }
 
+    bool called_sleep = false;
     void sleep()
     {
+      called_sleep = true;
     }
 
+    bool called_start = false;
     void start()
     {
+      called_start = true;
     }
 
+    bool called_pause = false;
     void pause()
     {
+      called_pause = true;
     }
 
+    bool called_stop = false;
     void stop()
     {
+      called_stop = true;
     }
 
     uint16_t getFolderTrackCount(uint16_t folder)
     {
-        return 0;
+        return df_folder_track_count[static_cast<uint8_t>(folder)];
     }
 
     // sd:/advert/####track name
     void playAdvertisement(uint16_t track)
     {
+      if (df_playing) {
+        df_playing_adv = true;
+        df_adv_track = track;
+      }
     }
+
+    // test functions
+    bool called_end_track = false;
+    void end_track() {
+      called_end_track = true;
+    }
+    bool called_end_adv = false;
+    void end_adv() {
+      if (df_playing_adv) {
+        df_playing_adv = false;
+        df_adv_track = 0;
+        called_end_adv = true;
+      }
+    }
+    uint16_t error_code = 0;
+    void set_error(uint16_t code) {
+      error_code = code;
+    }
+    uint16_t df_folder_track_count[0xff] = { 0 };
+    void set_folder_track_count(uint8_t folder, uint16_t count) {
+      df_folder_track_count[folder] = count;
+    }
+    bool is_playing_folder() {
+      return df_playing && !df_playing_adv && df_folder_track > 0;
+    }
+    bool is_playing_mp3() {
+      return df_playing && !df_playing_adv && df_mp3_track > 0;
+    }
+    bool is_playing_adv() {
+      return df_playing && df_playing_adv && df_adv_track > 0;
+    }
+    bool is_pause() {
+      return !df_playing && !df_stopped && df_folder_track > 0;
+    }
+    bool is_stopped() {
+      return df_stopped;
+    }
+
 };
