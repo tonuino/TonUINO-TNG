@@ -56,7 +56,7 @@ public:
   virtual void react(card_e    const &) { };
 
   virtual void entry(void) { };
-  void         exit (void) { waitForPlayFinish = false; };
+  virtual void exit (void) { waitForPlayFinish = false; };
 
   bool isAbort(command_e const &);
 
@@ -91,6 +91,7 @@ public:
   void entry() override;
   void react(command_e const &) override;
   void react(card_e    const &) override;
+  void exit() override;
 };
 
 class StartPlay: public Base
@@ -114,6 +115,7 @@ public:
   void entry() override;
   void react(command_e const &) override;
   void react(card_e    const &) override;
+  void exit() override;
 };
 
 // ----------------------------------------------------------------------------

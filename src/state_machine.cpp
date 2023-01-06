@@ -655,7 +655,13 @@ void Base::handleReadCard() {
 
 void Idle::entry() {
   LOG(state_log, s_info, str_enter(), str_Idle());
+  tonuino.disableAmplifier();
   tonuino.setStandbyTimer();
+}
+
+void Idle::exit() {
+  Base::exit();
+  tonuino.enableAmplifier();
 }
 
 void Idle::react(command_e const &cmd_e) {
@@ -790,7 +796,13 @@ void Play::react(card_e const &c_e) {
 void Pause::entry() {
   LOG(state_log, s_info, str_enter(), str_Pause());
   tonuino.setStandbyTimer();
+  tonuino.disableAmplifier();
   mp3.pause();
+}
+
+void Pause::exit() {
+  Base::exit();
+  tonuino.enableAmplifier();
 }
 
 void Pause::react(command_e const &cmd_e) {
