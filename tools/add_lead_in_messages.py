@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 # Adds a lead-in message to each mp3 file of a directory storing the result in another directory.
 # So - when played e.g. on a TonUINO - you first will hear the title of the track, then the track itself.
@@ -79,6 +79,8 @@ def addLeadInMessage(inputPath, outputPath):
     if not args.dry_run:
         tempLeadInFile = 'temp-lead-in.mp3'
         tempLeadInFileAdjusted = 'temp-lead-in_adjusted.mp3'
+        tempListFile = 'temp-list.txt'
+        tempTargetFile = 'temp-target.mp3'
         text_to_speech.textToSpeechUsingArgs(text=text, targetFile=tempLeadInFile, args=args)
 
         # Adjust sample rate and mono/stereo
@@ -93,17 +95,26 @@ def addLeadInMessage(inputPath, outputPath):
             subprocess.call([ 'ffmpeg', '-i', tempLeadInFile, '-vn', '-ar', detectionInfo['sampleRate'], '-ac', detectionInfo['channels'], tempLeadInFileAdjusted ])
 
         print('Concat')
-        subprocess.call([ 'ffmpeg', '-i', 'concat:{}|{}'.format(tempLeadInFileAdjusted, inputPath), '-acodec', 'copy', outputPath, '-map_metadata', '0:1' ])
+        # Use ffmpeg Concat demuxer
+        with open(tempListFile, 'w') as f:
+            f.write("file " + "'" + tempLeadInFileAdjusted + "'")
+            f.write("\n")
+            f.write("file " + "'" + inputPath + "'")
+        subprocess.call([ 'ffmpeg', '-f', 'concat', '-safe', '0', '-i', tempListFile, '-c', 'copy', tempTargetFile ])
+        # Copy metadata from input file
+        subprocess.call([ 'ffmpeg', '-i', inputPath, '-i', tempTargetFile, '-map', '1', '-c', 'copy', '-map_metadata', '0', outputPath ])
 
         os.remove(tempLeadInFile)
         os.remove(tempLeadInFileAdjusted)
+        os.remove(tempListFile)
+        os.remove(tempTargetFile)
         print('\n')
 
 
 def detectAudioData(mp3File):
     try:
         output = subprocess.check_output([ 'ffmpeg', '-i', mp3File, '-hide_banner' ], stderr=subprocess.STDOUT)
-    except Exception, e:
+    except Exception as e:
         output = str(e.output)
 
     match = re.match('.*Stream #\\d+:\\d+: Audio: mp3, (\\d+) Hz, (mono|stereo), .*', output, re.S)

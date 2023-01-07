@@ -18,14 +18,17 @@ mp3/0316_admin.mp3|Admin Funktionen.
 mp3/0317_special_random.mp3|Spezialmodus Von-Bis, Hörspiel: Eine zufällige Datei zwischen der Start und Enddatei wiedergeben.
 mp3/0318_special_album.mp3|Spezialmodus Von-Bis, Album: Alle Dateien zwischen der Start und Enddatei wiedergeben.
 mp3/0319_special_party.mp3|Spezialmodus Von-Bis, Party: Alle Dateien zwischen der Start und Enddatei zufällig wiedergeben.
-mp3/0320_select_file.mp3|OK, wähle nun bitte die Datei mit den Lautstärketasten aus.
-mp3/0321_select_first_file.mp3|OK, wähle nun bitte die Startdatei mit den Lautstärketasten aus.
-mp3/0322_select_last_file.mp3|Wähle nun bitte die Enddatei mit den Lautstärketasten aus.
+mp3/0320_mode_audio_book_single.mp3|Hörbuch Modus einzeln: Den nächsten Titel im Ordner wiedergeben und den Fortschritt speichern.
+mp3/0321_mode_repeat_last_card.mp3|Wiederhole Karte Modus: die letzte Karte oder der letzte Shortcut wird wiederholt.
+mp3/0327_select_file.mp3|OK, wähle nun bitte die Datei mit den Lautstärketasten aus.
+mp3/0328_select_first_file.mp3|OK, wähle nun bitte die Startdatei mit den Lautstärketasten aus.
+mp3/0329_select_last_file.mp3|Wähle nun bitte die Enddatei mit den Lautstärketasten aus.
 mp3/0330.mp3|Soll ich vor einer Datei jeweils die Nummer ansagen? Du kannst jederzeit durch einen langen Druck auf die Pausetaste die aktuelle Nummer abfragen.
 mp3/0331.mp3|Nein, Nummer nicht ansagen.
 mp3/0332.mp3|Ja, Nummer ansagen.
 mp3/0400_ok.mp3|OK. Ich habe die Karte konfiguriert.
 mp3/0401_error.mp3|Oh weh! Das hat leider nicht geklappt!
+mp3/0402_ok_settings.mp3|Ok, ich habe die Einstellungen gespeichert
 mp3/0800_waiting_for_card.mp3|Bitte lege nun die Karte auf!
 mp3/0802_reset_aborted.mp3|OK, ich habe den Vorgang abgebrochen.
 mp3/0900_admin.mp3|Willkommen im Admin Menü. Bitte wähle eine Funktion mit den Lautstärketasten aus und bestätige sie mit der Pausetaste! Durch einen langen Druck auf die Pausetaste kannst du den Vorgang abbrechen.
@@ -41,6 +44,8 @@ mp3/0909_batch_cards.mp3|Einzelkarten für einen Ordner erstellen.
 mp3/0910_switch_volume.mp3|Funktion der Lautstärketasten umdrehen.
 mp3/0911_reset.mp3|Alle Einstellungen löschen.
 mp3/0912_admin_lock.mp3|Das Adminmenü absichern.
+mp3/0913_pause_on_card_removed.mp3|Pause, wenn Karte entfernt wird.
+mp3/0919_continue_admin.mp3|und weiter im Admin Menü
 mp3/0920_eq_intro.mp3|Bitte wähle eine Einstellung für den EQ mit den Lautstärketasten aus und bestätige sie mit der Pausetaste.
 mp3/0921_normal.mp3|Normal
 mp3/0922_pop.mp3|Pop

@@ -1,14 +1,17 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # Converts text into spoken language saved to an mp3 file.
 
 
-import argparse, base64, json, os, subprocess, sys, urllib
-
+import argparse, base64, json, os, subprocess, sys
+try:
+    import urllib.request
+except ImportError:
+    print("WARNING: It looks like you are using an old version of Python. Please use Python 3 if you intend to use Google Text to Speech.")
 
 class PatchedArgumentParser(argparse.ArgumentParser):
     def error(self, message):
-        sys.stderr.write('error: %s\n\n' % message)
+        sys.stderr.write('ERROR: %s\n\n' % message)
         self.print_help()
         sys.exit(2)
 
@@ -16,15 +19,29 @@ class PatchedArgumentParser(argparse.ArgumentParser):
 sayVoiceByLang = {
     'de': 'Anna',
     'en': 'Samantha',
+    'fr': 'Thomas',
+    'nl': 'Xander',
+    'es': 'Monica',
+    'cz': 'Zuzana',
+    'it': 'Alice'
 }
 googleVoiceByLang = {
     'de': { 'languageCode': 'de-DE', 'name': 'de-DE-Wavenet-C' },
-    'en': { 'languageCode': 'en-US', 'name': 'en-US-Wavenet-D' },
+    'en': { 'languageCode': 'en-US', 'name': 'en-US-Wavenet-C' },
+    'fr': { 'languageCode': 'fr-FR', 'name': 'fr-FR-Wavenet-C' },
+    'nl': { 'languageCode': 'nl-NL', 'name': 'nl-NL-Wavenet-A' },
+    'es': { 'languageCode': 'es-ES', 'name': '' },
+    'cz': { 'languageCode': 'cs-CZ', 'name': 'cs-CZ-Wavenet-A' },
+    'it': { 'languageCode': 'it-IT', 'name': 'it-IT-Standard-B' }
 }
 amazonVoiceByLang = {
     # See: https://docs.aws.amazon.com/de_de/polly/latest/dg/voicelist.html
     'de': 'Vicki',
     'en': 'Joanna',
+    'fr': 'Celine',
+    'nl': 'Lotte',
+    'es': 'Lucia',
+    'it': 'Carla'
 }
 
 
@@ -38,7 +55,7 @@ Amazon Polly sounds best, Google text-to-speech is second, MacOS `say` sounds wo
 """.strip()
 
 def addArgumentsToArgparser(argparser):
-    argparser.add_argument('--lang', choices=['de', 'en'], default='de', help='The language (default: de)')
+    argparser.add_argument('--lang', choices=['de', 'en', 'fr', 'nl', 'es', 'cz', 'it'], default='de', help='The language (default: de)')
     argparser.add_argument('--use-say', action='store_true', default=None, help="If set, the MacOS tool `say` will be used.")
     argparser.add_argument('--use-amazon', action='store_true', default=None, help="If set, Amazon Polly is used. If missing the MacOS tool `say` will be used.")
     argparser.add_argument('--use-google-key', type=str, default=None, help="The API key of the Google text-to-speech account to use.")
@@ -47,6 +64,18 @@ def addArgumentsToArgparser(argparser):
 def checkArgs(argparser, args):
     if not args.use_say and not args.use_amazon and args.use_google_key is None:
         print('ERROR: You have to provide one of the arguments `--use-say`, `--use-amazon` or `--use-google-key`\n')
+        argparser.print_help()
+        sys.exit(2)
+    if args.use_say:
+        checkLanguage(sayVoiceByLang, args.lang, argparser)
+    if args.use_google_key:
+        checkLanguage(googleVoiceByLang, args.lang, argparser)
+    if args.use_amazon:
+        checkLanguage(amazonVoiceByLang, args.lang, argparser)
+
+def checkLanguage(dictionary, lang, argparser):
+    if lang not in dictionary:
+        print('ERROR: Language is not supported by selected text-to-speech engine\n')
         argparser.print_help()
         sys.exit(2)
 
@@ -65,7 +94,7 @@ def textToSpeech(text, targetFile, lang='de', useAmazon=False, useGoogleKey=None
             targetFile])
     elif useGoogleKey:
         responseJson = postJson(
-            'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=' + useGoogleKey,
+            'https://texttospeech.googleapis.com/v1/text:synthesize?key=' + useGoogleKey,
             {
                 'audioConfig': {
                     'audioEncoding': 'MP3',
@@ -89,19 +118,16 @@ def textToSpeech(text, targetFile, lang='de', useAmazon=False, useGoogleKey=None
         os.remove('temp.aiff')
 
 
-def postJson(url, postBody, headers = None):
-    cmd = ['curl']
-    if headers is not None:
-        for header in headers:
-            cmd.extend(['-H', header])
-    cmd.extend(['-H', 'Content-Type: application/json; charset=utf-8', '--data', json.dumps(postBody).encode('utf-8'), url])
-    response = subprocess.check_output(cmd)
-    return json.loads(response)
-
-
-def postForm(url, formData):
-    response = subprocess.check_output(['curl', '-H', 'Content-Type: application/x-www-form-urlencoded; charset=utf-8', '--data', urllib.urlencode(formData), url])
-    return json.loads(response)
+def postJson(postUrl, postBody, headers = {}):
+    headers['Content-Type'] = 'application/json; charset=utf-8'
+    postData = json.dumps(postBody).encode('utf-8')
+    try:
+        postRequest = urllib.request.Request(postUrl, postData, headers)
+        with urllib.request.urlopen(postRequest) as req:
+            postResponseData=req.read()
+        return json.loads(postResponseData.decode())
+    except Exception as e:
+        print(e)
 
 
 if __name__ == '__main__':
