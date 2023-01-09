@@ -163,14 +163,14 @@ Chip_card::readCardEvent Chip_card::readCard(nfcTagObject &nfcTag) {
   const uint32_t version              = buffer[4];
   if (version == cardVersion) {
     nfcTag.nfcFolderSettings.folder   = buffer[5];
-    nfcTag.nfcFolderSettings.mode     = static_cast<mode_t>(buffer[6]);
+    nfcTag.nfcFolderSettings.mode     = static_cast<pmode_t>(buffer[6]);
     nfcTag.nfcFolderSettings.special  = buffer[7];
     nfcTag.nfcFolderSettings.special2 = buffer[8];
   }
   else {
     LOG(card_log, s_warning, F("Unknown version "), version);
     nfcTag.nfcFolderSettings.folder   = 0;
-    nfcTag.nfcFolderSettings.mode     = mode_t::none;
+    nfcTag.nfcFolderSettings.mode     = pmode_t::none;
   }
   return readCardEvent::known;
 }

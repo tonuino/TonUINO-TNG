@@ -85,39 +85,39 @@ void Tonuino::playFolder() {
 
   switch (myFolder->mode) {
 
-  case mode_t::hoerspiel:
+  case pmode_t::hoerspiel:
     // Hörspielmodus: eine zufällige Datei aus dem Ordner
     myFolder->special = 1;
     myFolder->special2 = numTracksInFolder;
     __attribute__ ((fallthrough));
     /* no break */
-  case mode_t::hoerspiel_vb:
+  case pmode_t::hoerspiel_vb:
     // Spezialmodus Von-Bin: Hörspiel: eine zufällige Datei aus dem Ordner
     LOG(play_log, s_info, F("Hörspiel"));
     LOG(play_log, s_info, myFolder->special, str_bis(), myFolder->special2);
     mp3.enqueueTrack(myFolder->folder, random(myFolder->special, myFolder->special2 + 1));
     break;
 
-  case mode_t::album:
+  case pmode_t::album:
     // Album Modus: kompletten Ordner spielen
     myFolder->special = 1;
     myFolder->special2 = numTracksInFolder;
     __attribute__ ((fallthrough));
     /* no break */
-  case mode_t::album_vb:
+  case pmode_t::album_vb:
     // Spezialmodus Von-Bis: Album: alle Dateien zwischen Start und Ende spielen
     LOG(play_log, s_info, F("Album"));
     LOG(play_log, s_info, myFolder->special, str_bis() , myFolder->special2);
     mp3.enqueueTrack(myFolder->folder, myFolder->special, myFolder->special2);
     break;
 
-  case mode_t::party:
+  case pmode_t::party:
     // Party Modus: Ordner in zufälliger Reihenfolge
     myFolder->special = 1;
     myFolder->special2 = numTracksInFolder;
     __attribute__ ((fallthrough));
     /* no break */
-  case mode_t::party_vb:
+  case pmode_t::party_vb:
     // Spezialmodus Von-Bis: Party Ordner in zufälliger Reihenfolge
     LOG(play_log, s_info, F("Party"));
     LOG(play_log, s_info, myFolder->special, str_bis(), myFolder->special2);
@@ -126,14 +126,14 @@ void Tonuino::playFolder() {
     mp3.setEndless();
     break;
 
-  case mode_t::einzel:
+  case pmode_t::einzel:
     // Einzel Modus: eine Datei aus dem Ordner abspielen
     LOG(play_log, s_info, F("Einzel"));
     mp3.enqueueTrack(myFolder->folder, myFolder->special);
     break;
 
-  case mode_t::hoerbuch:
-  case mode_t::hoerbuch_1:
+  case pmode_t::hoerbuch:
+  case pmode_t::hoerbuch_1:
   {
     // Hörbuch Modus: kompletten Ordner spielen und Fortschritt merken (oder nur eine Datei)
     LOG(play_log, s_info, F("Hörbuch"));
@@ -161,10 +161,10 @@ void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
   LOG(play_log, s_info, F("nextTrack"));
   if (activeModifier->handleNext())
     return;
-  if (mp3.isPlayingFolder() && (myFolder->mode == mode_t::hoerbuch || myFolder->mode == mode_t::hoerbuch_1)) {
+  if (mp3.isPlayingFolder() && (myFolder->mode == pmode_t::hoerbuch || myFolder->mode == pmode_t::hoerbuch_1)) {
     const uint8_t trackToSave = (mp3.getCurrentTrack() < numTracksInFolder) ? mp3.getCurrentTrack()+1 : 1;
     settings.writeFolderSettingToFlash(myFolder->folder, trackToSave);
-    if (fromOnPlayFinished && myFolder->mode == mode_t::hoerbuch_1)
+    if (fromOnPlayFinished && myFolder->mode == pmode_t::hoerbuch_1)
       mp3.clearFolderQueue();
   }
   mp3.playNext(tracks);
@@ -172,7 +172,7 @@ void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
 
 void Tonuino::previousTrack(uint8_t tracks) {
   LOG(play_log, s_info, F("previousTrack"));
-  if (mp3.isPlayingFolder() && (myFolder->mode == mode_t::hoerbuch || myFolder->mode == mode_t::hoerbuch_1)) {
+  if (mp3.isPlayingFolder() && (myFolder->mode == pmode_t::hoerbuch || myFolder->mode == pmode_t::hoerbuch_1)) {
     const uint8_t trackToSave = (mp3.getCurrentTrack() > numTracksInFolder) ? mp3.getCurrentTrack()-1 : 1;
     settings.writeFolderSettingToFlash(myFolder->folder, trackToSave);
   }
@@ -234,23 +234,23 @@ bool Tonuino::specialCard(const nfcTagObject &nfcTag) {
   const Modifier *oldModifier = activeModifier;
 
   switch (nfcTag.nfcFolderSettings.mode) {
-  case mode_t::sleep_timer:  LOG(card_log, s_info, F("act. sleepTimer"));
+  case pmode_t::sleep_timer:  LOG(card_log, s_info, F("act. sleepTimer"));
                              mp3.playAdvertisement(advertTracks::t_302_sleep            , false/*olnyIfIsPlaying*/);
                              activeModifier = &sleepTimer;
                              sleepTimer.start(nfcTag.nfcFolderSettings.special)               ;break;
-  case mode_t::freeze_dance: LOG(card_log, s_info, F("act. freezeDance"));
+  case pmode_t::freeze_dance: LOG(card_log, s_info, F("act. freezeDance"));
                              mp3.playAdvertisement(advertTracks::t_300_freeze_into      , false/*olnyIfIsPlaying*/);
                              activeModifier = &freezeDance;                                   ;break;
-  case mode_t::locked:       LOG(card_log, s_info, F("act. locked"));
+  case pmode_t::locked:       LOG(card_log, s_info, F("act. locked"));
                              mp3.playAdvertisement(advertTracks::t_303_locked           , false/*olnyIfIsPlaying*/);
                              activeModifier = &locked                                         ;break;
-  case mode_t::toddler:      LOG(card_log, s_info, F("act. toddlerMode"));
+  case pmode_t::toddler:      LOG(card_log, s_info, F("act. toddlerMode"));
                              mp3.playAdvertisement(advertTracks::t_304_buttonslocked    , false/*olnyIfIsPlaying*/);
                              activeModifier = &toddlerMode                                    ;break;
-  case mode_t::kindergarden: LOG(card_log, s_info, F("act. kindergardenMode"));
+  case pmode_t::kindergarden: LOG(card_log, s_info, F("act. kindergardenMode"));
                              mp3.playAdvertisement(advertTracks::t_305_kindergarden     , false/*olnyIfIsPlaying*/);
                              activeModifier = &kindergardenMode                               ;break;
-  case mode_t::repeat_single:LOG(card_log, s_info, F("act. repeatSingleModifier"));
+  case pmode_t::repeat_single:LOG(card_log, s_info, F("act. repeatSingleModifier"));
                              mp3.playAdvertisement(advertTracks::t_260_activate_mod_card, false/*olnyIfIsPlaying*/);
                              activeModifier = &repeatSingleModifier                           ;break;
   default:                   return false;

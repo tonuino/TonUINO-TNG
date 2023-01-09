@@ -197,7 +197,7 @@ public:
   void entry() final;
   void react(command_e const &) final;
 private:
-  mode_t mode;
+  pmode_t mode;
   enum subState: uint8_t {
     start_writeCard,
     run_writeCard,
@@ -388,15 +388,15 @@ void ChMode::react(command_e const &cmd_e) {
     return;
 
   if ((cmd == command::select) && (currentValue != 0)) {
-    folder.mode = static_cast<mode_t>(currentValue);
+    folder.mode = static_cast<pmode_t>(currentValue);
     LOG(state_log, s_info, str_ChMode(), F(": "), currentValue);
-    if (folder.mode == mode_t::admin) {
+    if (folder.mode == pmode_t::admin) {
       folder.folder = 0;
-      folder.mode = mode_t::admin_card;
+      folder.mode = pmode_t::admin_card;
       transit<finished>();
       return;
     }
-    if (folder.mode == mode_t::repeat_last) {
+    if (folder.mode == pmode_t::repeat_last) {
       folder.folder = 0xff; // dummy value > 0 to make readCard() returning true
       transit<finished>();
     }
@@ -435,13 +435,13 @@ void ChFolder::react(command_e const &cmd_e) {
   if ((cmd == command::select) && (currentValue != 0)) {
     folder.folder = currentValue;
     LOG(state_log, s_info, str_ChFolder(), F(": "), currentValue);
-    if (folder.mode == mode_t::einzel) {
+    if (folder.mode == pmode_t::einzel) {
       transit<ChTrack>();
       return;
     }
-    if (  ( folder.mode == mode_t::hoerspiel_vb)
-        ||( folder.mode == mode_t::album_vb    )
-        ||( folder.mode == mode_t::party_vb    )) {
+    if (  ( folder.mode == pmode_t::hoerspiel_vb)
+        ||( folder.mode == pmode_t::album_vb    )
+        ||( folder.mode == pmode_t::party_vb    )) {
       transit<ChFirstTrack>();
       return;
     }
@@ -608,7 +608,7 @@ bool Base::readCard() {
 
   case Chip_card::readCardEvent::known:
     if (lastCardRead.nfcFolderSettings.folder == 0) {
-      if (lastCardRead.nfcFolderSettings.mode == mode_t::admin_card) {
+      if (lastCardRead.nfcFolderSettings.mode == pmode_t::admin_card) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Admin_Entry());
         Admin_Entry::lastCurrentValue = 0;
         transit<Admin_Entry>();
@@ -640,7 +640,7 @@ bool Base::readCard() {
 
 bool Base::handleShortcut(uint8_t shortCut) {
   if (shortCut <= 3 && settings.shortCuts[shortCut].folder != 0) {
-    if (settings.shortCuts[shortCut].mode != mode_t::repeat_last)
+    if (settings.shortCuts[shortCut].mode != pmode_t::repeat_last)
       tonuino.setFolder(&settings.shortCuts[shortCut]);
     if (tonuino.getFolder() != 0) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
@@ -652,7 +652,7 @@ bool Base::handleShortcut(uint8_t shortCut) {
 }
 
 void Base::handleReadCard() {
-  if (lastCardRead.nfcFolderSettings.mode != mode_t::repeat_last)
+  if (lastCardRead.nfcFolderSettings.mode != pmode_t::repeat_last)
     tonuino.setCard(lastCardRead);
   if (tonuino.getCard().nfcFolderSettings.folder != 0) {
     LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
@@ -1246,7 +1246,7 @@ void Admin_ModCard::entry() {
 
   VoiceMenu::entry(false);
 
-  mode              = mode_t::none;
+  mode              = pmode_t::none;
   current_subState  = start_writeCard;
   readyToWrite      = false;
 }
@@ -1269,7 +1269,7 @@ void Admin_ModCard::react(command_e const &cmd_e) {
       folder.special = 0;
       folder.special2 = 0;
       folder.mode = mode;
-      if (mode == mode_t::sleep_timer)
+      if (mode == pmode_t::sleep_timer)
         switch (currentValue) {
         case 1:
           folder.special = 5;
@@ -1299,9 +1299,9 @@ void Admin_ModCard::react(command_e const &cmd_e) {
   }
 
   if ((cmd == command::select) && (currentValue != 0)) {
-    if (mode == mode_t::none) {
-      mode = static_cast<mode_t>(currentValue);
-      if (mode != mode_t::sleep_timer) {
+    if (mode == pmode_t::none) {
+      mode = static_cast<pmode_t>(currentValue);
+      if (mode != pmode_t::sleep_timer) {
         mp3.clearMp3Queue();
         readyToWrite = true;
       }
@@ -1356,7 +1356,7 @@ void Admin_ShortCut::react(command_e const &cmd_e) {
     switch (current_subState) {
     case start_setupCard:
       settings.shortCuts[shortcut-1].folder = 0;
-      settings.shortCuts[shortcut-1].mode = mode_t::none;
+      settings.shortCuts[shortcut-1].mode = pmode_t::none;
       settings.writeSettingsToFlash();
       SM_setupCard::start();
       current_subState = run_setupCard;
@@ -1425,7 +1425,7 @@ void Admin_StandbyTimer::react(command_e const &cmd_e) {
 void Admin_CardsForFolder::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_CardsForFolder());
 
-  folder.mode = mode_t::einzel;
+  folder.mode = pmode_t::einzel;
 
   current_subState = start_getFolder;
 }
