@@ -50,7 +50,7 @@ class VoiceMenu : public SM<SMT>
 {
 protected:
   void entry(bool entryPlayAfter = true);
-  void react(command_e const &) override;
+  void react(command cmd);
   void playCurrentValue();
 
   static uint8_t   numberOfOptions  ;
@@ -291,8 +291,8 @@ public:
 // #######################################################
 
 template<SM_type SMT>
-bool SM<SMT>::isAbort(command_e const &b) {
-  if (b.cmd_raw == commandRaw::pauseLong) {
+bool SM<SMT>::isAbort(command cmd) {
+  if (cmd == command::adm_end) {
     SM<SMT>::mp3.enqueueMp3FolderTrack(mp3Tracks::t_802_reset_aborted);
     LOG(state_log, s_info, F("SM"), str_abort());
     this->template transit<finished_abort>();
@@ -320,7 +320,7 @@ void VoiceMenu<SMT>::playCurrentValue() {
 }
 
 template<SM_type SMT>
-void VoiceMenu<SMT>::react(command_e const &cmd_e) {
+void VoiceMenu<SMT>::react(command cmd) {
   if (   currentValue != 0
       && preview
       && not previewStarted
@@ -335,31 +335,28 @@ void VoiceMenu<SMT>::react(command_e const &cmd_e) {
     previewStarted = true;
   }
 
-  switch(cmd_e.cmd_raw) {
-  case commandRaw::upLong:
+  switch(cmd) {
+  case command::next10:
     currentValue = min(currentValue + 10, numberOfOptions);
     playCurrentValue();
     break;
 
-  case commandRaw::up:
+  case command::next:
     currentValue = min(currentValue + 1, numberOfOptions);
     playCurrentValue();
     break;
 
-  case commandRaw::downLong:
+  case command::previous10:
     currentValue = max(currentValue - 10, 1);
     playCurrentValue();
     break;
 
-  case commandRaw::down:
+  case command::previous:
     currentValue = max(currentValue - 1, 1);
     playCurrentValue();
     break;
   default:
     break;
-  }
-  if (cmd_e.cmd_raw != commandRaw::none) {
-    LOG(state_log, s_info, str_VoiceMenu(), F(" currentVal: "), currentValue);
   }
 }
 
@@ -383,12 +380,14 @@ void ChMode::react(command_e const &cmd_e) {
   if (cmd_e.cmd_raw != commandRaw::none) {
     LOG(state_log, s_debug, str_ChMode(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
-  VoiceMenu::react(cmd_e);
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
 
-  if (isAbort(cmd_e))
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
     return;
 
-  if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+  if ((cmd == command::select) && (currentValue != 0)) {
     folder.mode = static_cast<pmode_t>(currentValue);
     LOG(state_log, s_info, str_ChMode(), F(": "), currentValue);
     if (folder.mode == pmode_t::admin) {
@@ -426,12 +425,14 @@ void ChFolder::react(command_e const &cmd_e) {
   if (cmd_e.cmd_raw != commandRaw::none) {
     LOG(state_log, s_debug, str_ChFolder(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
-  VoiceMenu::react(cmd_e);
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
 
-  if (isAbort(cmd_e))
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
     return;
 
-  if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+  if ((cmd == command::select) && (currentValue != 0)) {
     folder.folder = currentValue;
     LOG(state_log, s_info, str_ChFolder(), F(": "), currentValue);
     if (folder.mode == pmode_t::einzel) {
@@ -467,12 +468,14 @@ void ChTrack::react(command_e const &cmd_e) {
   if (cmd_e.cmd_raw != commandRaw::none) {
     LOG(state_log, s_debug, str_ChTrack(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
-  VoiceMenu::react(cmd_e);
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
 
-  if (isAbort(cmd_e))
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
     return;
 
-  if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+  if ((cmd == command::select) && (currentValue != 0)) {
     folder.special = currentValue;
     LOG(state_log, s_info, str_ChTrack(), F(": "), currentValue);
     transit<finished>();
@@ -498,12 +501,14 @@ void ChFirstTrack::react(command_e const &cmd_e) {
   if (cmd_e.cmd_raw != commandRaw::none) {
     LOG(state_log, s_debug, str_ChFirstTrack(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
-  VoiceMenu::react(cmd_e);
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
 
-  if (isAbort(cmd_e))
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
     return;
 
-  if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+  if ((cmd == command::select) && (currentValue != 0)) {
     folder.special = currentValue;
     LOG(state_log, s_info, str_ChFirstTrack(), F(": "), currentValue);
     transit<ChLastTrack>();
@@ -531,12 +536,14 @@ void ChLastTrack::react(command_e const &cmd_e) {
   if (cmd_e.cmd_raw != commandRaw::none) {
     LOG(state_log, s_debug, str_ChLastTrack(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
-  VoiceMenu::react(cmd_e);
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
 
-  if (isAbort(cmd_e))
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
     return;
 
-  if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+  if ((cmd == command::select) && (currentValue != 0)) {
     folder.special2 = currentValue;
     LOG(state_log, s_info, str_ChLastTrack(), F(": "), currentValue);
     transit<finished>();
@@ -556,7 +563,9 @@ void WriteCard::react(command_e const &cmd_e) {
     LOG(state_log, s_debug, str_WriteCard(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
 
-  if (isAbort(cmd_e))
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
+
+  if (isAbort(cmd))
     return;
 
   switch (current_subState) {
@@ -651,6 +660,30 @@ void Base::handleReadCard() {
   }
 }
 
+bool Base::checkForShortcutAndShutdown(command cmd) {
+  uint8_t shortCut = 0xff;
+  switch(cmd) {
+  case command::shortcut1: shortCut = 0      ; break;
+  case command::shortcut2: shortCut = 1      ; break;
+  case command::shortcut3: shortCut = 2      ; break;
+  case command::start    : shortCut = 3      ; break;
+  case command::shutdown : mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
+                           mp3.loop();
+                           delay(1000);
+                           tonuino.shutdown();
+                                               break;
+  default                :                     break;
+  }
+  if (shortCut != 0xff) {
+    if (handleShortcut(shortCut))
+      return true;
+    else
+      mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
+  }
+  return false;
+}
+
+
 // #######################################################
 
 void Idle::entry() {
@@ -663,16 +696,10 @@ void Idle::react(command_e const &cmd_e) {
     LOG(state_log, s_debug, str_Idle(), F("::react(cmd_e) "), static_cast<int>(cmd_e.cmd_raw));
   }
 
-  const command cmd      = commands.getCommand(cmd_e.cmd_raw);
-  uint8_t       shortCut = 0xff;
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::idle_pause);
 
-  switch(cmd_e.cmd_raw) {
-  case commandRaw::pauseLong: shortCut = 0; break;
-  case commandRaw::upLong   : shortCut = 1; break;
-  case commandRaw::downLong : shortCut = 2; break;
-  case commandRaw::start    : shortCut = 3; break;
-  default                   :               break;
-  }
+  if (checkForShortcutAndShutdown(cmd))
+    return;
 
   switch (cmd) {
   case command::admin:
@@ -683,8 +710,6 @@ void Idle::react(command_e const &cmd_e) {
     break;
   }
 
-  if (shortCut != 0xff && not handleShortcut(shortCut))
-    mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
 }
 
 void Idle::react(card_e const &c_e) {
@@ -716,8 +741,7 @@ void Play::react(command_e const &cmd_e) {
     LOG(state_log, s_debug, str_Play(), F("::react(cmd_e) "), static_cast<int>(cmd_e.cmd_raw));
   }
 
-  command cmd      = commands.getCommand(cmd_e.cmd_raw);
-
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
   switch (cmd) {
   case command::admin:
     LOG(state_log, s_debug, str_Play(), str_to(), str_Admin_Allow());
@@ -745,6 +769,11 @@ void Play::react(command_e const &cmd_e) {
       break;
     tonuino.nextTrack();
     break;
+  case command::next10:
+    if (tonuino.getActiveModifier().handleNextButton())
+      break;
+    tonuino.nextTrack(10);
+    break;
   case command::volume_down:
     if (tonuino.getActiveModifier().handleVolumeDown())
       break;
@@ -754,6 +783,11 @@ void Play::react(command_e const &cmd_e) {
     if (tonuino.getActiveModifier().handlePreviousButton())
       break;
     tonuino.previousTrack();
+    break;
+  case command::previous10:
+    if (tonuino.getActiveModifier().handlePreviousButton())
+      break;
+    tonuino.previousTrack(10);
     break;
   default:
     break;
@@ -798,16 +832,10 @@ void Pause::react(command_e const &cmd_e) {
     LOG(state_log, s_debug, str_Pause(), F("::react(b) "), static_cast<int>(cmd_e.cmd_raw));
   }
 
-  const command cmd      = commands.getCommand(cmd_e.cmd_raw);
-  uint8_t         shortCut = 99;
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::idle_pause);
 
-  switch(cmd_e.cmd_raw) {
-  case commandRaw::pauseLong: shortCut = 0; break;
-  case commandRaw::upLong   : shortCut = 1; break;
-  case commandRaw::downLong : shortCut = 2; break;
-  case commandRaw::start    : shortCut = 3; break;
-  default                   :               break;
-  }
+  if (checkForShortcutAndShutdown(cmd))
+    return;
 
   switch (cmd) {
   case command::admin:
@@ -823,8 +851,6 @@ void Pause::react(command_e const &cmd_e) {
   default:
     break;
   }
-
-  handleShortcut(shortCut);
 }
 
 void Pause::react(card_e const &c_e) {
@@ -983,7 +1009,8 @@ void Admin_Allow::react(command_e const &cmd_e) {
 //    break;
 //  case get_match_c         :
 //    VoiceMenu::react(b);
-//    if ((b.b == commandRaw::pause) && (currentValue != 0)) {
+//    const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
+//    if ((cmd == command::select) && (currentValue != 0)) {
 //      if (current_subState == cv)
 //        current_subState = allow;
 //      else
@@ -1001,7 +1028,9 @@ void Admin_Allow::react(command_e const &cmd_e) {
     return;
   }
 
-  if (isAbort(cmd_e))
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
+
+  if (isAbort(cmd))
     return;
 }
 
@@ -1035,12 +1064,14 @@ void Admin_Entry::react(command_e const &cmd_e) {
   if (cmd_e.cmd_raw != commandRaw::none) {
     LOG(state_log, s_debug, str_Admin_Entry(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
-  VoiceMenu::react(cmd_e);
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
 
-  if (isAbort(cmd_e))
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
     return;
 
-  if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+  if ((cmd == command::select) && (currentValue != 0)) {
     lastCurrentValue = currentValue;
     switch (currentValue) {
     case 0:  break;
@@ -1181,12 +1212,14 @@ void Admin_SimpleSetting::react(command_e const &cmd_e) {
   if (cmd_e.cmd_raw != commandRaw::none) {
     LOG(state_log, s_debug, str_Admin_SimpleSetting(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
-  VoiceMenu::react(cmd_e);
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
 
-  if (isAbort(cmd_e))
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
     return;
 
-  if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+  if ((cmd == command::select) && (currentValue != 0)) {
     switch (type) {
     case maxVolume : settings.maxVolume  = currentValue + settings.minVolume    ; break;
     case minVolume : settings.minVolume  = currentValue                         ; break;
@@ -1222,9 +1255,11 @@ void Admin_ModCard::react(command_e const &cmd_e) {
   if (cmd_e.cmd_raw != commandRaw::none) {
     LOG(state_log, s_debug, str_Admin_ModCard(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
-  VoiceMenu::react(cmd_e);
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
 
-  if (isAbort(cmd_e))
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
     return;
 
   if (readyToWrite) {
@@ -1263,7 +1298,7 @@ void Admin_ModCard::react(command_e const &cmd_e) {
     return;
   }
 
-  if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+  if ((cmd == command::select) && (currentValue != 0)) {
     if (mode == pmode_t::none) {
       mode = static_cast<pmode_t>(currentValue);
       if (mode != pmode_t::sleep_timer) {
@@ -1304,13 +1339,15 @@ void Admin_ShortCut::react(command_e const &cmd_e) {
   if (cmd_e.cmd_raw != commandRaw::none) {
     LOG(state_log, s_debug, str_Admin_ShortCut(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
-  VoiceMenu::react(cmd_e);
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
 
-  if (isAbort(cmd_e))
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
     return;
 
   if (shortcut == 0) {
-    if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+    if ((cmd == command::select) && (currentValue != 0)) {
       shortcut = currentValue;
       current_subState = start_setupCard;
     }
@@ -1363,12 +1400,14 @@ void Admin_StandbyTimer::react(command_e const &cmd_e) {
   if (cmd_e.cmd_raw != commandRaw::none) {
     LOG(state_log, s_debug, str_Admin_StandbyTimer(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
-  VoiceMenu::react(cmd_e);
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
 
-  if (isAbort(cmd_e))
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
     return;
 
-  if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+  if ((cmd == command::select) && (currentValue != 0)) {
     switch (currentValue) {
     case 1: settings.standbyTimer =  5; break;
     case 2: settings.standbyTimer = 15; break;
@@ -1396,7 +1435,9 @@ void Admin_CardsForFolder::react(command_e const &cmd_e) {
     LOG(state_log, s_debug, str_Admin_CardsForFolder(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
 
-  if (isAbort(cmd_e))
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
+
+  if (isAbort(cmd))
     return;
 
   switch (current_subState) {
@@ -1411,8 +1452,8 @@ void Admin_CardsForFolder::react(command_e const &cmd_e) {
     current_subState = run_getFolder;
     break;
   case run_getFolder:
-    VoiceMenu::react(cmd_e);
-    if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+    VoiceMenu::react(cmd);
+    if ((cmd == command::select) && (currentValue != 0)) {
       folder.folder = currentValue;
       current_subState = start_getSpecial;
     }
@@ -1428,8 +1469,8 @@ void Admin_CardsForFolder::react(command_e const &cmd_e) {
     current_subState = run_getSpecial;
     break;
   case run_getSpecial:
-    VoiceMenu::react(cmd_e);
-    if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+    VoiceMenu::react(cmd);
+    if ((cmd == command::select) && (currentValue != 0)) {
       special = currentValue;
       current_subState = start_getSpecial2;
     }
@@ -1447,8 +1488,8 @@ void Admin_CardsForFolder::react(command_e const &cmd_e) {
     current_subState = run_getSpecial2;
     break;
   case run_getSpecial2:
-    VoiceMenu::react(cmd_e);
-    if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+    VoiceMenu::react(cmd);
+    if ((cmd == command::select) && (currentValue != 0)) {
       special2 = currentValue;
       mp3.enqueueMp3FolderTrack(mp3Tracks::t_936_batch_cards_intro);
       current_subState = prepare_writeCard;
@@ -1510,12 +1551,14 @@ void Admin_InvButtons::react(command_e const &cmd_e) {
   if (cmd_e.cmd_raw != commandRaw::none) {
     LOG(state_log, s_debug, str_Admin_InvButtons(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
-  VoiceMenu::react(cmd_e);
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
 
-  if (isAbort(cmd_e))
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
     return;
 
-  if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+  if ((cmd == command::select) && (currentValue != 0)) {
     switch (currentValue) {
     case 1: settings.invertVolumeButtons = false; break;
     case 2: settings.invertVolumeButtons = true ; break;
@@ -1561,13 +1604,15 @@ void Admin_LockAdmin::react(command_e const &cmd_e) {
     LOG(state_log, s_debug, str_Admin_LockAdmin(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
 
-  if (isAbort(cmd_e))
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
+
+  if (isAbort(cmd))
     return;
 
   switch(current_subState) {
   case get_mode:
-    VoiceMenu::react(cmd_e);
-    if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+    VoiceMenu::react(cmd);
+    if ((cmd == command::select) && (currentValue != 0)) {
       settings.adminMenuLocked = currentValue-1;
       if (settings.adminMenuLocked == 2) {
         current_subState = get_pin;
@@ -1614,12 +1659,14 @@ void Admin_PauseIfCardRemoved::react(command_e const &cmd_e) {
   if (cmd_e.cmd_raw != commandRaw::none) {
     LOG(state_log, s_debug, str_Admin_PauseIfCardRemoved(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
-  VoiceMenu::react(cmd_e);
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
 
-  if (isAbort(cmd_e))
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
     return;
 
-  if ((cmd_e.cmd_raw == commandRaw::pause) && (currentValue != 0)) {
+  if ((cmd == command::select) && (currentValue != 0)) {
     switch (currentValue) {
     case 1: settings.pauseWhenCardRemoved = false; break;
     case 2: settings.pauseWhenCardRemoved = true ; break;

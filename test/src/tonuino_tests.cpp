@@ -4,6 +4,7 @@
 #include <tonuino.hpp>
 #include <state_machine.hpp>
 #include <chip_card.hpp>
+#include <commands.hpp>
 
 class tonuino_test_fixture: public ::testing::Test {
 public:
@@ -15,6 +16,52 @@ public:
 
   void execute_cycle() {
     tonuino.loop();
+  }
+
+  void button_for_command(command c, state_for_command s) {
+    switch(s) {
+    case state_for_command::play:
+      switch(c) {
+
+      case command::pause:
+        press_button(buttonPausePin);
+        execute_cycle();
+        release_button(buttonPausePin);
+        execute_cycle();
+        break;
+
+      case command::next:
+        press_button(buttonUpPin);
+        execute_cycle();
+      #ifdef FIVEBUTTONS
+        release_button(buttonUpPin);
+      #else
+        current_time += buttonLongPress;
+        execute_cycle();
+        release_button(buttonUpPin);
+      #endif
+        execute_cycle();
+        break;
+
+      case command::previous:
+        press_button(buttonDownPin);
+        execute_cycle();
+      #ifdef FIVEBUTTONS
+        release_button(buttonDownPin);
+        execute_cycle();
+      #else
+        current_time += buttonLongPress;
+        execute_cycle();
+        release_button(buttonDownPin);
+      #endif
+        execute_cycle();
+        break;
+      }
+      break;
+    default:
+      EXPECT_TRUE(false) << "not yet implementred";
+      break;
+    }
   }
 
   Mp3&       getMp3     () { return tonuino.getMp3     (); }
@@ -107,57 +154,29 @@ TEST_F(tonuino_test_fixture, sunny_day) {
   EXPECT_EQ(getMp3().df_folder, play_folder);
   EXPECT_EQ(getMp3().df_folder_track, 1);
 
-  // button pause
-  press_button(buttonPausePin);
-  execute_cycle();
-  release_button(buttonPausePin);
-  execute_cycle();
+  // button pause --> pause
+  button_for_command(command::pause, state_for_command::play);
   EXPECT_TRUE(SM_tonuino::is_in_state<Pause>());
   execute_cycle();
   EXPECT_TRUE(getMp3().is_pause());
 
-  // button play
-  press_button(buttonPausePin);
-  execute_cycle();
-  release_button(buttonPausePin);
-  execute_cycle();
+  // button pause --> play
+  button_for_command(command::pause, state_for_command::play);
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   execute_cycle();
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, play_folder);
   EXPECT_EQ(getMp3().df_folder_track, 1);
 
-  // button next
-  press_button(buttonUpPin);
-  execute_cycle();
-//#ifndef FIVEBUTTONS
-  current_time += buttonLongPress;
-  execute_cycle();
-  release_button(buttonUpPin);
-  execute_cycle();
-//#else
-//  release_button(buttonUpPin);
-//  execute_cycle();
-//  execute_cycle();
-//#endif
+  // button next --> next track
+  button_for_command(command::next, state_for_command::play);
   execute_cycle();
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, play_folder);
   EXPECT_EQ(getMp3().df_folder_track, 2);
 
-  // button prev
-  press_button(buttonDownPin);
-  execute_cycle();
-  //#ifndef FIVEBUTTONS
-    current_time += buttonLongPress;
-    execute_cycle();
-    release_button(buttonDownPin);
-    execute_cycle();
-  //#else
-  //  release_button(buttonDownPin);
-  //  execute_cycle();
-  //  execute_cycle();
-  //#endif
+  // button prev --> prev track
+  button_for_command(command::previous, state_for_command::play);
   execute_cycle();
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, play_folder);

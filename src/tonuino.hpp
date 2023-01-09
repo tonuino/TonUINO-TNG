@@ -20,8 +20,8 @@ public:
   void playFolder     ();
   void playTrackNumber();
 
-  void       nextTrack(bool fromOnPlayFinished = false);
-  void   previousTrack();
+  void       nextTrack(uint8_t tracks = 1, bool fromOnPlayFinished = false);
+  void   previousTrack(uint8_t tracks = 1);
 
   void resetActiveModifier   () { activeModifier = &noneModifier; }
   Modifier& getActiveModifier() { return *activeModifier; }
@@ -39,6 +39,8 @@ public:
   Settings& getSettings () { return settings ; }
   Chip_card& getChipCard() { return chip_card; }
   static uint32_t generateRamdomSeed();
+
+  void shutdown();
 
 private:
 

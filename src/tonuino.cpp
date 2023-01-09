@@ -123,6 +123,7 @@ void Tonuino::playFolder() {
     LOG(play_log, s_info, myFolder->special, str_bis(), myFolder->special2);
     mp3.enqueueTrack(myFolder->folder, myFolder->special, myFolder->special2);
     mp3.shuffleQueue();
+    mp3.setEndless();
     break;
 
   case pmode_t::einzel:
@@ -156,7 +157,7 @@ void Tonuino::playTrackNumber () {
 
 
 // Leider kann das Modul selbst keine Queue abspielen, daher müssen wir selbst die Queue verwalten
-void Tonuino::nextTrack(bool fromOnPlayFinished) {
+void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
   LOG(play_log, s_info, F("nextTrack"));
   if (activeModifier->handleNext())
     return;
@@ -166,16 +167,16 @@ void Tonuino::nextTrack(bool fromOnPlayFinished) {
     if (fromOnPlayFinished && myFolder->mode == pmode_t::hoerbuch_1)
       mp3.clearFolderQueue();
   }
-  mp3.playNext();
+  mp3.playNext(tracks);
 }
 
-void Tonuino::previousTrack() {
+void Tonuino::previousTrack(uint8_t tracks) {
   LOG(play_log, s_info, F("previousTrack"));
   if (mp3.isPlayingFolder() && (myFolder->mode == pmode_t::hoerbuch || myFolder->mode == pmode_t::hoerbuch_1)) {
     const uint8_t trackToSave = (mp3.getCurrentTrack() > numTracksInFolder) ? mp3.getCurrentTrack()-1 : 1;
     settings.writeFolderSettingToFlash(myFolder->folder, trackToSave);
   }
-  mp3.playPrevious();
+  mp3.playPrevious(tracks);
 }
 
 // Funktionen für den Standby Timer (z.B. über Pololu-Switch oder Mosfet)
@@ -197,20 +198,29 @@ void Tonuino::disableStandbyTimer() {
 
 void Tonuino::checkStandby() {
   if (standbyTimer.isActive() && standbyTimer.isExpired()) {
-    LOG(standby_log, s_info, F("power off!"));
-    // enter sleep state
-    digitalWrite(shutdownPin, getLevel(shutdownPinType, level::inactive));
-    delay(500);
-
-    // http://discourse.voss.earth/t/intenso-s10000-powerbank-automatische-abschaltung-software-only/805
-    // powerdown to 27mA (powerbank switches off after 30-60s)
-    chip_card.sleepCard();
-    mp3.sleep();
-
-    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-    cli();  // Disable interrupts
-    sleep_mode();
+    shutdown();
   }
+}
+
+void Tonuino::shutdown() {
+  LOG(standby_log, s_info, F("power off!"));
+
+#if defined ALLinONE || defined ALLinONE_Plus
+  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
+#endif
+
+  // enter sleep state
+  digitalWrite(shutdownPin, getLevel(shutdownPinType, level::inactive));
+  delay(500);
+
+  // http://discourse.voss.earth/t/intenso-s10000-powerbank-automatische-abschaltung-software-only/805
+  // powerdown to 27mA (powerbank switches off after 30-60s)
+  chip_card.sleepCard();
+  mp3.sleep();
+
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  cli();  // Disable interrupts
+  sleep_mode();
 }
 
 bool Tonuino::specialCard(const nfcTagObject &nfcTag) {
