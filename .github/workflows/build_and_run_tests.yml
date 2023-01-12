@@ -1,7 +1,7 @@
 name: build and run tests
 on:
   push:
-    branches: [ main, test_platform.io ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 jobs:
