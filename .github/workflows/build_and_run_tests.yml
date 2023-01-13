@@ -50,3 +50,31 @@ jobs:
         with:
           name: TonUINO_firmware
           path: .pio/build/**/firmware.hex
+
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: create deploy directory
+        run: mkdir deploy
+      
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: TonUINO_firmware
+          path: deploy
+      
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: deploy
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
