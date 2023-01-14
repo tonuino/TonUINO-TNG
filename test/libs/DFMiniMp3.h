@@ -108,6 +108,7 @@ public:
 
     bool df_playing = false;
     bool df_playing_adv = false;
+    int df_playing_adv_counter = 0;
     bool df_stopped = true;
     uint16_t df_mp3_track = 0;
     uint8_t df_folder = 0;
@@ -135,7 +136,10 @@ public:
         df_playing = false;
       }
 
-      pin_value[dfPlayer_busyPin] = df_playing && !called_end_adv;
+      if (df_playing_adv && --df_playing_adv_counter <= 0)
+        end_adv();
+
+      pin_value[dfPlayer_busyPin] = !(df_playing && !called_end_adv);
       called_end_adv = false;
 
 
@@ -143,12 +147,10 @@ public:
         called_end_track = false;
         uint16_t replyArg = df_folder*255+(df_folder_track+df_mp3_track);
         df_playing = false;
-        df_playing_adv = false;
         df_stopped = true;
         df_folder = 0;
         df_folder_track = 0;
         df_mp3_track = 0;
-        df_adv_track = 0;
         T_NOTIFICATION_METHOD::OnPlayFinished(*this, DfMp3_PlaySources_Sd, replyArg);
       }
       if (error_code) {
@@ -228,6 +230,7 @@ public:
       if (df_playing) {
         df_playing_adv = true;
         df_adv_track = track;
+        df_playing_adv_counter = 3;
       }
     }
 
@@ -242,6 +245,7 @@ public:
         df_playing_adv = false;
         df_adv_track = 0;
         called_end_adv = true;
+        df_playing_adv_counter = 0;
       }
     }
     uint16_t error_code = 0;
