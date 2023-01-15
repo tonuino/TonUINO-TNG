@@ -83,4 +83,3 @@ mp3/0992_admin_calc.mp3|Wieviel ist
 mp3/0993_admin_calc.mp3|plus
 mp3/0994_admin_calc.mp3|minus
 mp3/0999_reset_ok.mp3|Reset wurde durchgeführt!
-Re
