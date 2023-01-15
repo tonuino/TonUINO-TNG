@@ -33,6 +33,9 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 2.x geände
 
 # Change Log
 
+## Version 3.1.1 (15.01.2023)
+- [Issue 044](https://github.com/tonuino/TonUINO-TNG/issues/44): Statemachine remains in StartPlay forever is mp3 files missing
+
 ## Version 3.1.1 (23.12.2022)
 - [Issue 034](https://github.com/tonuino/TonUINO-TNG/issues/34): Unit Test Framework and example Tests
 - [Issue 026](https://github.com/tonuino/TonUINO-TNG/issues/26): DFMiniMp3 lib support T_CHIP_VARIANT
