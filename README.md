@@ -34,6 +34,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 2.x geände
 # Change Log
 
 ## Version 3.1.1 (15.01.2023)
+- [Issue 045](https://github.com/tonuino/TonUINO-TNG/issues/45): audio_messages_de.txt isn't up to date.
 - [Issue 044](https://github.com/tonuino/TonUINO-TNG/issues/44): Statemachine remains in StartPlay forever is mp3 files missing
 
 ## Version 3.1.1 (23.12.2022)
