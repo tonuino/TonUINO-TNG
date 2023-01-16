@@ -82,14 +82,14 @@ bool Chip_card::auth(MFRC522::PICC_Type piccType) {
       (piccType == MFRC522::PICC_TYPE_MIFARE_1K  ) ||
       (piccType == MFRC522::PICC_TYPE_MIFARE_4K  ) )
   {
-    LOG(card_log, s_info, F("Auth Classic"));
+    LOG(card_log, s_debug, F("Auth Classic"));
     status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key, &(mfrc522.uid));
   }
   else if (piccType == MFRC522::PICC_TYPE_MIFARE_UL ) {
     byte pACK[] = {0, 0}; //16 bit PassWord ACK returned by the tempCard
 
     // Authenticate using key A
-    LOG(card_log, s_info, F("Auth UL"));
+    LOG(card_log, s_debug, F("Auth UL"));
     status = mfrc522.PCD_NTAG216_AUTH(key.keyByte, pACK);
   }
 
@@ -103,9 +103,9 @@ bool Chip_card::auth(MFRC522::PICC_Type piccType) {
 
 Chip_card::readCardEvent Chip_card::readCard(nfcTagObject &nfcTag) {
   // Show some details of the PICC (that is: the tag/card)
-  LOG(card_log, s_info, F("Card UID: "), dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size));
+  LOG(card_log, s_debug, F("Card UID: "), dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size));
   const MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
-  LOG(card_log, s_info, F("PICC type: "), printPiccType(mfrc522, piccType));
+  LOG(card_log, s_debug, F("PICC type: "), printPiccType(mfrc522, piccType));
 
   byte buffer[buffferSizeRead];
   MFRC522::StatusCode status = MFRC522::STATUS_ERROR;

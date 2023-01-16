@@ -8,7 +8,7 @@
 
 unsigned long current_time = 0;
 uint8_t pin_mode[max_pin] = { LOW };
-int pin_value[max_pin] = { 0 };
+int pin_value[max_pin] = { INPUT };
 
 HardwareSerial Serial;
 HardwareSerial Serial3;

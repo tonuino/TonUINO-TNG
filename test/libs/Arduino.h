@@ -70,13 +70,28 @@ static const uint8_t max_pin = 32;
 extern uint8_t pin_mode[max_pin];
 extern int pin_value[max_pin];
 
+inline void reset_pin_value(uint8_t pin) {
+  if (pin < max_pin) {
+    if (pin_mode[pin] == INPUT_PULLUP)
+      pin_value[pin] = 1;
+    else
+      pin_value[pin] = 0;
+  }
+}
 inline void pinMode(uint8_t pin, uint8_t mode) {
   if (pin < max_pin) {
     pin_mode[pin] = mode;
-    if (mode == INPUT_PULLUP)
-      pin_value[pin] = 1;
+    reset_pin_value(pin);
   }
 }
+
+inline void reset_all_pin_values() {
+  for (uint8_t pin = 0; pin < max_pin; ++pin)
+    reset_pin_value(pin);
+}
+
+
+
 inline int digitalRead(uint8_t pin) { if (pin < max_pin) return pin_value[pin]; return 0; }
 inline void digitalWrite(uint8_t pin, uint8_t val) { if (pin < max_pin) pin_value[pin] = val; }
 inline int analogRead(uint8_t pin) { if (pin <= A7 && pin >= A0) return pin_value[pin]; return 0; }
