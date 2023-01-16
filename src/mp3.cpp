@@ -222,7 +222,8 @@ void Mp3::setVolume() {
 void Mp3::loop() {
 #ifdef CHECK_MISSING_ONPLAYFINISHED
   if (not isPause && playing != play_none && startTrackTimer.isExpired() && not isPlaying()) {
-    missingOnPlayFinishedTimer.start(dfPlayer_timeUntilStarts);
+    if (not missingOnPlayFinishedTimer.isActive())
+      missingOnPlayFinishedTimer.start(dfPlayer_timeUntilStarts);
   }
   else {
     missingOnPlayFinishedTimer.stop();
