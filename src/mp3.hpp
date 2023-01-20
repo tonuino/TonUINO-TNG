@@ -189,6 +189,7 @@ public:
   void loop          ();
 
 private:
+  friend class tonuino_test_fixture;
 
   typedef queue<uint8_t, maxTracksInFolder> track_queue;
 

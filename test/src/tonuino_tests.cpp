@@ -12,6 +12,7 @@ public:
   : initializer{}
   , tonuino{Tonuino::getTonuino()}
   {
+    getSettings().resetSettings();
     tonuino.setup();
   }
 
@@ -297,6 +298,7 @@ public:
       execute_cycle();
     }
     if (SM_tonuino::is_in_state<Play>()) {
+      getMp3().endless = false;
       // loop for all tracks
       while (not SM_tonuino::is_in_state<Idle>()) {
         getMp3().end_track();
@@ -321,10 +323,7 @@ public:
 
   void goto_play() {
     goto_idle();
-    // set sd-card and insert card
-    getMp3().set_folder_track_count(play_folder, play_folder_track_count);
-    getMFRC522().card_in(cardCookie, cardVersion, play_folder, static_cast<uint8_t>(pmode_t::album), 0, 0);
-    execute_cycle();
+    card_in();
     EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
 
     // play t_262_pling
@@ -379,6 +378,45 @@ public:
     execute_cycle();
     EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
     EXPECT_TRUE(getMp3().is_stopped());
+  }
+
+  void card_in(uint32_t cookie, uint8_t version, uint8_t folder, uint8_t mode, uint8_t special, uint8_t special2) {
+    // set sd-card and insert card
+    getMp3().set_folder_track_count(folder, play_folder_track_count);
+    getMFRC522().card_in(cookie, version, folder, mode, special, special2);
+    execute_cycle();
+  }
+
+  void card_in() {
+    card_in(cardCookie, cardVersion, play_folder, static_cast<uint8_t>(pmode_t::album), 0, 0);
+  }
+
+  void card_in(folderSettings card) {
+    card_in(cardCookie, cardVersion, card.folder, static_cast<uint8_t>(card.mode), card.special, card.special2);
+  }
+
+  void card_out() {
+    getMFRC522().card_out();
+    // three cycles for card removed
+    execute_cycle();
+    execute_cycle();
+    execute_cycle();
+  }
+
+  void leave_start_play() {
+    // play t_262_pling
+    execute_cycle();
+    EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
+    EXPECT_TRUE(getMp3().is_playing_mp3());
+    EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_262_pling));
+
+    // end t_262_pling
+    getMp3().end_track();
+    execute_cycle();
+    EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
+    EXPECT_TRUE(getMp3().is_stopped());
+
+    execute_cycle();
   }
 };
 
@@ -456,26 +494,12 @@ TEST_F(tonuino_test_fixture, sunny_day_play) {
 
   Print::clear_output();
 
-  // set sd-card and insert card
-  getMp3().set_folder_track_count(play_folder, play_folder_track_count);
-  getMFRC522().card_in(cardCookie, cardVersion, 1, static_cast<uint8_t>(pmode_t::album), 0, 0);
-  execute_cycle();
+  card_in();
   EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
 
-  // play t_262_pling
-  execute_cycle();
-  EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
-  EXPECT_TRUE(getMp3().is_playing_mp3());
-  EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_262_pling));
-
-  // end t_262_pling
-  getMp3().end_track();
-  execute_cycle();
-  EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
-  EXPECT_TRUE(getMp3().is_stopped());
+  leave_start_play();
 
   // play 1-1
-  execute_cycle();
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, play_folder);
   EXPECT_EQ(getMp3().df_folder_track, 1);
@@ -512,12 +536,7 @@ TEST_F(tonuino_test_fixture, sunny_day_play) {
   EXPECT_TRUE(getMp3().is_stopped());
   EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
 
-  getMFRC522().card_out();
-  // three cycles for card removed
-  execute_cycle();
-  execute_cycle();
-  execute_cycle();
-
+  card_out();
 //  EXPECT_TRUE(false) << "log: " << Print::get_output();
 }
 
@@ -784,20 +803,9 @@ TEST_F(tonuino_test_fixture, shortcutx_in_idle) {
 
     EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
 
-    // play t_262_pling
-    execute_cycle();
-    EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
-    EXPECT_TRUE(getMp3().is_playing_mp3());
-    EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_262_pling));
-
-    // end t_262_pling
-    getMp3().end_track();
-    execute_cycle();
-    EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
-    EXPECT_TRUE(getMp3().is_stopped());
+    leave_start_play();
 
     // play play_folder-3
-    execute_cycle();
     EXPECT_TRUE(getMp3().is_playing_folder());
     EXPECT_EQ(getMp3().df_folder, play_folder);
     EXPECT_EQ(getMp3().df_folder_track, 3);
@@ -827,20 +835,9 @@ TEST_F(tonuino_test_fixture, shortcutx_in_pause) {
 
     EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
 
-    // play t_262_pling
-    execute_cycle();
-    EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
-    EXPECT_TRUE(getMp3().is_playing_mp3());
-    EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_262_pling));
-
-    // end t_262_pling
-    getMp3().end_track();
-    execute_cycle();
-    EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
-    EXPECT_TRUE(getMp3().is_stopped());
+    leave_start_play();
 
     // play play_folder-3
-    execute_cycle();
     EXPECT_TRUE(getMp3().is_playing_folder());
     EXPECT_EQ(getMp3().df_folder, play_folder);
     EXPECT_EQ(getMp3().df_folder_track, 3);
@@ -1045,6 +1042,208 @@ TEST_F(tonuino_test_fixture, adm_end_in_admin) {
   execute_cycle();
   EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
   EXPECT_TRUE(getMp3().is_stopped());
+}
 
+// =======================================================
+// Test Pause if card is removed
+// =======================================================
 
+// =================== card out in play
+TEST_F(tonuino_test_fixture, pause_if_card_removed_works) {
+  folderSettings test_data[] = {
+      { 1, pmode_t::hoerspiel    , 0, 0 },
+      { 1, pmode_t::album        , 0, 0 },
+      { 1, pmode_t::party        , 0, 0 },
+      { 1, pmode_t::einzel       , 1, 0 },
+      { 1, pmode_t::hoerbuch     , 0, 0 },
+      { 1, pmode_t::hoerspiel_vb , 1, 3 },
+      { 1, pmode_t::album_vb     , 2, 4 },
+      { 1, pmode_t::party_vb     , 5, 9 },
+      { 1, pmode_t::hoerbuch_1   , 0, 0 },
+  };
+
+  play_folder_track_count = 10;
+
+  getSettings().pauseWhenCardRemoved = true;
+
+  int ind = 0;
+  for (folderSettings card: test_data) {
+    goto_idle();
+    Print::clear_output();
+
+    card_in(card);
+    EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
+
+    leave_start_play();
+
+    // play 1-1
+    ASSERT_TRUE(getMp3().is_playing_folder()) << "Index: " << ind;
+    EXPECT_EQ(getMp3().df_folder, card.folder);
+
+    // card out --> pause
+    card_out();
+    ASSERT_TRUE(SM_tonuino::is_in_state<Pause>()) << "Index: " << ind;
+    execute_cycle();
+    EXPECT_TRUE(getMp3().is_pause());
+
+    // card in --> play
+    card_in(card);
+    ASSERT_TRUE(SM_tonuino::is_in_state<Play>()) << "Index: " << ind;
+    execute_cycle();
+    ASSERT_TRUE(getMp3().is_playing_folder()) << "Index: " << ind;
+    EXPECT_EQ(getMp3().df_folder, card.folder);
+
+    card_out();
+    ++ind;
+  }
+//  EXPECT_TRUE(false) << "log: " << Print::get_output();
+}
+
+// =================== card out early in StartPlay
+TEST_F(tonuino_test_fixture, pause_if_card_removed_card_out_early) {
+  play_folder = 1;
+  play_folder_track_count = 10;
+
+  getSettings().pauseWhenCardRemoved = true;
+
+  goto_idle();
+  Print::clear_output();
+
+  card_in();
+  EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
+
+  // card out
+  card_out();
+
+  // play t_262_pling
+  execute_cycle();
+  EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
+  EXPECT_TRUE(getMp3().is_playing_mp3());
+  EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_262_pling));
+
+  // end t_262_pling
+  getMp3().end_track();
+  execute_cycle();
+  // should go to pause
+  EXPECT_TRUE(SM_tonuino::is_in_state<Pause>());
+  EXPECT_TRUE(getMp3().is_stopped());
+
+  card_in();
+  EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
+
+  // play 1-1
+  execute_cycle();
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, play_folder);
+  EXPECT_EQ(getMp3().df_folder_track, 1);
+
+  card_out();
+
+//  EXPECT_TRUE(false) << "log: " << Print::get_output();
+}
+
+// =================== card in with other card
+struct card_data_2 {
+  folderSettings card1;
+  folderSettings card2;
+};
+TEST_F(tonuino_test_fixture, pause_if_card_removed_card_in_with_other) {
+  card_data_2 test_data[] = {
+      // folder
+      {
+          { 1, pmode_t::hoerspiel   , 0, 0 },
+          { 2, pmode_t::hoerspiel   , 0, 0 }
+      },
+      {
+          { 1, pmode_t::album       , 0, 0 },
+          { 2, pmode_t::album       , 0, 0 }
+      },
+      {
+          { 1, pmode_t::party       , 0, 0 },
+          { 2, pmode_t::party       , 0, 0 }
+      },
+      //... for other modes
+
+      // mode
+      {
+          { 1, pmode_t::hoerspiel   , 0, 0 },
+          { 1, pmode_t::album       , 0, 0 }
+      },
+      {
+          { 1, pmode_t::einzel      , 1, 0 },
+          { 1, pmode_t::hoerbuch    , 1, 1 }
+      },
+
+      // special
+      {
+          { 1, pmode_t::einzel      , 1, 0 },
+          { 1, pmode_t::einzel      , 2, 0 }
+      },
+      {
+          { 1, pmode_t::hoerspiel_vb, 1, 5 },
+          { 1, pmode_t::hoerspiel_vb, 3, 5 }
+      },
+      {
+          { 1, pmode_t::album_vb    , 3, 5 },
+          { 1, pmode_t::album_vb    , 4, 5 }
+      },
+      {
+          { 1, pmode_t::party_vb    , 3, 5 },
+          { 1, pmode_t::party_vb    , 5, 5 }
+      },
+
+      // special2
+      {
+          { 1, pmode_t::hoerspiel_vb, 1, 2 },
+          { 1, pmode_t::hoerspiel_vb, 1, 3 }
+      },
+      {
+          { 1, pmode_t::album_vb    , 1, 3 },
+          { 1, pmode_t::album_vb    , 1, 4 }
+      },
+      {
+          { 1, pmode_t::party_vb    , 1, 2 },
+          { 1, pmode_t::party_vb    , 1, 5 }
+      }
+  };
+
+  play_folder_track_count = 10;
+
+  getSettings().pauseWhenCardRemoved = true;
+
+  int ind = 0;
+  for (card_data_2 data: test_data) {
+    goto_idle();
+    Print::clear_output();
+
+    card_in(data.card1);
+    ASSERT_TRUE(SM_tonuino::is_in_state<StartPlay>()) << "Index: " << ind;
+
+    leave_start_play();
+
+    // play 1-1
+    ASSERT_TRUE(getMp3().is_playing_folder()) << "Index: " << ind;
+    EXPECT_EQ(getMp3().df_folder, data.card1.folder);
+
+    // card out --> pause
+    card_out();
+    EXPECT_TRUE(SM_tonuino::is_in_state<Pause>());
+    execute_cycle();
+    EXPECT_TRUE(getMp3().is_pause());
+
+    // card in other card --> StartPlay
+    card_in(data.card2);
+    ASSERT_TRUE(SM_tonuino::is_in_state<StartPlay>()) << "Index: " << ind;
+
+    leave_start_play();
+
+    // play 1-1
+    EXPECT_TRUE(getMp3().is_playing_folder());
+    EXPECT_EQ(getMp3().df_folder, data.card2.folder);
+
+    card_out();
+    ++ind;
+  }
+
+//  EXPECT_TRUE(false) << "log: " << Print::get_output();
 }
