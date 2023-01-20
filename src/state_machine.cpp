@@ -639,7 +639,10 @@ void StartPlay::react(command_e const &/*cmd_e*/) {
   if (not mp3.isPlayingMp3()) {
     tonuino.playFolder();
     LOG(state_log, s_debug, str_StartPlay(), str_to(), str_Play());
-    transit<Play>();
+    if (settings.pauseWhenCardRemoved && chip_card.isCardRemoved())
+      transit<Pause>();
+    else
+      transit<Play>();
   }
 }
 

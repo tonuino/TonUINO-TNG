@@ -45,7 +45,7 @@ struct folderSettings {
     if (mode == pmode_t::einzel && special != rhs.special)
       return false;
     if ((mode == pmode_t::hoerspiel_vb || mode == pmode_t::album_vb || mode == pmode_t::party_vb) &&
-        (special != rhs.special || special2 == rhs.special2))
+        (special != rhs.special || special2 != rhs.special2))
       return false;
     return true;
   }

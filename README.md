@@ -33,6 +33,9 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 2.x geände
 
 # Change Log
 
+## Version 3.1.2 (20.01.2023)
+- [Issue 039](https://github.com/tonuino/TonUINO-TNG/issues/39): No pause if card is removed too early
+
 ## Version 3.1.2 (16.01.2023)
 - [Issue 028](https://github.com/tonuino/TonUINO-TNG/issues/28): Revise Button behavior
 
