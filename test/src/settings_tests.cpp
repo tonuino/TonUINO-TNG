@@ -127,7 +127,7 @@ TEST_F(settings_test_fixture, read_write_folderSettings_works) {
   init_brand_new();
 
   for (uint16_t track:  { 10, 15,150,255 }) {
-    for (uint8_t folder: { 1, 5, 10, 99 }) {
+    for (uint8_t folder: { 0, 1, 5, 10, 99 }) {
       settings.writeFolderSettingToFlash(folder, track);
       uint8_t r_track = settings.readFolderSettingFromFlash(folder);
       EXPECT_EQ(r_track, track);
