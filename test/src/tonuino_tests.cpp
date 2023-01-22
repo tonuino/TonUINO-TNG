@@ -13,6 +13,9 @@ public:
   , tonuino{Tonuino::getTonuino()}
   {
     getSettings().resetSettings();
+#ifdef BUTTONS3X3
+    pin_value[button3x3Pin] = Buttons3x3::levels[Buttons3x3::numLevels];
+#endif
     tonuino.setup();
   }
 

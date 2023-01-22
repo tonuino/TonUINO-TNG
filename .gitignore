@@ -40,10 +40,14 @@ Temporary Items
 /.pydevproject
 /.sproject
 /.settings
+/build
 /Classic/
 /Classic_5/
+/Classic_3x3/
 /ALLinONE/
+/ALLinONE_3x3/
 /ALLinONE_plus/
+/ALLinONE_plus_3x3/
 
 # VS code
 .pio

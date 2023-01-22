@@ -1,26 +1,10 @@
+#ifdef BUTTONS3X3
 #include "buttons3x3.hpp"
 
 #include "constants.hpp"
 #include "logger.hpp"
-#ifdef BUTTONS3X3
 
 //#define CALIBRATE3X3
-
-namespace {
-constexpr uint8_t numLevels = 9;
-constexpr int levels[numLevels+1] = {
-                                         0
-                                     ,  77
-                                     , 148
-                                     , 234
-                                     , 306
-                                     , 390
-                                     , 465
-                                     , 534
-                                     , 593
-                                     , 784
-                                     };
-}
 
 Buttons3x3::Buttons3x3()
 : CommandSource()
