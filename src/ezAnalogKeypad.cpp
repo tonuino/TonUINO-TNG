@@ -91,6 +91,7 @@ unsigned char ezAnalogKeypad::getKey() {
 		}
 	}
 
+  const unsigned long currentTime = millis();
 	if (keyId != -1 && keyId != lastKeyId) {
     // release key
     if (keys[keyId] == 0) {
@@ -99,10 +100,11 @@ unsigned char ezAnalogKeypad::getKey() {
       else
         ret = keys[lastKeyId];
     }
+    lastPressTime = currentTime;
     lastKeyId = keyId;
 	}
 	// long press
-	if (!suppressRelease && keys[lastKeyId] != 0) {
+	if (!suppressRelease && keys[lastKeyId] != 0 && (currentTime - lastPressTime) >= longPressTime) {
 	  suppressRelease = true;
     ret = keysLong[keyId];
 	}

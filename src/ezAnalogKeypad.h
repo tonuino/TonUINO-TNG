@@ -45,6 +45,7 @@ class ezAnalogKeypad
     unsigned long longPressTime = 1000;
 
     int keypadPin;
+    unsigned long lastPressTime    = 0;
 		int keyNum                     = 0;
 		int lastKeyId                  = -1;
 		bool suppressRelease           = false;
