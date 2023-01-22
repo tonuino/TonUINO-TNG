@@ -40,10 +40,10 @@ void Settings::resetSettings() {
   locked               = false;
   standbyTimer         =  0;
   invertVolumeButtons  = true;
-  shortCuts[0].folder  =  0;
-  shortCuts[1].folder  =  0;
-  shortCuts[2].folder  =  0;
-  shortCuts[3].folder  =  0;
+  shortCuts[0]         =  { 0, pmode_t::none, 0, 0 };
+  shortCuts[1]         =  { 0, pmode_t::none, 0, 0 };
+  shortCuts[2]         =  { 0, pmode_t::none, 0, 0 };
+  shortCuts[3]         =  { 0, pmode_t::none, 0, 0 };
   adminMenuLocked      =  0;
   adminMenuPin[0]      =  1;
   adminMenuPin[1]      =  1;
@@ -66,6 +66,9 @@ void Settings::migrateSettings(int oldVersion) {
     pauseWhenCardRemoved = false;
     writeSettingsToFlash();
   }
+  const unsigned int t = pauseWhenCardRemoved;
+  if (t == 0xff)
+    pauseWhenCardRemoved = false;
 }
 
 void Settings::loadSettingsFromFlash() {
@@ -89,9 +92,10 @@ void Settings::loadSettingsFromFlash() {
 }
 
 void Settings::writeFolderSettingToFlash(uint8_t folder, uint16_t track) {
-  writeByteToFlash(folder, min(track, 0xffu));
+  if (folder < 100)
+    writeByteToFlash(folder, min(track, 0xffu));
 }
 
 uint16_t Settings::readFolderSettingFromFlash(uint8_t folder) {
-  return readByteFromFlash(folder);
+  return (folder < 100)? readByteFromFlash(folder) : 0;
 }
