@@ -7,7 +7,7 @@
 
 #include "constants.hpp"
 
-enum class mode_t: uint8_t {
+enum class pmode_t: uint8_t {
   none          =   0,
 
   // folder modes
@@ -36,16 +36,18 @@ enum class mode_t: uint8_t {
 
 struct folderSettings {
   uint8_t folder;
-  mode_t  mode;
+  pmode_t mode;
   uint8_t special;
   uint8_t special2;
   bool operator==(const folderSettings& rhs) const {
-    return   folder == rhs.folder
-          && mode   == rhs.mode
-          && ((  mode == mode_t::hoerspiel_vb
-              || mode == mode_t::album_vb
-              || mode == mode_t::party_vb) ? (special == rhs.special && special2 == rhs.special2) : true
-             );
+    if (folder != rhs.folder || mode != rhs.mode)
+      return false;
+    if (mode == pmode_t::einzel && special != rhs.special)
+      return false;
+    if ((mode == pmode_t::hoerspiel_vb || mode == pmode_t::album_vb || mode == pmode_t::party_vb) &&
+        (special != rhs.special || special2 != rhs.special2))
+      return false;
+    return true;
   }
 };
 
@@ -98,6 +100,9 @@ public:
   bool isCardRemoved     () { return cardRemoved; }
 
 private:
+  friend class tonuino_test_fixture;
+  friend class chip_card_test_fixture;
+
   void stopCrypto1();
   void stopCard   ();
   bool auth       (MFRC522::PICC_Type piccType);

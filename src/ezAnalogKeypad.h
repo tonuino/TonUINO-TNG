@@ -28,6 +28,7 @@
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+// Adapted for memory and code optimization and add long press feature
 
 #ifndef ezAnalogKeypad_h
 #define ezAnalogKeypad_h
@@ -41,11 +42,9 @@
 class ezAnalogKeypad
 {
 	private:
-    unsigned long debounceTime  =   50;
     unsigned long longPressTime = 1000;
 
     int keypadPin;
-		unsigned long lastDebounceTime = 0;
 		int keyNum                     = 0;
 		int lastKeyId                  = -1;
 		bool suppressRelease           = false;
@@ -55,7 +54,6 @@ class ezAnalogKeypad
 
 	public:
 		ezAnalogKeypad(int pin);
-		void setDebounceTime(unsigned long time);
 		void setLongPressTime(unsigned long time);
 		void setNoPressValue(int analogValue);
 		void registerKey(unsigned char key, int analogValue, unsigned char keyLong=0);

@@ -31,9 +31,14 @@ commandRaw Buttons::getCommandRaw() {
   commandRaw ret = commandRaw::none;
   readButtons();
 
+  if ((ignoreRelease || ignoreAll) && isNoButton()) {
+    ignoreAll     = false;
+    ignoreRelease = false;
+    longPressFactor = 1;
+    return commandRaw::none;
+  }
+
   if (ignoreAll) {
-    if (isNoButton())
-      ignoreAll = false;
     return commandRaw::none;
   }
 
@@ -48,53 +53,87 @@ commandRaw Buttons::getCommandRaw() {
     ignoreAll = true;
   }
 
-  else if (buttonPause.wasReleased()) {
-    if (not ignorePauseButton)
-      ret = commandRaw::pause;
+  else if ((  buttonUp   .pressedFor(buttonLongPress)
+      || buttonDown .pressedFor(buttonLongPress)
+      )
+     && buttonUp   .isPressed()
+     && buttonDown .isPressed()) {
+    ret = commandRaw::updownLong;
+    ignoreAll = true;
+  }
+
+  else if (buttonPause.wasReleased() && not ignoreRelease) {
+    ret = commandRaw::pause;
+  }
+
+  else if (buttonPause.pressedFor(longPressFactor * buttonLongPress)) {
+    if (longPressFactor == 1)
+      ret = commandRaw::pauseLong;
+  }
+
+  else if (buttonUp.wasReleased() && not ignoreRelease) {
+    ret = commandRaw::up;
+  }
+
+  else if (buttonUp.pressedFor(longPressFactor * buttonLongPress)) {
+    if (longPressFactor == 1)
+      ret = commandRaw::upLong;
     else
-      ignorePauseButton = false;
+      ret = commandRaw::upLongRepeat;
   }
 
-  else if (buttonPause.pressedFor(buttonLongPress) && not ignorePauseButton) {
-    ret = commandRaw::pauseLong;
-    ignorePauseButton = true;
+  else if (buttonDown.wasReleased() && not ignoreRelease) {
+    ret = commandRaw::down;
   }
 
-  else if (buttonUp.wasReleased()) {
-    if (!ignoreUpButton) {
-      ret = commandRaw::up;
-    }
+  else if (buttonDown.pressedFor(longPressFactor * buttonLongPress)) {
+    if (longPressFactor == 1)
+      ret = commandRaw::downLong;
     else
-      ignoreUpButton = false;
-  }
-
-  else if (buttonUp.pressedFor(buttonLongPress) && not ignoreUpButton) {
-    ret = commandRaw::upLong;
-    ignoreUpButton = true;
-  }
-
-  else if (buttonDown.wasReleased()) {
-    if (!ignoreDownButton) {
-      ret = commandRaw::down;
-    }
-    else
-      ignoreDownButton = false;
-  }
-
-  else if (buttonDown.pressedFor(buttonLongPress) && not ignoreDownButton) {
-    ret = commandRaw::downLong;
-    ignoreDownButton = true;
+      ret = commandRaw::downLongRepeat;
   }
 
 #ifdef FIVEBUTTONS
-  else if (buttonFour.wasReleased()) {
+  else if (buttonFour.wasReleased() && not ignoreRelease) {
     ret = commandRaw::four;
   }
 
-  else if (buttonFive.wasReleased()) {
+  else if (buttonFour.pressedFor(longPressFactor * buttonLongPress)) {
+    if (longPressFactor == 1)
+      ret = commandRaw::fourLong;
+    else
+      ret = commandRaw::fourLongRepeat;
+  }
+
+  else if (buttonFive.wasReleased() && not ignoreRelease) {
     ret = commandRaw::five;
   }
+
+  else if (buttonFive.pressedFor(longPressFactor * buttonLongPress)) {
+    if (longPressFactor == 1)
+      ret = commandRaw::fiveLong;
+    else
+      ret = commandRaw::fiveLongRepeat;
+  }
 #endif
+
+  switch (ret) {
+  case commandRaw::pauseLong     :
+  case commandRaw::upLong        :
+  case commandRaw::upLongRepeat  :
+  case commandRaw::downLong      :
+  case commandRaw::downLongRepeat:
+#ifdef FIVEBUTTONS
+  case commandRaw::fourLong      :
+  case commandRaw::fourLongRepeat:
+  case commandRaw::fiveLong      :
+  case commandRaw::fiveLongRepeat:
+#endif
+                                   ++longPressFactor;
+                                   ignoreRelease = true;
+                                   break;
+  default                        : break;
+  }
 
   if (ret != commandRaw::none) {
     LOG(button_log, s_debug, F("Button raw: "), static_cast<uint8_t>(ret));
@@ -105,7 +144,12 @@ commandRaw Buttons::getCommandRaw() {
 bool Buttons::isNoButton() {
   return not buttonPause.isPressed()
       && not buttonUp   .isPressed()
-      && not buttonDown .isPressed();
+      && not buttonDown .isPressed()
+#ifdef FIVEBUTTONS
+      && not buttonFour .isPressed()
+      && not buttonFive .isPressed()
+#endif
+      ;
 }
 
 bool Buttons::isReset() {

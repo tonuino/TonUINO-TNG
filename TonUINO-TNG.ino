@@ -19,10 +19,8 @@
 
 /*
 Please select your TonUINO PCB (Classic, AiO or AiO+) in file constants.hpp
-Right now you must use an older version of the DFPlayer Mini Mp3 by Makuna library (1.0.7)!
 
-Bitte wählt eure TonUINO-Platine (Classic, AiO oder AiO+) in der Datei constands.hpp
-Aktuell wird nur eine ältere Version der DFPlayer Mini Mp3 by Makuna Bibliothek (1.0.7) unterstützt!
+Bitte wählt eure TonUINO-Platine (Classic, AiO oder AiO+) in der Datei constants.hpp
 */
 
 void setup()
@@ -37,6 +35,7 @@ void setup()
   LOG(init_log, s_error, F("TonUINO Version 3.1 - refactored by Boerge1\n"));
   LOG(init_log, s_error, F("created by Thorsten Voß and licensed under GNU/GPL."));
   LOG(init_log, s_error, F("Information and contribution at https://tonuino.de.\n"));
+  LOG(init_log, s_error, F("V3.1.2 22.01.23\n"));
 
   Tonuino::getTonuino().setup();
 }

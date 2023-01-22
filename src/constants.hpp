@@ -24,6 +24,10 @@
 // um die Unterstützung für die 3x3 Buttons zu haben bitte in der nächste Zeile den Kommentar entfernen
 //#define BUTTONS3X3
 
+// uncomment the below line to support the MH2024K16SS chip on the DfMiniMp3 player
+// um den Chip MH2024K16SS auf dem DfMiniMp3 Player zu ünterstützen bitte in der nächste Zeile den Kommentar entfernen
+//#define DFMiniMp3_T_CHIP_VARIANT Mp3ChipMH2024K16SS
+
 // ####### helper for level ############################
 
 enum class level : uint8_t {
@@ -134,7 +138,7 @@ inline constexpr uint8_t  cardRemoveDelay =  3;
 // ####### mp3 #########################################
 
 #define DFPlayerUsesHardwareSerial
-//#define CHECK_MISSING_ONPLAYFINISHED
+#define CHECK_MISSING_ONPLAYFINISHED
 
 inline constexpr uint8_t        maxTracksInFolder        = 255;
 // inline constexpr uint8_t        dfPlayer_receivePin      =  2;
@@ -191,7 +195,7 @@ inline constexpr uint8_t  cardRemoveDelay =  3;
 // ####### mp3 #########################################
 
 #define DFPlayerUsesSoftwareSerial
-//#define CHECK_MISSING_ONPLAYFINISHED
+#define CHECK_MISSING_ONPLAYFINISHED
 
 inline constexpr uint8_t       maxTracksInFolder        = 255;
 inline constexpr uint8_t       dfPlayer_receivePin      = 2;

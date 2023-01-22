@@ -4,6 +4,6 @@
 void setup();
 void loop();
 
-#include "../Tonuino.ino"
+#include "../TonUINO-TNG.ino"
 
 #endif

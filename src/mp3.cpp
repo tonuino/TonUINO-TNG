@@ -31,7 +31,7 @@ void Mp3Notify::OnPlayFinished(DfMp3&, DfMp3_PlaySources /*source*/, uint16_t tr
   else
     lastTrackFinished = track;
   delay(1);
-  Tonuino::getTonuino().nextTrack(true/*fromOnPlayFinished*/);
+  Tonuino::getTonuino().nextTrack(1/*tracks*/, true/*fromOnPlayFinished*/);
 }
 
 #ifdef DFPlayerUsesSoftwareSerial
@@ -94,14 +94,14 @@ void Mp3::playAdvertisement(advertTracks track, bool olnyIfIsPlaying) {
 }
 
 void Mp3::clearFolderQueue() {
-  LOG(mp3_log, s_info, F("clear folder"));
+  LOG(mp3_log, s_debug, F("clear folder"));
   if (playing == play_folder) playing = play_none;
   current_track  = 0;
   current_folder = 0;
   q.clear();
 }
 void Mp3::clearMp3Queue() {
-  LOG(mp3_log, s_info, F("clear mp3"));
+  LOG(mp3_log, s_debug, F("clear mp3"));
   if (playing == play_mp3) playing = play_none;
   mp3_track      = 0;
   mp3_track_next = 0;
@@ -109,6 +109,7 @@ void Mp3::clearMp3Queue() {
 void Mp3::enqueueTrack(uint8_t folder, uint8_t firstTrack, uint8_t lastTrack, uint8_t currentTrack) {
   clearAllQueue();
   current_folder = folder;
+  endless = false;
   for (uint8_t i = firstTrack; i<=lastTrack; ++i) {
     LOG(mp3_log, s_info, F("enqueue "), folder, F("-"), i);
     q.push(i);
@@ -138,7 +139,7 @@ void Mp3::enqueueMp3FolderTrack(mp3Tracks track, bool playAfter) {
 }
 
 void Mp3::playCurrent() {
-  LOG(mp3_log, s_info, F("play current"));
+  LOG(mp3_log, s_debug, F("play current"));
   if (current_folder == 0) { // maybe play mp3 track
     if (mp3_track != 0) {
       LOG(mp3_log, s_info, F("play mp3 "), mp3_track);
@@ -166,9 +167,11 @@ void Mp3::playCurrent() {
     }
   }
 }
-void Mp3::playNext() {
-  if (playing == play_folder && current_track+1 < q.size()) {
-    ++current_track;
+void Mp3::playNext(uint8_t tracks) {
+  if (playing == play_folder && (current_track+1 < q.size() || endless)) {
+    current_track += tracks;
+    if (current_track >= q.size())
+      current_track = endless ? current_track % q.size() : q.size()-1;
     LOG(mp3_log, s_debug, F("playNext: "), current_track);
     playCurrent();
   }
@@ -182,9 +185,10 @@ void Mp3::playNext() {
     playing = play_none;
   }
 }
-void Mp3::playPrevious() {
-  if (playing == play_folder && current_track > 0) {
-    --current_track;
+void Mp3::playPrevious(uint8_t tracks) {
+  if (playing == play_folder && (current_track > 0 || endless)) {
+    int current_track_tmp = static_cast<int>(current_track) - tracks;
+    current_track = endless ? (current_track_tmp%q.size()+q.size()) % q.size() : max(current_track_tmp, 0);
     LOG(mp3_log, s_debug, F("playPrevious: "), current_track);
     playCurrent();
   }
@@ -218,7 +222,8 @@ void Mp3::setVolume() {
 void Mp3::loop() {
 #ifdef CHECK_MISSING_ONPLAYFINISHED
   if (not isPause && playing != play_none && startTrackTimer.isExpired() && not isPlaying()) {
-    missingOnPlayFinishedTimer.start(dfPlayer_timeUntilStarts);
+    if (not missingOnPlayFinishedTimer.isActive())
+      missingOnPlayFinishedTimer.start(dfPlayer_timeUntilStarts);
   }
   else {
     missingOnPlayFinishedTimer.stop();

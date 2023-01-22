@@ -26,11 +26,10 @@ private:
   Button  buttonFour;
   Button  buttonFive;
 #endif
-  bool ignorePauseButton = false;
-  bool ignoreUpButton    = false;
-  bool ignoreDownButton  = false;
+  bool ignoreRelease     = false;
   bool ignoreAll         = false;
 
+  uint8_t longPressFactor = 1;
 };
 
 #endif /* SRC_BUTTONS_HPP_ */

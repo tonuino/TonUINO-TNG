@@ -1,0 +1,81 @@
+name: build and run tests
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    # install dependencies
+    - name: dependencies
+      run: sudo apt-get update && sudo apt-get install -yq libgtest-dev cmake
+    # build project
+    - name: build
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        make all -j 2
+    # run tests
+    - name: run tests
+      run: |
+        cd build
+        make test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.platformio/.cache
+          key: ${{ runner.os }}-pio
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install PlatformIO Core
+        run: pip install --upgrade platformio
+
+      - name: Build PlatformIO Project
+        run: pio run
+        
+      - uses: actions/upload-artifact@v3
+        with:
+          name: TonUINO_firmware
+          path: .pio/build/**/firmware.hex
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: create deploy directory
+        run: mkdir deploy
+      
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: TonUINO_firmware
+          path: deploy
+      
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: deploy
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1

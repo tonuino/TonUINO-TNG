@@ -28,10 +28,9 @@
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+// Adapted for memory and code optimization and add long press feature
 
 #include "ezAnalogKeypad.h"
-
-#include "logger.hpp"
 
 ezAnalogKeypad::ezAnalogKeypad(int pin)
 : keypadPin(pin)
@@ -41,10 +40,6 @@ ezAnalogKeypad::ezAnalogKeypad(int pin)
     keysLong[i]   = 0;
 		values[i] = 0;
 	}
-}
-
-void ezAnalogKeypad::setDebounceTime(unsigned long time) {
-	debounceTime = time;
 }
 
 void ezAnalogKeypad::setLongPressTime(unsigned long time) {
@@ -57,36 +52,22 @@ void ezAnalogKeypad::setNoPressValue(int analogValue) {
 
 void ezAnalogKeypad::registerKey(unsigned char key, int analogValue, unsigned char keyLong) {
 	if(keyNum <= ezAnalogKeypad_MAX_KEY) {
-		keys[keyNum]   = key;
+    if (keyNum > 0 && values[keyNum-1] >= analogValue) {
+      //Serial.println(F("bad order"));
+      return;
+    }
+    keys[keyNum]   = key;
     keysLong[keyNum]   = keyLong;
 		values[keyNum] = analogValue;
 		keyNum++;
 		
-		// sorting the values array in ascending order
-		for (int i = 0; i < (keyNum - 1); i++) {
-			for (int j = i + 1; j < keyNum; j++) {
-				if (values[i] > values[j]) {
-					int swap_value = values[i];
-					values[i] = values[j];
-					values[j] = swap_value;
-				
-					unsigned char swap_key = keys[i];
-					keys[i] = keys[j];
-					keys[j] = swap_key;
-
-          swap_key = keysLong[i];
-          keysLong[i] = keysLong[j];
-          keysLong[j] = swap_key;
-				}
-			}
-		}
 	} else {
-		Serial.println(F("too much keys"));
+		//Serial.println(F("too much keys"));
 	}
 }
 
 unsigned char ezAnalogKeypad::getKey() {
-	int analogValue = analogRead(keypadPin);
+	const int analogValue = analogRead(keypadPin);
 
 	int keyId = -1;
 	unsigned char ret = 0;
@@ -110,22 +91,18 @@ unsigned char ezAnalogKeypad::getKey() {
 		}
 	}
 
-	const unsigned long currentTime = millis();
 	if (keyId != -1 && keyId != lastKeyId) {
-		if ((currentTime - lastDebounceTime) >= debounceTime) {
-		  // release key
-		  if (keys[keyId] == 0) {
-		    if (suppressRelease)
-		      suppressRelease = false;
-		    else
-		      ret = keys[lastKeyId];
-		  }
-			lastDebounceTime = currentTime;
-			lastKeyId = keyId;
-		}
+    // release key
+    if (keys[keyId] == 0) {
+      if (suppressRelease)
+        suppressRelease = false;
+      else
+        ret = keys[lastKeyId];
+    }
+    lastKeyId = keyId;
 	}
 	// long press
-	if (!suppressRelease && keys[lastKeyId] != 0 && (currentTime - lastDebounceTime) >= longPressTime) {
+	if (!suppressRelease && keys[lastKeyId] != 0) {
 	  suppressRelease = true;
     ret = keysLong[keyId];
 	}

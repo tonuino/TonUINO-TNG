@@ -8,29 +8,28 @@
 
 namespace {
 constexpr uint8_t numLevels = 9;
-constexpr uint16_t levels[numLevels+1] = {
-                                             0
-                                         ,  77
-                                         , 148
-                                         , 234
-                                         , 306
-                                         , 390
-                                         , 465
-                                         , 534
-                                         , 593
-                                         , 784
-                                         };
+constexpr int levels[numLevels+1] = {
+                                         0
+                                     ,  77
+                                     , 148
+                                     , 234
+                                     , 306
+                                     , 390
+                                     , 465
+                                     , 534
+                                     , 593
+                                     , 784
+                                     };
 }
 
 Buttons3x3::Buttons3x3()
 : CommandSource()
 , buttons(button3x3Pin)
 {
-  buttons.setDebounceTime(button3x3DbTime);
   buttons.setLongPressTime(buttonLongPress);
-  buttons.setNoPressValue(levels[numLevels]);
   for (uint8_t i = 0; i < numLevels; ++i)
     buttons.registerKey(i+1, levels[i], 9+i+1);
+  buttons.setNoPressValue(levels[numLevels]);
 }
 
 commandRaw Buttons3x3::getCommandRaw() {

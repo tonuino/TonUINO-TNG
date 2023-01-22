@@ -1,24 +1,78 @@
 # TonUINO
 Die DIY Musikbox (nicht nur) für Kinder
 
+# Anleitung zum Compilieren
+
+Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TNG](https://www.tonuino.de/TNG) und hier [www.leiterkartenpiraten.de](https://www.leiterkartenpiraten.de)
+
+## Arduino IDE
+- Bei der classic und AiO HW Variante muss die Datei 'platform.local.txt' in den avr HW Ordner kopiert werden. Dieser Ordner ist gewöhnlich folgender:
+```
+  Windows:
+    Classic:  C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6
+    AiO:      C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\LGT8fx Boards\hardware\avr\1.0.7
+
+  Linux:
+    Classic:  ~/.arduino15/packages/arduino/hardware/avr/1.8.6
+    Aio:      ~/.arduino15/packages/LGT8fx Boards/hardware/avr/1.0.7
+
+  MacOS 13.1:
+    Classic:  /Applications/Arduino.app/Contents/Java/arduino/hardware/avr
+    AiO:      /Applications/Arduino.app/Contents/Java/LGT8fx Boards/hardware/avr
+```
+- Man findet den Ordner auch, wenn man die Datei platform.txt sucht. 
+
+- Für die AiOplus HW Variante sind keine Änderungen notwendig
+
+## platform.io
+- geht out-of-the-box
+
+# Installation
+
+Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 2.x geändert. Hier kann man die Dateien downloaden: [www.tonuino.de/TNG](https://www.tonuino.de/TNG)
 
 # Change Log
 
+## Version 3.1.2 (22.01.2023)
+- [Issue 038](https://github.com/tonuino/TonUINO-TNG/issues/38): Bad initialization of setting 'pause when card removed'
+
+## Version 3.1.2 (20.01.2023)
+- [Issue 039](https://github.com/tonuino/TonUINO-TNG/issues/39): No pause if card is removed too early
+
+## Version 3.1.2 (16.01.2023)
+- [Issue 028](https://github.com/tonuino/TonUINO-TNG/issues/28): Revise Button behavior
+
+## Version 3.1.1 (15.01.2023)
+- [Issue 045](https://github.com/tonuino/TonUINO-TNG/issues/45): audio_messages_de.txt isn't up to date.
+- [Issue 044](https://github.com/tonuino/TonUINO-TNG/issues/44): Statemachine remains in StartPlay forever is mp3 files missing
+
+## Version 3.1.1 (23.12.2022)
+- [Issue 034](https://github.com/tonuino/TonUINO-TNG/issues/34): Unit Test Framework and example Tests
+- [Issue 026](https://github.com/tonuino/TonUINO-TNG/issues/26): DFMiniMp3 lib support T_CHIP_VARIANT
+- Remove strange noise during startup
+- [Issue 015](https://github.com/tonuino/TonUINO-TNG/issues/15): Implement command sources
+- [Issue 016](https://github.com/tonuino/TonUINO-TNG/issues/16): Shortcut at startup doesn't work
+- Bug Fix: Cannot enter Admin Menue with buttons
+- [Issue 003](https://github.com/tonuino/TonUINO-TNG/issues/3): Shortcut does not work after power-up
+- Bug Fix: Hoerbuch mode: Bad handling of start track
+- [Issue 004](https://github.com/tonuino/TonUINO-TNG/issues/4): Implement reaction to empty card
+- [Issue 005](https://github.com/tonuino/TonUINO-TNG/issues/5): Update to use new mp3 library version 1.1.0
+
 ## Version 3.1 (13.10.2022)
-- Unterstützung für alle Platinen der Leiterkartenpiraten hinzugefügt (über einfaches #define in der TonUINO.ino konfigurierbar)
+- Unterstützung für alle Platinen der Leiterkartenpiraten hinzugefügt (über einfaches #define in der `src/constants.hpp` konfigurierbar)
   - TonUINO Classic
   - All-in-One
   - All-in-One Plus
   - fix for NTAG213
 
 ## Version 3.0 (xx.xx.xxxx) - by Boerge1
-- vollständiges Refactoring mit State Machine
+- vollständiges Refactoring mit State-Machine
 - Die Main-Loop läuft jetzt stabil mit 50 ms
-- Neues Feature: neuer Mode: Hörbuch einzeln (nur ein Titel wird gespielt und Fortschritt gespeichert
+- Neues Feature: neuer Mode: Hörbuch einzeln (nur ein Titel wird gespielt und Fortschritt gespeichert)
 - Neues Feature: Pause, wenn Karte entfernt wird (lässt sich per Einstellungen steuern)
-- Das Admin Menü wir nach einer Einstellung nicht verlassen (kann in der Software geändert leicht werden)
-- Das Admin Menü kan an jeder Stelle abgrbrochen werden
-- Viele weitere Verbesserungen und Bug Fixes
+- Das Admin-Menü wird nach einer Einstellung nicht verlassen (kann in der Software leicht geändert werden)
+- Das Admin-Menü kann an jeder Stelle abgebrochen werden
+- Viele weitere Verbesserungen und Bug-Fixes
 
 ## Version 2.1 (xx.xx.xxxx) noch WIP
 - Partymodus hat nun eine Queue -> jedes Lied kommt nur genau 1x vorkommt
