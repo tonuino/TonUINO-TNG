@@ -171,6 +171,7 @@ Chip_card::readCardEvent Chip_card::readCard(nfcTagObject &nfcTag) {
     LOG(card_log, s_warning, F("bad ver "), version);
     nfcTag.nfcFolderSettings.folder   = 0;
     nfcTag.nfcFolderSettings.mode     = pmode_t::none;
+    return readCardEvent::none;
   }
   return readCardEvent::known;
 }
