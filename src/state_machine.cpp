@@ -393,9 +393,10 @@ bool Base::readCard() {
 }
 
 bool Base::handleShortcut(uint8_t shortCut) {
-  if (settings.getShortCut(shortCut).folder != 0) {
-    if (settings.getShortCut(shortCut).mode != pmode_t::repeat_last)
-      tonuino.setFolder(&settings.getShortCut(shortCut));
+  folderSettings &sc_folderSettings = settings.getShortCut(shortCut);
+  if (sc_folderSettings.folder != 0) {
+    if (sc_folderSettings.mode != pmode_t::repeat_last)
+      tonuino.setFolder(&sc_folderSettings);
     if (tonuino.getFolder() != 0) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
       transit<StartPlay>();

@@ -849,6 +849,81 @@ TEST_F(tonuino_test_fixture, shortcutx_in_pause) {
   }
 }
 
+#ifdef BUTTONS3X3
+void set_value_for_3x3(uint8_t button) {
+  ASSERT_LE(button, buttonExtSC_buttons);
+  pin_value[button3x3Pin] = Buttons3x3::levels[button];
+}
+void reset_value_for_3x3() {
+  set_value_for_3x3(Buttons3x3::numLevels);
+}
+constexpr uint16_t startAddressExtraShortcuts = 156;
+
+TEST_F(tonuino_test_fixture, shortcut3x3_in_idle) {
+
+  play_folder = 3;
+  play_folder_track_count = 99;
+  getMp3().set_folder_track_count(play_folder, play_folder_track_count);
+
+  for (uint8_t index = 0; index < Buttons3x3::numLevels; ++index) {
+    uint8_t start_track = index+1;
+    folderSettings fs = { play_folder, pmode_t::album_vb, start_track, 99 };
+    goto_idle();
+    Print::clear_output();
+
+    const int address = startAddressExtraShortcuts + index * sizeof(folderSettings);
+    EEPROM_put(address, fs);
+
+    set_value_for_3x3(index);
+    execute_cycle();
+    reset_value_for_3x3();
+    execute_cycle();
+
+    ASSERT_TRUE(SM_tonuino::is_in_state<StartPlay>()) << index;
+
+    leave_start_play();
+
+    // play play_folder-3
+    EXPECT_TRUE(getMp3().is_playing_folder());
+    EXPECT_EQ(getMp3().df_folder, play_folder);
+    EXPECT_EQ(getMp3().df_folder_track, index+1);
+
+    goto_idle();
+//    EXPECT_TRUE(false) << "log: " << Print::get_output();
+  }
+
+  // long press
+  for (uint8_t index = 0; index < Buttons3x3::numLevels; ++index) {
+    uint8_t start_track = Buttons3x3::numLevels+index+1;
+    folderSettings fs = { play_folder, pmode_t::album_vb, start_track, 99 };
+    goto_idle();
+    Print::clear_output();
+
+    const int address = startAddressExtraShortcuts + (Buttons3x3::numLevels+index) * sizeof(folderSettings);
+    EEPROM_put(address, fs);
+
+    set_value_for_3x3(index);
+    execute_cycle();
+    current_time += buttonLongPress;
+    execute_cycle();
+    reset_value_for_3x3();
+    execute_cycle();
+
+    ASSERT_TRUE(SM_tonuino::is_in_state<StartPlay>()) << index;
+
+    leave_start_play();
+
+    // play play_folder-3
+    EXPECT_TRUE(getMp3().is_playing_folder());
+    EXPECT_EQ(getMp3().df_folder, play_folder);
+    EXPECT_EQ(getMp3().df_folder_track, Buttons3x3::numLevels+index+1);
+
+    goto_idle();
+//    EXPECT_TRUE(false) << "log: " << Print::get_output();
+  }
+}
+#endif
+
 // =================== pause (pause, play)
 TEST_F(tonuino_test_fixture, pause_in_pause) {
   goto_pause();
