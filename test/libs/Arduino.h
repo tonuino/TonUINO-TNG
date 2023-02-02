@@ -95,6 +95,10 @@ inline void reset_all_pin_values() {
 inline int digitalRead(uint8_t pin) { if (pin < max_pin) return pin_value[pin]; return 0; }
 inline void digitalWrite(uint8_t pin, uint8_t val) { if (pin < max_pin) pin_value[pin] = val; }
 inline int analogRead(uint8_t pin) { if (pin <= A7 && pin >= A0) return pin_value[pin]; return 0; }
+inline void analogReference(uint8_t mode) {}
+#define INTERNAL2V5 0
+#define INTERNAL2V048 0
+inline void analogReadResolution(uint8_t) {}
 
 // test functions
 inline void press_button  (uint8_t pin) { if (pin < max_pin) pin_value[pin] = LOW; }

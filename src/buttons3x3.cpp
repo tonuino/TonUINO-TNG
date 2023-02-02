@@ -8,12 +8,8 @@
 
 Buttons3x3::Buttons3x3()
 : CommandSource()
-, buttons(button3x3Pin)
+, buttons(button3x3Pin, numLevels, maxLevel, buttonLongPress)
 {
-  buttons.setLongPressTime(buttonLongPress);
-  for (uint8_t i = 0; i < numLevels; ++i)
-    buttons.registerKey(i+1, levels[i], 9+i+1);
-  buttons.setNoPressValue(levels[numLevels]);
 }
 
 commandRaw Buttons3x3::getCommandRaw() {
@@ -21,7 +17,7 @@ commandRaw Buttons3x3::getCommandRaw() {
 
 #ifdef CALIBRATE3X3
   static uint8_t t = 0;
-  if (t % 20 == 0)
+  if (t % 50 == 0)
     LOG(button_log, s_info, F("Button3x3 analog value: "), static_cast<int>(analogRead(button3x3Pin)));
 #else
   const uint8_t button = buttons.getKey();

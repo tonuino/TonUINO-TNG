@@ -17,6 +17,16 @@ const __FlashStringHelper* str_bis      () { return F(" bis "); }
 } // anonymous namespace
 
 void Tonuino::setup() {
+#ifdef BUTTONS3X3
+#ifdef ALLinONE_Plus
+  analogReference(INTERNAL2V5);
+#endif
+#ifdef ALLinONE
+  analogReference(INTERNAL2V048);
+  analogReadResolution(12);
+#endif
+#endif
+
   pinMode(shutdownPin  , OUTPUT);
   digitalWrite(shutdownPin, getLevel(shutdownPinType, level::active));
 
@@ -79,7 +89,7 @@ void Tonuino::loop() {
 void Tonuino::playFolder() {
   LOG(play_log, s_debug, F("playFolder"));
   numTracksInFolder = mp3.getFolderTrackCount(myFolder->folder);
-  LOG(play_log, s_info, numTracksInFolder, F(" files in folder "), myFolder->folder);
+  LOG(play_log, s_warning, numTracksInFolder, F(" tr in folder "), myFolder->folder);
   numTracksInFolder = min(numTracksInFolder, 0xffu);
   mp3.clearAllQueue();
 

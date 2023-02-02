@@ -14,7 +14,7 @@ public:
   {
     getSettings().resetSettings();
 #ifdef BUTTONS3X3
-    pin_value[button3x3Pin] = Buttons3x3::levels[Buttons3x3::numLevels];
+    pin_value[button3x3Pin] = Buttons3x3::maxLevel;
 #endif
     tonuino.setup();
   }
@@ -852,7 +852,7 @@ TEST_F(tonuino_test_fixture, shortcutx_in_pause) {
 #ifdef BUTTONS3X3
 void set_value_for_3x3(uint8_t button) {
   ASSERT_LE(button, buttonExtSC_buttons);
-  pin_value[button3x3Pin] = Buttons3x3::levels[button];
+  pin_value[button3x3Pin] = button*Buttons3x3::maxLevel/Buttons3x3::numLevels;
 }
 void reset_value_for_3x3() {
   set_value_for_3x3(Buttons3x3::numLevels);
