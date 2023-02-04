@@ -123,7 +123,7 @@ inline constexpr HardwareSerial &dfPlayer_serial         = Serial3;
 // ####### tonuino #####################################
 
 inline constexpr uint8_t       shutdownPin      = 27;
-inline constexpr levelType     shutdownPinType  = levelType::activeHigh;
+inline constexpr levelType     shutdownPinType  = levelType::activeLow;
 inline constexpr uint8_t       ampEnablePin     = 19;
 inline constexpr levelType     ampEnablePinType = levelType::activeLow;
 inline constexpr uint8_t       usbAccessPin     = 20;
@@ -173,7 +173,7 @@ inline constexpr unsigned long dfPlayer_timeUntilStarts = 500;
 // ####### tonuino #####################################
 
 inline constexpr uint8_t       shutdownPin      = 7;
-inline constexpr levelType     shutdownPinType  = levelType::activeHigh;
+inline constexpr levelType     shutdownPinType  = levelType::activeLow;
 inline constexpr uint8_t       ampEnablePin     = 8;
 inline constexpr levelType     ampEnablePinType = levelType::activeLow;
 inline constexpr uint8_t       usbAccessPin     = A5;
