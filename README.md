@@ -33,26 +33,21 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 2.x geände
 
 # Change Log
 
-## Version 3.1.2 issue 019 (22.01.2023)
+## Version 3.1.2 issue 019 (04.02.2023)
 - [Issue 019](https://github.com/tonuino/TonUINO-TNG/issues/19): Implement support for the 3x3 Button board
+
+## Version 3.1.2 (04.02.2023)
+- [Issue 054](https://github.com/tonuino/TonUINO-TNG/issues/54): For classic variant: the shutdownPin should be HIGH on shutdown for the POLOLU switch
 
 ## Version 3.1.2 (23.01.2023)
 - [Issue 050](https://github.com/tonuino/TonUINO-TNG/issues/50): Cards with bad version handled as modification cards
-
-## Version 3.1.2 (22.01.2023)
 - [Issue 038](https://github.com/tonuino/TonUINO-TNG/issues/38): Bad initialization of setting 'pause when card removed'
-
-## Version 3.1.2 (20.01.2023)
 - [Issue 039](https://github.com/tonuino/TonUINO-TNG/issues/39): No pause if card is removed too early
-
-## Version 3.1.2 (16.01.2023)
 - [Issue 028](https://github.com/tonuino/TonUINO-TNG/issues/28): Revise Button behavior
 
 ## Version 3.1.1 (15.01.2023)
 - [Issue 045](https://github.com/tonuino/TonUINO-TNG/issues/45): audio_messages_de.txt isn't up to date.
 - [Issue 044](https://github.com/tonuino/TonUINO-TNG/issues/44): Statemachine remains in StartPlay forever is mp3 files missing
-
-## Version 3.1.1 (23.12.2022)
 - [Issue 034](https://github.com/tonuino/TonUINO-TNG/issues/34): Unit Test Framework and example Tests
 - [Issue 026](https://github.com/tonuino/TonUINO-TNG/issues/26): DFMiniMp3 lib support T_CHIP_VARIANT
 - Remove strange noise during startup

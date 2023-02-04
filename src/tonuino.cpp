@@ -28,7 +28,7 @@ void Tonuino::setup() {
 #endif
 
   pinMode(shutdownPin  , OUTPUT);
-  digitalWrite(shutdownPin, getLevel(shutdownPinType, level::active));
+  digitalWrite(shutdownPin, getLevel(shutdownPinType, level::inactive));
 
   randomSeed(generateRamdomSeed());
 
@@ -220,7 +220,7 @@ void Tonuino::shutdown() {
 #endif
 
   // enter sleep state
-  digitalWrite(shutdownPin, getLevel(shutdownPinType, level::inactive));
+  digitalWrite(shutdownPin, getLevel(shutdownPinType, level::active));
   delay(500);
 
   // http://discourse.voss.earth/t/intenso-s10000-powerbank-automatische-abschaltung-software-only/805

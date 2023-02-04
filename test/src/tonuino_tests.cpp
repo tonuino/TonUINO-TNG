@@ -430,9 +430,13 @@ public:
 TEST_F(tonuino_test_fixture, initial_state) {
   EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
   EXPECT_EQ(pin_mode[shutdownPin], OUTPUT);
-  EXPECT_EQ(pin_value[shutdownPin], HIGH);
+
+#ifdef TonUINO_Classic
+  EXPECT_EQ(pin_value[shutdownPin], LOW);
+#endif
 
 #if defined ALLinONE || defined ALLinONE_Plus
+  EXPECT_EQ(pin_value[shutdownPin], HIGH);
   EXPECT_EQ(pin_mode[ampEnablePin], OUTPUT);
   EXPECT_EQ(pin_value[ampEnablePin], LOW);
 
@@ -743,9 +747,11 @@ TEST_F(tonuino_test_fixture, shutdown_in_idle) {
 
 #if defined ALLinONE || defined ALLinONE_Plus
   EXPECT_EQ(pin_value[ampEnablePin], HIGH);
-#endif
-
   EXPECT_EQ(pin_value[shutdownPin], LOW);
+#endif
+#ifdef TonUINO_Classic
+  EXPECT_EQ(pin_value[shutdownPin], HIGH);
+#endif
   EXPECT_TRUE(getMp3()    .called_sleep        );
   EXPECT_TRUE(getMFRC522().called_AntennaOff   );
   EXPECT_TRUE(getMFRC522().called_SoftPowerDown);
@@ -772,9 +778,11 @@ TEST_F(tonuino_test_fixture, shutdown_in_pause) {
 
 #if defined ALLinONE || defined ALLinONE_Plus
   EXPECT_EQ(pin_value[ampEnablePin], HIGH);
-#endif
-
   EXPECT_EQ(pin_value[shutdownPin], LOW);
+#endif
+#ifdef TonUINO_Classic
+  EXPECT_EQ(pin_value[shutdownPin], HIGH);
+#endif
   EXPECT_TRUE(getMp3()    .called_sleep        );
   EXPECT_TRUE(getMFRC522().called_AntennaOff   );
   EXPECT_TRUE(getMFRC522().called_SoftPowerDown);
