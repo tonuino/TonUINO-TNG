@@ -3,7 +3,7 @@
 # Converts text into spoken language saved to an mp3 file.
 
 
-import argparse, base64, json, os, subprocess, sys, urllib
+import argparse, base64, json, os, subprocess, sys, urllib.request
 
 
 class PatchedArgumentParser(argparse.ArgumentParser):
@@ -104,13 +104,18 @@ def textToSpeech(text, targetFile, lang='de', useAmazon=False, useGoogleKey=None
 
 
 def postJson(url, postBody, headers = None):
-    cmd = ['curl']
-    if headers is not None:
-        for header in headers:
-            cmd.extend(['-H', header])
-    cmd.extend(['-H', 'Content-Type: application/json; charset=utf-8', '--data', json.dumps(postBody).encode('utf-8'), url])
-    response = subprocess.check_output(cmd)
-    return json.loads(response)
+    if headers is None:
+        headers = {}
+    headers['Content-Type'] = 'application/json; charset=utf-8'
+    data = json.dumps(postBody).encode('utf-8')
+    try:
+        request = urllib.request.Request(url, data, headers)
+        with urllib.request.urlopen(request) as req:
+            response_data=req.read()
+        return json.loads(response_data.decode())
+    except Exception as e:
+        print(e)
+        exit(2)
 
 
 if __name__ == '__main__':
