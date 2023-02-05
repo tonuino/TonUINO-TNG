@@ -113,11 +113,6 @@ def postJson(url, postBody, headers = None):
     return json.loads(response)
 
 
-def postForm(url, formData):
-    response = subprocess.check_output(['curl', '-H', 'Content-Type: application/x-www-form-urlencoded; charset=utf-8', '--data', urllib.urlencode(formData), url])
-    return json.loads(response)
-
-
 if __name__ == '__main__':
     argFormatter = lambda prog: argparse.RawDescriptionHelpFormatter(prog, max_help_position=30, width=100)
     argparser = PatchedArgumentParser(
