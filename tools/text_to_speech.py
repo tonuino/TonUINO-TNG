@@ -8,7 +8,7 @@ import argparse, base64, json, os, subprocess, sys, urllib.request
 
 class PatchedArgumentParser(argparse.ArgumentParser):
     def error(self, message):
-        sys.stderr.write('error: %s\n\n' % message)
+        sys.stderr.write('ERROR: %s\n\n' % message)
         self.print_help()
         sys.exit(2)
 
