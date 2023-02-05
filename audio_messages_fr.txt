@@ -1,0 +1,90 @@
+advert/0300_freeze_into.mp3|Nous allons maintenant jouer le jeu de la statue musicale. Quand la musique s'arrête, reste immobile !
+advert/0301_freeze_freeze1.mp3|Et arrête !
+advert/0301_freeze_freeze2.mp3|Ne bouge pas !
+advert/0301_freeze_freeze3.mp3|continuons !
+advert/0302_sleep.mp3|Fonction sommeil activée.
+advert/0303_locked.mp3|L'appareil est maintenant verrouillé.
+advert/0304_buttonslocked.mp3|Les boutons sont désormais verrouillés.
+advert/0305_kindergarden.mp3|Mode crèche activé.
+mp3/0300_new_tag.mp3|Oh, une nouvelle carte !
+mp3/0301_select_folder.mp3|Utilise les touches de volume pour sélectionner un dossier pour la carte. Appuie sur la touche pause pour continuer.
+mp3/0310.mp3|OK, utilise maintenant les touches de volume pour sélectionner le mode de lecture.
+mp3/0311_mode_random_episode.mp3|Mode de lecture audio : lire un fichier aléatoire du dossier
+mp3/0312_mode_album.mp3|Mode album : lire le dossier complet
+mp3/0313_mode_party.mp3|Mode fête : lire le dossier de façon aléatoire.
+mp3/0314_mode_single_track.mp3|Mode unique : lire un fichier spécifique du dossier.
+mp3/0315_mode_audio_book.mp3|Mode livre audio : lire un dossier et enregistrer la progression.
+mp3/0316_admin.mp3|Fonctions d'administration.
+mp3/0317_special_random.mp3|Mode spécial de-à, jeu d'écoute : lire un fichier aléatoire entre le fichier de début et le fichier de fin.
+mp3/0318_special_album.mp3|Mode spécial de-à, album : lire tous les fichiers entre le fichier de départ et le fichier final.
+mp3/0319_special_party.mp3|Mode spécial de-à, fête : lire tous les fichiers de manière aléatoire entre le fichier de départ et le fichier final.
+mp3/0320_mode_audio_book_single.mp3|Mode livre audio seul : lire le titre suivant dans le dossier et enregistrer la progression.
+mp3/0321_mode_repeat_last_card.mp3|Mode répéter la carte : la dernière carte ou le dernier raccourci est répété.
+mp3/0327_select_file.mp3|OK, sélectionne maintenant le fichier à l'aide des touches de volume.
+mp3/0328_select_first_file.mp3|OK, sélectionne maintenant le fichier de départ à l'aide des touches de volume.
+mp3/0329_select_last_file.mp3|Sélectionne maintenant le fichier final à l'aide des touches de volume.
+mp3/0330.mp3|Dois-je annoncer le numéro avant chaque fichier ? Tu peux à tout moment demander le numéro actuel en appuyant longuement sur la touche pause.
+mp3/0331.mp3|Non, n'annonce pas le numéro.
+mp3/0332.mp3|Oui, annonce le numéro.
+mp3/0400_ok.mp3|OK. J'ai configuré la carte.
+mp3/0401_error.mp3|Hélas ! Malheureusement, cela n'a pas fonctionné !
+mp3/0402_ok_settings.mp3|Ok, j'ai enregistré les paramètres.
+mp3/0800_waiting_for_card.mp3|S'il te plaît, pose la carte !
+mp3/0802_reset_aborted.mp3|OK, j'ai annulé le processus.
+mp3/0900_admin.mp3|Bienvenue dans le menu Admin. Sélectionne une fonction à l'aide des touches de volume et confirmer avec la touche pause ! Tu peux interrompre le processus en appuyant longuement sur la touche pause.
+mp3/0901_card_reset.mp3|Reconfigurer une carte.
+mp3/0902_max_volume.mp3|Définir le volume maximal.
+mp3/0903_min_volume.mp3|Définir le volume minimal.
+mp3/0904_init_volume.mp3|Définir le volume au démarrage.
+mp3/0905_eq.mp3|Configurer l'égaliseur.
+mp3/0906_modifiers.mp3|Créer une carte de modification. Ces cartes sont placées après les cartes de musique proprement dites et modifient le comportement de ton appareil.
+mp3/0907_shortcut.mp3|Configurer les touches avec un raccourci. Un raccourci est lancé par un appui long sur une touche et ne fonctionne que si rien n'est en cours de lecture.
+mp3/0908_standbytimer.mp3|Configurer la minuterie.
+mp3/0909_batch_cards.mp3|Créer des cartes individuelles pour un dossier.
+mp3/0910_switch_volume.mp3|Inverser la fonction des boutons de volume.
+mp3/0911_reset.mp3|Effacer tous les paramètres.
+mp3/0912_admin_lock.mp3|Vérouiller le menu admin.
+mp3/0913_pause_on_card_removed.mp3|Pause lorsque la carte est retirée.
+mp3/0919_continue_admin.mp3|et on continue dans le menu Admin
+mp3/0920_eq_intro.mp3|Sélectionne un réglage pour l'égaliseur à l'aide des touches de volume et le confirmer en appuyant sur la touche de pause.
+mp3/0921_normal.mp3|Normal
+mp3/0922_pop.mp3|Pop
+mp3/0923_rock.mp3|Rock
+mp3/0924_jazz.mp3|Jazz
+mp3/0925_classic.mp3|Classique
+mp3/0926_bass.mp3|Bass
+mp3/0930_max_volume_intro.mp3|Sélectionner le volume maximal et confirmer avec la touche pause.
+mp3/0931_min_volume_into.mp3|Sélectionner le volume minimal et confirmer avec la touche pause.
+mp3/0932_init_volume_into.mp3|Sélectionner le volume au démarrage et confirmer avec la touche pause.
+mp3/0933_switch_volume_intro.mp3|Tu veux inverser la fonction des touches de volume ? Tu dois alors appuyer longuement sur les touches pour avancer ou reculer d'une chanson.
+mp3/0934_no.mp3|Non.
+mp3/0935_yes.mp3|Oui.
+mp3/0936_batch_cards_intro.mp3|OK, pose maintenant les cartes l'une après l'autre sur la boîte. J'annoncerai le numéro de chaque carte à l'avance pour que tu ne te trompes pas. Pour annuler, il suffit d'appuyer sur l'une des touches de volume !
+mp3/0940_shortcut_into.mp3|Sélectionne le raccourci que tu veux configurer.
+mp3/0941_pause.mp3|Bouton de pause
+mp3/0942_up.mp3|Touche d'avance ou touche de volume
+mp3/0943_down.mp3|Bouton de retour ou de silence
+mp3/0944_startup.mp3|Définir le raccourci au démarrage
+mp3/0960_timer_intro.mp3|Après combien de minutes l'appareil doit-il être désactivé ?
+mp3/0961_timer_5.mp3|5 minutes.
+mp3/0962_timer_15.mp3|15 minutes.
+mp3/0963_timer_30.mp3|30 minutes.
+mp3/0964_timer_60.mp3|60 minutes.
+mp3/0965_timer_disabled.mp3|Ne s'arrête pas automatiquement
+mp3/0970_modifier_Intro.mp3|Sélectionne maintenant ta carte de modification à l'aide des touches de volume.
+mp3/0971_modifier_SleepTimer.mp3|Mode sieste
+mp3/0972_modifier_FreezeDance.mp3|Jeu de la statue musicale - L'appareil joue le jeu de la statue musicale avec toi et arrête brièvement la lecture de manière aléatoire pour toi.
+mp3/0973_modifier_Locked.mp3|Verrouiller l'appareil
+mp3/0974_modifier_Toddler.mp3|Mode rampant - Toutes les touches de l'appareil sont verrouillées pour les tout-petits. Les cartes continuent de fonctionner.
+mp3/0975_modifier_KinderGarden.mp3|Mode crèche - Pour éviter les disputes, les nouvelles cartes ne sont pas jouées immédiatement mais seulement après la fin du titre en cours. Les touches avant et arrière sont bloquées.
+mp3/0976_modifier_repeat1.mp3|Répéter le titre - répéter indéfiniment le titre actuel.
+mp3/0980_admin_lock_intro.mp3|Sélectionnez si et comment le menu administrateur doit être protégé.
+mp3/0981_admin_lock_disabled.mp3|Pas de protection - le menu admin peut être activé à tout moment en appuyant sur les trois boutons.
+mp3/0982_admin_lock_card.mp3|Carte admin uniquement - le menu admin ne peut être ouvert qu'avec une carte admin. Une nouvelle carte admin peut être apprise à tout moment.
+mp3/0983_admin_lock_pin.mp3|Entrer un code - le menu admin est protégé par un code pin à quatre chiffres. Si tu sélectionnes cette option, tu dois ensuite définir le pin.
+mp3/0984_admin_lock_calc.mp3|Tâche de calcul - le menu admin ne peut être accédé qu'en résolvant une tâche de calcul.
+mp3/0991_admin_pin.mp3|Saisis le code PIN.
+mp3/0992_admin_calc.mp3|Combien fait ?
+mp3/0993_admin_calc.mp3|pluss
+mp3/0994_admin_calc.mp3|moins
+mp3/0999_reset_ok.mp3|La réinitialisation a été effectuée !
