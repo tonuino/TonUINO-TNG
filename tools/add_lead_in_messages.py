@@ -74,6 +74,9 @@ def addLeadInMessage(inputPath, outputPath):
         return
 
     text = re.sub(fileRegex, titlePattern, inputFileName).replace('_', ' ').strip()
+    if text == '':
+        print('File {} does not have a title. Skipping.'.format(outputPath))
+        return
     print('Adding lead-in "{}" to {}'.format(text, os.path.abspath(outputPath)))
 
     if not args.dry_run:
