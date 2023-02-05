@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # Converts text into spoken language saved to an mp3 file.
 
