@@ -103,7 +103,7 @@ def addLeadInMessage(inputPath, outputPath):
 def detectAudioData(mp3File):
     try:
         output = subprocess.check_output([ 'ffmpeg', '-i', mp3File, '-hide_banner' ], stderr=subprocess.STDOUT)
-    except Exception, e:
+    except Exception as e:
         output = str(e.output)
 
     match = re.match('.*Stream #\\d+:\\d+: Audio: mp3, (\\d+) Hz, (mono|stereo), .*', output, re.S)
