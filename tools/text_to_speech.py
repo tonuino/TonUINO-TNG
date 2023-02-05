@@ -16,15 +16,18 @@ class PatchedArgumentParser(argparse.ArgumentParser):
 sayVoiceByLang = {
     'de': 'Anna',
     'en': 'Samantha',
+    'fr': 'Thomas',
 }
 googleVoiceByLang = {
     'de': { 'languageCode': 'de-DE', 'name': 'de-DE-Wavenet-C' },
     'en': { 'languageCode': 'en-US', 'name': 'en-US-Wavenet-D' },
+    'fr': { 'languageCode': 'fr-FR', 'name': 'fr-FR-Neural2-A' },
 }
 amazonVoiceByLang = {
     # See: https://docs.aws.amazon.com/de_de/polly/latest/dg/voicelist.html
     'de': 'Vicki',
     'en': 'Joanna',
+    'fr': 'Léa',
 }
 
 
