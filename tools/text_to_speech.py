@@ -65,7 +65,7 @@ def textToSpeech(text, targetFile, lang='de', useAmazon=False, useGoogleKey=None
             targetFile])
     elif useGoogleKey:
         responseJson = postJson(
-            'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=' + useGoogleKey,
+            'https://texttospeech.googleapis.com/v1/text:synthesize?key=' + useGoogleKey,
             {
                 'audioConfig': {
                     'audioEncoding': 'MP3',
