@@ -38,7 +38,10 @@ Amazon Polly sounds best, Google text-to-speech is second, MacOS `say` sounds wo
 """.strip()
 
 def addArgumentsToArgparser(argparser):
-    argparser.add_argument('--lang', choices=['de', 'en'], default='de', help='The language (default: de)')
+    # Create a list of supported languages directly from the say/Amazon/Google service configurations
+    supported_languages = list({key for d in [sayVoiceByLang, googleVoiceByLang, amazonVoiceByLang] for key in d.keys()})
+
+    argparser.add_argument('--lang', choices=supported_languages, default='de', help='The language (default: de)')
     argparser.add_argument('--use-say', action='store_true', default=None, help="If set, the MacOS tool `say` will be used.")
     argparser.add_argument('--use-amazon', action='store_true', default=None, help="If set, Amazon Polly is used. If missing the MacOS tool `say` will be used.")
     argparser.add_argument('--use-google-key', type=str, default=None, help="The API key of the Google text-to-speech account to use.")
