@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 # Adds a lead-in message to each mp3 file of a directory storing the result in another directory.
 # So - when played e.g. on a TonUINO - you first will hear the title of the track, then the track itself.
@@ -74,6 +74,9 @@ def addLeadInMessage(inputPath, outputPath):
         return
 
     text = re.sub(fileRegex, titlePattern, inputFileName).replace('_', ' ').strip()
+    if text == '':
+        print('File {} does not have a title. Skipping.'.format(outputPath))
+        return
     print('Adding lead-in "{}" to {}'.format(text, os.path.abspath(outputPath)))
 
     if not args.dry_run:
@@ -103,7 +106,7 @@ def addLeadInMessage(inputPath, outputPath):
 def detectAudioData(mp3File):
     try:
         output = subprocess.check_output([ 'ffmpeg', '-i', mp3File, '-hide_banner' ], stderr=subprocess.STDOUT)
-    except Exception, e:
+    except Exception as e:
         output = str(e.output)
 
     match = re.match('.*Stream #\\d+:\\d+: Audio: mp3, (\\d+) Hz, (mono|stereo), .*', output, re.S)
