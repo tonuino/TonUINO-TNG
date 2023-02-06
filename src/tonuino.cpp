@@ -79,7 +79,7 @@ void Tonuino::loop() {
 void Tonuino::playFolder() {
   LOG(play_log, s_debug, F("playFolder"));
   numTracksInFolder = mp3.getFolderTrackCount(myFolder->folder);
-  LOG(play_log, s_info, numTracksInFolder, F(" files in folder "), myFolder->folder);
+  LOG(play_log, s_warning, numTracksInFolder, F(" files in folder "), myFolder->folder);
   numTracksInFolder = min(numTracksInFolder, 0xffu);
   mp3.clearAllQueue();
 
