@@ -52,7 +52,7 @@ mp3/0922_pop.mp3|Pop
 mp3/0923_rock.mp3|Rock
 mp3/0924_jazz.mp3|Jazz
 mp3/0925_classic.mp3|Classic
-mp3/0926_bass.mp3|Base
+mp3/0926_bass.mp3|Bass
 mp3/0930_max_volume_intro.mp3|Select maximum volume and confirm with the pause key.
 mp3/0931_min_volume_into.mp3|Select minimum volume and confirm with the pause key.
 mp3/0932_init_volume_into.mp3|Select volume at startup and confirm with the pause key.
@@ -75,13 +75,13 @@ mp3/0970_modifier_Intro.mp3|Now please select your modification card with the vo
 mp3/0971_modifier_SleepTimer.mp3|Snooze mode
 mp3/0972_modifier_FreezeDance.mp3|Stop Dance - TonUINO plays stop dance with you and randomly stops playback briefly for you.
 mp3/0973_modifier_Locked.mp3|Lock TonUINO
-mp3/0974_modifier_Toddler.mp3|Crawler mode - All keys of the TonUINO are locked for the very small ones. Cards still work.
+mp3/0974_modifier_Toddler.mp3|Toddler mode - All keys of the TonUINO are locked for the very small ones. Cards still work.
 mp3/0975_modifier_KinderGarden.mp3|Kindergarten mode - In order to avoid conflicts, new cards are not played immediately, but only after the current song is over. The forward and back buttons are locked.
 mp3/0976_modifier_repeat1.mp3|Repeat title - repeat the current title endlessly.
 mp3/0980_admin_lock_intro.mp3|Please select if and how the admin menu should be protected.
 mp3/0981_admin_lock_disabled.mp3|No protection - the admin menu can be activated at any time by pressing all three buttons.
 mp3/0982_admin_lock_card.mp3|Admin card only - the admin menu can only be opened with an admin card. A new admin card can be learned at any time.
-mp3/0983_admin_lock_pin.mp3|Codeeingabe - das Adminmenü wird durch eine vierstellige Pin geschützt. Wenn du diese Option auswählst musst du als nächstes die Pin festlegen.
+mp3/0983_admin_lock_pin.mp3|Enter Pin Code - the admin menu is protected by a four-digit pin. When you select this option, the next thing you need to do is set the pin.
 mp3/0984_admin_lock_calc.mp3|Calculation task - the admin menu can be entered only by solving a calculation task.
 mp3/0991_admin_pin.mp3|Please enter the pin
 mp3/0992_admin_calc.mp3|How many is
