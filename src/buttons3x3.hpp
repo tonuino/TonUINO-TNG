@@ -9,15 +9,15 @@
 
 class Buttons3x3: public CommandSource {
 public:
-  static constexpr uint8_t numLevels = 9;
+  static constexpr uint16_t numLevels = 9;
 #ifdef TonUINO_Classic
-  static constexpr int maxLevel =  900; // 1023
+  static constexpr int16_t maxLevel =  900; // 1023
 #endif
 #ifdef ALLinONE
-  static constexpr int maxLevel = 4300; // 4064;
+  static constexpr int16_t maxLevel = 4300; // 4064;
 #endif
 #ifdef ALLinONE_Plus
-  static constexpr int maxLevel =  900; // 1023;
+  static constexpr int16_t maxLevel =  900; // 1023;
 #endif
 
   Buttons3x3();

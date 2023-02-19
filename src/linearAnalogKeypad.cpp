@@ -1,6 +1,6 @@
 #include "linearAnalogKeypad.h"
 
-linearAnalogKeypad::linearAnalogKeypad(int pin, int keyNum, int maxLevel, unsigned long longPressTime)
+linearAnalogKeypad::linearAnalogKeypad(uint8_t pin, uint16_t keyNum, int16_t maxLevel, unsigned long longPressTime)
 : keypadPin(pin)
 , keyNum(keyNum)
 , maxLevel(maxLevel)
@@ -9,9 +9,10 @@ linearAnalogKeypad::linearAnalogKeypad(int pin, int keyNum, int maxLevel, unsign
 }
 
 unsigned char linearAnalogKeypad::getKey() {
-	const int analogValue = analogRead(keypadPin);
+	const int16_t analogValue = analogRead(keypadPin);
 
-	unsigned char keyId = min((analogValue+maxLevel/keyNum/2)*keyNum/maxLevel, keyNum);
+	uint16_t keyId = static_cast<int32_t>(analogValue+maxLevel/keyNum/2)*keyNum/maxLevel;
+	keyId = min(keyId, keyNum);
 
 	unsigned char ret = 0;
 

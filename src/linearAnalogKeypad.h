@@ -11,9 +11,9 @@ class linearAnalogKeypad
 {
 	private:
 
-    const int keypadPin;
-		const int keyNum;
-		const int maxLevel;
+    const int8_t   keypadPin;
+		const uint16_t keyNum;
+		const int16_t  maxLevel;
     const unsigned long longPressTime;
 
 		unsigned long lastPressTime    = 0;
@@ -21,7 +21,7 @@ class linearAnalogKeypad
 		bool suppressRelease           = false;
 
 	public:
-		linearAnalogKeypad(int pin, int keyNum, int maxLevel, unsigned long longPressTime);
+		linearAnalogKeypad(uint8_t pin, uint16_t keyNum, int16_t maxLevel, unsigned long longPressTime);
 		unsigned char getKey();
 };
 
