@@ -33,6 +33,9 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 2.x geände
 
 # Change Log
 
+## Version 3.1.2_issue067 (20.02.2023)
+- [Issue 067](https://github.com/tonuino/TonUINO-TNG/issues/67): Add a hint in the admin menu that the card has to be removed
+
 ## Version 3.1.2 (20.02.2023)
 - [Issue 065](https://github.com/tonuino/TonUINO-TNG/issues/65): Increase dfPlayer_timeUntilStarts
 
