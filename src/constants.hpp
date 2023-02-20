@@ -43,12 +43,15 @@ inline constexpr int getLevel(levelType t, level l) { return (l == level::inacti
 
 inline constexpr uint32_t  buttonLongPress = 1000; // timeout for long press button in ms
 inline constexpr uint8_t   buttonPausePin  = A0;
-inline constexpr uint8_t   buttonUpPin     = A1;
-inline constexpr uint8_t   buttonDownPin   = A2;
 
 #ifdef FIVEBUTTONS
-inline constexpr uint8_t   buttonFourPin   = A3;
-inline constexpr uint8_t   buttonFivePin   = A4;
+inline constexpr uint8_t   buttonUpPin     = A3;
+inline constexpr uint8_t   buttonDownPin   = A4;
+inline constexpr uint8_t   buttonFourPin   = A1;
+inline constexpr uint8_t   buttonFivePin   = A2;
+#else
+inline constexpr uint8_t   buttonUpPin     = A1;
+inline constexpr uint8_t   buttonDownPin   = A2;
 #endif
 
 inline constexpr levelType buttonPinType   = levelType::activeLow;
