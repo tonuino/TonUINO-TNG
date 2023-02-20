@@ -35,7 +35,7 @@ void setup()
   LOG(init_log, s_error, F("TonUINO Version 3.1 - refactored by Boerge1\n"));
   LOG(init_log, s_error, F("created by Thorsten Voß and licensed under GNU/GPL."));
   LOG(init_log, s_error, F("Information and contribution at https://tonuino.de.\n"));
-  LOG(init_log, s_error, F("V3.1.2 18.02.23\n"));
+  LOG(init_log, s_error, F("V3.1.2 20.02.23\n"));
 
   Tonuino::getTonuino().setup();
 }
