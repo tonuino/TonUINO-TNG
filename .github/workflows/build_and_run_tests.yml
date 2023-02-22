@@ -45,11 +45,18 @@ jobs:
 
       - name: Build PlatformIO Project
         run: pio run
-        
+    
+      - name: Zip sd_card
+        run: zip -r sd-card.zip sd-card
+
       - uses: actions/upload-artifact@v3
         with:
           name: TonUINO_firmware
           path: .pio/build/**/firmware.hex
+      - uses: actions/upload-artifact@v3
+        with:
+          name: TonUINO_sd_card
+          path: sd-card.zip
 
   deploy:
     needs: build
@@ -69,6 +76,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: TonUINO_firmware
+          path: deploy
+      
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: TonUINO_sd_card
           path: deploy
       
       - name: Upload Pages artifact

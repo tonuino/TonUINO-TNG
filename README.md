@@ -33,13 +33,14 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 2.x geände
 
 # Change Log
 
-## Version 3.1.2 issue 019 (04.02.2023)
+## Version 3.1.2 issue 019 (22.02.2023)
 - [Issue 019](https://github.com/tonuino/TonUINO-TNG/issues/19): Implement support for the 3x3 Button board
 
-## Version 3.1.2 (04.02.2023)
+## Version 3.1.2 (22.02.2023)
+- [Issue 067](https://github.com/tonuino/TonUINO-TNG/issues/67): Add a hint in the admin menu that the card has to be removed
+- [Issue 065](https://github.com/tonuino/TonUINO-TNG/issues/65): Increase dfPlayer_timeUntilStarts
+- [Issue 061](https://github.com/tonuino/TonUINO-TNG/issues/61): Fix pin assignment for classic with 5 buttons
 - [Issue 054](https://github.com/tonuino/TonUINO-TNG/issues/54): For classic variant: the shutdownPin should be HIGH on shutdown for the POLOLU switch
-
-## Version 3.1.2 (23.01.2023)
 - [Issue 050](https://github.com/tonuino/TonUINO-TNG/issues/50): Cards with bad version handled as modification cards
 - [Issue 038](https://github.com/tonuino/TonUINO-TNG/issues/38): Bad initialization of setting 'pause when card removed'
 - [Issue 039](https://github.com/tonuino/TonUINO-TNG/issues/39): No pause if card is removed too early
