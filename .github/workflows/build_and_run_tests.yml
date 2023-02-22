@@ -45,11 +45,19 @@ jobs:
 
       - name: Build PlatformIO Project
         run: pio run
-        
+    
+      - name: Install Zip
+        run: sudo apt-get update && sudo apt-get install -yq zip
+
+      - name: Zip sd_card
+        run: zip -r sd-card.zip sd-card
+
       - uses: actions/upload-artifact@v3
         with:
           name: TonUINO_firmware
-          path: .pio/build/**/firmware.hex
+          path: |
+            .pio/build/**/firmware.hex
+            sd-card.zip
 
   deploy:
     needs: build
