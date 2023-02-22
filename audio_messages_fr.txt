@@ -30,6 +30,7 @@ mp3/0400_ok.mp3|OK. J'ai configuré la carte.
 mp3/0401_error.mp3|Hélas ! Malheureusement, cela n'a pas fonctionné !
 mp3/0402_ok_settings.mp3|Ok, j'ai enregistré les paramètres.
 mp3/0800_waiting_for_card.mp3|S'il te plaît, pose la carte !
+mp3/0801_remove_card.mp3|Bitte die Karte vom Leser entfernen!
 mp3/0802_reset_aborted.mp3|OK, j'ai annulé le processus.
 mp3/0900_admin.mp3|Bienvenue dans le menu Admin. Sélectionne une fonction à l'aide des touches de volume et confirmer avec la touche pause ! Tu peux interrompre le processus en appuyant longuement sur la touche pause.
 mp3/0901_card_reset.mp3|Reconfigurer une carte.

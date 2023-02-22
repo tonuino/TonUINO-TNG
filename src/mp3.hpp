@@ -56,6 +56,7 @@ enum class mp3Tracks: uint16_t {
   t_401_error                  = 401,
   t_402_ok_settings            = 402,
   t_800_waiting_for_card       = 800,
+  t_801_remove_card            = 801,
   t_802_reset_aborted          = 802,
   t_900_admin                  = 900,
   t_901_card_reset             = 901,
