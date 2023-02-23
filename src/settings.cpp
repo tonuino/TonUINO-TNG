@@ -122,7 +122,7 @@ void Settings::readExtShortCutFromFlash(uint8_t shortCut,       folderSettings& 
 
 folderSettings& Settings::getShortCut(uint8_t shortCut) {
   if (shortCut > 0 && shortCut <= 4)
-    return shortCuts[shortCut];
+    return shortCuts[shortCut-1];
 #ifdef BUTTONS3X3
   else if (shortCut >= buttonExtSC_begin && shortCut < buttonExtSC_begin + buttonExtSC_buttons) {
     readExtShortCutFromFlash(shortCut-buttonExtSC_begin, extShortCut);
@@ -135,7 +135,7 @@ folderSettings& Settings::getShortCut(uint8_t shortCut) {
 
 void Settings::setShortCut(uint8_t shortCut, const folderSettings& value) {
   if (shortCut > 0 && shortCut <= 4) {
-    shortCuts[shortCut] = value;
+    shortCuts[shortCut-1] = value;
     // writeSettingsToFlash(); -- will be done in state machine
   }
 #ifdef BUTTONS3X3

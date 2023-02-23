@@ -132,7 +132,7 @@ template<SM_type SMT>
 class VoiceMenu : public SM<SMT>
 {
 protected:
-  void entry(bool entryPlayAfter = true);
+  void entry(bool entryPlayAfter = false);
   void react(command cmd);
   void playCurrentValue();
 

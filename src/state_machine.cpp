@@ -418,10 +418,10 @@ void Base::handleReadCard() {
 bool Base::checkForShortcutAndShutdown(command cmd) {
   uint8_t shortCut = 0xff;
   switch(cmd) {
-  case command::shortcut1: shortCut = 0      ; break;
-  case command::shortcut2: shortCut = 1      ; break;
-  case command::shortcut3: shortCut = 2      ; break;
-  case command::start    : shortCut = 3      ; break;
+  case command::shortcut1: shortCut = 1      ; break;
+  case command::shortcut2: shortCut = 2      ; break;
+  case command::shortcut3: shortCut = 3      ; break;
+  case command::start    : shortCut = 4      ; break;
   case command::shutdown : mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
                            mp3.loop();
                            delay(1000);
@@ -813,7 +813,7 @@ void Admin_Entry::entry() {
     mp3.stop();
   }
 
-  VoiceMenu::entry();
+  VoiceMenu::entry(true);
 
   currentValue      = lastCurrentValue;
 }
@@ -964,7 +964,7 @@ void Admin_SimpleSetting::entry() {
   preview           = false;
   previewFromFolder = 0;
 
-  VoiceMenu::entry(false);
+  VoiceMenu::entry();
 
   currentValue      = type == maxVolume  ? settings.maxVolume - settings.minVolume        :
                       type == minVolume  ? settings.minVolume                             :
@@ -1008,7 +1008,7 @@ void Admin_ModCard::entry() {
   preview           = false;
   previewFromFolder = 0;
 
-  VoiceMenu::entry(false);
+  VoiceMenu::entry();
 
   mode              = pmode_t::none;
   current_subState  = start_writeCard;
@@ -1021,7 +1021,8 @@ void Admin_ModCard::react(command_e const &cmd_e) {
   }
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
 
-  VoiceMenu::react(cmd);
+  if (not readyToWrite)
+    VoiceMenu::react(cmd);
 
   if (isAbort(cmd))
     return;
@@ -1061,8 +1062,7 @@ void Admin_ModCard::react(command_e const &cmd_e) {
     }
     return;
   }
-
-  if ((cmd == command::select) && (currentValue != 0)) {
+  else if ((cmd == command::select) && (currentValue != 0)) {
     if (mode == pmode_t::none) {
       mode = static_cast<pmode_t>(currentValue);
       if (mode != pmode_t::sleep_timer) {
@@ -1073,7 +1073,7 @@ void Admin_ModCard::react(command_e const &cmd_e) {
         numberOfOptions   = 4;
         startMessage      = mp3Tracks::t_960_timer_intro;
         messageOffset     = mp3Tracks::t_960_timer_intro;
-        VoiceMenu::entry(false);
+        VoiceMenu::entry();
       }
     }
     else {
@@ -1094,7 +1094,7 @@ void Admin_ShortCut::entry() {
   preview           = false;
   previewFromFolder = 0;
 
-  VoiceMenu::entry(false);
+  VoiceMenu::entry();
 
   shortcut = 0;
 }
@@ -1126,8 +1126,7 @@ void Admin_ShortCut::react(command_e const &cmd_e) {
   else {
     switch (current_subState) {
     case start_setupCard:
-      settings.getShortCut(shortcut).folder = 0;
-      settings.getShortCut(shortcut).mode = pmode_t::none;
+      settings.setShortCut(shortcut, folderSettings{0,pmode_t::none,0,0});
       settings.writeSettingsToFlash();
       SM_setupCard::start();
       current_subState = run_setupCard;
@@ -1164,7 +1163,7 @@ void Admin_StandbyTimer::entry() {
   preview           = false;
   previewFromFolder = 0;
 
-  VoiceMenu::entry(false);
+  VoiceMenu::entry();
 }
 
 void Admin_StandbyTimer::react(command_e const &cmd_e) {
@@ -1315,7 +1314,7 @@ void Admin_InvButtons::entry() {
   preview           = false;
   previewFromFolder = 0;
 
-  VoiceMenu::entry(false);
+  VoiceMenu::entry();
 }
 
 void Admin_InvButtons::react(command_e const &cmd_e) {
@@ -1365,7 +1364,7 @@ void Admin_LockAdmin::entry() {
   preview           = false;
   previewFromFolder = 0;
 
-  VoiceMenu::entry(false);
+  VoiceMenu::entry();
 
   current_subState = get_mode;
 }
@@ -1423,7 +1422,7 @@ void Admin_PauseIfCardRemoved::entry() {
   preview           = false;
   previewFromFolder = 0;
 
-  VoiceMenu::entry(false);
+  VoiceMenu::entry();
 }
 
 void Admin_PauseIfCardRemoved::react(command_e const &cmd_e) {
