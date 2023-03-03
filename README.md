@@ -33,10 +33,11 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 2.x geände
 
 # Change Log
 
+## Version 3.1.2 (03.03.2023)
+- [Issue 062](https://github.com/tonuino/TonUINO-TNG/issues/62): Add offline TTS coqui to text_to_speach
+
 ## Version 3.1.2 (22.02.2023)
 - [Issue 067](https://github.com/tonuino/TonUINO-TNG/issues/67): Add a hint in the admin menu that the card has to be removed
-
-## Version 3.1.2 (20.02.2023)
 - [Issue 065](https://github.com/tonuino/TonUINO-TNG/issues/65): Increase dfPlayer_timeUntilStarts
 - [Issue 061](https://github.com/tonuino/TonUINO-TNG/issues/61): Fix pin assignment for classic with 5 buttons
 - [Issue 054](https://github.com/tonuino/TonUINO-TNG/issues/54): For classic variant: the shutdownPin should be HIGH on shutdown for the POLOLU switch
