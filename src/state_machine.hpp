@@ -318,12 +318,9 @@ public:
   void react(command_e const &) final;
 private:
   enum subState: uint8_t {
-    start_getFolder,
-    run_getFolder,
-    start_getSpecial,
-    run_getSpecial,
-    start_getSpecial2,
-    run_getSpecial2,
+    start_setupCard,
+    run_setupCard,
+    end_setupCard,
     prepare_writeCard,
     start_writeCard,
     run_writeCard,

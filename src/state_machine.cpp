@@ -324,7 +324,7 @@ void WriteCard::react(command_e const &cmd_e) {
 
   switch (current_subState) {
   case start_waitCardInserted:
-    mp3.enqueueMp3FolderTrack(mp3Tracks::t_800_waiting_for_card, true/*playAfter*/);
+    mp3.enqueueMp3FolderTrack(mp3Tracks::t_800_waiting_for_card/*, true*//*playAfter*/); // TODO
     current_subState = run_writeCard;
     break;
   case run_writeCard:
@@ -813,7 +813,7 @@ void Admin_Entry::entry() {
     mp3.stop();
   }
 
-  VoiceMenu::entry(true);
+  VoiceMenu::entry(startMessage == mp3Tracks::t_919_continue_admin);
 
   currentValue      = lastCurrentValue;
 }
@@ -1197,7 +1197,7 @@ void Admin_CardsForFolder::entry() {
 
   folder.mode = pmode_t::einzel;
 
-  current_subState = start_getFolder;
+  current_subState = start_setupCard;
 }
 
 void Admin_CardsForFolder::react(command_e const &cmd_e) {
@@ -1211,62 +1211,33 @@ void Admin_CardsForFolder::react(command_e const &cmd_e) {
     return;
 
   switch (current_subState) {
-  case start_getFolder:
-    numberOfOptions   = 99;
-    startMessage      = mp3Tracks::t_301_select_folder;
-    messageOffset     = mp3Tracks::t_0;
-    preview           = true;
-    previewFromFolder = 0;
-
-    VoiceMenu::entry();
-    current_subState = run_getFolder;
+  case start_setupCard:
+    SM_setupCard::current_state_ptr = &tinyfsm::_state_instance< ChFolder >::value;
+    SM_setupCard::folder.mode = pmode_t::album_vb;
+    SM_setupCard::enter();
+    current_subState = run_setupCard;
     break;
-  case run_getFolder:
-    VoiceMenu::react(cmd);
-    if ((cmd == command::select) && (currentValue != 0)) {
-      folder.folder = currentValue;
-      current_subState = start_getSpecial;
+  case run_setupCard:
+    SM_setupCard::dispatch(cmd_e);
+    if (SM_setupCard::is_in_state<finished_setupCard>())
+      current_subState = end_setupCard;
+    if (SM_setupCard::is_in_state<finished_abort_setupCard>()) {
+      LOG(state_log, s_info, str_Admin_CardsForFolder(), str_abort());
+      transit<finished_abort>();
+      return;
     }
     break;
-  case start_getSpecial:
-    numberOfOptions   = mp3.getFolderTrackCount(folder.folder);
-    startMessage      = mp3Tracks::t_328_select_first_file;
-    messageOffset     = mp3Tracks::t_0;
-    preview           = true;
-    previewFromFolder = folder.folder;
+  case end_setupCard:
+    folder.folder = SM_setupCard::folder.folder;
+    special       = SM_setupCard::folder.special;
+    special2      = SM_setupCard::folder.special2;
+    mp3.enqueueMp3FolderTrack(mp3Tracks::t_936_batch_cards_intro);
+    timer.start(dfPlayer_timeUntilStarts);
+    current_subState = prepare_writeCard;
+    break;
 
-    VoiceMenu::entry();
-    current_subState = run_getSpecial;
-    break;
-  case run_getSpecial:
-    VoiceMenu::react(cmd);
-    if ((cmd == command::select) && (currentValue != 0)) {
-      special = currentValue;
-      current_subState = start_getSpecial2;
-    }
-    break;
-  case start_getSpecial2:
-    numberOfOptions   = mp3.getFolderTrackCount(folder.folder);
-    startMessage      = mp3Tracks::t_329_select_last_file;
-    messageOffset     = mp3Tracks::t_0;
-    preview           = true;
-    previewFromFolder = folder.folder;
-
-    VoiceMenu::entry();
-    currentValue      = special;
-
-    current_subState = run_getSpecial2;
-    break;
-  case run_getSpecial2:
-    VoiceMenu::react(cmd);
-    if ((cmd == command::select) && (currentValue != 0)) {
-      special2 = currentValue;
-      mp3.enqueueMp3FolderTrack(mp3Tracks::t_936_batch_cards_intro);
-      current_subState = prepare_writeCard;
-    }
-    break;
   case prepare_writeCard:
-    if (chip_card.isCardRemoved()) {
+    if (timer.isExpired() && not mp3.isPlaying() && chip_card.isCardRemoved()) {
       if (special > special2) {
         LOG(state_log, s_debug, str_Admin_CardsForFolder(), str_to(), str_Idle());
         transit<Admin_End>();
