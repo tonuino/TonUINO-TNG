@@ -41,6 +41,10 @@ public:
   Chip_card& getChipCard() { return chip_card; }
   static uint32_t generateRamdomSeed();
 
+#ifdef SerialInputAsCommand
+  uint8_t getMenuJump() const { return serialInput.get_menu_jump(); }
+#endif
+
   void shutdown();
 
 private:

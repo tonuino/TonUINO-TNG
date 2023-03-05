@@ -15,10 +15,11 @@
 
 // uncomment the below line to enable serial input as additional command source
 // um den Serial Monitor als zusätzliche Kommandoquelle zu haben bitte in der nächste Zeile den Kommentar entfernen
-//#define SerialInputAsCommand
-// 7:            8: up         9: upLong
-// 4: allLong    5: pause      6: pauseLong
-// 1:            2: down       3: downLong
+#define SerialInputAsCommand
+// -7:             -8: up         -9: upLong
+// -4: allLong     -5: pause      -6: pauseLong
+// -1: up/downLong -2: down       -3: downLong
+// number n > 0: Springe im Voice Menü zum n-ten Eintrag und selektiere ihn
 
 // uncomment the below line if you have support for the 3x3Buttons
 // um die Unterstützung für die 3x3 Buttons zu haben bitte in der nächste Zeile den Kommentar entfernen
