@@ -64,3 +64,98 @@ TEST_F(mp3_test_fixture, enqueue_mp3_with_playafter) {
   EXPECT_TRUE(mp3.is_stopped());
 }
 
+TEST_F(mp3_test_fixture, enqueue_folder_track) {
+  mp3.enqueueTrack(1, 2);
+  execute_cycle();
+  EXPECT_TRUE(mp3.is_playing_folder());
+  EXPECT_EQ(mp3.df_folder, 1);
+  EXPECT_EQ(mp3.df_folder_track, 2);
+
+  mp3.enqueueTrack(4, 5);
+  execute_cycle();
+  EXPECT_TRUE(mp3.is_playing_folder());
+  EXPECT_EQ(mp3.df_folder, 4);
+  EXPECT_EQ(mp3.df_folder_track, 5);
+
+  mp3.end_track();
+  execute_cycle();
+  EXPECT_TRUE(mp3.is_stopped());
+}
+
+TEST_F(mp3_test_fixture, enqueue_folder_tracks) {
+  mp3.enqueueTrack(1, 2, 12);
+  execute_cycle();
+
+  for (uint8_t t = 2; t <= 12; ++t) {
+    EXPECT_TRUE(mp3.is_playing_folder());
+    EXPECT_EQ(mp3.df_folder, 1);
+    EXPECT_EQ(mp3.df_folder_track, t);
+    mp3.end_track();
+    execute_cycle();
+    execute_cycle();
+  }
+  EXPECT_TRUE(mp3.is_stopped());
+}
+
+TEST_F(mp3_test_fixture, enqueue_folder_tracks_with_current) {
+  mp3.enqueueTrack(1, 2, 12, 3);
+  execute_cycle();
+
+  for (uint8_t t = 2+3; t <= 12; ++t) {
+    EXPECT_TRUE(mp3.is_playing_folder());
+    EXPECT_EQ(mp3.df_folder, 1);
+    EXPECT_EQ(mp3.df_folder_track, t);
+    mp3.end_track();
+    execute_cycle();
+    execute_cycle();
+  }
+  EXPECT_TRUE(mp3.is_stopped());
+}
+
+TEST_F(mp3_test_fixture, enqueue_folder_tracks_and_jump) {
+  mp3.enqueueTrack(1, 2, 12);
+  execute_cycle();
+
+  EXPECT_TRUE(mp3.is_playing_folder());
+  EXPECT_EQ(mp3.df_folder, 1);
+  EXPECT_EQ(mp3.df_folder_track, 2);
+
+  mp3.playNext();
+  execute_cycle();
+  execute_cycle();
+
+  EXPECT_TRUE(mp3.is_playing_folder());
+  EXPECT_EQ(mp3.df_folder, 1);
+  EXPECT_EQ(mp3.df_folder_track, 3);
+
+  mp3.playNext(2);
+  execute_cycle();
+  execute_cycle();
+
+  EXPECT_TRUE(mp3.is_playing_folder());
+  EXPECT_EQ(mp3.df_folder, 1);
+  EXPECT_EQ(mp3.df_folder_track, 5);
+
+  mp3.playPrevious();
+  execute_cycle();
+  execute_cycle();
+
+  EXPECT_TRUE(mp3.is_playing_folder());
+  EXPECT_EQ(mp3.df_folder, 1);
+  EXPECT_EQ(mp3.df_folder_track, 4);
+
+  mp3.playPrevious(2);
+  execute_cycle();
+  execute_cycle();
+
+  EXPECT_TRUE(mp3.is_playing_folder());
+  EXPECT_EQ(mp3.df_folder, 1);
+  EXPECT_EQ(mp3.df_folder_track, 2);
+
+  mp3.clearFolderQueue();
+  mp3.end_track();
+  execute_cycle();
+
+  EXPECT_TRUE(mp3.is_stopped());
+}
+

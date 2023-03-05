@@ -36,6 +36,19 @@ public:
     getMFRC522().card_out();
   }
 
+  folderSettings card_decode() {
+    folderSettings card;
+    uint32_t cookie;
+    uint8_t  version;
+    uint8_t  mode;
+    getMFRC522().card_decode(cookie, version, card.folder, mode, card.special, card.special2);
+    card.mode = static_cast<pmode_t>(mode);
+    if (cookie == cardCookie && version == cardVersion)
+      return card;
+    else
+      return folderSettings{};
+  }
+
   Settings  settings;
   Mp3       mp3;
   Chip_card chip_card;
@@ -124,3 +137,33 @@ TEST_F(chip_card_test_fixture, read_card_with_bad_cookie) {
   ce = execute_cycle();
   EXPECT_EQ(ce, cardEvent::removed);
 }
+
+TEST_F(chip_card_test_fixture, write_card_works) {
+  folderSettings test_data[] = {
+      { 1, pmode_t::hoerspiel    , 0, 0 },
+      { 1, pmode_t::album        , 0, 0 },
+      { 1, pmode_t::party        , 0, 0 },
+      { 1, pmode_t::einzel       , 1, 0 },
+      { 1, pmode_t::hoerbuch     , 0, 0 },
+      { 1, pmode_t::hoerspiel_vb , 1, 3 },
+      { 1, pmode_t::album_vb     , 2, 4 },
+      { 1, pmode_t::party_vb     , 5, 9 },
+      { 1, pmode_t::hoerbuch_1   , 0, 0 },
+  };
+
+  for (folderSettings card: test_data) {
+    nfcTagObject nfcTag{card};
+    card_in(0, 0, 0, 0, 0, 0);
+    cardEvent ce = execute_cycle();
+    EXPECT_EQ(ce, cardEvent::inserted);
+
+    chip_card.writeCard(nfcTag);
+    EXPECT_EQ(card, card_decode());
+    card_out();
+    execute_cycle();
+    execute_cycle();
+    ce = execute_cycle();
+    EXPECT_EQ(ce, cardEvent::removed);
+  }
+}
+
