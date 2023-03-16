@@ -127,7 +127,7 @@ void ChMode::entry() {
   preview           = false;
   previewFromFolder = 0;
 
-  VoiceMenu::entry();
+  VoiceMenu::entry(true);
 }
 
 void ChMode::react(command_e const &cmd_e) {
