@@ -28,7 +28,7 @@ public:
 
   mp3Tracks get_intro_track(Admin_Entry_menu_items menu_item) {
     switch (menu_item) {
-    case Admin_Entry_menu_items::Admin_NewCard                 : return mp3Tracks::t_901_card_reset;
+    case Admin_Entry_menu_items::Admin_NewCard                 : return mp3Tracks::t_310_select_mode;
     case Admin_Entry_menu_items::Admin_SimpleSetting_maxVolume : return mp3Tracks::t_930_max_volume_intro;
     case Admin_Entry_menu_items::Admin_SimpleSetting_minVolume : return mp3Tracks::t_931_min_volume_into;
     case Admin_Entry_menu_items::Admin_SimpleSetting_initVolume: return mp3Tracks::t_932_init_volume_into;
@@ -112,12 +112,6 @@ public:
     if (menu_item == Admin_Entry_menu_items::Admin_ResetEeprom) {
       EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
       // end t_919_continue_admin
-      getMp3().end_track();
-      execute_cycle();
-    }
-    else if (menu_item == Admin_Entry_menu_items::Admin_NewCard) {
-      check_state(menu_item);
-      // end t_301_select_folder
       getMp3().end_track();
       execute_cycle();
     }

@@ -127,7 +127,7 @@ void ChMode::entry() {
   preview           = false;
   previewFromFolder = 0;
 
-  VoiceMenu::entry(true);
+  VoiceMenu::entry();
 }
 
 void ChMode::react(command_e const &cmd_e) {
@@ -378,6 +378,7 @@ bool Base::readCard() {
     LOG(state_log, s_debug, str_Base(), str_to(), str_Admin_NewCard());
     Admin_NewCard::return_to_idle = true;
     mp3.enqueueMp3FolderTrack(mp3Tracks::t_300_new_tag);
+    Admin_NewCard::wait_track_finished = true;
     transit<Admin_NewCard>();
     return false;
   }
@@ -841,6 +842,7 @@ void Admin_Entry::react(command_e const &cmd_e) {
     case 0:  break;
     case 1:  // create new card
              LOG(state_log, s_debug, str_Admin_Entry(), str_to(), str_Admin_NewCard());
+             Admin_NewCard::wait_track_finished = false;
              transit<Admin_NewCard>();
              return;
     case 2:  // Maximum Volume
@@ -903,7 +905,13 @@ void Admin_Entry::react(command_e const &cmd_e) {
 
 void Admin_NewCard::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_NewCard());
-  current_subState = start_setupCard;
+  if (wait_track_finished) {
+    current_subState = wait_track;
+    timer.start(dfPlayer_timeUntilStarts);
+  }
+  else {
+    current_subState = start_setupCard;
+  }
 }
 
 void Admin_NewCard::react(command_e const &cmd_e) {
@@ -911,6 +919,10 @@ void Admin_NewCard::react(command_e const &cmd_e) {
     LOG(state_log, s_debug, str_Admin_NewCard(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
   switch (current_subState) {
+  case wait_track:
+    if (timer.isExpired() and not mp3.isPlaying())
+      current_subState = start_setupCard;
+    break;
   case start_setupCard:
     SM_setupCard::start();
     current_subState = run_setupCard;
@@ -1462,3 +1474,4 @@ nfcTagObject Base::lastCardRead{};
 uint8_t Admin_Entry::lastCurrentValue{};
 Admin_SimpleSetting::Type Admin_SimpleSetting::type{};
 bool Admin_NewCard::return_to_idle{false};
+bool Admin_NewCard::wait_track_finished{false};
