@@ -69,7 +69,6 @@ void VoiceMenu<SMT>::entry(bool entryPlayAfter) {
 template<SM_type SMT>
 void VoiceMenu<SMT>::playCurrentValue() {
   SM<SMT>::mp3.enqueueMp3FolderTrack(messageOffset + currentValue);
-  previewTimer.start(1000);
   previewStarted = false;
 }
 
@@ -78,8 +77,7 @@ void VoiceMenu<SMT>::react(command cmd) {
   if (   currentValue != 0
       && preview
       && not previewStarted
-      && previewTimer.isExpired()
-      && not SM<SMT>::mp3.isPlaying())
+      && not SM<SMT>::mp3.isPlayingMp3())
   {
     LOG(state_log, s_debug, str_VoiceMenu(), F("::react() start preview "), currentValue);
     if (previewFromFolder == 0)
@@ -423,11 +421,13 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
   case command::shortcut2: shortCut = 2      ; break;
   case command::shortcut3: shortCut = 3      ; break;
   case command::start    : shortCut = 4      ; break;
+#ifndef DISABLE_SHUTDOWN_VIA_BUTTOM
   case command::shutdown : mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
                            mp3.loop();
                            delay(1000);
                            tonuino.shutdown();
                                                break;
+#endif
   default                :                     break;
   }
 #ifdef BUTTONS3X3
@@ -437,7 +437,7 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
   if (shortCut != 0xff) {
     if (handleShortcut(shortCut))
       return true;
-    else
+    else if (shortCut == 4)
       mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
   }
   return false;
@@ -503,8 +503,10 @@ void Play::react(command_e const &cmd_e) {
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
   switch (cmd) {
   case command::admin:
-    LOG(state_log, s_debug, str_Play(), str_to(), str_Admin_Allow());
-    transit<Admin_Allow>();
+    if (settings.adminMenuLocked != 1) { // only card is allowed
+      LOG(state_log, s_debug, str_Play(), str_to(), str_Admin_Allow());
+      transit<Admin_Allow>();
+    }
     return;
   case command::pause:
     LOG(state_log, s_debug, F("Pause Taste"));
@@ -598,8 +600,10 @@ void Pause::react(command_e const &cmd_e) {
 
   switch (cmd) {
   case command::admin:
-    LOG(state_log, s_debug, str_Pause(), str_to(), str_Admin_Allow());
-    transit<Admin_Allow>();
+    if (settings.adminMenuLocked != 1) { // only card is allowed
+      LOG(state_log, s_debug, str_Pause(), str_to(), str_Admin_Allow());
+      transit<Admin_Allow>();
+    }
     return;
   case command::pause:
     if (tonuino.getActiveModifier().handlePause())
@@ -1369,6 +1373,7 @@ void Admin_LockAdmin::react(command_e const &cmd_e) {
       settings.adminMenuLocked = currentValue-1;
       if (settings.adminMenuLocked == 2) {
         current_subState = get_pin;
+        pin_number = 0;
         mp3.enqueueMp3FolderTrack(mp3Tracks::t_991_admin_pin);
       }
       else
@@ -1465,8 +1470,6 @@ uint8_t   VoiceMenu<SMT>::previewFromFolder;
 template<SM_type SMT>
 uint8_t   VoiceMenu<SMT>::currentValue     ;
 
-template<SM_type SMT>
-Timer     VoiceMenu<SMT>::previewTimer     ;
 template<SM_type SMT>
 bool      VoiceMenu<SMT>::previewStarted   ;
 

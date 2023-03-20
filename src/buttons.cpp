@@ -53,8 +53,21 @@ commandRaw Buttons::getCommandRaw() {
     ignoreAll = true;
   }
 
+#ifdef FIVEBUTTONS
+  else if ((  buttonPause.pressedFor(buttonLongPress)
+           || buttonFour .pressedFor(buttonLongPress)
+           || buttonFive .pressedFor(buttonLongPress)
+      )
+     && buttonPause.isPressed()
+     && buttonFour .isPressed()
+     && buttonFive .isPressed()) {
+    ret = commandRaw::allLong;
+    ignoreAll = true;
+  }
+#endif
+
   else if ((  buttonUp   .pressedFor(buttonLongPress)
-      || buttonDown .pressedFor(buttonLongPress)
+           || buttonDown .pressedFor(buttonLongPress)
       )
      && buttonUp   .isPressed()
      && buttonDown .isPressed()) {

@@ -28,6 +28,10 @@
 // um den Chip MH2024K16SS auf dem DfMiniMp3 Player zu ünterstützen bitte in der nächste Zeile den Kommentar entfernen
 //#define DFMiniMp3_T_CHIP_VARIANT Mp3ChipMH2024K16SS
 
+// uncomment the below line to disable shutdown via nutton (long press play/pause)
+// um ein Shutdown via Taste (long press Play/Pause) zu unterdrücken bitte in der nächste Zeile den Kommentar entfernen
+//#define DISABLE_SHUTDOWN_VIA_BUTTOM
+
 // ####### helper for level ############################
 
 enum class level : uint8_t {
@@ -212,7 +216,7 @@ inline constexpr uint8_t       ampEnablePin     = 8;
 inline constexpr levelType     ampEnablePinType = levelType::activeLow;
 inline constexpr uint8_t       usbAccessPin     = A5;
 inline constexpr levelType     usbAccessPinType = levelType::activeHigh;
-inline constexpr uint8_t       openAnalogPin    = A0;
+inline constexpr uint8_t       openAnalogPin    = A7;
 inline constexpr unsigned long cycleTime        = 50;
 #endif /* ALLinONE */
 

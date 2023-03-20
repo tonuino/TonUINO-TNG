@@ -143,7 +143,6 @@ protected:
   static uint8_t   previewFromFolder;
   static uint8_t   currentValue     ;
 
-  static Timer     previewTimer     ;
   static bool      previewStarted   ;
 };
 
