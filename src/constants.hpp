@@ -30,7 +30,7 @@
 
 // uncomment the below line to disable shutdown via nutton (long press play/pause)
 // um ein Shutdown via Taste (long press Play/Pause) zu unterdrücken bitte in der nächste Zeile den Kommentar entfernen
-//#define DISABLE_SHUTDOWN_VIA_BUTTOM
+//#define DISABLE_SHUTDOWN_VIA_BUTTON
 
 // ####### helper for level ############################
 

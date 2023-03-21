@@ -421,7 +421,7 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
   case command::shortcut2: shortCut = 2      ; break;
   case command::shortcut3: shortCut = 3      ; break;
   case command::start    : shortCut = 4      ; break;
-#ifndef DISABLE_SHUTDOWN_VIA_BUTTOM
+#ifndef DISABLE_SHUTDOWN_VIA_BUTTON
   case command::shutdown : mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
                            mp3.loop();
                            delay(1000);
