@@ -7,8 +7,8 @@ advert/0303_locked.mp3|TonUINO is now locked.
 advert/0304_buttonslocked.mp3|Keys are now locked.
 advert/0305_kindergarden.mp3|Kindergarten mode enabled.
 mp3/0300_new_tag.mp3|Oh, a new card!
-mp3/0301_select_folder.mp3|Use the volume keys to select a folder for the card. Press the pause button to continue.
-mp3/0310.mp3|OK, now use the volume keys to select the playback mode.
+mp3/0301_select_folder.mp3|Ok, now use the volume keys to select a folder for the card.
+mp3/0310.mp3|Use the volume keys to select the playback mode. Press the pause button to continue.
 mp3/0311_mode_random_episode.mp3|Random play mode: play a random file from the folder
 mp3/0312_mode_album.mp3|Album mode: Play the complete folder
 mp3/0313_mode_party.mp3|Party Mode: Play tracks in a folder randomly.
@@ -39,14 +39,14 @@ mp3/0903_min_volume.mp3|Set minimum volume.
 mp3/0904_init_volume.mp3|Set volume at startup.
 mp3/0905_eq.mp3|Configure EQ.
 mp3/0906_modifiers.mp3|Create a modification card. These cards are placed after the actual music cards and change the behavior of your TonUINO.
-mp3/0907_shortcut.mp3|Configure keys with a shortcut. A shortcut is started by a long keystroke and only works if nothing is currently being played.
+mp3/0907_shortcut.mp3|Configure a shortcut. A shortcut is started by a long keystroke and only works if nothing is currently being played.
 mp3/0908_standbytimer.mp3|Configure the timer.
 mp3/0909_batch_cards.mp3|Create single cards for a folder.
 mp3/0910_switch_volume.mp3|Invert the function of the volume keys.
 mp3/0911_reset.mp3|Delete all settings.
 mp3/0912_admin_lock.mp3|Secure the admin menu.
 mp3/0913_pause_on_card_removed.mp3|Pause when card is removed.
-mp3/0919_continue_admin.mp3|and continuing in the admin menu
+mp3/0919_continue_admin.mp3|and continuing in the admin menu. By a long press on the pause button you can cancel the admin menu.
 mp3/0920_eq_intro.mp3|Please select a setting for the EQ with the volume keys and confirm it with the pause key.
 mp3/0921_normal.mp3|Normal
 mp3/0922_pop.mp3|Pop
@@ -60,8 +60,8 @@ mp3/0932_init_volume_into.mp3|Select volume at startup and confirm with the paus
 mp3/0933_switch_volume_intro.mp3|Do you want to reverse the function of the volume buttons? You have to press the keys for a long time to go forward or backward one song.
 mp3/0934_no.mp3|No.
 mp3/0935_yes.mp3|Yes.
-mp3/0936_batch_cards_intro.mp3|OK, now please place the cards on the box one after the other. I will announce the respective number before, so that you don't get confused. To cancel, just press one of the volume buttons!
-mp3/0940_shortcut_into.mp3|Please select the shortcut you want to configure.
+mp3/0936_batch_cards_intro.mp3|OK, now please place the cards on the box one after the other. I will announce the respective number before, so that you don't get confused. To cancel, just press the pause button long!
+mp3/0940_shortcut_into.mp3|Please select the shortcut you want to configure. If you have the 3 by 3 button board, you can press a button there as well.
 mp3/0941_pause.mp3|Up and down key
 mp3/0942_up.mp3|Up key
 mp3/0943_down.mp3|Down key
