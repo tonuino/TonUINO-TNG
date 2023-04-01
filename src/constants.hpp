@@ -32,6 +32,12 @@
 // um ein Shutdown via Taste (long press Play/Pause) zu unterdrücken bitte in der nächste Zeile den Kommentar entfernen
 //#define DISABLE_SHUTDOWN_VIA_BUTTON
 
+// uncomment the below line to enable the roraty encoder for volume setting
+// um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
+#define ROTARY_ENCODER
+inline constexpr uint8_t   rotaryEncoderClkPin    = 5;
+inline constexpr uint8_t   rotaryEncoderDtPin     = 6;
+
 // ####### helper for level ############################
 
 enum class level : uint8_t {
