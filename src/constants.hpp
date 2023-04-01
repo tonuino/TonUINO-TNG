@@ -220,4 +220,13 @@ inline constexpr uint8_t       openAnalogPin    = A7;
 inline constexpr unsigned long cycleTime        = 50;
 #endif /* ALLinONE */
 
+// ####### some helper fuctions #####################################
+
+template <typename T> void PROGMEM_read(const T * sce, T& dest)
+{
+  memcpy_P (&dest, sce, sizeof (T));
+}
+
+
+
 #endif /* SRC_CONSTANTS_HPP_ */
