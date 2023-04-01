@@ -61,6 +61,11 @@ enum class commandRaw: uint8_t {
   fiveLong,
   fiveLongRepeat,
 #endif
+  cmd_end,
+#ifdef BUTTONS3X3
+  ext_begin = buttonExtSC_begin,
+  ext_end   = ext_begin +  buttonExtSC_buttons,
+#endif
 };
 
 enum class command: uint8_t {
@@ -84,6 +89,10 @@ enum class command: uint8_t {
   // adm
   select,
   adm_end,
+#ifdef BUTTONS3X3
+  ext_begin = buttonExtSC_begin,
+  ext_end   = ext_begin +  buttonExtSC_buttons,
+#endif
 };
 
 enum class state_for_command: uint8_t {
@@ -138,6 +147,9 @@ public:
   command    getCommand   (commandRaw b, state_for_command s);
 
   static uint8_t   getButtonCode(commandRaw b);
+#ifdef BUTTONS3X3
+  static bool isExtButton(command c);
+#endif
 
 private:
   const Settings&           settings;

@@ -132,7 +132,7 @@ template<SM_type SMT>
 class VoiceMenu : public SM<SMT>
 {
 protected:
-  void entry(bool entryPlayAfter = true);
+  void entry(bool entryPlayAfter = false);
   void react(command cmd);
   void playCurrentValue();
 
@@ -143,7 +143,6 @@ protected:
   static uint8_t   previewFromFolder;
   static uint8_t   currentValue     ;
 
-  static Timer     previewTimer     ;
   static bool      previewStarted   ;
 };
 
@@ -249,8 +248,10 @@ public:
   void entry() final;
   void react(command_e const &) final;
   static bool return_to_idle;
+  static bool wait_track_finished;
 private:
   enum subState: uint8_t {
+    wait_track,
     start_setupCard,
     run_setupCard,
     end_setupCard,
@@ -318,12 +319,9 @@ public:
   void react(command_e const &) final;
 private:
   enum subState: uint8_t {
-    start_getFolder,
-    run_getFolder,
-    start_getSpecial,
-    run_getSpecial,
-    start_getSpecial2,
-    run_getSpecial2,
+    start_setupCard,
+    run_setupCard,
+    end_setupCard,
     prepare_writeCard,
     start_writeCard,
     run_writeCard,

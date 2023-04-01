@@ -94,7 +94,7 @@ bool Chip_card::auth(MFRC522::PICC_Type piccType) {
   }
 
   if (status != MFRC522::STATUS_OK) {
-    LOG(card_log, s_error, F("Auth failed: "), printStatusCode(mfrc522, status));
+    LOG(card_log, s_error, F("Auth "), str_failed(), printStatusCode(mfrc522, status));
     return false;
   }
 
@@ -148,7 +148,7 @@ Chip_card::readCardEvent Chip_card::readCard(nfcTagObject &nfcTag) {
     return readCardEvent::none;
   }
 
-  LOG(card_log, s_info, F("Data on Card: "), dump_byte_array(buffer, 9));
+  LOG(card_log, s_info, F("CardData: "), dump_byte_array(buffer, 9));
 
   uint32_t tempCookie = 0;
   for (byte i = 0, shift = 24; i < 4; ++i, shift -= 8)
@@ -168,7 +168,7 @@ Chip_card::readCardEvent Chip_card::readCard(nfcTagObject &nfcTag) {
     nfcTag.nfcFolderSettings.special2 = buffer[8];
   }
   else {
-    LOG(card_log, s_warning, F("Unknown version "), version);
+    LOG(card_log, s_warning, F("bad ver "), version);
     nfcTag.nfcFolderSettings.folder   = 0;
     nfcTag.nfcFolderSettings.mode     = pmode_t::none;
     return readCardEvent::none;
@@ -200,7 +200,7 @@ bool Chip_card::writeCard(const nfcTagObject &nfcTag) {
   MFRC522::StatusCode status = MFRC522::STATUS_ERROR;
 
   // Write data to the block
-  LOG(card_log, s_info, F("Writing data: "), dump_byte_array(buffer, 9));
+  LOG(card_log, s_info, F("Writing: "), dump_byte_array(buffer, 9));
 
   if ((mifareType == MFRC522::PICC_TYPE_MIFARE_MINI) ||
       (mifareType == MFRC522::PICC_TYPE_MIFARE_1K  ) ||
@@ -237,9 +237,9 @@ void Chip_card::sleepCard() {
 }
 
 void Chip_card::initCard() {
-  SPI.begin();                                                   // Init SPI bus
-  mfrc522.PCD_Init();                                            // Init MFRC522
-  LOG_CODE(card_log, s_info, mfrc522.PCD_DumpVersionToSerial()); // Show details of PCD - MFRC522 Card Reader
+  SPI.begin();                                                    // Init SPI bus
+  mfrc522.PCD_Init();                                             // Init MFRC522
+  LOG_CODE(card_log, s_debug, mfrc522.PCD_DumpVersionToSerial()); // Show details of PCD - MFRC522 Card Reader
 }
 
 void Chip_card::stopCard() {

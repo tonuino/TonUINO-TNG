@@ -5,26 +5,37 @@
 
 namespace {
 
-const int startAddressAdminSettings = sizeof(folderSettings::folder) * 100;
+//  ############### EEPROM ################################
+//  Address       Usage
+//    0- 99       Folder Settings (Hoerbuch Fortschritt)
+//  100-137       AdminSettings (38 Byte)
+//  138-155       reserved (18 Byte)
+//  156-255       extra Shortcuts (100 Byte, max. 25 Shortcuts)
 
+constexpr uint16_t startAddressFolderSettings =   0;
+constexpr uint16_t startAddressAdminSettings  = 100;
+constexpr uint16_t startAddressExtraShortcuts = 156;
+constexpr uint16_t endAddress                 = 256;
+
+#ifdef BUTTONS3X3
+constexpr uint16_t maxExtraShortcuts = (endAddress - startAddressExtraShortcuts) / sizeof(folderSettings);
+static_assert(buttonExtSC_buttons <= maxExtraShortcuts, "Too many ExtraShortCuts");
+#endif
 }
 
-void Settings::writeByteToFlash(uint16_t address, uint8_t value) {
-  EEPROM_put(address, value);
-}
-
-uint8_t Settings::readByteFromFlash(uint16_t address) {
-  return EEPROM.read(address);
-}
+#ifdef BUTTONS3X3
+folderSettings Settings::extShortCut{};
+#endif
 
 void Settings::clearEEPROM() {
-  LOG(settings_log, s_info, F("clearEEPROM"));
-  for (uint16_t i = 0; i < sizeof(folderSettings::folder) * 100 + sizeof(this); i++) {
-    writeByteToFlash(i, 0);
+  LOG(settings_log, s_info, F("clEEPROM"));
+  for (uint16_t i = startAddressFolderSettings; i < endAddress; ++i) {
+    EEPROM.write(i, '\0');
   }
 }
 
 void Settings::writeSettingsToFlash() {
+  static_assert(startAddressExtraShortcuts-startAddressAdminSettings > sizeof(Settings), "Settings to big");
   LOG(settings_log, s_debug, F("writeSettingsToFlash"));
   EEPROM_put(startAddressAdminSettings, *this);
 }
@@ -56,7 +67,7 @@ void Settings::resetSettings() {
 
 void Settings::migrateSettings(int oldVersion) {
   if (oldVersion == 1) {
-    LOG(settings_log, s_info, F("migradeSettings 1 -> 2"));
+    LOG(settings_log, s_info, F("1->2"));
     version              = 2;
     adminMenuLocked      = 0;
     adminMenuPin[0]      = 1;
@@ -72,30 +83,65 @@ void Settings::migrateSettings(int oldVersion) {
 }
 
 void Settings::loadSettingsFromFlash() {
-  LOG(settings_log, s_debug, F("loadSettingsFromFlash"));
+  LOG(settings_log, s_debug, F("loadSettings"));
   EEPROM_get(startAddressAdminSettings, *this);
   if (cookie != cardCookie)
     resetSettings();
   migrateSettings(version);
 
-  LOG(settings_log, s_info, F("Version: "                ), version);
-  LOG(settings_log, s_info, F("Max Vol: "                ), maxVolume);
-  LOG(settings_log, s_info, F("Min Vol: "                ), minVolume);
-  LOG(settings_log, s_info, F("Init Vol: "               ), initVolume);
-  LOG(settings_log, s_info, F("EQ: "                     ), eq);
-  LOG(settings_log, s_info, F("Locked: "                 ), locked);
-  LOG(settings_log, s_info, F("Sleep Timer: "            ), standbyTimer);
-  LOG(settings_log, s_info, F("Inverted Vol Buttons: "   ), invertVolumeButtons);
-  LOG(settings_log, s_info, F("Admin Menu locked: "      ), adminMenuLocked);
-  LOG(settings_log, s_info, F("Admin Menu Pin: "         ), adminMenuPin[0], adminMenuPin[1], adminMenuPin[2], adminMenuPin[3]);
-  LOG(settings_log, s_info, F("Pause when card removed: "), pauseWhenCardRemoved);
+  LOG(settings_log, s_info, F("Ver:"), version);
+  LOG(settings_log, s_info, F("Vol:"), maxVolume, F(" "), minVolume, F(" "), initVolume);
+  LOG(settings_log, s_info, F("EQ:" ), eq);
+  LOG(settings_log, s_info, F("LOC:"), locked);
+  LOG(settings_log, s_info, F("ST:" ), standbyTimer);
+  LOG(settings_log, s_info, F("IB:" ), invertVolumeButtons);
+  LOG(settings_log, s_info, F("AL:" ), adminMenuLocked);
+  LOG(settings_log, s_info, F("AP:" ), adminMenuPin[0], adminMenuPin[1], adminMenuPin[2], adminMenuPin[3]);
+  LOG(settings_log, s_info, F("PCR:"), pauseWhenCardRemoved);
 }
 
-void Settings::writeFolderSettingToFlash(uint8_t folder, uint16_t track) {
+void Settings::writeFolderSettingToFlash(uint8_t folder, uint8_t track) {
   if (folder < 100)
-    writeByteToFlash(folder, min(track, 0xffu));
+    EEPROM.write(folder, track);
 }
 
-uint16_t Settings::readFolderSettingFromFlash(uint8_t folder) {
-  return (folder < 100)? readByteFromFlash(folder) : 0;
+uint8_t Settings::readFolderSettingFromFlash(uint8_t folder) {
+  return (folder < 100)? EEPROM.read(folder) : 0;
 }
+
+void Settings::writeExtShortCutToFlash (uint8_t shortCut, const folderSettings& value) {
+  const int address = startAddressExtraShortcuts + shortCut * sizeof(folderSettings);
+  EEPROM_put(address, value);
+}
+
+void Settings::readExtShortCutFromFlash(uint8_t shortCut,       folderSettings& value) {
+  const int address = startAddressExtraShortcuts + shortCut * sizeof(folderSettings);
+  EEPROM_get(address, value);
+}
+
+
+folderSettings& Settings::getShortCut(uint8_t shortCut) {
+  if (shortCut > 0 && shortCut <= 4)
+    return shortCuts[shortCut-1];
+#ifdef BUTTONS3X3
+  else if (shortCut >= buttonExtSC_begin && shortCut < buttonExtSC_begin + buttonExtSC_buttons) {
+    readExtShortCutFromFlash(shortCut-buttonExtSC_begin, extShortCut);
+    return extShortCut;
+  }
+#endif
+
+  return shortCuts[0];
+}
+
+void Settings::setShortCut(uint8_t shortCut, const folderSettings& value) {
+  if (shortCut > 0 && shortCut <= 4) {
+    shortCuts[shortCut-1] = value;
+    // writeSettingsToFlash(); -- will be done in state machine
+  }
+#ifdef BUTTONS3X3
+  else if (shortCut >= buttonExtSC_begin && shortCut < buttonExtSC_begin + buttonExtSC_buttons) {
+    writeExtShortCutToFlash(shortCut-buttonExtSC_begin, value);
+  }
+#endif
+}
+

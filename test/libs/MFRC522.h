@@ -267,7 +267,17 @@ public:
     uid.sak  = 0;
     called_PICC_RequestA = false;
 	}
-	// todo: decode from t_buffer for testing write
+	void card_decode(uint32_t &cookie, uint8_t &version, uint8_t &folder, uint8_t &mode, uint8_t &special, uint8_t &special2) {
+	  cookie = (static_cast<uint32_t>(t_buffer[0]) << 24) +
+	           (static_cast<uint32_t>(t_buffer[1]) << 16) +
+	           (static_cast<uint32_t>(t_buffer[2]) <<  8) +
+	           (static_cast<uint32_t>(t_buffer[3]) <<  0) ;
+	  version  = t_buffer[4];
+    folder   = t_buffer[5];
+    mode     = t_buffer[6];
+    special  = t_buffer[7];
+    special2 = t_buffer[8];
+	}
 };
 
 #endif

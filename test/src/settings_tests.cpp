@@ -63,7 +63,7 @@ public:
   Settings  settings;
 };
 
-bool operator==(Settings lhs, Settings rhs) {
+bool operator==(const Settings &lhs, const Settings &rhs) {
   return
   lhs.cookie               == rhs.cookie               &&
   lhs.version              == rhs.version              &&
@@ -132,17 +132,6 @@ TEST_F(settings_test_fixture, read_write_folderSettings_works) {
       uint8_t r_track = settings.readFolderSettingFromFlash(folder);
       EXPECT_EQ(r_track, track);
     }
-  }
-}
-
-TEST_F(settings_test_fixture, write_folderSettings_cuts_track_if_bigger_than_255) {
-  init_brand_new();
-
-  const uint8_t folder = 22;
-  for (uint16_t track:  { 256, 1322323, 3333 }) {
-    settings.writeFolderSettingToFlash(folder, track);
-    uint8_t r_track = settings.readFolderSettingFromFlash(folder);
-    EXPECT_EQ(r_track, 255);
   }
 }
 
