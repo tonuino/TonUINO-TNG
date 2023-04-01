@@ -7,8 +7,8 @@ advert/0303_locked.mp3|L'appareil est maintenant verrouillé.
 advert/0304_buttonslocked.mp3|Les boutons sont désormais verrouillés.
 advert/0305_kindergarden.mp3|Mode crèche activé.
 mp3/0300_new_tag.mp3|Oh, une nouvelle carte !
-mp3/0301_select_folder.mp3|Utilise les touches de volume pour sélectionner un dossier pour la carte. Appuie sur la touche pause pour continuer.
-mp3/0310.mp3|OK, utilise maintenant les touches de volume pour sélectionner le mode de lecture.
+mp3/0301_select_folder.mp3|Ok, utilise maintenant les touches de volume pour sélectionner un dossier pour la carte.
+mp3/0310.mp3|Sélectionne le mode de lecture à l'aide des touches de volume. Appuie sur la touche pause pour continuer.
 mp3/0311_mode_random_episode.mp3|Mode de lecture audio : lire un fichier aléatoire du dossier
 mp3/0312_mode_album.mp3|Mode album : lire le dossier complet
 mp3/0313_mode_party.mp3|Mode fête : lire le dossier de façon aléatoire.
@@ -39,14 +39,14 @@ mp3/0903_min_volume.mp3|Définir le volume minimal.
 mp3/0904_init_volume.mp3|Définir le volume au démarrage.
 mp3/0905_eq.mp3|Configurer l'égaliseur.
 mp3/0906_modifiers.mp3|Créer une carte de modification. Ces cartes sont placées après les cartes de musique proprement dites et modifient le comportement de ton appareil.
-mp3/0907_shortcut.mp3|Configurer les touches avec un raccourci. Un raccourci est lancé par un appui long sur une touche et ne fonctionne que si rien n'est en cours de lecture.
+mp3/0907_shortcut.mp3|Configurer les raccourcis. Un raccourci est lancé par un appui long sur une touche et ne fonctionne que si rien n'est en cours de lecture.
 mp3/0908_standbytimer.mp3|Configurer la minuterie.
 mp3/0909_batch_cards.mp3|Créer des cartes individuelles pour un dossier.
 mp3/0910_switch_volume.mp3|Inverser la fonction des boutons de volume.
 mp3/0911_reset.mp3|Effacer tous les paramètres.
 mp3/0912_admin_lock.mp3|Vérouiller le menu admin.
 mp3/0913_pause_on_card_removed.mp3|Pause lorsque la carte est retirée.
-mp3/0919_continue_admin.mp3|et on continue dans le menu Admin
+mp3/0919_continue_admin.mp3|et on continue dans le menu Admin. En appuyant longuement sur la touche Pause, tu peux interrompre le menu Admin.
 mp3/0920_eq_intro.mp3|Sélectionne un réglage pour l'égaliseur à l'aide des touches de volume et le confirmer en appuyant sur la touche de pause.
 mp3/0921_normal.mp3|Normal
 mp3/0922_pop.mp3|Pop
@@ -60,9 +60,9 @@ mp3/0932_init_volume_into.mp3|Sélectionner le volume au démarrage et confirmer
 mp3/0933_switch_volume_intro.mp3|Tu veux inverser la fonction des touches de volume ? Tu dois alors appuyer longuement sur les touches pour avancer ou reculer d'une chanson.
 mp3/0934_no.mp3|Non.
 mp3/0935_yes.mp3|Oui.
-mp3/0936_batch_cards_intro.mp3|OK, pose maintenant les cartes l'une après l'autre sur la boîte. J'annoncerai le numéro de chaque carte à l'avance pour que tu ne te trompes pas. Pour annuler, il suffit d'appuyer sur l'une des touches de volume !
-mp3/0940_shortcut_into.mp3|Sélectionne le raccourci que tu veux configurer.
-mp3/0941_pause.mp3|Bouton de pause
+mp3/0936_batch_cards_intro.mp3|OK, pose maintenant les cartes l'une après l'autre sur la boîte. J'annoncerai le numéro de chaque carte à l'avance pour que tu ne te trompes pas. Pour annuler, il suffit d'appuyer longuement sur la touche pause !
+mp3/0940_shortcut_into.mp3|Sélectionne le raccourci que tu veux configurer. Si tu as le panneau de boutons 3 par 3, tu peux aussi appuyer sur une touche à cet endroit. 
+mp3/0941_pause.mp3|touche d'avance et de retour
 mp3/0942_up.mp3|Touche d'avance ou touche de volume
 mp3/0943_down.mp3|Bouton de retour ou de silence
 mp3/0944_startup.mp3|Définir le raccourci au démarrage

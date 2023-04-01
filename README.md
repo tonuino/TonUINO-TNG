@@ -36,7 +36,8 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 ## Version 3.1.3 issue 069 (05.03.2023)
 - [Issue 069](https://github.com/tonuino/TonUINO-TNG/issues/69): Enhance serial input as command source to jump into menu entries
 
-## Version 3.1.3 issue 019 (03.03.2023)
+## Version 3.1.3 (01.04.2023)
+- Viele Fehlerkorrekturen und Verbesserungen
 - [Issue 019](https://github.com/tonuino/TonUINO-TNG/issues/19): Implement support for the 3x3 Button board
 
 ## Version 3.1.2 (03.03.2023)

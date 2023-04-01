@@ -143,7 +143,6 @@ protected:
   static uint8_t   previewFromFolder;
   static uint8_t   currentValue     ;
 
-  static Timer     previewTimer     ;
   static bool      previewStarted   ;
 };
 
@@ -249,8 +248,10 @@ public:
   void entry() final;
   void react(command_e const &) final;
   static bool return_to_idle;
+  static bool wait_track_finished;
 private:
   enum subState: uint8_t {
+    wait_track,
     start_setupCard,
     run_setupCard,
     end_setupCard,

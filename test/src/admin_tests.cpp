@@ -240,18 +240,20 @@ public:
     ASSERT_EQ(SM_setupCard::folder, card);
   }
 
-  void write_card() {
+  void write_card(bool with_card_already_in = false) {
 
     ASSERT_TRUE(SM_writeCard::is_in_state<WriteCard>());
 
-    execute_cycle(); // --> run_writeCard
-    execute_cycle_for_ms(time_check_play);
-    EXPECT_TRUE(getMp3().is_playing_mp3());
-    EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_800_waiting_for_card));
+    execute_cycle(); // --> run_writeCard (in SM_tonuino)
+    if (not with_card_already_in) {
+      execute_cycle_for_ms(time_check_play);
+      EXPECT_TRUE(getMp3().is_playing_mp3());
+      EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_800_waiting_for_card));
 
-    execute_cycle(); // --> run_writeCard
+      execute_cycle(); // --> run_writeCard (in SM_writeCard)
 
-    card_in({ 1, pmode_t::album       , 0, 0 });
+      card_in({ 1, pmode_t::album       , 0, 0 });
+    }
     execute_cycle(); // --> end_writeCard
     execute_cycle_for_ms(time_check_play);
     EXPECT_TRUE(getMp3().is_playing_mp3());
@@ -913,6 +915,70 @@ TEST_F(admin_test_fixture, Admin_ShortCut_extButtons_longPress) {
 
 }
 #endif
+
+// =======================================================
+// Test New (empty) Card
+// =======================================================
+
+TEST_F(admin_test_fixture, New_Card) {
+
+  folderSettings cards[] = {
+      { 0, pmode_t::admin       , 0, 0 },
+      { 0, pmode_t::repeat_last , 0, 0 },
+      { 1, pmode_t::hoerspiel   , 0, 0 },
+      { 2, pmode_t::album       , 0, 0 },
+      { 3, pmode_t::party       , 0, 0 },
+      { 4, pmode_t::einzel      , 1, 0 },
+      { 5, pmode_t::hoerbuch    , 0, 0 },
+      { 6, pmode_t::hoerspiel_vb, 1, 2 },
+      { 7, pmode_t::album_vb    , 2, 3 },
+      { 8, pmode_t::party_vb    , 4, 5 },
+      { 9, pmode_t::hoerbuch_1  , 0, 0 }
+  };
+
+  Print::clear_output();
+
+  goto_idle();
+
+  for (const folderSettings& card: cards) {
+
+    getMp3().set_folder_track_count(card.folder, 10);
+
+    card_in(0, 0, 0, 0, 0, 0);
+
+    ASSERT_TRUE(SM_tonuino::is_in_state<Admin_NewCard>());
+
+    execute_cycle_for_ms(time_check_play);
+    EXPECT_TRUE(getMp3().is_playing_mp3());
+    EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_300_new_tag));
+
+    // wait for end t_300_new_tag
+    execute_cycle_for_ms(dfPlayer_timeUntilStarts);
+    getMp3().end_track();
+    execute_cycle();
+    execute_cycle();
+    execute_cycle(); // --> start_setupCard
+
+    admin_setup_card(card);
+    execute_cycle(); // --> end_setupCard
+    execute_cycle(); // --> start_writeCard
+    execute_cycle(); // --> run_writeCard
+    write_card(true /*with_cars_already_in*/);
+
+    folderSettings card_expected = card;
+    if (card.mode == pmode_t::admin)
+      card_expected.mode = pmode_t::admin_card;
+    if (card.mode == pmode_t::repeat_last)
+      card_expected.folder = 0xff;
+
+    EXPECT_EQ(card_expected, card_decode());
+
+    EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
+    ASSERT_TRUE(getMp3().is_stopped());
+  }
+//  EXPECT_TRUE(false) << "log: " << Print::get_output();
+
+}
 
 // =======================================================
 // Test Admin_StandbyTimer

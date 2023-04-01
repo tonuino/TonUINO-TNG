@@ -270,26 +270,20 @@ bool Tonuino::specialCard(const nfcTagObject &nfcTag) {
   return true;
 }
 
-// genereates a seed for our pseudo random number generator
-// https://rheingoldheavy.com/better-arduino-random-values/
-#define seedPin openAnalogPin
+// generates a seed for our pseudo random number generator
+// adapted from https://rheingoldheavy.com/better-arduino-random-values
 uint32_t Tonuino::generateRamdomSeed()
 {
-  uint8_t seedBitValue = 0;
-  uint8_t seedByteValue = 0;
-  uint32_t seedWordValue = 0;
+  uint32_t seedLongValue = 0;
 
-  for (uint8_t wordShift = 0; wordShift < 4; wordShift++) { // 4 bytes in a 32 bit word
-    for (uint8_t byteShift = 0; byteShift < 8; byteShift++) { // 8 bits in a byte
-      for (uint8_t bitSum = 0; bitSum <= 8; bitSum++) { // 8 samples of analog pin
-        seedBitValue = seedBitValue + (analogRead(seedPin) & 0x01); // Flip the coin eight times, adding the results together
-      }
-      delay(1);                                                             // Delay a single millisecond to allow the pin to fluctuate
-      seedByteValue = seedByteValue | ((seedBitValue & 0x01) << byteShift); // Build a stack of eight flipped coins
-      seedBitValue = 0;                                                     // Clear out the previous coin value
+  for (uint8_t bitShift = 0; bitShift < 32; bitShift++) { // 32 bits in a uint32_t
+    uint32_t seedBitValue  = 0;
+    for (uint8_t bitSum = 0; bitSum <= 8; bitSum++) {     // 8 samples of analog pin
+      seedBitValue += analogRead(openAnalogPin);          // Flip the coin eight times, adding the results together
     }
-    seedWordValue = seedWordValue | (uint32_t)seedByteValue << (8 * wordShift); // Build a stack of four sets of 8 coins (shifting right creates a larger number so cast to 32bit)
-    seedByteValue = 0;                                                          // Clear out the previous stack value
+    delay(1);                                             // Delay a single millisecond to allow the pin to fluctuate
+    seedLongValue |= ((seedBitValue & 0x01) << bitShift); // Build a stack of 32 flipped coins
   }
-  return (seedWordValue);
+  LOG(init_log, s_debug, F("RamdonSeed: "), seedLongValue);
+  return (seedLongValue);
 }

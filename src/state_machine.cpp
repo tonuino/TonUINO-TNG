@@ -69,7 +69,6 @@ void VoiceMenu<SMT>::entry(bool entryPlayAfter) {
 template<SM_type SMT>
 void VoiceMenu<SMT>::playCurrentValue() {
   SM<SMT>::mp3.enqueueMp3FolderTrack(messageOffset + currentValue);
-  previewTimer.start(1000);
   previewStarted = false;
 }
 
@@ -78,8 +77,7 @@ void VoiceMenu<SMT>::react(command cmd) {
   if (   currentValue != 0
       && preview
       && not previewStarted
-      && previewTimer.isExpired()
-      && not SM<SMT>::mp3.isPlaying())
+      && not SM<SMT>::mp3.isPlayingMp3())
   {
     LOG(state_log, s_debug, str_VoiceMenu(), F("::react() start preview "), currentValue);
     if (previewFromFolder == 0)
@@ -386,6 +384,7 @@ bool Base::readCard() {
     LOG(state_log, s_debug, str_Base(), str_to(), str_Admin_NewCard());
     Admin_NewCard::return_to_idle = true;
     mp3.enqueueMp3FolderTrack(mp3Tracks::t_300_new_tag);
+    Admin_NewCard::wait_track_finished = true;
     transit<Admin_NewCard>();
     return false;
   }
@@ -402,7 +401,7 @@ bool Base::readCard() {
 
 bool Base::handleShortcut(uint8_t shortCut) {
   folderSettings &sc_folderSettings = settings.getShortCut(shortCut);
-  if (sc_folderSettings.folder != 0) {
+  if (sc_folderSettings.folder != 0 && sc_folderSettings.folder != 0xff) {
     if (sc_folderSettings.mode != pmode_t::repeat_last)
       tonuino.setFolder(&sc_folderSettings);
     if (tonuino.getFolder() != 0) {
@@ -430,11 +429,13 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
   case command::shortcut2: shortCut = 2      ; break;
   case command::shortcut3: shortCut = 3      ; break;
   case command::start    : shortCut = 4      ; break;
+#ifndef DISABLE_SHUTDOWN_VIA_BUTTON
   case command::shutdown : mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
                            mp3.loop();
                            delay(1000);
                            tonuino.shutdown();
                                                break;
+#endif
   default                :                     break;
   }
 #ifdef BUTTONS3X3
@@ -444,7 +445,7 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
   if (shortCut != 0xff) {
     if (handleShortcut(shortCut))
       return true;
-    else
+    else if (shortCut == 4)
       mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
   }
   return false;
@@ -510,8 +511,10 @@ void Play::react(command_e const &cmd_e) {
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
   switch (cmd) {
   case command::admin:
-    LOG(state_log, s_debug, str_Play(), str_to(), str_Admin_Allow());
-    transit<Admin_Allow>();
+    if (settings.adminMenuLocked != 1) { // only card is allowed
+      LOG(state_log, s_debug, str_Play(), str_to(), str_Admin_Allow());
+      transit<Admin_Allow>();
+    }
     return;
   case command::pause:
     LOG(state_log, s_debug, F("Pause Taste"));
@@ -605,8 +608,10 @@ void Pause::react(command_e const &cmd_e) {
 
   switch (cmd) {
   case command::admin:
-    LOG(state_log, s_debug, str_Pause(), str_to(), str_Admin_Allow());
-    transit<Admin_Allow>();
+    if (settings.adminMenuLocked != 1) { // only card is allowed
+      LOG(state_log, s_debug, str_Pause(), str_to(), str_Admin_Allow());
+      transit<Admin_Allow>();
+    }
     return;
   case command::pause:
     if (tonuino.getActiveModifier().handlePause())
@@ -849,6 +854,7 @@ void Admin_Entry::react(command_e const &cmd_e) {
     case 0:  break;
     case 1:  // create new card
              LOG(state_log, s_debug, str_Admin_Entry(), str_to(), str_Admin_NewCard());
+             Admin_NewCard::wait_track_finished = false;
              transit<Admin_NewCard>();
              return;
     case 2:  // Maximum Volume
@@ -911,7 +917,13 @@ void Admin_Entry::react(command_e const &cmd_e) {
 
 void Admin_NewCard::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_NewCard());
-  current_subState = start_setupCard;
+  if (wait_track_finished) {
+    current_subState = wait_track;
+    timer.start(dfPlayer_timeUntilStarts);
+  }
+  else {
+    current_subState = start_setupCard;
+  }
 }
 
 void Admin_NewCard::react(command_e const &cmd_e) {
@@ -919,6 +931,10 @@ void Admin_NewCard::react(command_e const &cmd_e) {
     LOG(state_log, s_debug, str_Admin_NewCard(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
   switch (current_subState) {
+  case wait_track:
+    if (timer.isExpired() and not mp3.isPlaying())
+      current_subState = start_setupCard;
+    break;
   case start_setupCard:
     SM_setupCard::start();
     current_subState = run_setupCard;
@@ -1365,6 +1381,7 @@ void Admin_LockAdmin::react(command_e const &cmd_e) {
       settings.adminMenuLocked = currentValue-1;
       if (settings.adminMenuLocked == 2) {
         current_subState = get_pin;
+        pin_number = 0;
         mp3.enqueueMp3FolderTrack(mp3Tracks::t_991_admin_pin);
       }
       else
@@ -1462,11 +1479,10 @@ template<SM_type SMT>
 uint8_t   VoiceMenu<SMT>::currentValue     ;
 
 template<SM_type SMT>
-Timer     VoiceMenu<SMT>::previewTimer     ;
-template<SM_type SMT>
 bool      VoiceMenu<SMT>::previewStarted   ;
 
 nfcTagObject Base::lastCardRead{};
 uint8_t Admin_Entry::lastCurrentValue{};
 Admin_SimpleSetting::Type Admin_SimpleSetting::type{};
 bool Admin_NewCard::return_to_idle{false};
+bool Admin_NewCard::wait_track_finished{false};
