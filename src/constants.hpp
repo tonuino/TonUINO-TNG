@@ -32,11 +32,11 @@
 // um ein Shutdown via Taste (long press Play/Pause) zu unterdrücken bitte in der nächste Zeile den Kommentar entfernen
 //#define DISABLE_SHUTDOWN_VIA_BUTTON
 
-// uncomment the below line to enable the roraty encoder for volume setting
-// um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
-#define ROTARY_ENCODER
-inline constexpr uint8_t   rotaryEncoderClkPin    = 36;
-inline constexpr uint8_t   rotaryEncoderDtPin     = 37;
+// uncomment the below line to enable the rotary encoder for volume setting (only for AiOplus)
+// um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen (nur für AioPlus)
+//#define ROTARY_ENCODER
+inline constexpr uint8_t   rotaryEncoderClkPin    = 31;
+inline constexpr uint8_t   rotaryEncoderDtPin     = 32;
 
 // ####### helper for level ############################
 

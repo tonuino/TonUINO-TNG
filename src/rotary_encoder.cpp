@@ -1,12 +1,18 @@
 #include "rotary_encoder.hpp"
 
 #include "constants.hpp"
+
+#ifdef ROTARY_ENCODER
 #include "logger.hpp"
+
+#ifndef ALLinONE_Plus
+static_assert(false, "The rotary encoder only works with AiOplus");
+#endif
 
 int RotaryEncoder::pos = 0;
 
 void RotaryEncoder::changed() {
-  const uint8_t dt      = digitalRead(rotaryEncoderDtPin);
+  const uint8_t dt = digitalRead(rotaryEncoderDtPin);
   LOG(button_log, s_debug, F("dt: "), dt);
   if (dt == 0)
     --pos;
@@ -27,7 +33,11 @@ RotaryEncoder::RotaryEncoder(const Settings& settings)
 commandRaw RotaryEncoder::getCommandRaw() {
   commandRaw ret = commandRaw::none;
 
-  if (pos > old_pos) {
+  noInterrupts();
+  const int new_pos = pos;
+  interrupts();
+
+  if (new_pos > old_pos) {
 #ifdef FIVEBUTTONS
     ret = commandRaw::four;
 
@@ -35,14 +45,16 @@ commandRaw RotaryEncoder::getCommandRaw() {
     ret = settings.invertVolumeButtons? commandRaw::up : commandRaw::upLong;
 #endif
   }
-  else if (pos < old_pos) {
+  else if (new_pos < old_pos) {
 #ifdef FIVEBUTTONS
     ret = commandRaw::five;
 #else
     ret = settings.invertVolumeButtons? commandRaw::down : commandRaw::downLong;
 #endif
   }
-  old_pos = pos;
+  old_pos = new_pos;
 
   return ret;
 }
+
+#endif // ROTARY_ENCODER
