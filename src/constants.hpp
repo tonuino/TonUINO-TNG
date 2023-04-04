@@ -35,8 +35,8 @@
 // uncomment the below line to enable the roraty encoder for volume setting
 // um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
 #define ROTARY_ENCODER
-inline constexpr uint8_t   rotaryEncoderClkPin    = 5;
-inline constexpr uint8_t   rotaryEncoderDtPin     = 6;
+inline constexpr uint8_t   rotaryEncoderClkPin    = 36;
+inline constexpr uint8_t   rotaryEncoderDtPin     = 37;
 
 // ####### helper for level ############################
 

@@ -9,11 +9,14 @@ class RotaryEncoder: public CommandSource {
 public:
 
   RotaryEncoder(const Settings& settings);
+  virtual ~RotaryEncoder() {}
   commandRaw getCommandRaw() override;
 
+  static void changed();
 private:
   const Settings& settings;
-  uint8_t old_clk = 0;
+  static int pos;
+  int old_pos = 0;
 };
 
 #endif /* SRC_ROTARY_ENCODER_HPP_ */
