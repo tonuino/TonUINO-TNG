@@ -33,6 +33,9 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
+## Version 3.1.3.issue_076 (06.04.2023)
+- [Issue 076](https://github.com/tonuino/TonUINO-TNG/issues/76): <<Phopp>> sound at poweroff
+
 ## Version 3.1.3 (01.04.2023)
 - Viele Fehlerkorrekturen und Verbesserungen
 - [Issue 019](https://github.com/tonuino/TonUINO-TNG/issues/19): Implement support for the 3x3 Button board
