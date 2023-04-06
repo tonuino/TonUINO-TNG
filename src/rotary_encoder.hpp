@@ -15,8 +15,8 @@ public:
   static void changed();
 private:
   const Settings& settings;
-  static int pos;
-  int old_pos = 0;
+  volatile static int8_t pos;
+  int8_t old_pos = 0;
 };
 
 #endif /* SRC_ROTARY_ENCODER_HPP_ */

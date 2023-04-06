@@ -33,7 +33,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
-## Version 3.1.3.issue_072 (04.04.2023)
+## Version 3.1.3 (06.04.2023)
 - [Issue 072](https://github.com/tonuino/TonUINO-TNG/issues/72): Support Rotary Encoder KY-040 for setting the volume
 
 ## Version 3.1.3 (01.04.2023)
