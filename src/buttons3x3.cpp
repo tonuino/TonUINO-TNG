@@ -1,9 +1,9 @@
-#ifdef BUTTONS3X3
 #include "buttons3x3.hpp"
 
 #include "constants.hpp"
 #include "logger.hpp"
 
+#ifdef BUTTONS3X3
 //#define CALIBRATE3X3
 
 Buttons3x3::Buttons3x3()

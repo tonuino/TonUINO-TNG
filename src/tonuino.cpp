@@ -217,6 +217,7 @@ void Tonuino::shutdown() {
 
 #if defined ALLinONE || defined ALLinONE_Plus
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
+  delay(1000);
 #endif
 
   // enter sleep state
