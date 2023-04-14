@@ -182,6 +182,8 @@ void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
 
 void Tonuino::previousTrack(uint8_t tracks) {
   LOG(play_log, s_info, F("previousTrack"));
+  if (activeModifier->handlePrevious())
+    return;
   if (mp3.isPlayingFolder() && (myFolder->mode == pmode_t::hoerbuch || myFolder->mode == pmode_t::hoerbuch_1)) {
     const uint8_t trackToSave = (mp3.getCurrentTrack() > numTracksInFolder) ? mp3.getCurrentTrack()-1 : 1;
     settings.writeFolderSettingToFlash(myFolder->folder, trackToSave);
@@ -242,32 +244,41 @@ bool Tonuino::specialCard(const nfcTagObject &nfcTag) {
     mp3.playAdvertisement(advertTracks::t_261_deactivate_mod_card, false/*olnyIfIsPlaying*/);
     return true;
   }
-  const Modifier *oldModifier = activeModifier;
 
   switch (nfcTag.nfcFolderSettings.mode) {
   case pmode_t::sleep_timer:  LOG(card_log, s_info, F("act. sleepTimer"));
-                             mp3.playAdvertisement(advertTracks::t_302_sleep            , false/*olnyIfIsPlaying*/);
-                             activeModifier = &sleepTimer;
-                             sleepTimer.start(nfcTag.nfcFolderSettings.special)               ;break;
+                              mp3.playAdvertisement(advertTracks::t_302_sleep            , false/*olnyIfIsPlaying*/);
+                              activeModifier = &sleepTimer;
+                              break;
+
   case pmode_t::freeze_dance: LOG(card_log, s_info, F("act. freezeDance"));
-                             mp3.playAdvertisement(advertTracks::t_300_freeze_into      , false/*olnyIfIsPlaying*/);
-                             activeModifier = &freezeDance;                                   ;break;
+                              mp3.playAdvertisement(advertTracks::t_300_freeze_into      , false/*olnyIfIsPlaying*/);
+                              activeModifier = &freezeDance;
+                              break;
+
   case pmode_t::locked:       LOG(card_log, s_info, F("act. locked"));
-                             mp3.playAdvertisement(advertTracks::t_303_locked           , false/*olnyIfIsPlaying*/);
-                             activeModifier = &locked                                         ;break;
+                              mp3.playAdvertisement(advertTracks::t_303_locked           , false/*olnyIfIsPlaying*/);
+                              activeModifier = &locked;
+                              break;
+
   case pmode_t::toddler:      LOG(card_log, s_info, F("act. toddlerMode"));
-                             mp3.playAdvertisement(advertTracks::t_304_buttonslocked    , false/*olnyIfIsPlaying*/);
-                             activeModifier = &toddlerMode                                    ;break;
+                              mp3.playAdvertisement(advertTracks::t_304_buttonslocked    , false/*olnyIfIsPlaying*/);
+                              activeModifier = &toddlerMode;
+                              break;
+
   case pmode_t::kindergarden: LOG(card_log, s_info, F("act. kindergardenMode"));
-                             mp3.playAdvertisement(advertTracks::t_305_kindergarden     , false/*olnyIfIsPlaying*/);
-                             activeModifier = &kindergardenMode                               ;break;
+                              mp3.playAdvertisement(advertTracks::t_305_kindergarden     , false/*olnyIfIsPlaying*/);
+                              activeModifier = &kindergardenMode;
+                              break;
+
   case pmode_t::repeat_single:LOG(card_log, s_info, F("act. repeatSingleModifier"));
-                             mp3.playAdvertisement(advertTracks::t_260_activate_mod_card, false/*olnyIfIsPlaying*/);
-                             activeModifier = &repeatSingleModifier                           ;break;
-  default:                   return false;
+                              mp3.playAdvertisement(advertTracks::t_260_activate_mod_card, false/*olnyIfIsPlaying*/);
+                              activeModifier = &repeatSingleModifier;
+                              break;
+
+  default:                    return false;
   }
-  if (oldModifier != activeModifier)
-    activeModifier->init();
+  activeModifier->init(nfcTag.nfcFolderSettings.special);
   return true;
 }
 

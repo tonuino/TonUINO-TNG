@@ -23,9 +23,9 @@ void SleepTimer::loop() {
   }
 }
 
-void SleepTimer::start(uint8_t minutes) {
-  LOG(modifier_log, s_info, str_SleepTimer(), F(" minutes: "), minutes);
-  sleepTimer.start(minutes * 60000);
+void SleepTimer::init(uint8_t special /* is minutes*/) {
+  LOG(modifier_log, s_info, str_SleepTimer(), F(" minutes: "), special);
+  sleepTimer.start(special * 60000);
   //playAdvertisement(advertTracks::t_302_sleep);
 }
 
@@ -66,6 +66,15 @@ bool KindergardenMode::handleRFID(const nfcTagObject &newCard) {
   }
   return true;
 }
+
+bool KindergardenMode::handleButton(command cmd) {
+  if (cmd != command::pause) {
+    LOG(modifier_log, s_debug, F("KindergardenMode::NextButton -> LOCKED!"));
+    return true;
+  }
+  return false;
+}
+
 
 bool RepeatSingleModifier::handleNext() {
   LOG(modifier_log, s_info, str_RepeatSingleModifier(), F(" -> REPEAT"));
