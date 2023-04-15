@@ -9,7 +9,9 @@ public:
   mp3_test_fixture()
   : tonuino(Tonuino::getTonuino())
   , mp3(tonuino.getMp3())
-  {}
+  {
+    mp3.reset_to_initial_state();
+  }
 
   void execute_cycle() {
     mp3.loop();

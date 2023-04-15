@@ -128,8 +128,12 @@ public:
       }
       if (called_start) {
         called_start = false;
-        if (!df_stopped)
-          df_playing = true;
+        if (!df_stopped) { // id not stopped before, start first track
+          df_stopped = false;
+          if (!df_folder) df_folder = 1;
+          if (!df_folder_track) df_folder_track = 1;
+        }
+        df_playing = true;
       }
       if (called_pause) {
         called_pause = false;
@@ -270,6 +274,21 @@ public:
     }
     bool is_stopped() {
       return df_stopped;
+    }
+
+    void reset_to_initial_state() {
+      df_playing = false;
+      df_playing_adv = false;
+      df_playing_adv_counter = 0;
+      df_stopped = true;
+      df_mp3_track = 0;
+      df_folder = 0;
+      df_folder_track = 0;
+      df_adv_track = 0;
+      called_sleep = false;
+      called_start = false;
+      called_pause = false;
+      called_stop = false;
     }
 
 };

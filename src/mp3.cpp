@@ -83,6 +83,7 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
   }
   else if (not olnyIfIsPlaying) {
     start();
+    loop();
     Base::playAdvertisement(track);
     waitForTrackToFinish(); // TODO remove waitForTrackToFinish
     pause();
