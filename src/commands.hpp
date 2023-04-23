@@ -61,6 +61,9 @@ enum class commandRaw: uint8_t {
   fiveLong,
   fiveLongRepeat,
 #endif
+#ifdef SerialInputAsCommand
+  menu_jump,
+#endif
   cmd_end,
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
@@ -88,6 +91,9 @@ enum class command: uint8_t {
   previous10,
   // adm
   select,
+#ifdef SerialInputAsCommand
+  menu_jump,
+#endif
   adm_end,
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
@@ -115,6 +121,14 @@ public:
 
   commandRaw getCommandRaw();
   command    getCommand   (commandRaw b, state_for_command s);
+
+  static bool isSelect(command cmd) {
+    return cmd == command::select
+#ifdef SerialInputAsCommand
+        || cmd == command::menu_jump
+#endif
+        ;
+  }
 
   static uint8_t   getButtonCode(commandRaw b);
 #ifdef BUTTONS3X3
