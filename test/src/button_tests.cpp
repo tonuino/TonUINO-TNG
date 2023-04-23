@@ -179,10 +179,10 @@ TEST_F(buttons_test_fixture, raw_all_single_pins) {
     press_button(pin);
     EXPECT_EQ(execute_cycle(), commandRaw::none);
     unsigned long start_time = current_time;
-    EXPECT_EQ(execute_cycle(  buttonLongPress-1-(current_time-start_time)), commandRaw::none);
-    EXPECT_EQ(execute_cycle(1                                            ), get_command_long(pin)) << static_cast<int>(pin);
-    EXPECT_EQ(execute_cycle(2*buttonLongPress-1-(current_time-start_time)), commandRaw::none);
-    EXPECT_EQ(execute_cycle(1                                            ), get_command_repeat(pin)) << static_cast<int>(pin);
+    EXPECT_EQ(execute_cycle(buttonLongPress      -1), commandRaw::none);
+    EXPECT_EQ(execute_cycle(1                      ), get_command_long  (pin)) << static_cast<int>(pin);
+    EXPECT_EQ(execute_cycle(buttonLongPressRepeat-1), commandRaw::none);
+    EXPECT_EQ(execute_cycle(1                      ), get_command_repeat(pin)) << static_cast<int>(pin);
     release_button(pin);
     EXPECT_EQ(execute_cycle(), commandRaw::none);
   }
