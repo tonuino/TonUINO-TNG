@@ -79,14 +79,14 @@ private:
 
   friend class Base;
 
-  Modifier             noneModifier        {*this, mp3, settings};
-  SleepTimer           sleepTimer          {*this, mp3, settings};
-  FreezeDance          freezeDance         {*this, mp3, settings};
-  Locked               locked              {*this, mp3, settings};
-  ToddlerMode          toddlerMode         {*this, mp3, settings};
-  KindergardenMode     kindergardenMode    {*this, mp3, settings};
-  RepeatSingleModifier repeatSingleModifier{*this, mp3, settings};
-  //FeedbackModifier     feedbackModifier    {*this, mp3, settings};
+  Modifier             noneModifier        {*this, mp3};
+  SleepTimer           sleepTimer          {*this, mp3};
+  FreezeDance          freezeDance         {*this, mp3};
+  Locked               locked              {*this, mp3};
+  ToddlerMode          toddlerMode         {*this, mp3};
+  KindergardenMode     kindergardenMode    {*this, mp3};
+  RepeatSingleModifier repeatSingleModifier{*this, mp3};
+  //FeedbackModifier     feedbackModifier    {*this, mp3};
 
   Modifier*            activeModifier      {&noneModifier};
 
