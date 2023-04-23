@@ -51,6 +51,7 @@ bool KindergardenMode::handleNext() {
     tonuino.setCard(nextCard);
     LOG(modifier_log, s_debug, F("Folder: "), nextCard.nfcFolderSettings.folder, F(" Mode: "), static_cast<uint8_t>(nextCard.nfcFolderSettings.mode));
     tonuino.playFolder();
+    mp3.loop(); // to start the new queue now and not going to Idle
     return true;
   }
   return false;

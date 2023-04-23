@@ -33,7 +33,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
-## Version 3.1.3.issue_070 (15.04.2023)
+## Version 3.1.3 (23.04.2023)
 - [Issue 070](https://github.com/tonuino/TonUINO-TNG/issues/70): Revise modification cards
 
 ## Version 3.1.3 (07.04.2023)
