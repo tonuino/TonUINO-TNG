@@ -60,11 +60,12 @@ inline constexpr uint8_t buttonExtSC_begin   = 101;
 inline constexpr uint8_t buttonExtSC_buttons =  18;
 #endif // BUTTONS3X3
 
+inline constexpr uint32_t  buttonLongPress       = 1000; // timeout for long press button in ms
+inline constexpr uint32_t  buttonLongPressRepeat =  200; // timeout for long press button repeat in ms
 
 #ifdef TonUINO_Classic
 // ####### buttons #####################################
 
-inline constexpr uint32_t  buttonLongPress = 1000; // timeout for long press button in ms
 inline constexpr uint8_t   buttonPausePin  = A0;
 
 #if defined(BUTTONS3X3)
@@ -116,7 +117,6 @@ inline constexpr unsigned long cycleTime       = 50;
 #ifdef ALLinONE_Plus
 // ####### buttons #####################################
 
-inline constexpr uint32_t  buttonLongPress = 1000; // timeout for long press button in ms
 inline constexpr uint8_t   buttonPausePin  = A0;
 
 #ifdef BUTTONS3X3
@@ -173,7 +173,6 @@ inline constexpr unsigned long cycleTime        = 50;
 #ifdef ALLinONE
 // ####### buttons #####################################
 
-inline constexpr uint32_t  buttonLongPress = 1000; // timeout for long press button in ms
 inline constexpr uint8_t   buttonPausePin  = A0;
 
 #ifdef BUTTONS3X3
@@ -226,5 +225,14 @@ inline constexpr levelType     usbAccessPinType = levelType::activeHigh;
 inline constexpr uint8_t       openAnalogPin    = A7;
 inline constexpr unsigned long cycleTime        = 50;
 #endif /* ALLinONE */
+
+// ####### some helper fuctions #####################################
+
+template <typename T> void PROGMEM_read(const T * sce, T& dest)
+{
+  memcpy_P (&dest, sce, sizeof (T));
+}
+
+
 
 #endif /* SRC_CONSTANTS_HPP_ */

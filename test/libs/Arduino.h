@@ -14,6 +14,11 @@
 extern "C"{
 #endif
 
+#define PROGMEM
+inline void *memcpy_P(void * dest, const void * src, size_t s) {
+  return memcpy(dest, src, s);
+}
+
 #define HIGH 0x1
 #define LOW  0x0
 

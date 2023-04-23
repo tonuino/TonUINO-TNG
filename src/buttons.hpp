@@ -29,7 +29,7 @@ private:
   bool ignoreRelease     = false;
   bool ignoreAll         = false;
 
-  uint8_t longPressFactor = 1;
+  uint8_t longPressFactor = 0;
 };
 
 #endif /* SRC_BUTTONS_HPP_ */
