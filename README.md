@@ -33,10 +33,11 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
+## Version 3.1.3.issue_079 (23.04.2023)
+- [Issue 079](https://github.com/tonuino/TonUINO-TNG/issues/79): Support DF Player GD3200B
+
 ## Version 3.1.3 (07.04.2023)
 - [Issue 076](https://github.com/tonuino/TonUINO-TNG/issues/76): \<\<Phopp\>\> sound at poweroff
-
-## Version 3.1.3 (06.04.2023)
 - [Issue 072](https://github.com/tonuino/TonUINO-TNG/issues/72): Support Rotary Encoder KY-040 for setting the volume
 - Viele Fehlerkorrekturen und Verbesserungen
 - [Issue 019](https://github.com/tonuino/TonUINO-TNG/issues/19): Implement support for the 3x3 Button board

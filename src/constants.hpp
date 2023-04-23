@@ -24,9 +24,10 @@
 // um die Unterstützung für die 3x3 Buttons zu haben bitte in der nächste Zeile den Kommentar entfernen
 //#define BUTTONS3X3
 
-// uncomment the below line to support the MH2024K16SS chip on the DfMiniMp3 player
-// um den Chip MH2024K16SS auf dem DfMiniMp3 Player zu ünterstützen bitte in der nächste Zeile den Kommentar entfernen
-//#define DFMiniMp3_T_CHIP_VARIANT Mp3ChipMH2024K16SS
+// uncomment the below one line to support a special chip on the DfMiniMp3 player
+// um einen speziellen Chip auf dem DfMiniMp3 Player zu ünterstützen bitte in eine der nächste Zeilen den Kommentar entfernen
+//#define DFMiniMp3_T_CHIP_GD3200B
+//#define DFMiniMp3_T_CHIP_MH2024K16SS
 
 // uncomment the below line to disable shutdown via nutton (long press play/pause)
 // um ein Shutdown via Taste (long press Play/Pause) zu unterdrücken bitte in der nächste Zeile den Kommentar entfernen

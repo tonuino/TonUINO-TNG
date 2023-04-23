@@ -17,10 +17,12 @@ using SerialType = SoftwareSerial;
 using SerialType = HardwareSerial;
 #endif // DFPlayerUsesHardwareSerial
 
-//#define CHECK_MISSING_ONPLAYFINISHED
-
 // forward declare the notify class, just the name
 class Mp3Notify;
+
+#ifdef DFMiniMp3_T_CHIP_MH2024K16SS
+#define DFMiniMp3_T_CHIP_VARIANT Mp3ChipMH2024K16SS
+#endif
 
 // define a handy type using serial and our notify class
 #ifdef DFMiniMp3_T_CHIP_VARIANT
@@ -177,6 +179,7 @@ public:
   void playNext(uint8_t tracks = 1);
   void playPrevious(uint8_t tracks = 1);
   uint8_t getCurrentTrack() { return playing ? q.get(current_track) : 0; }
+  uint16_t getFolderTrackCount(uint16_t folder);
 
 #ifdef CHECK_MISSING_ONPLAYFINISHED
   void start() { isPause = false; Base::start(); }
