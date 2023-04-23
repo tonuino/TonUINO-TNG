@@ -32,6 +32,7 @@ public:
   Settings&  getSettings() { return tonuino.getSettings(); }
   Chip_card& getChipCard() { return tonuino.getChipCard(); }
   MFRC522&   getMFRC522 () { return getChipCard().mfrc522; }
+  Modifier&  getModifier() { return tonuino.getActiveModifier(); }
 
   uint8_t    getVolume  () { return getMp3().volume; }
 

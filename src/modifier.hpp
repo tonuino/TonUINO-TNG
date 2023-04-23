@@ -6,40 +6,38 @@
 #include "chip_card.hpp"
 #include "logger.hpp"
 #include "timer.hpp"
+#include "commands.hpp"
 
 class Tonuino;
 class Mp3;
-class Settings;
 struct nfcTagObject;
 
 class Modifier {
 public:
-  Modifier(Tonuino &tonuino, Mp3 &mp3, const Settings &settings): tonuino(tonuino), mp3(mp3), settings(settings) {}
+  Modifier(Tonuino &tonuino, Mp3 &mp3): tonuino(tonuino), mp3(mp3) {}
+  //virtual ~Modifier() {}
   virtual void loop                () {}
-  virtual bool handlePause         () { return false; }
   virtual bool handleNext          () { return false; }
   virtual bool handlePrevious      () { return false; }
-  virtual bool handleNextButton    () { return false; }
-  virtual bool handlePreviousButton() { return false; }
-  virtual bool handleVolumeUp      () { return false; }
-  virtual bool handleVolumeDown    () { return false; }
+  virtual bool handleButton(command ) { return false; }
   virtual bool handleRFID(const nfcTagObject&)
                                       { return false; }
   virtual pmode_t getActive        () { return pmode_t::none; }
-  virtual void init                () {}
+  virtual void init         (uint8_t) {}
+
   Modifier& operator=(const Modifier&) = delete;
 protected:
   Tonuino        &tonuino;
   Mp3            &mp3;
-  const Settings &settings;
 };
 
 class SleepTimer: public Modifier {
 public:
-  SleepTimer(Tonuino &tonuino, Mp3 &mp3, const Settings &settings): Modifier(tonuino, mp3, settings) {}
-  void   loop      () final;
-  pmode_t getActive() final { return pmode_t::sleep_timer; }
-  void   start     (uint8_t minutes);
+  SleepTimer(Tonuino &tonuino, Mp3 &mp3): Modifier(tonuino, mp3) {}
+  void   loop       () final;
+
+  pmode_t getActive () final { return pmode_t::sleep_timer; }
+  void   init(uint8_t) final;
 
 private:
   Timer sleepTimer{};
@@ -47,14 +45,15 @@ private:
 
 class FreezeDance: public Modifier {
 public:
-  FreezeDance(Tonuino &tonuino, Mp3 &mp3, const Settings &settings): Modifier(tonuino, mp3, settings) {}
-  void   loop      () final;
-  pmode_t getActive() final { return pmode_t::freeze_dance; }
-  void   init      () final { setNextStopAtMillis(); }
+  FreezeDance(Tonuino &tonuino, Mp3 &mp3): Modifier(tonuino, mp3) {}
+  void   loop       () final;
 
-  void setNextStopAtMillis();
+  pmode_t getActive () final { return pmode_t::freeze_dance; }
+  void   init(uint8_t) final { setNextStopAtMillis(); }
 
 private:
+  void setNextStopAtMillis();
+
   Timer stopTimer{};
   static constexpr uint8_t minSecondsBetweenStops =  5;
   static constexpr uint8_t maxSecondsBetweenStops = 30;
@@ -62,42 +61,31 @@ private:
 
 class Locked: public Modifier {
 public:
-  Locked(Tonuino &tonuino, Mp3 &mp3, const Settings &settings): Modifier(tonuino, mp3, settings) {}
-  bool handlePause         () final { LOG(modifier_log, s_debug, F("Locked::Pause -> LOCKED!"))     ; return true; }
-  bool handleNextButton    () final { LOG(modifier_log, s_debug, F("Locked::NextButton -> LOCKED!")); return true; }
-  bool handlePreviousButton() final { LOG(modifier_log, s_debug, F("Locked::PrevButton -> LOCKED!")); return true; }
-  bool handleVolumeUp      () final { LOG(modifier_log, s_debug, F("Locked::VolumeUp -> LOCKED!"))  ; return true; }
-  bool handleVolumeDown    () final { LOG(modifier_log, s_debug, F("Locked::VolumeDown -> LOCKED!")); return true; }
+  Locked(Tonuino &tonuino, Mp3 &mp3): Modifier(tonuino, mp3) {}
+  bool handleButton(command) final { LOG(modifier_log, s_debug, F("Locked::Button -> LOCKED!"))    ; return true; }
   bool handleRFID(const nfcTagObject&)
-                              final { LOG(modifier_log, s_debug, F("Locked::RFID -> LOCKED!"))      ; return true; }
+                             final { LOG(modifier_log, s_debug, F("Locked::RFID -> LOCKED!"))      ; return true; }
 
-  pmode_t getActive() final { return pmode_t::locked; }
+  pmode_t getActive()        final { return pmode_t::locked; }
 };
 
 class ToddlerMode: public Modifier {
 public:
-  ToddlerMode(Tonuino &tonuino, Mp3 &mp3, const Settings &settings): Modifier(tonuino, mp3, settings) {}
-  bool handlePause         () final { LOG(modifier_log, s_debug, F("ToddlerMode::Pause -> LOCKED!"))     ; return true; }
-  bool handleNextButton    () final { LOG(modifier_log, s_debug, F("ToddlerMode::NextButton -> LOCKED!")); return true; }
-  bool handlePreviousButton() final { LOG(modifier_log, s_debug, F("ToddlerMode::PrevButton -> LOCKED!")); return true; }
-  bool handleVolumeUp      () final { LOG(modifier_log, s_debug, F("ToddlerMode::VolumeUp -> LOCKED!"))  ; return true; }
-  bool handleVolumeDown    () final { LOG(modifier_log, s_debug, F("ToddlerMode::VolumeDown -> LOCKED!")); return true; }
+  ToddlerMode(Tonuino &tonuino, Mp3 &mp3): Modifier(tonuino, mp3) {}
+  bool handleButton(command) final { LOG(modifier_log, s_debug, F("ToddlerMode::Button -> LOCKED!")); return true; }
 
-  pmode_t getActive() final { return pmode_t::toddler; }
+  pmode_t getActive()        final { return pmode_t::toddler; }
 };
 
 class KindergardenMode: public Modifier {
 public:
-  KindergardenMode(Tonuino &tonuino, Mp3 &mp3, const Settings &settings): Modifier(tonuino, mp3, settings) {}
-  bool handleNext() final;
+  KindergardenMode(Tonuino &tonuino, Mp3 &mp3): Modifier(tonuino, mp3) {}
+  bool handleNext  (                           ) final;
+  bool handleButton(command cmd                ) final;
+  bool handleRFID  (const nfcTagObject &newCard) final;
 
-//bool handlePause         () final { LOG(modifier_log, s_debug, F("KindergardenMode::Pause -> LOCKED!"))     ; return true; }
-  bool handleNextButton    () final { LOG(modifier_log, s_debug, F("KindergardenMode::NextButton -> LOCKED!")); return true; }
-  bool handlePreviousButton() final { LOG(modifier_log, s_debug, F("KindergardenMode::PrevButton -> LOCKED!")); return true; }
-
-  bool   handleRFID (const nfcTagObject &newCard) final;
-  pmode_t getActive () final { return pmode_t::kindergarden; }
-  void   init       () final { cardQueued = false; }
+  pmode_t getActive (                          ) final { return pmode_t::kindergarden; }
+  void   init       (uint8_t                   ) final { cardQueued = false; }
 
 private:
   nfcTagObject nextCard{};
@@ -106,7 +94,7 @@ private:
 
 class RepeatSingleModifier: public Modifier {
 public:
-  RepeatSingleModifier(Tonuino &tonuino, Mp3 &mp3, const Settings &settings): Modifier(tonuino, mp3, settings) {}
+  RepeatSingleModifier(Tonuino &tonuino, Mp3 &mp3): Modifier(tonuino, mp3) {}
   bool   handleNext    () final;
   bool   handlePrevious() final;
   pmode_t getActive    () final { return pmode_t::repeat_single; }
