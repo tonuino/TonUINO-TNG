@@ -200,6 +200,27 @@ void Mp3::playPrevious(uint8_t tracks) {
   }
 }
 
+uint16_t Mp3::getFolderTrackCount(uint16_t folder)
+{
+    uint16_t ret = 0;
+
+#ifdef DFMiniMp3_T_CHIP_GD3200B
+    Base::setVolume(0);
+    delay(100);
+
+    Base::playFolderTrack(folder, 1);
+    delay(500);
+#endif
+
+    ret = Base::getFolderTrackCount(folder);
+
+#ifdef DFMiniMp3_T_CHIP_GD3200B
+    Base::setVolume(volume);
+#endif
+
+    return ret;
+}
+
 void Mp3::increaseVolume() {
   if (volume < settings.maxVolume) {
     Base::setVolume(++volume);
