@@ -330,7 +330,8 @@ void WriteCard::react(command_e const &cmd_e) {
 
   switch (current_subState) {
   case start_waitCardInserted:
-    mp3.enqueueMp3FolderTrack(mp3Tracks::t_800_waiting_for_card/*, true*//*playAfter*/); // TODO
+    if (chip_card.isCardRemoved())
+      mp3.enqueueMp3FolderTrack(mp3Tracks::t_800_waiting_for_card/*, true*//*playAfter*/); // TODO
     current_subState = run_writeCard;
     break;
   case run_writeCard:
