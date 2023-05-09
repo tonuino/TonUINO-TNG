@@ -107,6 +107,14 @@ void VoiceMenu<SMT>::react(command cmd) {
     currentValue = max(currentValue - 1, 1);
     playCurrentValue();
     break;
+
+#ifdef SerialInputAsCommand
+  case command::menu_jump:
+    currentValue = min(max(this->tonuino.getMenuJump(), 1),numberOfOptions);
+    playCurrentValue();
+    break;
+#endif
+
   default:
     break;
   }
@@ -139,7 +147,7 @@ void ChMode::react(command_e const &cmd_e) {
   if (isAbort(cmd))
     return;
 
-  if ((cmd == command::select) && (currentValue != 0)) {
+  if (Commands::isSelect(cmd) && (currentValue != 0)) {
     folder.mode = static_cast<pmode_t>(currentValue);
     LOG(state_log, s_info, str_ChMode(), F(": "), currentValue);
     if (folder.mode == pmode_t::admin) {
@@ -184,7 +192,7 @@ void ChFolder::react(command_e const &cmd_e) {
   if (isAbort(cmd))
     return;
 
-  if ((cmd == command::select) && (currentValue != 0)) {
+  if (Commands::isSelect(cmd) && (currentValue != 0)) {
     folder.folder = currentValue;
     LOG(state_log, s_info, str_ChFolder(), F(": "), currentValue);
     if (folder.mode == pmode_t::einzel) {
@@ -227,7 +235,7 @@ void ChTrack::react(command_e const &cmd_e) {
   if (isAbort(cmd))
     return;
 
-  if ((cmd == command::select) && (currentValue != 0)) {
+  if (Commands::isSelect(cmd) && (currentValue != 0)) {
     folder.special = currentValue;
     LOG(state_log, s_info, str_ChTrack(), F(": "), currentValue);
     transit<finished>();
@@ -260,7 +268,7 @@ void ChFirstTrack::react(command_e const &cmd_e) {
   if (isAbort(cmd))
     return;
 
-  if ((cmd == command::select) && (currentValue != 0)) {
+  if (Commands::isSelect(cmd) && (currentValue != 0)) {
     folder.special = currentValue;
     LOG(state_log, s_info, str_ChFirstTrack(), F(": "), currentValue);
     transit<ChLastTrack>();
@@ -295,7 +303,7 @@ void ChLastTrack::react(command_e const &cmd_e) {
   if (isAbort(cmd))
     return;
 
-  if ((cmd == command::select) && (currentValue != 0)) {
+  if (Commands::isSelect(cmd) && (currentValue != 0)) {
     folder.special2 = currentValue;
     LOG(state_log, s_info, str_ChLastTrack(), F(": "), currentValue);
     transit<finished>();
@@ -322,7 +330,8 @@ void WriteCard::react(command_e const &cmd_e) {
 
   switch (current_subState) {
   case start_waitCardInserted:
-    mp3.enqueueMp3FolderTrack(mp3Tracks::t_800_waiting_for_card/*, true*//*playAfter*/); // TODO
+    if (chip_card.isCardRemoved())
+      mp3.enqueueMp3FolderTrack(mp3Tracks::t_800_waiting_for_card/*, true*//*playAfter*/); // TODO
     current_subState = run_writeCard;
     break;
   case run_writeCard:
@@ -422,7 +431,9 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
   case command::shortcut3: shortCut = 3      ; break;
   case command::start    : shortCut = 4      ; break;
 #ifndef DISABLE_SHUTDOWN_VIA_BUTTON
-  case command::shutdown : mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
+  case command::shutdown : if (tonuino.getActiveModifier().handleButton(command::shutdown))
+                             return false;
+                           mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
                            mp3.loop();
                            delay(1000);
                            tonuino.shutdown();
@@ -435,6 +446,8 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
     shortCut = static_cast<uint8_t>(cmd);
 #endif
   if (shortCut != 0xff) {
+    if (tonuino.getActiveModifier().handleButton(command::shortcut1))
+      return false;
     if (handleShortcut(shortCut))
       return true;
     else if (shortCut == 4)
@@ -463,6 +476,8 @@ void Idle::react(command_e const &cmd_e) {
 
   switch (cmd) {
   case command::admin:
+    if (tonuino.getActiveModifier().handleButton(command::admin))
+      return;
     LOG(state_log, s_debug, str_Idle(), str_to(), str_Admin_Allow());
     transit<Admin_Allow>();
     return;
@@ -503,6 +518,8 @@ void Play::react(command_e const &cmd_e) {
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
   switch (cmd) {
   case command::admin:
+    if (tonuino.getActiveModifier().handleButton(command::admin))
+      return;
     if (settings.adminMenuLocked != 1) { // only card is allowed
       LOG(state_log, s_debug, str_Play(), str_to(), str_Admin_Allow());
       transit<Admin_Allow>();
@@ -510,43 +527,43 @@ void Play::react(command_e const &cmd_e) {
     return;
   case command::pause:
     LOG(state_log, s_debug, F("Pause Taste"));
-    if (tonuino.getActiveModifier().handlePause())
+    if (tonuino.getActiveModifier().handleButton(command::pause))
       break;
     LOG(state_log, s_debug, str_Play(), str_to(), str_Pause());
     transit<Pause>();
     return;
   case command::track:
-    if (tonuino.getActiveModifier().handlePause())
+    if (tonuino.getActiveModifier().handleButton(command::pause))
       break;
     tonuino.playTrackNumber();
     break;
   case command::volume_up:
-    if (tonuino.getActiveModifier().handleVolumeUp())
+    if (tonuino.getActiveModifier().handleButton(command::volume_up))
       break;
     mp3.increaseVolume();
     break;
   case command::next:
-    if (tonuino.getActiveModifier().handleNextButton())
+    if (tonuino.getActiveModifier().handleButton(command::next))
       break;
     tonuino.nextTrack();
     break;
   case command::next10:
-    if (tonuino.getActiveModifier().handleNextButton())
+    if (tonuino.getActiveModifier().handleButton(command::next10))
       break;
     tonuino.nextTrack(10);
     break;
   case command::volume_down:
-    if (tonuino.getActiveModifier().handleVolumeDown())
+    if (tonuino.getActiveModifier().handleButton(command::volume_down))
       break;
     mp3.decreaseVolume();
     break;
   case command::previous:
-    if (tonuino.getActiveModifier().handlePreviousButton())
+    if (tonuino.getActiveModifier().handleButton(command::previous))
       break;
     tonuino.previousTrack();
     break;
   case command::previous10:
-    if (tonuino.getActiveModifier().handlePreviousButton())
+    if (tonuino.getActiveModifier().handleButton(command::previous10))
       break;
     tonuino.previousTrack(10);
     break;
@@ -570,7 +587,7 @@ void Play::react(card_e const &c_e) {
       handleReadCard();
     return;
   case cardEvent::removed:
-    if (settings.pauseWhenCardRemoved && not tonuino.getActiveModifier().handlePause()) {
+    if (settings.pauseWhenCardRemoved && not tonuino.getActiveModifier().handleButton(command::pause)) {
       transit<Pause>();
       return;
     }
@@ -600,13 +617,15 @@ void Pause::react(command_e const &cmd_e) {
 
   switch (cmd) {
   case command::admin:
+    if (tonuino.getActiveModifier().handleButton(command::admin))
+      return;
     if (settings.adminMenuLocked != 1) { // only card is allowed
       LOG(state_log, s_debug, str_Pause(), str_to(), str_Admin_Allow());
       transit<Admin_Allow>();
     }
     return;
   case command::pause:
-    if (tonuino.getActiveModifier().handlePause())
+    if (tonuino.getActiveModifier().handleButton(command::pause))
       break;
     LOG(state_log, s_debug, str_Pause(), str_to(), str_Play());
     transit<Play>();
@@ -623,7 +642,7 @@ void Pause::react(card_e const &c_e) {
   switch (c_e.card_ev) {
   case cardEvent::inserted:
     if (readCard()) {
-      if (settings.pauseWhenCardRemoved && tonuino.getCard() == lastCardRead && not tonuino.getActiveModifier().handlePause()) {
+      if (settings.pauseWhenCardRemoved && tonuino.getCard() == lastCardRead && not tonuino.getActiveModifier().handleButton(command::pause)) {
         transit<Play>();
         return;
       }
@@ -776,7 +795,7 @@ void Admin_Allow::react(command_e const &cmd_e) {
 //  case get_match_c         :
 //    VoiceMenu::react(b);
 //    const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
-//    if ((cmd == command::select) && (currentValue != 0)) {
+//    if (Commands::isSelect(cmd) && (currentValue != 0)) {
 //      if (current_subState == cv)
 //        current_subState = allow;
 //      else
@@ -840,7 +859,7 @@ void Admin_Entry::react(command_e const &cmd_e) {
   if (isAbort(cmd))
     return;
 
-  if ((cmd == command::select) && (currentValue != 0)) {
+  if (Commands::isSelect(cmd) && (currentValue != 0)) {
     lastCurrentValue = currentValue;
     switch (currentValue) {
     case 0:  break;
@@ -999,7 +1018,7 @@ void Admin_SimpleSetting::react(command_e const &cmd_e) {
   if (isAbort(cmd))
     return;
 
-  if ((cmd == command::select) && (currentValue != 0)) {
+  if (Commands::isSelect(cmd) && (currentValue != 0)) {
     switch (type) {
     case maxVolume : settings.maxVolume  = currentValue + settings.minVolume    ; break;
     case minVolume : settings.minVolume  = currentValue                         ; break;
@@ -1078,7 +1097,7 @@ void Admin_ModCard::react(command_e const &cmd_e) {
     }
     return;
   }
-  else if ((cmd == command::select) && (currentValue != 0)) {
+  else if (Commands::isSelect(cmd) && (currentValue != 0)) {
     if (mode == pmode_t::none) {
       mode = static_cast<pmode_t>(currentValue);
       if (mode != pmode_t::sleep_timer) {
@@ -1127,7 +1146,7 @@ void Admin_ShortCut::react(command_e const &cmd_e) {
     return;
 
   if (shortcut == 0) {
-    if ((cmd == command::select) && (currentValue != 0)) {
+    if (Commands::isSelect(cmd) && (currentValue != 0)) {
       shortcut = currentValue;
       current_subState = start_setupCard;
     }
@@ -1193,7 +1212,7 @@ void Admin_StandbyTimer::react(command_e const &cmd_e) {
   if (isAbort(cmd))
     return;
 
-  if ((cmd == command::select) && (currentValue != 0)) {
+  if (Commands::isSelect(cmd) && (currentValue != 0)) {
     switch (currentValue) {
     case 1: settings.standbyTimer =  5; break;
     case 2: settings.standbyTimer = 15; break;
@@ -1315,7 +1334,7 @@ void Admin_InvButtons::react(command_e const &cmd_e) {
   if (isAbort(cmd))
     return;
 
-  if ((cmd == command::select) && (currentValue != 0)) {
+  if (Commands::isSelect(cmd) && (currentValue != 0)) {
     switch (currentValue) {
     case 1: settings.invertVolumeButtons = false; break;
     case 2: settings.invertVolumeButtons = true ; break;
@@ -1369,7 +1388,7 @@ void Admin_LockAdmin::react(command_e const &cmd_e) {
   switch(current_subState) {
   case get_mode:
     VoiceMenu::react(cmd);
-    if ((cmd == command::select) && (currentValue != 0)) {
+    if (Commands::isSelect(cmd) && (currentValue != 0)) {
       settings.adminMenuLocked = currentValue-1;
       if (settings.adminMenuLocked == 2) {
         current_subState = get_pin;
@@ -1424,7 +1443,7 @@ void Admin_PauseIfCardRemoved::react(command_e const &cmd_e) {
   if (isAbort(cmd))
     return;
 
-  if ((cmd == command::select) && (currentValue != 0)) {
+  if (Commands::isSelect(cmd) && (currentValue != 0)) {
     switch (currentValue) {
     case 1: settings.pauseWhenCardRemoved = false; break;
     case 2: settings.pauseWhenCardRemoved = true ; break;

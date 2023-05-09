@@ -61,6 +61,9 @@ enum class commandRaw: uint8_t {
   fiveLong,
   fiveLongRepeat,
 #endif
+#ifdef SerialInputAsCommand
+  menu_jump,
+#endif
   cmd_end,
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
@@ -88,6 +91,9 @@ enum class command: uint8_t {
   previous10,
   // adm
   select,
+#ifdef SerialInputAsCommand
+  menu_jump,
+#endif
   adm_end,
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
@@ -102,37 +108,7 @@ enum class state_for_command: uint8_t {
   play_invert = 3,
 };
 
-inline constexpr command cmd_table[][4] = {
-/*  raw commands                   adm             idle/pause               play           play_invert       */
-/*  none,           */  { command::none      , command::none     , command::none       , command::none        },
-/*  start,          */  { command::none      , command::start    , command::none       , command::none        },
-/*  allLong,        */  { command::none      , command::admin    , command::admin      , command::admin       },
-/*  pause,          */  { command::select    , command::pause    , command::pause      , command::pause       },
-/*  pauseLong,      */  { command::adm_end   , command::shutdown , command::track      , command::track       },
-#ifdef FIVEBUTTONS
-/*  up,             */  { command::next      , command::none     , command::next       , command::none        },
-/*  upLong,         */  { command::next10    , command::shortcut2, command::next10     , command::none        },
-/*  upLongRepeat,   */  { command::none      , command::none     , command::none       , command::none        },
-/*  down,           */  { command::previous  , command::none     , command::previous   , command::none        },
-/*  downLong,       */  { command::previous10, command::shortcut3, command::previous10 , command::none        },
-/*  downLongRepeat, */  { command::none      , command::none     , command::none       , command::none        },
-/*  updownLong,     */  { command::none      , command::shortcut1, command::none       , command::none        },
-/*  four,           */  { command::next      , command::none     , command::volume_up  , command::none        },
-/*  fourLong,       */  { command::next10    , command::none     , command::volume_up  , command::none        },
-/*  fourLongRepeat, */  { command::none      , command::none     , command::volume_up  , command::none        },
-/*  five,           */  { command::previous  , command::none     , command::volume_down, command::none        },
-/*  fiveLong,       */  { command::previous10, command::none     , command::volume_down, command::none        },
-/*  fiveLongRepeat, */  { command::none      , command::none     , command::volume_down, command::none        }
-#else // Three Button
-/*  up,             */  { command::next      , command::none     , command::next       , command::volume_up   },
-/*  upLong,         */  { command::next10    , command::shortcut2, command::volume_up  , command::next        },
-/*  upLongRepeat,   */  { command::none      , command::none     , command::volume_up  , command::none        },
-/*  down,           */  { command::previous  , command::none     , command::previous   , command::volume_down },
-/*  downLong,       */  { command::previous10, command::shortcut3, command::volume_down, command::previous    },
-/*  downLongRepeat, */  { command::none      , command::none     , command::volume_down, command::none        },
-/*  updownLong,     */  { command::none      , command::shortcut1, command::none       , command::none        }
-#endif
-};
+extern const command cmd_table[][4] PROGMEM;
 
 class CommandSource {
 public:
@@ -145,6 +121,14 @@ public:
 
   commandRaw getCommandRaw();
   command    getCommand   (commandRaw b, state_for_command s);
+
+  static bool isSelect(command cmd) {
+    return cmd == command::select
+#ifdef SerialInputAsCommand
+        || cmd == command::menu_jump
+#endif
+        ;
+  }
 
   static uint8_t   getButtonCode(commandRaw b);
 #ifdef BUTTONS3X3
