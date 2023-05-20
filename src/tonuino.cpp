@@ -64,6 +64,9 @@ void Tonuino::setup() {
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
 #endif
 
+  // ignore commands, if buttons already pressed during startup
+  commands.getCommandRaw();
+
   // Start Shortcut "at Startup" - e.g. Welcome Sound
   SM_tonuino::dispatch(command_e(commandRaw::start));
 }
