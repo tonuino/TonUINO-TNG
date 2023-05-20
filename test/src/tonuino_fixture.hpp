@@ -342,11 +342,11 @@ public:
     // end t_262_pling
     getMp3().end_track();
     execute_cycle();
+    execute_cycle_for_ms(dfPlayer_timeUntilStarts);
+    execute_cycle();
     EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
-    EXPECT_TRUE(getMp3().is_stopped());
 
     // play 1-1
-    execute_cycle();
     EXPECT_TRUE(getMp3().is_playing_folder());
     EXPECT_EQ(getMp3().df_folder, card.folder);
     //EXPECT_EQ(getMp3().df_folder_track, 1); // TODO
@@ -428,10 +428,9 @@ public:
     // end t_262_pling
     getMp3().end_track();
     execute_cycle();
-    EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
-    EXPECT_TRUE(getMp3().is_stopped());
-
+    execute_cycle_for_ms(dfPlayer_timeUntilStarts);
     execute_cycle();
+    EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   }
 #ifdef BUTTONS3X3
   void set_value_for_3x3(uint8_t button) {
