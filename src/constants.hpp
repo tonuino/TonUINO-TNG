@@ -13,7 +13,7 @@
 /* uncomment one of the below lines to enable special button support
  * um die Tasten zu konfigurieren, bitte eine der nächsten Zeilen auskommentieren
  * default: THREEBUTTONS for classic
- *          FIVEBUTTONS for AiO and AiO+
+ *          FIVEBUTTONS  for AiO and AiO+
  */
 //#define THREEBUTTONS
 //#define FIVEBUTTONS
@@ -28,20 +28,29 @@
  */
 #define SerialInputAsCommand
 
-// uncomment one of the below lines to support a special chip on the DfMiniMp3 player
-// um einen speziellen Chip auf dem DfMiniMp3 Player zu ünterstützen bitte in eine der nächste Zeilen den Kommentar entfernen
+/* uncomment one of the below lines to support a special chip on the DfMiniMp3 player
+ * um einen speziellen Chip auf dem DfMiniMp3 Player zu ünterstützen bitte in eine der nächste Zeilen den Kommentar entfernen
+ */
 //#define DFMiniMp3_T_CHIP_GD3200B
 //#define DFMiniMp3_T_CHIP_MH2024K16SS
 
-// uncomment the below line to disable shutdown via button (long press play/pause)
-// um ein Shutdown via Taste (long press Play/Pause) zu unterdrücken bitte in der nächste Zeile den Kommentar entfernen
+/* uncomment the below line to disable shutdown via button (long press play/pause)
+ * um ein Shutdown via Taste (long press Play/Pause) zu unterdrücken bitte in der nächste Zeile den Kommentar entfernen
+ */
 //#define DISABLE_SHUTDOWN_VIA_BUTTON
 
-// uncomment the below line to enable the rotary encoder for volume setting (only for AiOplus)
-// um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen (nur für AioPlus)
+/* uncomment the below line to enable the rotary encoder for volume setting (only for AiOplus)
+ * um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen (nur für AioPlus)
+ */
 //#define ROTARY_ENCODER
 inline constexpr uint8_t   rotaryEncoderClkPin    = 31;
 inline constexpr uint8_t   rotaryEncoderDtPin     = 32;
+
+/* #################################################################################################
+ * ##### normally, you don't have to edit lines below                   ############################
+ * ##### mormalerweise müssen die folgende Zeilen nicht editiert werden ############################
+ * #################################################################################################
+ */
 
 // ####### helper for level ############################
 
