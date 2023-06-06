@@ -16,9 +16,9 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
     Classic:  ~/.arduino15/packages/arduino/hardware/avr/1.8.6
     Aio:      ~/.arduino15/packages/LGT8fx Boards/hardware/avr/1.0.7
 
-  MacOS 13.1:
-    Classic:  /Applications/Arduino.app/Contents/Java/arduino/hardware/avr
-    AiO:      /Applications/Arduino.app/Contents/Java/LGT8fx Boards/hardware/avr
+  MacOS 13.x:
+    Classic:  ~/Library/Arduino15/packages/arduino/hardware/avr
+    AiO:      ~/Library/Arduino15/packages/LGT8fx Boards/hardware/avr
 ```
 - Man findet den Ordner auch, wenn man die Datei platform.txt sucht. 
 
@@ -33,10 +33,12 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
-## Version 3.1.3 (20.05.2023)
+## Version 3.1.3 (06.06.2023)
 - [Issue 039](https://github.com/tonuino/TonUINO-TNG/issues/39): No pause if card is removed too early
 
-## Version 3.1.3 (09.05.2023)
+## Version 3.1.3 (05.06.2023)
+- [Issue 091](https://github.com/tonuino/TonUINO-TNG/issues/91): Revise configuration part of the file constants.hpp
+- [Issue 093](https://github.com/tonuino/TonUINO-TNG/issues/93): location for platfrom.txt on macOS does not exist
 - [Issue 079](https://github.com/tonuino/TonUINO-TNG/issues/79): Support DF Player GD3200B
 - [Issue 085](https://github.com/tonuino/TonUINO-TNG/issues/85): Bad audio message on writing card if card is already present
 - [Issue 069](https://github.com/tonuino/TonUINO-TNG/issues/69): Enhance serial input as command source to jump into menu entries
