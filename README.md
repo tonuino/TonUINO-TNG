@@ -8,6 +8,7 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
 ## Arduino IDE
 - Bei der classic und AiO HW Variante muss die Datei 'platform.local.txt' in den avr HW Ordner kopiert werden. Dieser Ordner ist gewöhnlich folgender:  
 
+```
     Windows:  
       Classic:  C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6
       AiO:      C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\LGT8fx Boards\hardware\avr\1.0.7
@@ -19,6 +20,7 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
     MacOS 13.x:  
       Classic:  ~/Library/Arduino15/packages/arduino/hardware/avr
       AiO:      ~/Library/Arduino15/packages/LGT8fx Boards/hardware/avr
+```
 
 - Man findet den Ordner auch, wenn man die Datei platform.txt sucht.  
 
