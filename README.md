@@ -6,23 +6,28 @@ Die DIY Musikbox (nicht nur) für Kinder
 Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TNG](https://www.tonuino.de/TNG) und hier [www.leiterkartenpiraten.de](https://www.leiterkartenpiraten.de)
 
 ## Arduino IDE
-- Bei der classic und AiO HW Variante muss die Datei 'platform.local.txt' in den avr HW Ordner kopiert werden. Dieser Ordner ist gewöhnlich folgender:
-```
-  Windows:
-    Classic:  C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6
-    AiO:      C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\LGT8fx Boards\hardware\avr\1.0.7
+- Bei der classic und AiO HW Variante muss die Datei 'platform.local.txt' in den avr HW Ordner kopiert werden. Dieser Ordner ist gewöhnlich folgender:  
 
-  Linux:
-    Classic:  ~/.arduino15/packages/arduino/hardware/avr/1.8.6
-    Aio:      ~/.arduino15/packages/LGT8fx Boards/hardware/avr/1.0.7
+    Windows:  
+      Classic:  C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6
+      AiO:      C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\LGT8fx Boards\hardware\avr\1.0.7
 
-  MacOS 13.x:
-    Classic:  ~/Library/Arduino15/packages/arduino/hardware/avr
-    AiO:      ~/Library/Arduino15/packages/LGT8fx Boards/hardware/avr
-```
-- Man findet den Ordner auch, wenn man die Datei platform.txt sucht. 
+    Linux:  
+      Classic:  ~/.arduino15/packages/arduino/hardware/avr/1.8.6
+      Aio:      ~/.arduino15/packages/LGT8fx Boards/hardware/avr/1.0.7
 
-- Für die AiOplus HW Variante sind keine Änderungen notwendig
+    MacOS 13.x:  
+      Classic:  ~/Library/Arduino15/packages/arduino/hardware/avr
+      AiO:      ~/Library/Arduino15/packages/LGT8fx Boards/hardware/avr
+
+- Man findet den Ordner auch, wenn man die Datei platform.txt sucht.  
+
+- Für die AiOplus HW Variante sind keine Änderungen notwendig  
+
+- Es müssen folgende Versionen der Libraries verwendet werden:  
+    - jchristensen/JC_Button: 2.1.2  
+    - miguelbalboa/MFRC522: 1.4.10  
+    - makuna/DFPlayer Mini Mp3 by Makuna: 1.1.0 (**Achtung: nicht 1.2.0!**)
 
 ## platform.io
 - geht out-of-the-box
