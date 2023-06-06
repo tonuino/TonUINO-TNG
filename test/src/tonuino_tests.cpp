@@ -742,9 +742,12 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_out_early) {
   // end t_262_pling
   getMp3().end_track();
   execute_cycle();
+  execute_cycle_for_ms(dfPlayer_timeUntilStarts);
+  execute_cycle();
   // should go to pause
   EXPECT_TRUE(SM_tonuino::is_in_state<Pause>());
-  EXPECT_TRUE(getMp3().is_stopped());
+  execute_cycle();
+  EXPECT_TRUE(getMp3().is_pause());
 
   card_in(card, track_count);
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
