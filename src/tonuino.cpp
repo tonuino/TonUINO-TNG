@@ -40,6 +40,11 @@ void Tonuino::setup() {
   digitalWrite(usbAccessPin, getLevel(usbAccessPinType, level::inactive));
 #endif
 
+#ifdef NEO_RING
+  ring.init();
+  ring.setAll({ 255, 0, 0 });
+#endif
+
   // load Settings from EEPROM
   settings.loadSettingsFromFlash();
 
@@ -82,6 +87,19 @@ void Tonuino::loop() {
 
   SM_tonuino::dispatch(command_e(commands.getCommandRaw()));
   SM_tonuino::dispatch(card_e(chip_card.getCardEvent()));
+
+#ifdef NEO_RING
+  if (SM_tonuino::is_in_state<Idle>())
+    ring.colorWipe({ 0, 255, 0 });
+  else if (SM_tonuino::is_in_state<Play>())
+    ring.rainbow();
+  else if (SM_tonuino::is_in_state<StartPlay>())
+    ring.colorWipe({ 255, 0, 0 });
+  else if (SM_tonuino::is_in_state<Pause>())
+    ; // simply stop rainbow
+  else // admin menu
+    ring.colorWipe({ 0, 0, 255 });
+#endif
 
   unsigned long  stop_cycle = millis();
 

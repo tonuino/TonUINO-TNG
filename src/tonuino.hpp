@@ -10,6 +10,7 @@
 #include "mp3.hpp"
 #include "modifier.hpp"
 #include "timer.hpp"
+#include "ring.hpp"
 
 class Tonuino {
 public:
@@ -80,6 +81,9 @@ private:
 #endif
                                            };
   Chip_card            chip_card           {mp3};
+#ifdef NEO_RING
+  Ring                 ring                {cycleTime};
+#endif
 
   friend class Base;
 
