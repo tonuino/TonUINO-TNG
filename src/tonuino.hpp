@@ -82,7 +82,7 @@ private:
                                            };
   Chip_card            chip_card           {mp3};
 #ifdef NEO_RING
-  Ring                 ring                {cycleTime};
+  Ring                 ring                {};
 #endif
 
   friend class Base;

@@ -42,7 +42,7 @@ void Tonuino::setup() {
 
 #ifdef NEO_RING
   ring.init();
-  ring.setAll({ 255, 0, 0 });
+  ring.call_on_startup();
 #endif
 
   // load Settings from EEPROM
@@ -90,15 +90,15 @@ void Tonuino::loop() {
 
 #ifdef NEO_RING
   if (SM_tonuino::is_in_state<Idle>())
-    ring.colorWipe({ 0, 255, 0 });
-  else if (SM_tonuino::is_in_state<Play>())
-    ring.rainbow();
+    ring.call_on_idle();
   else if (SM_tonuino::is_in_state<StartPlay>())
-    ring.colorWipe({ 255, 0, 0 });
+    ring.call_on_startPlay();
+  else if (SM_tonuino::is_in_state<Play>())
+    ring.call_on_play();
   else if (SM_tonuino::is_in_state<Pause>())
-    ; // simply stop rainbow
+    ring.call_on_pause();
   else // admin menu
-    ring.colorWipe({ 0, 0, 255 });
+    ring.call_on_admin();
 #endif
 
   unsigned long  stop_cycle = millis();
