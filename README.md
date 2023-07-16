@@ -40,10 +40,11 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
+## Version 3.1.3 (16.07.2023)
+- [Issue 095](https://github.com/tonuino/TonUINO-TNG/issues/95): React on 3x3 Button Board also in Play State
+
 ## Version 3.1.3 (07.06.2023)
 - [Issue 088](https://github.com/tonuino/TonUINO-TNG/issues/88): Flash reset during startup should not open the admin menu
-
-## Version 3.1.3 (06.06.2023)
 - [Issue 039](https://github.com/tonuino/TonUINO-TNG/issues/39): No pause if card is removed too early
 - [Issue 091](https://github.com/tonuino/TonUINO-TNG/issues/91): Revise configuration part of the file constants.hpp
 - [Issue 093](https://github.com/tonuino/TonUINO-TNG/issues/93): location for platfrom.txt on macOS does not exist
