@@ -1,5 +1,6 @@
-#include "ring.hpp"
+#include "constants.hpp"
 #ifdef NEO_RING
+#include "ring.hpp"
 
 #include <limits.h>
 

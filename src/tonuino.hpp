@@ -10,7 +10,9 @@
 #include "mp3.hpp"
 #include "modifier.hpp"
 #include "timer.hpp"
+#ifdef NEO_RING
 #include "ring.hpp"
+#endif
 
 class Tonuino {
 public:
