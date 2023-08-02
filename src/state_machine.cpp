@@ -516,6 +516,10 @@ void Play::react(command_e const &cmd_e) {
   }
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
+
+  if (checkForShortcutAndShutdown(cmd))
+    return;
+
   switch (cmd) {
   case command::admin:
     if (tonuino.getActiveModifier().handleButton(command::admin))

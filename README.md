@@ -43,7 +43,8 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 ## Version 3.1.3 (02.08.2023)
 - [Issue 073](https://github.com/tonuino/TonUINO-TNG/issues/73): Support LED or NeoPixel Ring
 
-## Version 3.1.3 (07.06.2023)
+## Version 3.1.3 (16.07.2023)
+- [Issue 095](https://github.com/tonuino/TonUINO-TNG/issues/95): React on 3x3 Button Board also in Play State
 - [Issue 088](https://github.com/tonuino/TonUINO-TNG/issues/88): Flash reset during startup should not open the admin menu
 - [Issue 039](https://github.com/tonuino/TonUINO-TNG/issues/39): No pause if card is removed too early
 - [Issue 091](https://github.com/tonuino/TonUINO-TNG/issues/91): Revise configuration part of the file constants.hpp
