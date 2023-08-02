@@ -40,7 +40,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
-## Version 3.1.3 (08.06.2023)
+## Version 3.1.3 (02.08.2023)
 - [Issue 073](https://github.com/tonuino/TonUINO-TNG/issues/73): Support LED or NeoPixel Ring
 
 ## Version 3.1.3 (07.06.2023)

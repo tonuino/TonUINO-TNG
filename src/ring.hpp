@@ -53,7 +53,7 @@ private:
 
   // for pulse()
   uint8_t brightness { 50 };
-  uint8_t  brightness_inc { cycleTime*255/pulse_per_second/1000 };
+  int8_t  brightness_inc { cycleTime*255/pulse_per_second/1000 };
 
   // for rainbow()
   unsigned int pixelCycle { 0 };  // Pattern Pixel Cycle
