@@ -238,6 +238,10 @@ void Tonuino::checkStandby() {
 void Tonuino::shutdown() {
   LOG(standby_log, s_info, F("power off!"));
 
+#ifdef NEO_RING
+  ring.call_on_sleep();
+#endif
+
 #if defined ALLinONE || defined ALLinONE_Plus
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
   delay(1000);

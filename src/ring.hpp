@@ -31,6 +31,7 @@ public:
   static constexpr color_t red   { 255,   0,   0 };
   static constexpr color_t green {   0, 255,   0 };
   static constexpr color_t blue  {   0,   0, 255 };
+  static constexpr color_t black {   0,   0,   0 };
 
   void call_on_startup  () { setAll   (red  ); }
   void call_on_idle     () { pulse    (green); }
@@ -38,6 +39,7 @@ public:
   void call_on_play     () { rainbow  (); }
   void call_on_pause    () { /* simply stop rainbow */ }
   void call_on_admin    () { pulse    (blue ); }
+  void call_on_sleep    () { setAll   (black); }
 
 private:
 
