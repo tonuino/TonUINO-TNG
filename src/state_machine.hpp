@@ -83,6 +83,9 @@ protected:
   bool handleShortcut(uint8_t shortCut);
   void handleReadCard();
   bool checkForShortcutAndShutdown(command cmd);
+#ifdef NEO_RING
+  void handleBrightness(command cmd);
+#endif
   static nfcTagObject lastCardRead;
 };
 

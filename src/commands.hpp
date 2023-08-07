@@ -84,6 +84,8 @@ enum class command: uint8_t {
   track,
   volume_up,
   volume_down,
+  bright_up,
+  bright_down,
   // play/pause/idle/adm
   next,
   next10,

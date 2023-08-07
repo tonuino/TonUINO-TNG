@@ -9,7 +9,8 @@
 #include <Adafruit_NeoPixel.h>
 
 inline constexpr uint8_t  pulse_per_second = 1;
-inline constexpr uint8_t  brightness_max   = 16;
+inline constexpr uint8_t  brightness_max   = 32;
+inline constexpr uint8_t  brightness_init  = 16;
 
 class Ring {
 public:
@@ -36,11 +37,13 @@ public:
   void call_on_startup  () { setAll   (red  ); }
   void call_on_idle     () { pulse    (green); }
   void call_on_startPlay() { pulse    (red  ); }
-  void call_on_play     () { rainbow  (); }
-  void call_on_pause    () { /* simply stop rainbow */ }
+  void call_on_play     () { rainbow  (5    ); }
+  void call_on_pause    () { rainbow  (0    ); }
   void call_on_admin    () { pulse    (blue ); }
   void call_on_sleep    () { setAll   (black); }
 
+  void brightness_up    () { if (brightness < brightness_max) ++brightness; strip.setBrightness(brightness); }
+  void brightness_down  () { if (brightness > 0             ) --brightness; strip.setBrightness(brightness); }
 private:
 
   void showStrip() { strip.show(); }
@@ -49,16 +52,19 @@ private:
   color_t wheel(byte wheelPos) const;
 
   void pulse(const color_t color);
-  void rainbow();
+  void rainbow(uint8_t incr);
   void setAll(const color_t color);
   void setAll(auto&& f);
 
+  uint8_t brightness { brightness_init };
+
   // for pulse()
-  uint8_t brightness { 50 };
+  uint8_t brightness_pulse { 50 };
   int8_t  brightness_inc { cycleTime*255/pulse_per_second/1000 };
 
+
   // for rainbow()
-  unsigned int pixelCycle { 0 };  // Pattern Pixel Cycle
+  uint8_t pixelCycle { 0 };  // Pattern Pixel Cycle
 
   Adafruit_NeoPixel strip;
 };

@@ -43,6 +43,9 @@ public:
   Commands& getCommands () { return commands ; }
   Settings& getSettings () { return settings ; }
   Chip_card& getChipCard() { return chip_card; }
+#ifdef NEO_RING
+  Ring&     getRing     () { return ring     ; }
+#endif
   static uint32_t generateRamdomSeed();
 
 #ifdef SerialInputAsCommand

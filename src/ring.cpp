@@ -10,22 +10,22 @@ Ring::Ring()
 
 void Ring::init() {
   strip.begin();
-  strip.setBrightness(brightness_max);
+  strip.setBrightness(brightness);
 }
 
 void Ring::pulse(const color_t color) {
-  brightness += brightness_inc;
-  if (brightness >= 200 or brightness <= 50)
+  brightness_pulse += brightness_inc;
+  if (brightness_pulse >= 200 or brightness_pulse <= 50)
     brightness_inc *= -1;
 
-  setAll(color*brightness);
+  setAll(color*brightness_pulse);
 }
 
 // Rainbow cycle along whole strip.
-void Ring::rainbow() {
+void Ring::rainbow(uint8_t incr){
   setAll([this](uint8_t i){ return wheel((255/neoPixelNumber * (neoPixelNumber-1-i) + pixelCycle) & 255); });
 
-  pixelCycle += 5;
+  pixelCycle += incr;
 }
 
 void Ring::setAll(const color_t color) {
