@@ -237,7 +237,11 @@ void Mp3::decreaseVolume() {
 
 void Mp3::setVolume() {
   volume = settings.initVolume;
-  Base::setVolume(volume);
+  while(Base::getVolume() != volume) {
+    delay(100);
+    Base::setVolume(volume);
+    delay(100);
+  }
   LOG(mp3_log, s_info, str_Volume(), volume);
 }
 

@@ -5,8 +5,8 @@
 #ifdef ROTARY_ENCODER
 #include "logger.hpp"
 
-#ifndef ALLinONE_Plus
-static_assert(false, "The rotary encoder only works with AiOplus");
+#if not defined(ALLinONE_Plus) and not defined(TonUINO_Every)
+static_assert(false, "The rotary encoder only works with AiOplus or Nano Every");
 #endif
 
 volatile int8_t RotaryEncoder::pos = 0;

@@ -13,6 +13,9 @@ public:
 #ifdef TonUINO_Classic
   static constexpr int16_t maxLevel =  900; // 1023
 #endif
+#ifdef TonUINO_Every
+  static constexpr int16_t maxLevel =  900; // 1023
+#endif
 #ifdef ALLinONE
   static constexpr int16_t maxLevel = 4300; // 4064;
 #endif
