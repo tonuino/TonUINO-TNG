@@ -10,6 +10,9 @@
 #include "mp3.hpp"
 #include "modifier.hpp"
 #include "timer.hpp"
+#ifdef NEO_RING
+#include "ring.hpp"
+#endif
 
 class Tonuino {
 public:
@@ -40,6 +43,9 @@ public:
   Commands& getCommands () { return commands ; }
   Settings& getSettings () { return settings ; }
   Chip_card& getChipCard() { return chip_card; }
+#ifdef NEO_RING
+  Ring&     getRing     () { return ring     ; }
+#endif
   static uint32_t generateRamdomSeed();
 
 #ifdef SerialInputAsCommand
@@ -80,6 +86,9 @@ private:
 #endif
                                            };
   Chip_card            chip_card           {mp3};
+#ifdef NEO_RING
+  Ring                 ring                {};
+#endif
 
   friend class Base;
 

@@ -195,6 +195,8 @@ public:
 private:
   friend class tonuino_fixture;
 
+  void logVolume();
+
   typedef queue<uint8_t, maxTracksInFolder> track_queue;
 
 #ifdef DFPlayerUsesSoftwareSerial
@@ -207,7 +209,7 @@ private:
   // folder queue
   track_queue          q{};
   uint8_t              current_folder{};
-  size_t               current_track{};
+  uint16_t             current_track{};
   bool                 endless{false};
 
   // mp3 queue

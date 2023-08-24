@@ -46,6 +46,14 @@
 inline constexpr uint8_t   rotaryEncoderClkPin    = 31;
 inline constexpr uint8_t   rotaryEncoderDtPin     = 32;
 
+/* uncomment the below line to enable the neo ring
+ * um den Neo Ring zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
+ */
+//#define NEO_RING
+inline constexpr uint8_t neoPixelRingPin = 10; // PB2 on AiOplus
+inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
+
+
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
  * ##### mormalerweise müssen die folgende Zeilen nicht editiert werden ############################

@@ -5,7 +5,7 @@
 
 namespace {
 
-const __FlashStringHelper* str_Volume() { return F("Volume: ") ; }
+const __FlashStringHelper* str_Space()  { return F(" ") ; }
 
 }
 
@@ -111,10 +111,12 @@ void Mp3::enqueueTrack(uint8_t folder, uint8_t firstTrack, uint8_t lastTrack, ui
   clearAllQueue();
   current_folder = folder;
   endless = false;
+  LOG(mp3_log, s_info, F("enqueue "), folder, F("-"), lf_no);
   for (uint8_t i = firstTrack; i<=lastTrack; ++i) {
-    LOG(mp3_log, s_info, F("enqueue "), folder, F("-"), i);
+    LOG(mp3_log, s_info, i, str_Space(), lf_no);
     q.push(i);
   }
+  LOG(mp3_log, s_info, str_Space());
   current_track = currentTrack;
 }
 void Mp3::enqueueTrack(uint8_t folder, uint8_t track) {
@@ -122,11 +124,13 @@ void Mp3::enqueueTrack(uint8_t folder, uint8_t track) {
 }
 void Mp3::shuffleQueue() {
   q.shuffle();
+  LOG(mp3_log, s_info, F("shuffled "), lf_no);
   for (uint8_t i = 0; i<q.size(); ++i)
-    LOG(mp3_log, s_info, F("shuffled "), q.get(i));
+    LOG(mp3_log, s_info, q.get(i), str_Space(), lf_no);
+  LOG(mp3_log, s_info, str_Space());
 }
 void Mp3::enqueueMp3FolderTrack(uint16_t track, bool playAfter) {
-  LOG(mp3_log, s_info, F("enqueue mp3 "), track, F(" "), playAfter);
+  LOG(mp3_log, s_info, F("enqueue mp3 "), track, str_Space(), playAfter);
   clearFolderQueue();
   if (not playAfter)
     clearMp3Queue();
@@ -225,20 +229,24 @@ void Mp3::increaseVolume() {
   if (volume < settings.maxVolume) {
     Base::setVolume(++volume);
   }
-  LOG(mp3_log, s_info, str_Volume(), volume);
+  logVolume();
 }
 
 void Mp3::decreaseVolume() {
   if (volume > settings.minVolume) {
     Base::setVolume(--volume);
   }
-  LOG(mp3_log, s_info, str_Volume(), volume);
+  logVolume();
 }
 
 void Mp3::setVolume() {
   volume = settings.initVolume;
   Base::setVolume(volume);
-  LOG(mp3_log, s_info, str_Volume(), volume);
+  logVolume();
+}
+
+void Mp3::logVolume() {
+  LOG(mp3_log, s_info, F("Volume: "), volume);
 }
 
 void Mp3::loop() {
