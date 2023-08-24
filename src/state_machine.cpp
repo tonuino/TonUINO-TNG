@@ -456,6 +456,16 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
   return false;
 }
 
+#ifdef NEO_RING
+void Base::handleBrightness(command cmd) {
+  switch (cmd) {
+  case command::bright_up  : tonuino.getRing().brightness_up  (); break;
+  case command::bright_down: tonuino.getRing().brightness_down(); break;
+  default                  :                                      break;
+  }
+}
+#endif
+
 
 // #######################################################
 
@@ -474,10 +484,12 @@ void Idle::react(command_e const &cmd_e) {
   if (checkForShortcutAndShutdown(cmd))
     return;
 
-  switch (cmd) {
+#ifdef NEO_RING
+  handleBrightness(cmd);
+#endif
+
+  if (not tonuino.getActiveModifier().handleButton(cmd)) switch (cmd) {
   case command::admin:
-    if (tonuino.getActiveModifier().handleButton(command::admin))
-      return;
     LOG(state_log, s_debug, str_Idle(), str_to(), str_Admin_Allow());
     transit<Admin_Allow>();
     return;
@@ -520,10 +532,8 @@ void Play::react(command_e const &cmd_e) {
   if (checkForShortcutAndShutdown(cmd))
     return;
 
-  switch (cmd) {
+  if (not tonuino.getActiveModifier().handleButton(cmd)) switch (cmd) {
   case command::admin:
-    if (tonuino.getActiveModifier().handleButton(command::admin))
-      return;
     if (settings.adminMenuLocked != 1) { // only card is allowed
       LOG(state_log, s_debug, str_Play(), str_to(), str_Admin_Allow());
       transit<Admin_Allow>();
@@ -531,44 +541,28 @@ void Play::react(command_e const &cmd_e) {
     return;
   case command::pause:
     LOG(state_log, s_debug, F("Pause Taste"));
-    if (tonuino.getActiveModifier().handleButton(command::pause))
-      break;
     LOG(state_log, s_debug, str_Play(), str_to(), str_Pause());
     transit<Pause>();
     return;
   case command::track:
-    if (tonuino.getActiveModifier().handleButton(command::pause))
-      break;
     tonuino.playTrackNumber();
     break;
   case command::volume_up:
-    if (tonuino.getActiveModifier().handleButton(command::volume_up))
-      break;
     mp3.increaseVolume();
     break;
   case command::next:
-    if (tonuino.getActiveModifier().handleButton(command::next))
-      break;
     tonuino.nextTrack();
     break;
   case command::next10:
-    if (tonuino.getActiveModifier().handleButton(command::next10))
-      break;
     tonuino.nextTrack(10);
     break;
   case command::volume_down:
-    if (tonuino.getActiveModifier().handleButton(command::volume_down))
-      break;
     mp3.decreaseVolume();
     break;
   case command::previous:
-    if (tonuino.getActiveModifier().handleButton(command::previous))
-      break;
     tonuino.previousTrack();
     break;
   case command::previous10:
-    if (tonuino.getActiveModifier().handleButton(command::previous10))
-      break;
     tonuino.previousTrack(10);
     break;
   default:
@@ -619,18 +613,18 @@ void Pause::react(command_e const &cmd_e) {
   if (checkForShortcutAndShutdown(cmd))
     return;
 
-  switch (cmd) {
+#ifdef NEO_RING
+  handleBrightness(cmd);
+#endif
+
+  if (not tonuino.getActiveModifier().handleButton(cmd)) switch (cmd) {
   case command::admin:
-    if (tonuino.getActiveModifier().handleButton(command::admin))
-      return;
     if (settings.adminMenuLocked != 1) { // only card is allowed
       LOG(state_log, s_debug, str_Pause(), str_to(), str_Admin_Allow());
       transit<Admin_Allow>();
     }
     return;
   case command::pause:
-    if (tonuino.getActiveModifier().handleButton(command::pause))
-      break;
     LOG(state_log, s_debug, str_Pause(), str_to(), str_Play());
     transit<Play>();
     return;

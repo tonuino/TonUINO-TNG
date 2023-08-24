@@ -17,9 +17,7 @@ public:
     if (s < N)
       c[s++] = t;
   }
-  T get (uint8_t pos) {
-    if (pos >= s)
-      return T{};
+  T &get (uint8_t pos) {
     return c[pos];
   }
   void clear() { s = 0; }
@@ -31,6 +29,12 @@ public:
       swap(c[i], c[j]);
     }
   }
+  // Iterators
+  T *begin() { return c.begin(); }
+  const T *begin() const { return c.begin(); }
+  T *end() { return &c[s]; }
+  const T *end() const { return &c[s]; }
+
 private:
   array<T, N> c{};
   uint8_t     s{};

@@ -40,6 +40,11 @@ void Tonuino::setup() {
   digitalWrite(usbAccessPin, getLevel(usbAccessPinType, level::inactive));
 #endif
 
+#ifdef NEO_RING
+  ring.init();
+  ring.call_on_startup();
+#endif
+
   // load Settings from EEPROM
   settings.loadSettingsFromFlash();
 
@@ -81,6 +86,19 @@ void Tonuino::loop() {
 
   SM_tonuino::dispatch(command_e(commands.getCommandRaw()));
   SM_tonuino::dispatch(card_e(chip_card.getCardEvent()));
+
+#ifdef NEO_RING
+  if (SM_tonuino::is_in_state<Idle>())
+    ring.call_on_idle();
+  else if (SM_tonuino::is_in_state<StartPlay>())
+    ring.call_on_startPlay();
+  else if (SM_tonuino::is_in_state<Play>())
+    ring.call_on_play();
+  else if (SM_tonuino::is_in_state<Pause>())
+    ring.call_on_pause();
+  else // admin menu
+    ring.call_on_admin();
+#endif
 
   unsigned long  stop_cycle = millis();
 
@@ -218,6 +236,10 @@ void Tonuino::checkStandby() {
 
 void Tonuino::shutdown() {
   LOG(standby_log, s_info, F("power off!"));
+
+#ifdef NEO_RING
+  ring.call_on_sleep();
+#endif
 
 #if defined ALLinONE || defined ALLinONE_Plus
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));

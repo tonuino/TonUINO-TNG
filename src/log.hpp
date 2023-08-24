@@ -24,6 +24,10 @@ enum severity: uint8_t {
   s_error  ,
   s_none   ,
 };
+enum lineFeed: uint8_t {
+  lf_yes,
+  lf_no ,
+};
 
 extern const __FlashStringHelper* getSeverityName(severity sev);
 
@@ -33,8 +37,9 @@ public:
     return true;
   }
 
-  static void log() {
-    Serial.println();
+  static void log(lineFeed lf = lf_yes) {
+    if (lf == lf_yes)
+      Serial.println();
   }
   template<typename T, typename ... Types>
   static void log(T t, Types ... types) {

@@ -34,12 +34,12 @@ void u8toa_hex(uint8_t number, char *arr) {
     number /= 16;
   } while (number != 0);
 }
-const char* dump_byte_array(byte * buffer, size_t bufferSize) {
+const char* dump_byte_array(byte * buffer, uint8_t bufferSize) {
   static char ret[3*10+1];
   ret[0] = '\0';
   if (bufferSize > 10)
     return ret;
-  size_t pos = 0;
+  uint8_t pos = 0;
   for (uint8_t i = 0; i < bufferSize; ++i) {
     ret[pos++] = ' ';
     u8toa_hex(buffer[i], &ret[pos]);
