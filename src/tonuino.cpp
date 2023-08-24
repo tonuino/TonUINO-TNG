@@ -50,7 +50,6 @@ void Tonuino::setup() {
 
   // DFPlayer Mini initialisieren
   mp3.begin();
-  mp3.reset();
   mp3.setVolume();
   mp3.setEq(static_cast<DfMp3_Eq>(settings.eq - 1));
 
