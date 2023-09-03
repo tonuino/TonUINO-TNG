@@ -29,7 +29,7 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
 - Es müssen folgende Versionen der Libraries verwendet werden:  
     - jchristensen/JC_Button: 2.1.2  
     - miguelbalboa/MFRC522: 1.4.10  
-    - makuna/DFPlayer Mini Mp3 by Makuna: 1.1.0 (**Achtung: nicht 1.2.0!**)
+    - makuna/DFPlayer Mini Mp3 by Makuna: 1.2.1
 
 ## platform.io
 - geht out-of-the-box
