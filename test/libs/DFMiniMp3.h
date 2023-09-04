@@ -92,6 +92,10 @@ class Mp3ChipOriginal
 {
 };
 
+class Mp3ChipIncongruousNoAck
+{
+};
+
 template <class T_SERIAL_METHOD, class T_NOTIFICATION_METHOD, class T_CHIP_VARIANT = Mp3ChipOriginal>
 class DFMiniMp3
 {
