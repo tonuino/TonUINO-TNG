@@ -31,6 +31,8 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
     - miguelbalboa/MFRC522: 1.4.10  
     - makuna/DFPlayer Mini Mp3 by Makuna: 1.2.1
 
+- Die HW Variante (TonUINO_Classic, ALLinONE oder ALLinONE_Plus) sowie die Button Konfiguration (THREEBUTTONS, FIVEBUTTONS oder BUTTONS3X3) muss in der Datei constants.hpp durch Entfernen des entsprechenden Kommentars angegeben werden. 
+
 ## platform.io
 - geht out-of-the-box
 
