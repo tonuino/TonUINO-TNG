@@ -79,11 +79,13 @@ void Mp3::waitForTrackToStart() {
 void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
   LOG(mp3_log, s_info, F("play adv: "), track);
   if (isPlaying()) {
+    LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
   }
   else if (not olnyIfIsPlaying) {
     start();
     loop();
+    LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
     waitForTrackToFinish(); // TODO remove waitForTrackToFinish
     pause();
@@ -149,6 +151,7 @@ void Mp3::playCurrent() {
     if (mp3_track != 0) {
       LOG(mp3_log, s_info, F("play mp3 "), mp3_track);
       Mp3Notify::ResetLastTrackFinished(); // maybe the same mp3 track is played twice
+      LOG(mp3_log, s_debug, F("playMp3FolderTrack: "), mp3_track);
       Base::playMp3FolderTrack(mp3_track);
 #ifdef CHECK_MISSING_ONPLAYFINISHED
       isPause = false;
@@ -216,7 +219,9 @@ uint16_t Mp3::getFolderTrackCount(uint16_t folder)
     delay(500);
 #endif
 
+    LOG(mp3_log, s_debug, F("getFolderTrackCount: "), folder);
     ret = Base::getFolderTrackCount(folder);
+    LOG(mp3_log, s_debug, F("getFolderTrackCount return: "), ret);
 
 #ifdef DFMiniMp3_T_CHIP_GD3200B
     Base::setVolume(volume);
@@ -227,6 +232,7 @@ uint16_t Mp3::getFolderTrackCount(uint16_t folder)
 
 void Mp3::increaseVolume() {
   if (volume < settings.maxVolume) {
+    LOG(mp3_log, s_debug, F("setVolume: "), volume+1);
     Base::setVolume(++volume);
   }
   logVolume();
@@ -234,6 +240,7 @@ void Mp3::increaseVolume() {
 
 void Mp3::decreaseVolume() {
   if (volume > settings.minVolume) {
+    LOG(mp3_log, s_debug, F("setVolume: "), volume-1);
     Base::setVolume(--volume);
   }
   logVolume();
@@ -241,6 +248,7 @@ void Mp3::decreaseVolume() {
 
 void Mp3::setVolume() {
   volume = settings.initVolume;
+  LOG(mp3_log, s_debug, F("setVolume: "), volume);
   while(Base::getVolume() != volume) {
     delay(100);
     Base::setVolume(volume);

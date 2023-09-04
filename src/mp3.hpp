@@ -2,6 +2,7 @@
 #define SRC_MP3_HPP_
 
 #include <Arduino.h>
+//#define DfMiniMp3Debug Serial
 #include <DFMiniMp3.h>
 
 #include "constants.hpp"
@@ -22,6 +23,9 @@ class Mp3Notify;
 
 #ifdef DFMiniMp3_T_CHIP_MH2024K16SS
 #define DFMiniMp3_T_CHIP_VARIANT Mp3ChipMH2024K16SS
+#endif
+#ifdef DFMiniMp3_T_CHIP_Mp3ChipIncongruousNoAck
+#define DFMiniMp3_T_CHIP_VARIANT Mp3ChipIncongruousNoAck
 #endif
 
 // define a handy type using serial and our notify class

@@ -29,7 +29,9 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
 - Es müssen folgende Versionen der Libraries verwendet werden:  
     - jchristensen/JC_Button: 2.1.2  
     - miguelbalboa/MFRC522: 1.4.10  
-    - makuna/DFPlayer Mini Mp3 by Makuna: 1.1.0 (**Achtung: nicht 1.2.0!**)
+    - makuna/DFPlayer Mini Mp3 by Makuna: 1.2.1
+
+- Die HW Variante (TonUINO_Classic, ALLinONE oder ALLinONE_Plus) sowie die Button Konfiguration (THREEBUTTONS, FIVEBUTTONS oder BUTTONS3X3) muss in der Datei constants.hpp durch Entfernen des entsprechenden Kommentars angegeben werden. 
 
 ## platform.io
 - geht out-of-the-box
@@ -40,8 +42,11 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
-## Version 3.1.3 (23.08.2023)
+## Version 3.1.4 (04.09.2023)
 - [Issue 100](https://github.com/tonuino/TonUINO-TNG/issues/100): Support Nano Every with classic HW
+
+## Version 3.1.4 (25.08.2023)
+- [Issue 099](https://github.com/tonuino/TonUINO-TNG/issues/99): Use new DFPlayer Mini Mp3 v1.2.1 Library
 
 ## Version 3.1.3 (03.08.2023)
 - [Issue 073](https://github.com/tonuino/TonUINO-TNG/issues/73): Support LED or NeoPixel Ring
