@@ -2,7 +2,7 @@
 <html lang="de">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-    <title>TonUINO - Die DIY Musikbox (nicht nur) für Kinder</title>
+    <title>TonUINO - Die DIY Musikbox (nicht nur) f&uuml;r Kinder</title>
     <script src="https://github.com/dbuezas/arduino-web-uploader/releases/download/v1.1.2/main.js"></script>
     <link rel="stylesheet" type="text/css" href="tonuino.css" media="all">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.0/css/all.css" integrity="sha384-Mmxa0mLqhmOeaE8vgOSbKacftZcsNYDjQzuCOm6D02luYSzBG8vpaOykv9lFQ51Y" crossorigin="anonymous">
@@ -16,37 +16,54 @@
 <br>
 <i>TonUINO AiO Online Firmware Updater</i><br>
 <br>
-<i>Benötigt einen aktuellen <a href="https://www.google.com/chrome/">Google Chrome</a> oder <a href="https://www.chromium.org/Home">Chromium</a>!</i><br>
+<i>Ben&ouml;tigt einen aktuellen <a href="https://www.google.com/chrome/">Google Chrome</a> oder <a href="https://www.chromium.org/Home">Chromium</a>!</i><br>
 <br>
 <h1>Anleitung</h1>
 <i class="fas fa-arrow-down fa-2x"></i><br>
 <br>
-<b>1)</b> Schließe die TonUINO AiO Platine an deinen Computer an.<br>
+<b>1)</b> Schlie&szlig;e die TonUINO AiO Platine an deinen Computer an.<br>
 <br>
 <i class="fas fa-arrow-down fa-2x"></i><br>
 <br>
-<b>2)</b> <b>Halte die play/pause Taste gedrückt</b> und klicke auf <b>Firmware Update Starten</b>.<br>
+<b>2)</b> W&auml;hle die gew&uuml;nschten Konfiguration aus.<br>
 <br>
-<b>Hinweis:</b> Die play/pause Taste muss solange gedrückt gehalten werden, bis im Button <b>Done!</b> erscheint!<br>
+<label for="config">Konfiguration:</label>
+<select name="config" id="config" onchange="getconfig(this)">
+  <option value="">Bitte w&auml;hle eine Konfiguration aus --></option>
+  <option value="ALLinONE">ALLinONE 5 Buttons</option>
+  <option value="ALLinONE_3x3">ALLinONE 3x3 Button Board</option>
+</select>
+<script type='text/javascript'> 
+function getconfig(selectObject) {
+  var value = selectObject.value+"/firmware.hex";  
+  //console.log(value);
+  document.getElementById('upload_button').setAttribute("hex-href", value);
+}
+</script>
+<i class="fas fa-arrow-down fa-2x"></i><br>
+<br>
+<b>2)</b> <b>Halte die play/pause Taste gedr&uuml;ckt</b> und klicke auf <b>Firmware Update Starten</b>.<br>
+<br>
+<b>Hinweis:</b> Die play/pause Taste muss solange gedr&uuml;ckt gehalten werden, bis im Button <b>Done!</b> erscheint!<br>
 <br>
 <div id="wrap1">
   <div id="left">
     <dl class="icon">
       <dt>
-        <button arduino-uploader class="button" hex-href="ALLinONE/firmware.hex" board="lgt8f328p" port-filters='[{"usbProductId":46388,"usbVendorId":1241}]'>
+        <button arduino-uploader id=upload_button class="button" hex-href="ALLinONE/firmware.hex" board="lgt8f328p" port-filters='[{"usbProductId":46388,"usbVendorId":1241}]'>
         Firmware Update Starten
         <span class="upload-progress"></span>
         </button>
       </dt>
-      <dd><a href="https://github.com/tonuino/TonUINO-TNG">All-in-One</a> - 5 Tasten</dd>
+      <dd><a href="https://github.com/tonuino/TonUINO-TNG">Sources</a></dd>
     </dl>
   </div>
 </div>
 <i class="fas fa-arrow-down fa-2x"></i><br>
 <br>
-<b>3)</b> Wähle im PopUp Fenster die richtige <b>Schnittstelle</b> [1] und klicke auf <b>Verbinden</b> [2].<br>
+<b>3)</b> W&auml;hle im PopUp Fenster die richtige <b>Schnittstelle</b> [1] und klicke auf <b>Verbinden</b> [2].<br>
 <br>
-<b>Hinweis:</b> Der COM Port kann sich unterscheiden, im Zweifel bitte mit dem Gerätemanager überprüfen.<br>
+<b>Hinweis:</b> Der COM Port kann sich unterscheiden, im Zweifel bitte mit dem Ger&auml;temanager &uuml;berpr&uuml;fen.<br>
 <br>
 <div id="wrap1">
   <div id="left">
@@ -68,9 +85,9 @@
 <br>
 <i class="fas fa-arrow-down fa-2x"></i><br>
 <br>
-<b>5)</b> Du kannst die benötigten Sprachdateien für die SD Karte direkt <a href="sdcard.zip">hier</a> herunterladen<br>
-und dann auf die SD Karte kopieren. Für das Formatieren der SD Karte verwendest du<br>
-am Besten den <a href="https://www.sdcard.org/downloads/formatter/">SD Memory Card Formater</a>. Für Hilfe und alles Weitere, schaue gerne<br>
+<b>5)</b> Du kannst die ben&ouml;tigten Sprachdateien f&uuml;r die SD Karte direkt <a href="sd-card.zip">hier</a> herunterladen<br>
+und dann auf die SD Karte kopieren. F&uuml;r das Formatieren der SD Karte verwendest du<br>
+am Besten den <a href="https://www.sdcard.org/downloads/formatter/">SD Memory Card Formater</a>. F&uuml;r Hilfe und alles Weitere, schaue gerne<br>
 in der <a href="https://discourse.voss.earth">TonUINO Community</a> vorbei.<br>
 <br>
 <i class="fas fa-arrow-down fa-2x"></i><br>
