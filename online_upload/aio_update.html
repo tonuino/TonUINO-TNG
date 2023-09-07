@@ -28,16 +28,22 @@
 <b>2)</b> W&auml;hle die gew&uuml;nschten Konfiguration aus.<br>
 <br>
 <label for="config">Konfiguration:</label>
-<select name="config" id="config" onchange="getconfig(this)">
+<select name="config" id="config" onchange="setconfig(this)">
   <option value="">Bitte w&auml;hle eine Konfiguration aus --></option>
   <option value="ALLinONE">ALLinONE 5 Buttons</option>
   <option value="ALLinONE_3x3">ALLinONE 3x3 Button Board</option>
 </select>
-<script type='text/javascript'> 
-function getconfig(selectObject) {
+<script> 
+function setconfig(selectObject) {
   var value = selectObject.value+"/firmware.hex";  
+  var btn = document.getElementById('upload_button');
+  btn.setAttribute("hex-href", value);
+  if (selectObject.value == "") {
+    btn.disabled = true;
+  } else {
+    btn.disabled = false;
+  }  
   //console.log(value);
-  document.getElementById('upload_button').setAttribute("hex-href", value);
 }
 </script>
 <i class="fas fa-arrow-down fa-2x"></i><br>
@@ -50,7 +56,7 @@ function getconfig(selectObject) {
   <div id="left">
     <dl class="icon">
       <dt>
-        <button arduino-uploader id=upload_button class="button" hex-href="ALLinONE/firmware.hex" board="lgt8f328p" port-filters='[{"usbProductId":46388,"usbVendorId":1241}]'>
+        <button arduino-uploader id=upload_button class="button" hex-href="ALLinONE/firmware.hex" board="lgt8f328p" port-filters='[{"usbProductId":46388,"usbVendorId":1241}]' disabled>
         Firmware Update Starten
         <span class="upload-progress"></span>
         </button>

@@ -23,6 +23,11 @@ button {
     outline: none;
 }
 
+button:disabled {
+    background-color: #333;
+    color: #666;
+}
+
 dl.icon dd {
     margin: 10px;
 }
