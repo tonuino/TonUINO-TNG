@@ -12,6 +12,11 @@ namespace {
 //  138-155       reserved (18 Byte)
 //  156-255       extra Shortcuts (100 Byte, max. 25 Shortcuts)
 
+// Nano:      2048 byte
+// Nano Every: 256 byte
+// AiO:        512 byte (with framework-lgt8fx@1.0.6 emulated)
+// AiOplus:    256 byte
+
 constexpr uint16_t startAddressFolderSettings =   0;
 constexpr uint16_t startAddressAdminSettings  = 100;
 constexpr uint16_t startAddressExtraShortcuts = 156;

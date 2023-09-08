@@ -18,7 +18,7 @@ const __FlashStringHelper* str_bis      () { return F(" bis "); }
 
 void Tonuino::setup() {
 #ifdef BUTTONS3X3
-#ifdef ALLinONE_Plus
+#if defined(ALLinONE_Plus) or defined(TonUINO_Every)
   analogReference(INTERNAL2V5);
 #endif
 #ifdef ALLinONE
@@ -50,8 +50,6 @@ void Tonuino::setup() {
 
   // DFPlayer Mini initialisieren
   mp3.begin();
-  // Zwei Sekunden warten bis der DFPlayer Mini initialisiert ist
-  delay(2000);
   mp3.setVolume();
   mp3.setEq(static_cast<DfMp3_Eq>(settings.eq - 1));
 
