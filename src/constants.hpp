@@ -7,12 +7,13 @@
  * Bitte die passende Platine durch entfernen der Kommentare in einer der folgenden Zeilen auswählen
  */
 //#define TonUINO_Classic
+//#define TonUINO_Every
 //#define ALLinONE
 //#define ALLinONE_Plus
 
 /* uncomment one of the below lines to enable special button support
  * um die Tasten zu konfigurieren, bitte eine der nächsten Zeilen auskommentieren
- * default: THREEBUTTONS for classic
+ * default: THREEBUTTONS for classic/every
  *          FIVEBUTTONS  for AiO and AiO+
  */
 //#define THREEBUTTONS
@@ -91,7 +92,7 @@ inline constexpr uint32_t  buttonLongPressRepeat =  200; // timeout for long pre
  ** Classic ****************************************************************
  ***************************************************************************/
 
-#ifdef TonUINO_Classic
+#if defined(TonUINO_Classic) or defined(TonUINO_Every)
 // ####### buttons #####################################
 
 inline constexpr uint8_t   buttonPausePin  = A0;
@@ -140,7 +141,7 @@ inline constexpr uint8_t       shutdownPin     = 7;
 inline constexpr levelType     shutdownPinType = levelType::activeHigh;
 inline constexpr uint8_t       openAnalogPin   = A7;
 inline constexpr unsigned long cycleTime       = 50;
-#endif /* TonUINO_Classic */
+#endif /* TonUINO_Classic or TonUINO_Every */
 
 /***************************************************************************
  ** AiO plus ***************************************************************

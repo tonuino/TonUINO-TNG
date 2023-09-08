@@ -104,6 +104,10 @@ public:
     {
     }
 
+    void reset()
+    {
+    }
+
     bool called_begin = false;
     void begin(unsigned long baud = 9600)
     {
@@ -195,6 +199,11 @@ public:
     void setVolume(uint8_t volume)
     {
       current_volume = volume;
+    }
+
+    uint8_t getVolume()
+    {
+      return current_volume;
     }
 
     DfMp3_Eq current_eq = DfMp3_Eq_Normal;
