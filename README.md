@@ -45,10 +45,11 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
-## Version 3.1.4 (04.09.2023)
+## Version 3.1.4 (08.09.2023)
 - [Issue 100](https://github.com/tonuino/TonUINO-TNG/issues/100): Support Nano Every with classic HW
 
-## Version 3.1.4 (25.08.2023)
+## Version 3.1.4 (07.09.2023)
+- [Issue 104](https://github.com/tonuino/TonUINO-TNG/issues/104): Use bad framework-lgt8fx
 - [Issue 099](https://github.com/tonuino/TonUINO-TNG/issues/99): Use new DFPlayer Mini Mp3 v1.2.1 Library
 
 ## Version 3.1.3 (03.08.2023)
