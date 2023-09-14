@@ -171,6 +171,9 @@ public:
   void clearAllQueue() { clearFolderQueue(); clearMp3Queue(); }
   bool isPlayingFolder() { return playing == play_folder; }
   bool isPlayingMp3   () { return playing == play_mp3   ; }
+#ifdef DFMiniMp3_T_CHIP_LISP3
+  bool resetPlayingAdv() { bool ret = advPlaying; advPlaying = false; return ret; }
+#endif
   // firstTrack and lastTrack -> index in folder starting with 1
   // currentTrack             -> index in queue starting with 0
   void enqueueTrack(uint8_t folder, uint8_t firstTrack, uint8_t lastTrack, uint8_t currentTrack = 0);
@@ -231,6 +234,10 @@ private:
   Timer                missingOnPlayFinishedTimer{};
   bool                 isPause{};
 #endif
+#ifdef DFMiniMp3_T_CHIP_LISP3
+  bool                 advPlaying{false};
+#endif
+
 };
 
 #endif /* SRC_MP3_HPP_ */

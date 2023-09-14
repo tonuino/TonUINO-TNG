@@ -53,7 +53,7 @@ void Settings::resetSettings() {
   minVolume            =  5;
   initVolume           = 15;
   eq                   =  1;
-  locked               = false;
+  dummy                = false;
   standbyTimer         =  0;
   invertVolumeButtons  = true;
   shortCuts[0]         =  { 0, pmode_t::none, 0, 0 };
@@ -97,7 +97,6 @@ void Settings::loadSettingsFromFlash() {
   LOG(settings_log, s_info, F("Ver:"), version);
   LOG(settings_log, s_info, F("Vol:"), maxVolume, F(" "), minVolume, F(" "), initVolume);
   LOG(settings_log, s_info, F("EQ:" ), eq);
-  LOG(settings_log, s_info, F("LOC:"), locked);
   LOG(settings_log, s_info, F("ST:" ), standbyTimer);
   LOG(settings_log, s_info, F("IB:" ), invertVolumeButtons);
   LOG(settings_log, s_info, F("AL:" ), adminMenuLocked);

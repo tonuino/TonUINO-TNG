@@ -37,7 +37,7 @@ struct Settings {
   uint8_t     minVolume;
   uint8_t     initVolume;
   uint8_t     eq;
-  bool        locked;
+  bool        dummy;
   long        standbyTimer;
   bool        invertVolumeButtons;
   shortCuts_t shortCuts;
