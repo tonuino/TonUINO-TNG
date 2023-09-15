@@ -71,7 +71,7 @@ bool operator==(const Settings &lhs, const Settings &rhs) {
   lhs.minVolume            == rhs.minVolume            &&
   lhs.initVolume           == rhs.initVolume           &&
   lhs.eq                   == rhs.eq                   &&
-  lhs.locked               == rhs.locked               &&
+  lhs.dummy                == rhs.dummy                &&
   lhs.standbyTimer         == rhs.standbyTimer         &&
   lhs.invertVolumeButtons  == rhs.invertVolumeButtons  &&
   lhs.shortCuts[0]         == rhs.shortCuts[0]         &&

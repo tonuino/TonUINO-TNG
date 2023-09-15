@@ -30,6 +30,10 @@ void Mp3Notify::OnPlayFinished(DfMp3&, DfMp3_PlaySources /*source*/, uint16_t tr
     return;
   else
     lastTrackFinished = track;
+#ifdef DFMiniMp3_T_CHIP_LISP3  
+  if (Tonuino::getTonuino().getMp3().resetPlayingAdv())
+    return;
+#endif
   delay(1);
   Tonuino::getTonuino().nextTrack(1/*tracks*/, true/*fromOnPlayFinished*/);
 }
@@ -78,6 +82,9 @@ void Mp3::waitForTrackToStart() {
 
 void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
   LOG(mp3_log, s_info, F("play adv: "), track);
+#ifdef DFMiniMp3_T_CHIP_LISP3
+  advPlaying = true;
+#endif
   if (isPlaying()) {
     LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
