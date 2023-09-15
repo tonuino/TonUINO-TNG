@@ -39,7 +39,7 @@ TEST_F(tonuino_test_fixture, initial_state) {
   EXPECT_EQ(getSettings().minVolume           ,           5);
   EXPECT_EQ(getSettings().initVolume          ,          15);
   EXPECT_EQ(getSettings().eq                  ,           1);
-  EXPECT_EQ(getSettings().locked              ,       false);
+  EXPECT_EQ(getSettings().dummy               ,       false);
   EXPECT_EQ(getSettings().standbyTimer        ,           0);
   EXPECT_EQ(getSettings().invertVolumeButtons ,           1);
   EXPECT_EQ(getSettings().shortCuts[0].folder ,           0);
