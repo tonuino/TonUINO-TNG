@@ -279,7 +279,7 @@ void Mp3::loop() {
   }
   if (missingOnPlayFinishedTimer.isActive() && missingOnPlayFinishedTimer.isExpired()) {
     LOG(mp3_log, s_info, F("missing OnPlayFinished"));
-    playNext();
+    Tonuino::getTonuino().nextTrack(1/*tracks*/, true/*fromOnPlayFinished*/);
   }
   else
 #endif
