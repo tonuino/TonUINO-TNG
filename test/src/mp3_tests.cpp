@@ -99,6 +99,21 @@ TEST_F(mp3_test_fixture, enqueue_folder_tracks) {
   EXPECT_TRUE(mp3.is_stopped());
 }
 
+TEST_F(mp3_test_fixture, enqueue_folder_tracks_no_chrash) {
+  mp3.enqueueTrack(1, 2, 255);
+  execute_cycle();
+
+  for (uint16_t t = 2; t <= 255; ++t) {
+    EXPECT_TRUE(mp3.is_playing_folder());
+    EXPECT_EQ(mp3.df_folder, 1);
+    EXPECT_EQ(mp3.df_folder_track, t);
+    mp3.end_track();
+    execute_cycle();
+    execute_cycle();
+  }
+  EXPECT_TRUE(mp3.is_stopped());
+}
+
 TEST_F(mp3_test_fixture, enqueue_folder_tracks_with_current) {
   mp3.enqueueTrack(1, 2, 12, 3);
   execute_cycle();
