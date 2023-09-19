@@ -124,6 +124,8 @@ void Mp3::enqueueTrack(uint8_t folder, uint8_t firstTrack, uint8_t lastTrack, ui
   for (uint8_t i = firstTrack; i<=lastTrack; ++i) {
     LOG(mp3_log, s_info, i, str_Space(), lf_no);
     q.push(i);
+    if (i == 0xffu)
+      break;
   }
   LOG(mp3_log, s_info, str_Space());
   current_track = currentTrack;
