@@ -45,10 +45,11 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
-## Version 3.1.4 (18.09.2023)
+## Version 3.1.4 (20.09.2023)
 - [Issue 103](https://github.com/tonuino/TonUINO-TNG/issues/103): Deploy pages for online upload
 
-## Version 3.1.4 (17.09.2023)
+## Version 3.1.4 (19.09.2023)
+- [Issue 111](https://github.com/tonuino/TonUINO-TNG/issues/111): TonUINO crashes if if the player gives a track count >255
 - [Issue 108](https://github.com/tonuino/TonUINO-TNG/issues/108): Missing OnPlayFinished: the progress is not saved for Hoerbuch mode
 - [Issue 106](https://github.com/tonuino/TonUINO-TNG/issues/106): Support LISP3 DF Player
 - [Issue 100](https://github.com/tonuino/TonUINO-TNG/issues/100): Support Nano Every with classic HW
