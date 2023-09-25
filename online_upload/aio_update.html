@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="de">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>TonUINO - Die DIY Musikbox (nicht nur) f&uuml;r Kinder</title>
+    <script src="https://github.com/dbuezas/arduino-web-uploader/releases/download/v1.1.2/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="tonuino.css" media="all">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.0/css/all.css" integrity="sha384-Mmxa0mLqhmOeaE8vgOSbKacftZcsNYDjQzuCOm6D02luYSzBG8vpaOykv9lFQ51Y" crossorigin="anonymous">
+  </head>
+  <body>
+<!-- content starts -->
+
+<center>
+<br>
+<a href="index.html"><img src="tonuino_logo_wide.png" alt="tonuino logo" width="500"></a><br>
+<br>
+<i>TonUINO AiO Online Firmware Updater</i><br>
+<br>
+<i>Ben&ouml;tigt einen aktuellen <a href="https://www.google.com/chrome/">Google Chrome</a> oder <a href="https://www.chromium.org/Home">Chromium</a>!</i><br>
+<br>
+<h1>Anleitung</h1>
+<i class="fas fa-arrow-down fa-2x"></i><br>
+<br>
+<b>1)</b> Schlie&szlig;e die TonUINO AiO Platine an deinen Computer an.<br>
+<br>
+<i class="fas fa-arrow-down fa-2x"></i><br>
+<br>
+<b>2)</b> W&auml;hle die gew&uuml;nschten Konfiguration aus.<br>
+<br>
+<label for="config">Konfiguration:</label>
+<select name="config" id="config" onchange="setconfig(this)">
+  <option value="">Bitte w&auml;hle eine Konfiguration aus --></option>
+  <option value="ALLinONE">ALLinONE 5 Buttons</option>
+  <option value="ALLinONE_3x3">ALLinONE 3x3 Button Board</option>
+</select>
+<script> 
+function setconfig(selectObject) {
+  var value = selectObject.value+"/firmware.hex";  
+  var btn = document.getElementById('upload_button');
+  btn.setAttribute("hex-href", value);
+  if (selectObject.value == "") {
+    btn.disabled = true;
+  } else {
+    btn.disabled = false;
+  }  
+  //console.log(value);
+}
+</script>
+<i class="fas fa-arrow-down fa-2x"></i><br>
+<br>
+<b>2)</b> <b>Halte die play/pause Taste gedr&uuml;ckt</b> und klicke auf <b>Firmware Update Starten</b>.<br>
+<br>
+<b>Hinweis:</b> Die play/pause Taste muss solange gedr&uuml;ckt gehalten werden, bis im Button <b>Done!</b> erscheint!<br>
+<br>
+<div id="wrap1">
+  <div id="left">
+    <dl class="icon">
+      <dt>
+        <button arduino-uploader id=upload_button class="button" hex-href="ALLinONE/firmware.hex" board="lgt8f328p" port-filters='[{"usbProductId":46388,"usbVendorId":1241}]' disabled>
+        Firmware Update Starten
+        <span class="upload-progress"></span>
+        </button>
+      </dt>
+      <dd><a href="https://github.com/tonuino/TonUINO-TNG">Sources</a></dd>
+    </dl>
+  </div>
+</div>
+<i class="fas fa-arrow-down fa-2x"></i><br>
+<br>
+<b>3)</b> W&auml;hle im PopUp Fenster die richtige <b>Schnittstelle</b> [1] und klicke auf <b>Verbinden</b> [2].<br>
+<br>
+<b>Hinweis:</b> Der COM Port kann sich unterscheiden, im Zweifel bitte mit dem Ger&auml;temanager &uuml;berpr&uuml;fen.<br>
+<br>
+<div id="wrap1">
+  <div id="left">
+    <dl class="icon">
+      <dt><img class="help" src="aio_windows.png" alt="windows" width="300"></dt>
+      <dd>Windows</dd>
+    </dl>
+  </div>
+  <div id="right">
+    <dl class="icon">
+      <dt><img class="help" src="aio_macos.png" alt="macos" width="300"></dt>
+      <dd>macOS</dd>
+    </dl>
+  </div>
+</div><br>
+<i class="fas fa-arrow-down fa-2x"></i><br>
+<br>
+<b>4)</b> Im Button erscheint <b>Done!</b>, sobald das Firmware Update abgeschlossen ist.<br>
+<br>
+<i class="fas fa-arrow-down fa-2x"></i><br>
+<br>
+<b>5)</b> Du kannst die ben&ouml;tigten Sprachdateien f&uuml;r die SD Karte direkt <a href="sd-card.zip">hier</a> herunterladen<br>
+und dann auf die SD Karte kopieren. F&uuml;r das Formatieren der SD Karte verwendest du<br>
+am Besten den <a href="https://www.sdcard.org/downloads/formatter/">SD Memory Card Formater</a>. F&uuml;r Hilfe und alles Weitere, schaue gerne<br>
+in der <a href="https://discourse.voss.earth">TonUINO Community</a> vorbei.<br>
+<br>
+<i class="fas fa-arrow-down fa-2x"></i><br>
+<br>
+<i class="fas fa-smile fa-8x"></i><br>
+<br><br>
+powered by David Buezas' <a href="https://github.com/dbuezas/arduino-web-uploader">arduino-web-uploader</a><br>
+<br>
+</center>
+
+<!-- content ends -->
+  </body>
+</html>

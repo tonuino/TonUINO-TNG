@@ -1,0 +1,161 @@
+<style>
+    * {
+        background-color: #81DAF5;
+        font-family: monospace;
+        color: #000000;
+        padding: 0px;
+    }
+
+    button,
+    datalist {
+        background-color: #DEDEDE;
+    }
+
+    input[type=text] {
+        color: #000000;
+        background-color: #FFFFFF;
+        border: 1px solid;
+    }
+
+    #serialResults {
+        font-family: monospace;
+        white-space: pre;
+        height: calc(100% - 120px);
+        width: calc(100% - 20px);
+        border-style: solid;
+        overflow: scroll;
+        background-color: #BBEEFF;
+        padding: 10px;
+        margin: 0px;
+    }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TonUINO - Die DIY Musikbox (nicht nur) fuer Kinder</title>
+
+<button onclick="connectSerial()">Verbinden</button>
+Baud:
+<input type="text" id="baud" list="baudList" style="width: 10ch;" onclick="this.value = ''"
+    onchange="localStorage.baud = this.value">
+<datalist id="baudList">
+    <option value="110">110</option>
+    <option value="300">300</option>
+    <option value="600">600</option>
+    <option value="1200">1200</option>
+    <option value="2400">2400</option>
+    <option value="4800">4800</option>
+    <option value="9600">9600</option>
+    <option value="14400">14400</option>
+    <option value="19200">19200</option>
+    <option value="38400">38400</option>
+    <option value="57600">57600</option>
+    <option value="115200">115200</option>
+    <option value="128000">128000</option>
+    <option value="256000">256000</option>
+</datalist>
+<button onclick="serialResultsDiv.innerHTML = '';">Loeschen</button>
+
+<br>
+<input type="text" id="lineToSend" style="width:calc(100% - 175px)">
+<button onclick="sendSerialLine()" style="width:55px">Senden</button>
+<button onclick="sendCharacterNumber()" style="width:100px">Char Senden</button>
+<br>
+
+<input type="checkbox" id="addLine" onclick="localStorage.addLine = this.checked;" checked>
+<label for="addLine">Mit \r\n Senden</label>
+
+<input type="checkbox" id="echoOn" onclick="localStorage.echoOn = this.checked;" checked>
+<label for="echoOn">Lokales Echo</label>
+
+<br>
+<div id="serialResults">
+</div>
+
+<script>
+    var port, textEncoder, writableStreamClosed, writer, historyIndex = -1;
+    const lineHistory = [];
+
+    async function connectSerial() {
+        try {
+            // Prompt user to select any serial port.
+            port = await navigator.serial.requestPort();
+            await port.open({ baudRate: document.getElementById("baud").value });
+            listenToPort();
+
+            textEncoder = new TextEncoderStream();
+            writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+
+            writer = textEncoder.writable.getWriter();
+        } catch {
+            alert("Serial Connection Failed");
+        }
+    }
+
+    async function sendCharacterNumber(){
+       document.getElementById("lineToSend").value = String.fromCharCode(document.getElementById("lineToSend").value);
+    }
+   
+    async function sendSerialLine() {
+        dataToSend = document.getElementById("lineToSend").value;
+        lineHistory.unshift(dataToSend);
+        historyIndex = -1; // No history entry selected
+        if (document.getElementById("addLine").checked == true) dataToSend = dataToSend + "\r\n";
+        if (document.getElementById("echoOn").checked == true) appendToTerminal("> " + dataToSend);
+        await writer.write(dataToSend);
+        document.getElementById("lineToSend").value = "";
+        //await writer.releaseLock();
+    }
+
+    async function listenToPort() {
+        const textDecoder = new TextDecoderStream();
+        const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+        const reader = textDecoder.readable.getReader();
+
+        // Listen to data coming from the serial device.
+        while (true) {
+            const { value, done } = await reader.read();
+            if (done) {
+                // Allow the serial port to be closed later.
+                //reader.releaseLock();
+                break;
+            }
+            // value is a string.
+            appendToTerminal(value);
+        }
+    }
+
+    const serialResultsDiv = document.getElementById("serialResults");
+
+    async function appendToTerminal(newStuff) {
+        serialResultsDiv.innerHTML += newStuff;
+        if (serialResultsDiv.innerHTML.length > 3000) serialResultsDiv.innerHTML = serialResultsDiv.innerHTML.slice(serialResultsDiv.innerHTML.length - 3000);
+
+        //scroll down to bottom of div
+        serialResultsDiv.scrollTop = serialResultsDiv.scrollHeight;
+    }
+
+    function scrollHistory(direction) {
+        // Clamp the value between -1 and history length
+        historyIndex = Math.max(Math.min(historyIndex + direction, lineHistory.length - 1), -1);
+        if (historyIndex >= 0) {
+            document.getElementById("lineToSend").value = lineHistory[historyIndex];
+        } else {
+            document.getElementById("lineToSend").value = "";
+        }
+    }
+
+    document.getElementById("lineToSend").addEventListener("keyup", async function (event) {
+        if (event.keyCode === 13) {
+            sendSerialLine();
+        } else if (event.keyCode === 38) { // Key up
+            scrollHistory(1);
+        } else if (event.keyCode === 40) { // Key down
+            scrollHistory(-1);
+        }
+    })
+
+    document.getElementById("baud").value = (localStorage.baud == undefined ? 115200 : localStorage.baud);
+    document.getElementById("addLine").checked = (localStorage.addLine == "false" ? false : true);
+    document.getElementById("echoOn").checked = (localStorage.echoOn == "false" ? false : true);
+
+</script>
+<br>powered by Mike Molinaris' <a href="https://github.com/mmiscool/serialTerminal.com">serialTerminal.com</a>
