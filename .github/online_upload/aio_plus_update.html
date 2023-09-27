@@ -14,24 +14,26 @@
 <br>
 <a href="index.html"><img src="tonuino_logo_wide.png" alt="tonuino logo" width="500"></a><br>
 <br>
-<i>TonUINO AiO Online Firmware Updater</i><br>
+<i>TonUINO AiO Plus Online Firmware Uploader</i><br>
 <br>
 <i>Ben&ouml;tigt einen aktuellen <a href="https://www.google.com/chrome/">Google Chrome</a> oder <a href="https://www.chromium.org/Home">Chromium</a>!</i><br>
 <br>
 <h1>Anleitung</h1>
 <i class="fas fa-arrow-down fa-2x"></i><br>
 <br>
-<b>1)</b> Schlie&szlig;e die TonUINO AiO Platine an deinen Computer an.<br>
+<b>1)</b> Schlie&szlig;e die TonUINO AiO Plus Platine an deinen Computer an.<br>
+<br>
+<b>Hinweis:</b> Der passende Treiber (<a href="http://wch.cn/downloads/CH341SER_ZIP.html">Windows</a> - <a href="http://wch.cn/downloads/CH34xSER_MAC_ZIP.html">macOS (nur &auml;ltere Versionen)</a>) f&uuml;r die CH340 USB Bridge muss bereits installiert sein.<br>
 <br>
 <i class="fas fa-arrow-down fa-2x"></i><br>
 <br>
 <b>2)</b> W&auml;hle die gew&uuml;nschten Konfiguration aus.<br>
 <br>
 <label for="config">Konfiguration:</label>
-<select name="config" id="config" onchange="setconfig(this)">
+<select class="config" name="config" id="config" onchange="setconfig(this)">
   <option value="">Bitte w&auml;hle eine Konfiguration aus --></option>
-  <option value="ALLinONE">ALLinONE 5 Buttons</option>
-  <option value="ALLinONE_3x3">ALLinONE 3x3 Button Board</option>
+  <option value="ALLinONE_Plus">ALLinONE_Plus 5 Buttons</option>
+  <option value="ALLinONE_Plus_3x3">ALLinONE_Plus 3x3 Button Board</option>
 </select>
 <script> 
 function setconfig(selectObject) {
@@ -46,9 +48,10 @@ function setconfig(selectObject) {
   //console.log(value);
 }
 </script>
+<br>
 <i class="fas fa-arrow-down fa-2x"></i><br>
 <br>
-<b>2)</b> <b>Halte die play/pause Taste gedr&uuml;ckt</b> und klicke auf <b>Firmware Update Starten</b>.<br>
+<b>3)</b> <b>Halte die play/pause Taste gedr&uuml;ckt</b> und klicke auf <b>Firmware Upload Starten</b>.<br>
 <br>
 <b>Hinweis:</b> Die play/pause Taste muss solange gedr&uuml;ckt gehalten werden, bis im Button <b>Done!</b> erscheint!<br>
 <br>
@@ -56,38 +59,38 @@ function setconfig(selectObject) {
   <div id="left">
     <dl class="icon">
       <dt>
-        <button arduino-uploader id=upload_button class="button" hex-href="ALLinONE/firmware.hex" board="lgt8f328p" port-filters='[{"usbProductId":46388,"usbVendorId":1241}]' disabled>
-        Firmware Update Starten
+        <button arduino-uploader id=upload_button class="button" hex-href="ALLinONE_Plus/firmware.hex" board="avr4809" disabled>
+        Firmware Upload Starten
         <span class="upload-progress"></span>
         </button>
       </dt>
-      <dd><a href="https://github.com/tonuino/TonUINO-TNG">Sources</a></dd>
+      <dd><a href="https://github.com/tonuino/TonUINO-TNG">Sourcecode auf Github</a></dd>
     </dl>
   </div>
 </div>
 <i class="fas fa-arrow-down fa-2x"></i><br>
 <br>
-<b>3)</b> W&auml;hle im PopUp Fenster die richtige <b>Schnittstelle</b> [1] und klicke auf <b>Verbinden</b> [2].<br>
+<b>4)</b> W&auml;hle im PopUp Fenster die richtige <b>Schnittstelle</b> [1] und klicke auf <b>Verbinden</b> [2].<br>
 <br>
 <b>Hinweis:</b> Der COM Port kann sich unterscheiden, im Zweifel bitte mit dem Ger&auml;temanager &uuml;berpr&uuml;fen.<br>
 <br>
 <div id="wrap1">
   <div id="left">
     <dl class="icon">
-      <dt><img class="help" src="aio_windows.png" alt="windows" width="300"></dt>
+      <dt><img class="help" src="aio_plus_windows.png" alt="windows" width="300"></dt>
       <dd>Windows</dd>
     </dl>
   </div>
   <div id="right">
     <dl class="icon">
-      <dt><img class="help" src="aio_macos.png" alt="macos" width="300"></dt>
+      <dt><img class="help" src="aio_plus_macos.png" alt="macos" width="300"></dt>
       <dd>macOS</dd>
     </dl>
   </div>
 </div><br>
 <i class="fas fa-arrow-down fa-2x"></i><br>
 <br>
-<b>4)</b> Im Button erscheint <b>Done!</b>, sobald das Firmware Update abgeschlossen ist.<br>
+<b>5)</b> Im Button erscheint <b>Done!</b>, sobald das Firmware Upload abgeschlossen ist.<br>
 <br>
 <i class="fas fa-arrow-down fa-2x"></i><br>
 <br>

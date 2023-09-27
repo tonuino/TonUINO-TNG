@@ -60,7 +60,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: TonUINO_online_upload
-          path: online_upload
+          path: .github/online_upload
 
   deploy:
     needs: build

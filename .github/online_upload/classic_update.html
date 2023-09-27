@@ -14,7 +14,7 @@
 <br>
 <a href="index.html"><img src="tonuino_logo_wide.png" alt="tonuino logo" width="500"></a><br>
 <br>
-<i>TonUINO Classic Online Firmware Updater</i><br>
+<i>TonUINO Classic Online Firmware Uploader</i><br>
 <br>
 <i>Ben&ouml;tigt einen aktuellen <a href="https://www.google.com/chrome/">Google Chrome</a> oder <a href="https://www.chromium.org/Home">Chromium</a>!</i><br>
 <br>
@@ -30,7 +30,7 @@
 <b>2)</b> W&auml;hle die gew&uuml;nschten Konfiguration aus.<br>
 <br>
 <label for="config">Konfiguration:</label>
-<select name="config" id="config" onchange="setconfig(this)">
+<select class="config" name="config" id="config" onchange="setconfig(this)">
   <option value="">Bitte w&auml;hle eine Konfiguration aus --></option>
   <option value="TonUINO_Classic_3">TonUINO Classic 3 Buttons</option>
   <option value="TonUINO_Classic_5">TonUINO Classic 5 Buttons</option>
@@ -52,24 +52,24 @@ function setconfig(selectObject) {
 <br>
 <i class="fas fa-arrow-down fa-2x"></i><br>
 <br>
-<b>2)</b> Klicke auf <b>Firmware Update Starten</b>.<br>
+<b>3)</b> Klicke auf <b>Firmware Upload Starten</b>.<br>
 <br>
 <div id="wrap1">
   <div id="left">
     <dl class="icon">
       <dt>
         <button arduino-uploader id=upload_button class="button" hex-href="TonUINO_Classic_3/firmware.hex" board="nanoOldBootloader" disabled>
-        Firmware Update Starten
+        Firmware Upload Starten
         <span class="upload-progress"></span>
         </button>
       </dt>
-      <dd><a href="https://github.com/tonuino/TonUINO-TNG">Sources</a></dd>
+      <dd><a href="https://github.com/tonuino/TonUINO-TNG">Sourcecode auf Github</a></dd>
     </dl>
   </div>
 </div>
 <i class="fas fa-arrow-down fa-2x"></i><br>
 <br>
-<b>3)</b> W&auml;hle im PopUp Fenster die richtige <b>Schnittstelle</b> [1] und klicke auf <b>Verbinden</b> [2].<br>
+<b>4)</b> W&auml;hle im PopUp Fenster die richtige <b>Schnittstelle</b> [1] und klicke auf <b>Verbinden</b> [2].<br>
 <br>
 <b>Hinweis:</b> Der COM Port kann sich unterscheiden, im Zweifel bitte mit dem Ger&auml;temanager &uuml;berpr&uuml;fen.<br>
 <br>
@@ -89,7 +89,7 @@ function setconfig(selectObject) {
 </div><br>
 <i class="fas fa-arrow-down fa-2x"></i><br>
 <br>
-<b>4)</b> Im Button erscheint <b>Done!</b>, sobald das Firmware Update abgeschlossen ist.<br>
+<b>5)</b> Im Button erscheint <b>Done!</b>, sobald das Firmware Upload abgeschlossen ist.<br>
 <br>
 <i class="fas fa-arrow-down fa-2x"></i><br>
 <br>

@@ -41,6 +41,30 @@ img.logo {
     margin-top: 100px;
 }
 
+select option{
+    font-size: 11pt;
+}
+
+select option:first-child {
+    font-size: 9pt;
+}
+
+select.config {
+    overflow: hidden;
+    background-color: #000000;
+    border: 4px solid #000000;
+    border-radius: 20px;
+    color: white;
+    padding: 15px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 11pt;
+    margin: 4px 2px;
+    cursor: pointer;
+    outline: none;
+}
+
 #wrap0 {
     padding-top: 60px;
     padding-bottom: 30px;
@@ -63,3 +87,4 @@ img.logo {
      display: inline-block;
      padding: 10px;
 }
+
