@@ -176,6 +176,15 @@ void Buttons::readButtons() {
   buttonPause.read();
   buttonUp   .read();
   buttonDown .read();
+
+  if (millis()>3000 && digitalRead(powerswitchPin)) //SHUTDOWN
+  { 
+   mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
+   mp3.loop();
+   delay(1000);
+   tonuino.shutdown();
+  }
+  
 #ifdef FIVEBUTTONS
   buttonFour .read();
   buttonFive .read();
