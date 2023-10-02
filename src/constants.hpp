@@ -118,7 +118,7 @@ inline constexpr uint32_t  buttonDbTime    = 25; // Debounce time in millisecond
 
 // ####### chip_card ###################################
 
-inline constexpr uint32_t cardCookie      = 0x1337b347;
+inline constexpr uint32_t cardCookie      = 322417479;  // 0x1337b347
 inline constexpr uint8_t  cardVersion     = 0x02;
 inline constexpr byte     mfrc522_RSTPin  =  9;
 inline constexpr byte     mfrc522_SSPin   = 10;
@@ -138,7 +138,8 @@ inline constexpr unsigned long dfPlayer_timeUntilStarts = 1000;
 
 // ####### tonuino #####################################
 
-inline constexpr uint8_t       shutdownPin     = 7;
+inline constexpr uint8_t       shutdownPin     = 8;
+inline constexpr uint8_t       powerswitchPin  = 6;
 inline constexpr levelType     shutdownPinType = levelType::activeHigh;
 inline constexpr uint8_t       openAnalogPin   = A7;
 inline constexpr unsigned long cycleTime       = 50;
