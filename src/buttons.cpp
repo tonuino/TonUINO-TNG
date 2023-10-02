@@ -18,9 +18,10 @@ Buttons::Buttons()
 , buttonFive (buttonFivePin , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
 #endif
 {
-  buttonPause.begin();
-  buttonUp   .begin();
-  buttonDown .begin();
+  buttonPause    .begin();
+  buttonUp       .begin();
+  buttonDown     .begin();
+  //buttonShutdown .begin();
 #ifdef FIVEBUTTONS
   buttonFour .begin();
   buttonFive .begin();
@@ -151,6 +152,10 @@ commandRaw Buttons::getCommandRaw() {
   if (ret != commandRaw::none) {
     LOG(button_log, s_debug, F("Button raw: "), static_cast<uint8_t>(ret));
   }
+
+  /*if (buttonShutdown.pressedFor(200) && millis()> 3000)
+  {ret = commandRaw::pauseLong;}*/
+
   return ret;
 }
 
@@ -173,17 +178,11 @@ bool Buttons::isReset() {
 }
 
 void Buttons::readButtons() {
-  buttonPause.read();
-  buttonUp   .read();
-  buttonDown .read();
+  buttonPause   .read();
+  buttonUp      .read();
+  buttonDown    .read();
+  //buttonShutdown.read();
 
-  if (millis()>3000 && digitalRead(powerswitchPin)) //SHUTDOWN
-  { 
-   mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
-   mp3.loop();
-   delay(1000);
-   tonuino.shutdown();
-  }
   
 #ifdef FIVEBUTTONS
   buttonFour .read();

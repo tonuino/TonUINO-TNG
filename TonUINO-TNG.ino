@@ -26,6 +26,7 @@ Bitte wählt eure TonUINO-Platine (Classic, AiO oder AiO+) in der Datei constant
 void setup()
 {
   Serial.begin(115200);
+  
 
   // Dieser Hinweis darf nicht entfernt werden
   LOG(init_log, s_error, F("\n _____         _____ _____ _____ _____"));
@@ -43,4 +44,9 @@ void setup()
 void loop()
 {
   Tonuino::getTonuino().loop();
+
+  if (millis()>3000 && digitalRead(powerswitchPin))
+  {
+    digitalWrite(shutdownPin,1);
+  }
 }

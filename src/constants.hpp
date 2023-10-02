@@ -40,7 +40,7 @@
 /* uncomment the below line to disable shutdown via button (long press play/pause)
  * um ein Shutdown via Taste (long press Play/Pause) zu unterdrücken bitte in der nächste Zeile den Kommentar entfernen
  */
-#define DISABLE_SHUTDOWN_VIA_BUTTON
+//#define DISABLE_SHUTDOWN_VIA_BUTTON
 
 /* uncomment the below line to enable the rotary encoder for volume setting (only for AiOplus)
  * um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen (nur für AioPlus)

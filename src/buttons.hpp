@@ -22,6 +22,7 @@ private:
   Button buttonPause;
   Button buttonUp   ;
   Button buttonDown ;
+  //Button buttonShutdown;
 #ifdef FIVEBUTTONS
   Button  buttonFour;
   Button  buttonFive;
