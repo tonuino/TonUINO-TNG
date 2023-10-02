@@ -6,7 +6,7 @@
 /* Select the right PCB by uncommenting one of the following lines
  * Bitte die passende Platine durch entfernen der Kommentare in einer der folgenden Zeilen auswählen
  */
-//#define TonUINO_Classic
+#define TonUINO_Classic
 //#define TonUINO_Every
 //#define ALLinONE
 //#define ALLinONE_Plus
@@ -16,7 +16,7 @@
  * default: THREEBUTTONS for classic/every
  *          FIVEBUTTONS  for AiO and AiO+
  */
-//#define THREEBUTTONS
+#define THREEBUTTONS
 //#define FIVEBUTTONS
 //#define BUTTONS3X3
 
@@ -40,7 +40,7 @@
 /* uncomment the below line to disable shutdown via button (long press play/pause)
  * um ein Shutdown via Taste (long press Play/Pause) zu unterdrücken bitte in der nächste Zeile den Kommentar entfernen
  */
-//#define DISABLE_SHUTDOWN_VIA_BUTTON
+#define DISABLE_SHUTDOWN_VIA_BUTTON
 
 /* uncomment the below line to enable the rotary encoder for volume setting (only for AiOplus)
  * um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen (nur für AioPlus)
