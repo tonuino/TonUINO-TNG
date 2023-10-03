@@ -258,11 +258,13 @@ void Mp3::decreaseVolume() {
 void Mp3::setVolume() {
   volume = settings.initVolume;
   LOG(mp3_log, s_debug, F("setVolume: "), volume);
-  while(Base::getVolume() != volume) {
+  uint8_t max_loop = 20; // 4 seconds
+  while((--max_loop>0) && (Base::getVolume() != volume)) {
     delay(100);
     Base::setVolume(volume);
     delay(100);
   }
+  LOG(mp3_log, s_debug, F("setVolume loops: "), 20-max_loop);
   logVolume();
 }
 
