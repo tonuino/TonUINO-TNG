@@ -1,11 +1,15 @@
 # TonUINO
 Die DIY Musikbox (nicht nur) für Kinder
 
+Dies ist die offizielle Software für die Musikbox, die [hier](https://www.tonuino.de/TNG) beschrieben ist. 
+
 # Anleitung zum Compilieren
 
 Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TNG](https://www.tonuino.de/TNG) und hier [www.leiterkartenpiraten.de](https://www.leiterkartenpiraten.de)
 
 ## Arduino IDE
+- Es ist unbedingt darauf zu achten, das das Verzeichnis in das das Repository gecloned oder heruntergeladen wird (also das Verzeichnis, in dem schließlich auch die TonUINO-TNG.ino zu finden ist, genau so heißt, wie die ino Datei, also in diesem Fall "TonUINO-TNG"!
+
 - Bei der classic und AiO HW Variante muss die Datei 'platform.local.txt' in den avr HW Ordner kopiert werden. Dieser Ordner ist gewöhnlich folgender:  
 
 ```
