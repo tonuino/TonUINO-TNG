@@ -197,6 +197,8 @@ public:
   void increaseVolume();
   void decreaseVolume();
   void setVolume     ();
+  void setVolume     (uint8_t);
+  uint8_t getVolume  () const { return volume; }
   void loop          ();
 
 private:

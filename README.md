@@ -3,6 +3,8 @@ Die DIY Musikbox (nicht nur) für Kinder
 
 Dies ist die offizielle Software für die Musikbox, die [hier](https://www.tonuino.de/TNG) beschrieben ist. 
 
+Falls du Interesse daran hast, zur Weiterentwicklung des TonUINO-Projekts beizutragen, bist du herzlich eingeladen, dich zu beteiligen. Für Diskussionen verwende bitte das [Forum](https://discourse.voss.earth). Dort findest du auch weitere Anleitungen und bekommst Hilfe bei Problemen. 
+
 # Anleitung zum Compilieren
 
 Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TNG](https://www.tonuino.de/TNG) und hier [www.leiterkartenpiraten.de](https://www.leiterkartenpiraten.de)
@@ -49,10 +51,11 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
+## Version 3.1.4 (06.10.2023)
+- [Issue 117](https://github.com/tonuino/TonUINO-TNG/issues/117): Support potentiometer for setting the volume
+
 ## Version 3.1.4 (03.10.2023)
 - [Issue 115](https://github.com/tonuino/TonUINO-TNG/issues/115): Sometimes initial SetVolume does not come to an end
-
-## Version 3.1.4 (20.09.2023)
 - [Issue 103](https://github.com/tonuino/TonUINO-TNG/issues/103): Deploy pages for online upload
 - [Issue 111](https://github.com/tonuino/TonUINO-TNG/issues/111): TonUINO crashes if if the player gives a track count >255
 - [Issue 108](https://github.com/tonuino/TonUINO-TNG/issues/108): Missing OnPlayFinished: the progress is not saved for Hoerbuch mode
