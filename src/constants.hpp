@@ -53,7 +53,7 @@ inline constexpr uint8_t   rotaryEncoderDtPin     = 32;
  * um den Poti zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
  */
 //#define POTI
-inline constexpr uint8_t   potiPin    = A14; // AiO+ PF4
+//inline constexpr uint8_t   potiPin    = A14; // AiO+ PF4
 
 /* uncomment the below line to enable the neo ring
  * um den Neo Ring zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
