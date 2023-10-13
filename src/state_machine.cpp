@@ -666,7 +666,7 @@ void StartPlay::react(command_e const &/*cmd_e*/) {
   if (timer.isActive()) {
     if (timer.isExpired()) {
       LOG(state_log, s_debug, str_StartPlay(), str_to(), str_Play());
-      if (settings.pauseWhenCardRemoved && chip_card.isCardRemoved())
+      if (settings.pauseWhenCardRemoved && chip_card.isCardRemoved() && tonuino.playingCard())
         transit<Pause>();
       else
         transit<Play>();
