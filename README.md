@@ -49,10 +49,11 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
+## Version 3.1.4 (08.10.2023)
+- [Issue 118](https://github.com/tonuino/TonUINO-TNG/issues/118): In modus pause_if_card_removed no shortcut is played
+
 ## Version 3.1.4 (03.10.2023)
 - [Issue 115](https://github.com/tonuino/TonUINO-TNG/issues/115): Sometimes initial SetVolume does not come to an end
-
-## Version 3.1.4 (20.09.2023)
 - [Issue 103](https://github.com/tonuino/TonUINO-TNG/issues/103): Deploy pages for online upload
 - [Issue 111](https://github.com/tonuino/TonUINO-TNG/issues/111): TonUINO crashes if if the player gives a track count >255
 - [Issue 108](https://github.com/tonuino/TonUINO-TNG/issues/108): Missing OnPlayFinished: the progress is not saved for Hoerbuch mode
