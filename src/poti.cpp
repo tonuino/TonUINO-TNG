@@ -23,12 +23,10 @@ Poti::Poti(const Settings& settings, Mp3& mp3)
 
 commandRaw Poti::getCommandRaw() {
   const uint8_t volume = map( analogRead(potiPin), 0, maxLevel, settings.minVolume, settings.maxVolume);
-  LOG(button_log, s_debug, F("poti volume: "), volume);
 
   if (volume != mp3.getVolume()) {
-    LOG(button_log, s_debug, F("start setVolume"));
+    LOG(button_log, s_debug, F("poti volume: "), volume);
     mp3.setVolume(volume);
-    LOG(button_log, s_debug, F("finished setVolume"));
   }
 
   return commandRaw::none;
