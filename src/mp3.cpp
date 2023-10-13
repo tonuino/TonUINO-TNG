@@ -268,6 +268,13 @@ void Mp3::setVolume() {
   logVolume();
 }
 
+void Mp3::setVolume(uint8_t v) {
+  volume = v;
+  LOG(mp3_log, s_debug, F("setVolume: "), volume);
+  Base::setVolume(volume);
+  logVolume();
+}
+
 void Mp3::logVolume() {
   LOG(mp3_log, s_info, F("Volume: "), volume);
 }
