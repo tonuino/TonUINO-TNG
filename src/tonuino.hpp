@@ -39,6 +39,7 @@ public:
   const nfcTagObject& getCard() const           { return myCard; }
   void setFolder(folderSettings *newFolder    ) { myFolder = newFolder; }
   uint8_t getFolder()                           { return myFolder->folder; }
+  bool playingCard()                            { return myFolder == &myCard.nfcFolderSettings; }
 
   Mp3&      getMp3      () { return mp3      ; }
   Commands& getCommands () { return commands ; }
