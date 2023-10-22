@@ -585,7 +585,7 @@ void Play::react(card_e const &c_e) {
       handleReadCard();
     return;
   case cardEvent::removed:
-    if (settings.pauseWhenCardRemoved && not tonuino.getActiveModifier().handleButton(command::pause)) {
+    if ((settings.pauseWhenCardRemoved==1) && not tonuino.getActiveModifier().handleButton(command::pause)) {
       transit<Pause>();
       return;
     }
@@ -640,7 +640,7 @@ void Pause::react(card_e const &c_e) {
   switch (c_e.card_ev) {
   case cardEvent::inserted:
     if (readCard()) {
-      if (settings.pauseWhenCardRemoved && tonuino.getCard() == lastCardRead && not tonuino.getActiveModifier().handleButton(command::pause)) {
+      if ((settings.pauseWhenCardRemoved==1) && tonuino.getCard() == lastCardRead && not tonuino.getActiveModifier().handleButton(command::pause)) {
         transit<Play>();
         return;
       }
@@ -666,7 +666,7 @@ void StartPlay::react(command_e const &/*cmd_e*/) {
   if (timer.isActive()) {
     if (timer.isExpired()) {
       LOG(state_log, s_debug, str_StartPlay(), str_to(), str_Play());
-      if (settings.pauseWhenCardRemoved && chip_card.isCardRemoved() && tonuino.playingCard())
+      if ((settings.pauseWhenCardRemoved==1) && chip_card.isCardRemoved() && tonuino.playingCard())
         transit<Pause>();
       else
         transit<Play>();
@@ -1341,8 +1341,8 @@ void Admin_InvButtons::react(command_e const &cmd_e) {
 
   if (Commands::isSelect(cmd) && (currentValue != 0)) {
     switch (currentValue) {
-    case 1: settings.invertVolumeButtons = false; break;
-    case 2: settings.invertVolumeButtons = true ; break;
+    case 1: settings.invertVolumeButtons = 0; break;
+    case 2: settings.invertVolumeButtons = 1; break;
     }
     saveAndTransit();
     return;
@@ -1450,8 +1450,8 @@ void Admin_PauseIfCardRemoved::react(command_e const &cmd_e) {
 
   if (Commands::isSelect(cmd) && (currentValue != 0)) {
     switch (currentValue) {
-    case 1: settings.pauseWhenCardRemoved = false; break;
-    case 2: settings.pauseWhenCardRemoved = true ; break;
+    case 1: settings.pauseWhenCardRemoved = 0; break;
+    case 2: settings.pauseWhenCardRemoved = 1; break;
     }
     saveAndTransit();
     return;

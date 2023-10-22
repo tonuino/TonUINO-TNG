@@ -51,7 +51,7 @@ TEST_F(tonuino_test_fixture, initial_state) {
   EXPECT_EQ(getSettings().adminMenuPin[1]     ,           1);
   EXPECT_EQ(getSettings().adminMenuPin[2]     ,           1);
   EXPECT_EQ(getSettings().adminMenuPin[3]     ,           1);
-  EXPECT_EQ(getSettings().pauseWhenCardRemoved,       false);
+  EXPECT_EQ(getSettings().pauseWhenCardRemoved,           0);
 
   EXPECT_TRUE(getMp3().called_begin);
   EXPECT_EQ(getMp3().current_volume, getSettings().initVolume);
@@ -777,17 +777,17 @@ TEST_F(tonuino_test_fixture, adminMenu_settings) {
 // =================== pauseWhenCardRemoved
 TEST_F(tonuino_test_fixture, pauseWhenCardRemoved_settings) {
 
-  getSettings().pauseWhenCardRemoved = false;
+  getSettings().pauseWhenCardRemoved = 0;
   getSettings().writeSettingsToFlash();
-  getSettings().pauseWhenCardRemoved = true;
+  getSettings().pauseWhenCardRemoved = 1;
   tonuino.setup();
-  EXPECT_EQ(getSettings().pauseWhenCardRemoved, false);
+  EXPECT_EQ(getSettings().pauseWhenCardRemoved, 0);
 
-  getSettings().pauseWhenCardRemoved = true;
+  getSettings().pauseWhenCardRemoved = 1;
   getSettings().writeSettingsToFlash();
-  getSettings().pauseWhenCardRemoved = false;
+  getSettings().pauseWhenCardRemoved = 0;
   tonuino.setup();
-  EXPECT_EQ(getSettings().pauseWhenCardRemoved, true);
+  EXPECT_EQ(getSettings().pauseWhenCardRemoved, 1);
 
 }
 
@@ -811,7 +811,7 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_works) {
 
   uint16_t track_count = 10;
 
-  getSettings().pauseWhenCardRemoved = true;
+  getSettings().pauseWhenCardRemoved = 1;
 
   int ind = 0;
   for (folderSettings card: test_data) {
@@ -852,7 +852,7 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_out_early) {
   folderSettings card = { 1, pmode_t::album        , 0, 0 };
   uint16_t track_count = 10;
 
-  getSettings().pauseWhenCardRemoved = true;
+  getSettings().pauseWhenCardRemoved = 1;
 
   goto_idle();
   Print::clear_output();
@@ -960,7 +960,7 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_in_with_other) {
 
   uint16_t track_count = 10;
 
-  getSettings().pauseWhenCardRemoved = true;
+  getSettings().pauseWhenCardRemoved = 1;
 
   int ind = 0;
   for (card_data_2 data: test_data) {
