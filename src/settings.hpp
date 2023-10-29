@@ -19,7 +19,7 @@ struct Settings {
 
   void writeSettingsToFlash();
   void resetSettings();
-  void migrateSettings(int oldVersion);
+  //void migrateSettings(int oldVersion);
   void loadSettingsFromFlash();
 
   void    writeFolderSettingToFlash (uint8_t folder, uint8_t track);
@@ -37,13 +37,13 @@ struct Settings {
   uint8_t     minVolume;
   uint8_t     initVolume;
   uint8_t     eq;
-  bool        dummy;
-  long        standbyTimer;
-  bool        invertVolumeButtons;
+  uint8_t     dummy;
+  uint32_t    standbyTimer;
+  uint8_t     invertVolumeButtons;
   shortCuts_t shortCuts;
   uint8_t     adminMenuLocked;
   pin_t       adminMenuPin;
-  bool        pauseWhenCardRemoved;
+  uint8_t     pauseWhenCardRemoved;
 
 #ifdef BUTTONS3X3
   static folderSettings extShortCut;
