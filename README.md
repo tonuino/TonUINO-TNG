@@ -24,8 +24,8 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
       Aio:      ~/.arduino15/packages/LGT8fx Boards/hardware/avr/1.0.7
 
     MacOS 13.x:  
-      Classic:  ~/Library/Arduino15/packages/arduino/hardware/avr
-      AiO:      ~/Library/Arduino15/packages/LGT8fx Boards/hardware/avr
+      Classic:  ~/Library/Arduino15/packages/arduino/hardware/avr/1.8.6
+      AiO:      ~/Library/Arduino15/packages/LGT8fx Boards/hardware/avr/1.0.7
 ```
 
 - Man findet den Ordner auch, wenn man die Datei platform.txt sucht.  
@@ -51,12 +51,13 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
+## Version 3.1.4 (29.10.2023)
+- [Issue 125](https://github.com/tonuino/TonUINO-TNG/issues/125): platform.local.txt on MacOS
+
 ## Version 3.1.4 (13.10.2023)
 - [Issue 117](https://github.com/tonuino/TonUINO-TNG/issues/117): Support potentiometer for setting the 
 - [Issue 120](https://github.com/tonuino/TonUINO-TNG/issues/120): Change to version 1.2.2 of the DFMiniMp3 library
 - [Issue 118](https://github.com/tonuino/TonUINO-TNG/issues/118): In modus pause_if_card_removed no shortcut is played
-
-## Version 3.1.4 (03.10.2023)
 - [Issue 115](https://github.com/tonuino/TonUINO-TNG/issues/115): Sometimes initial SetVolume does not come to an end
 - [Issue 103](https://github.com/tonuino/TonUINO-TNG/issues/103): Deploy pages for online upload
 - [Issue 111](https://github.com/tonuino/TonUINO-TNG/issues/111): TonUINO crashes if if the player gives a track count >255
