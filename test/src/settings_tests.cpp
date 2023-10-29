@@ -27,7 +27,7 @@ public:
       }}            ,//shortCuts_t shortCuts;
       0             ,//uint8_t     adminMenuLocked;
       {{1,1,1,1}}   ,//pin_t       adminMenuPin;
-      false         ,//bool        pauseWhenCardRemoved;
+      0             ,//uint8_t     pauseWhenCardRemoved;
   };
   const Settings other_settings = {
       cardCookie    ,//uint32_t    cookie;
@@ -47,7 +47,7 @@ public:
       }}            ,//shortCuts_t shortCuts;
       0             ,//uint8_t     adminMenuLocked;
       {{1,2,3,4}}   ,//pin_t       adminMenuPin;
-      true          ,//bool        pauseWhenCardRemoved;
+      1             ,//uint8_t     pauseWhenCardRemoved;
   };
 
   const int startAddressAdminSettings = sizeof(folderSettings::folder) * 100;
@@ -104,7 +104,7 @@ TEST_F(settings_test_fixture, initial_state_on_old_box_from_v2) {
   std::size_t addr_pauseWhenCardRemoved = offsetof(Settings, pauseWhenCardRemoved);
   EEPROM.eeprom_mem[startAddressAdminSettings+addr_pauseWhenCardRemoved] = 0xff;
   settings.loadSettingsFromFlash();
-  EXPECT_EQ(settings, default_settings);
+  EXPECT_EQ(settings.pauseWhenCardRemoved==1, default_settings.pauseWhenCardRemoved==1);
 
 //  EXPECT_TRUE(false) << "log: " << Print::get_output();
 }

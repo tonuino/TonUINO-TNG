@@ -32,10 +32,12 @@ void Tonuino::setup() {
 
   randomSeed(generateRamdomSeed());
 
-#if defined ALLinONE || defined ALLinONE_Plus
+#if defined ALLinONE || defined ALLinONE_Plus || defined SPKONOFF
   pinMode(ampEnablePin, OUTPUT);
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
+#endif
 
+#if defined ALLinONE || defined ALLinONE_Plus
   pinMode(usbAccessPin, OUTPUT);
   digitalWrite(usbAccessPin, getLevel(usbAccessPinType, level::inactive));
 #endif
@@ -64,7 +66,7 @@ void Tonuino::setup() {
   }
 
   SM_tonuino::start();
-#if defined ALLinONE || defined ALLinONE_Plus
+#if defined ALLinONE || defined ALLinONE_Plus || defined SPKONOFF
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
 #endif
 
@@ -241,7 +243,7 @@ void Tonuino::shutdown() {
   ring.call_on_sleep();
 #endif
 
-#if defined ALLinONE || defined ALLinONE_Plus
+#if defined ALLinONE || defined ALLinONE_Plus || defined SPKONOFF
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
   delay(1000);
 #endif

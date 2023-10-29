@@ -1232,7 +1232,7 @@ TEST_F(admin_test_fixture, Admin_ResetEeprom) {
       }}            ,//shortCuts_t shortCuts;
       0             ,//uint8_t     adminMenuLocked;
       {{1,1,1,1}}   ,//pin_t       adminMenuPin;
-      false         ,//bool        pauseWhenCardRemoved;
+      0             ,//uint8_t     pauseWhenCardRemoved;
   };
   const Settings other_settings = {
       cardCookie    ,//uint32_t    cookie;
@@ -1252,7 +1252,7 @@ TEST_F(admin_test_fixture, Admin_ResetEeprom) {
       }}            ,//shortCuts_t shortCuts;
       0             ,//uint8_t     adminMenuLocked;
       {{1,2,3,4}}   ,//pin_t       adminMenuPin;
-      true          ,//bool        pauseWhenCardRemoved;
+      1             ,//uint8_t     pauseWhenCardRemoved;
   };
   Print::clear_output();
 
