@@ -62,6 +62,13 @@ inline constexpr uint8_t   rotaryEncoderDtPin     = 32;
 inline constexpr uint8_t neoPixelRingPin = 10; // PB2 on AiOplus
 inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
 
+/* uncomment the below line to enable the Speaker on/off on Pin D6 for Classic to suppress noise
+ * on startup and shutdown
+ * um den Lautsprecher ein/aus Schalter über D6 für die Classic Variante zu unterstützen bitte
+ * in der nächste Zeile den Kommentar entfernen (zur Unterdrückung der Ein- und Ausschaltgeräusche)
+ */
+//#define SPKONOFF
+
 
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
@@ -144,10 +151,12 @@ inline constexpr unsigned long dfPlayer_timeUntilStarts = 1000;
 
 // ####### tonuino #####################################
 
-inline constexpr uint8_t       shutdownPin     = 7;
-inline constexpr levelType     shutdownPinType = levelType::activeHigh;
-inline constexpr uint8_t       openAnalogPin   = A7;
-inline constexpr unsigned long cycleTime       = 50;
+inline constexpr uint8_t       shutdownPin      = 7;
+inline constexpr levelType     shutdownPinType  = levelType::activeHigh;
+inline constexpr uint8_t       ampEnablePin     = 6;
+inline constexpr levelType     ampEnablePinType = levelType::activeHigh;
+inline constexpr uint8_t       openAnalogPin    = A7;
+inline constexpr unsigned long cycleTime        = 50;
 #endif /* TonUINO_Classic or TonUINO_Every */
 
 /***************************************************************************
