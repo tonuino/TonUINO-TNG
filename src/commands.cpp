@@ -66,7 +66,7 @@ command Commands::getCommand(commandRaw b, state_for_command s) {
 #endif
 
 #ifndef FIVEBUTTONS
-  if (s == state_for_command::play && settings.invertVolumeButtons)
+  if (s == state_for_command::play && (settings.invertVolumeButtons==1))
     s = state_for_command::play_invert;
 #endif
 

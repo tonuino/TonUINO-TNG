@@ -47,14 +47,14 @@ commandRaw RotaryEncoder::getCommandRaw() {
     ret = commandRaw::four;
 
 #else
-    ret = settings.invertVolumeButtons? commandRaw::up : commandRaw::upLong;
+    ret = (settings.invertVolumeButtons==1)? commandRaw::up : commandRaw::upLong;
 #endif
   }
   else {
 #ifdef FIVEBUTTONS
     ret = commandRaw::five;
 #else
-    ret = settings.invertVolumeButtons? commandRaw::down : commandRaw::downLong;
+    ret = (settings.invertVolumeButtons==1)? commandRaw::down : commandRaw::downLong;
 #endif
   }
   old_pos = new_pos;
