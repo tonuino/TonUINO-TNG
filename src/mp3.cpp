@@ -30,7 +30,7 @@ void Mp3Notify::OnPlayFinished(DfMp3&, DfMp3_PlaySources /*source*/, uint16_t tr
     return;
   else
     lastTrackFinished = track;
-#ifdef DFMiniMp3_T_CHIP_LISP3  
+#ifdef DFMiniMp3_T_CHIP_LISP3
   if (Tonuino::getTonuino().getMp3().resetPlayingAdv())
     return;
 #endif
@@ -228,12 +228,20 @@ uint16_t Mp3::getFolderTrackCount(uint16_t folder)
     delay(500);
 #endif
 
+#ifdef DFMiniMp3_T_CHIP_MH2024K24SS
+    delay(500);
+#endif
+
     LOG(mp3_log, s_debug, F("getFolderTrackCount: "), folder);
     ret = Base::getFolderTrackCount(folder);
     LOG(mp3_log, s_debug, F("getFolderTrackCount return: "), ret);
 
 #ifdef DFMiniMp3_T_CHIP_GD3200B
     Base::setVolume(volume);
+#endif
+
+#ifdef DFMiniMp3_T_CHIP_MH2024K24SS
+    delay(500);
 #endif
 
     return ret;

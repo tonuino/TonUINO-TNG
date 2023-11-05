@@ -34,6 +34,7 @@
  */
 //#define DFMiniMp3_T_CHIP_GD3200B
 //#define DFMiniMp3_T_CHIP_MH2024K16SS
+//#define DFMiniMp3_T_CHIP_MH2024K24SS
 //#define DFMiniMp3_T_CHIP_LISP3
 #define DFMiniMp3_T_CHIP_Mp3ChipIncongruousNoAck
 
