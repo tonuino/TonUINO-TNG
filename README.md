@@ -41,7 +41,7 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
 - Es müssen folgende Versionen der Libraries verwendet werden:  
     - jchristensen/JC_Button: 2.1.2  
     - miguelbalboa/MFRC522: 1.4.10  
-    - makuna/DFPlayer Mini Mp3 by Makuna: 1.2.2
+    - makuna/DFPlayer Mini Mp3 by Makuna: 1.2.3
     - adafruit/Adafruit NeoPixel: 1.11.0 (optional, nur bei Feature NEO_RING notwendig)
 
 
@@ -51,12 +51,14 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
+## Version 3.1.5 (09.11.2023)
+- [Issue 132](https://github.com/tonuino/TonUINO-TNG/issues/132): Support DF Player MP3-TF-16P V3.0 with the cip MH2024K-24SS
+- [Issue 130](https://github.com/tonuino/TonUINO-TNG/issues/130): Add circuit diagram
+
 ## Version 3.1.4 (29.10.2023)
 - [Issue 125](https://github.com/tonuino/TonUINO-TNG/issues/125): platform.local.txt on MacOS
 - [Issue 126](https://github.com/tonuino/TonUINO-TNG/issues/126): Support Speaker on/off for Classic Variant to suppress Noise on startup and shutdown 
 - [Issue 123](https://github.com/tonuino/TonUINO-TNG/issues/123): Setting of pauseWhenCardRemoved not disabled when upgraded from Version 2.x 
-
-## Version 3.1.4 (22.10.2023)
 - [Issue 117](https://github.com/tonuino/TonUINO-TNG/issues/117): Support potentiometer for setting the 
 - [Issue 120](https://github.com/tonuino/TonUINO-TNG/issues/120): Change to version 1.2.2 of the DFMiniMp3 library
 - [Issue 118](https://github.com/tonuino/TonUINO-TNG/issues/118): In modus pause_if_card_removed no shortcut is played
