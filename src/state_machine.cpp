@@ -581,8 +581,12 @@ void Play::react(card_e const &c_e) {
   }
   switch (c_e.card_ev) {
   case cardEvent::inserted:
-    if (readCard())
-      handleReadCard();
+    if (readCard()) {
+#ifdef DONT_ACCEPT_SAME_RFID_TWICE
+      if (tonuino.getCard() != lastCardRead)
+#endif
+        handleReadCard();
+    }
     return;
   case cardEvent::removed:
     if ((settings.pauseWhenCardRemoved==1) && not tonuino.getActiveModifier().handleButton(command::pause)) {
