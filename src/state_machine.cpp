@@ -644,7 +644,13 @@ void Pause::react(card_e const &c_e) {
   switch (c_e.card_ev) {
   case cardEvent::inserted:
     if (readCard()) {
-      if ((settings.pauseWhenCardRemoved==1) && tonuino.getCard() == lastCardRead && not tonuino.getActiveModifier().handleButton(command::pause)) {
+      bool resume_on_card = settings.pauseWhenCardRemoved==1 ||
+#ifdef RESUME_ON_SAME_RFID
+                            true ||
+#endif
+                            false;
+
+      if (resume_on_card && tonuino.getCard() == lastCardRead && not tonuino.getActiveModifier().handleButton(command::pause)) {
         transit<Play>();
         return;
       }
