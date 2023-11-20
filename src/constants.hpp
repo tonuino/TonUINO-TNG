@@ -69,6 +69,18 @@ inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
  */
 //#define SPKONOFF
 
+/* uncomment the below line to ignore the RFID if it is already playing
+ * um die selbe RFID zu ignorieren, wenn die bereits spielt, in der nächste
+ * Zeile den Kommentar entfernen
+ */
+//#define DONT_ACCEPT_SAME_RFID_TWICE
+
+/* uncomment the below line to resume playback if the RFID that started the
+ * playback is detected again
+ * um die Wiedergabe fortzusetzen, wenn die selbe RFID erkannt wird, die bereits
+ * abgespielt wird, in der nächste Zeile den Kommentar entfernen
+ */
+//#define RESUME_ON_SAME_RFID
 
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
