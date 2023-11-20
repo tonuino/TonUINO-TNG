@@ -583,7 +583,7 @@ void Play::react(card_e const &c_e) {
   case cardEvent::inserted:
     if (readCard()) {
 #ifdef DONT_ACCEPT_SAME_RFID_TWICE
-      if (tonuino.getCard() != lastCardRead)
+      if (not (tonuino.getCard() == lastCardRead))
 #endif
         handleReadCard();
     }

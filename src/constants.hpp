@@ -69,7 +69,6 @@ inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
  */
 //#define SPKONOFF
 
-
 /* uncomment the below line to ignore the RFID if it is already playing
  * um die selbe RFID zu ignorieren, wenn die bereits spielt, in der nächste
  * Zeile den Kommentar entfernen
