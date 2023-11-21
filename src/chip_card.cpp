@@ -161,7 +161,7 @@ Chip_card::readCardEvent Chip_card::readCard(nfcTagObject &nfcTag) {
       return readCardEvent::none;
   }
   const uint32_t version              = buffer[4];
-  if (version == cardVersion) {
+  if ((version != 0) && (version <= cardVersion)) {
     nfcTag.nfcFolderSettings.folder   = buffer[5];
     nfcTag.nfcFolderSettings.mode     = static_cast<pmode_t>(buffer[6]);
     nfcTag.nfcFolderSettings.special  = buffer[7];
