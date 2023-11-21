@@ -52,7 +52,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 # Change Log
 
 ## Version 3.1.5 (21.11.2023)
-- [Issue 132](https://github.com/tonuino/TonUINO-TNG/issues/132): Support DF Player MP3-TF-16P V3.0 with the cip MH2024K-24SS
+- [Issue 132](https://github.com/tonuino/TonUINO-TNG/issues/132): Support DF Player MP3-TF-16P V3.0 with the chip MH2024K-24SS
 
 ## Version 3.1.4 (20.11.2023)
 - [Issue 138](https://github.com/tonuino/TonUINO-TNG/issues/138): Two new options for when the same RFID card is inserted
