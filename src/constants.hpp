@@ -45,15 +45,27 @@
 /* uncomment the below line to enable the rotary encoder for volume setting (only for AiOplus)
  * um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen (nur für AioPlus)
  */
-#define ROTARY_ENCODER
-inline constexpr uint8_t   rotaryEncoderClkPin    = 36;
-inline constexpr uint8_t   rotaryEncoderDtPin     = 37;
+//#define ROTARY_ENCODER
+#ifdef ALLinONE_Plus
+// if using Rotary Encoder Buchse
+//inline constexpr uint8_t   rotaryEncoderClkPin    = 31; // PE2
+//inline constexpr uint8_t   rotaryEncoderDtPin     = 32; // PE3
+
+// if using Opt Leiste (Male)
+inline constexpr uint8_t   rotaryEncoderClkPin    = 36; // PF2
+inline constexpr uint8_t   rotaryEncoderDtPin     = 37; // PF3
+#endif // ALLinONE_Plus
+
 
 /* uncomment the below line to enable the poti for volume setting
  * um den Poti zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
  */
 //#define POTI
-//inline constexpr uint8_t   potiPin    = A14; // AiO+ PF4
+#ifdef ALLinONE_Plus
+inline constexpr uint8_t   potiPin    = A14; // AiO+ PF4
+#else
+inline constexpr uint8_t   potiPin    = A5 ; // AiO/Classic A5
+#endif // ALLinONE_Plus
 
 /* uncomment the below line to enable the neo ring
  * To have more features (show volume setting) uncomment also NEO_RING_EXT
@@ -62,7 +74,11 @@ inline constexpr uint8_t   rotaryEncoderDtPin     = 37;
  */
 //#define NEO_RING
 //#define NEO_RING_EXT
-inline constexpr uint8_t neoPixelRingPin = 10; // PB2 on AiOplus
+#ifdef ALLinONE_Plus
+inline constexpr uint8_t neoPixelRingPin = 10; // PB2 on AiOplus (Erweiterungsleiste (Female))
+#else
+inline constexpr uint8_t neoPixelRingPin =  5; // D5 on AiO/Classic
+#endif // ALLinONE_Plus
 inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
 
 /* uncomment the below line to enable the Speaker on/off on Pin D6 for Classic to suppress noise
