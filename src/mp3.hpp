@@ -198,7 +198,10 @@ public:
   void decreaseVolume();
   void setVolume     ();
   void setVolume     (uint8_t);
-  uint8_t getVolume  () const { return volume; }
+#ifdef NEO_RING_EXT
+  uint8_t getVolumeRel() const { return static_cast<uint16_t>(volume-settings.minVolume)*0xff/(settings.maxVolume-settings.minVolume); }
+  bool volumeChanged () { return not volumeChangedTimer.isExpired(); }
+#endif // NEO_RING_EXT
   void loop          ();
 
 private:
@@ -214,6 +217,9 @@ private:
   const Settings&      settings;
 
   uint8_t              volume{};
+#ifdef NEO_RING_EXT
+  Timer                volumeChangedTimer{};
+#endif // NEO_RING_EXT
 
   // folder queue
   track_queue          q{};

@@ -19,7 +19,7 @@ void SleepTimer::loop() {
     LOG(modifier_log, s_info, str_SleepTimer(), F(" -> SLEEP!"));
     if (SM_tonuino::is_in_state<Play>())
       SM_tonuino::dispatch(command_e(commandRaw::pause));
-    tonuino.resetActiveModifier();
+    //tonuino.resetActiveModifier();
   }
 }
 

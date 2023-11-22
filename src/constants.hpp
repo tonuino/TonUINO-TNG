@@ -45,9 +45,9 @@
 /* uncomment the below line to enable the rotary encoder for volume setting (only for AiOplus)
  * um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen (nur für AioPlus)
  */
-//#define ROTARY_ENCODER
-inline constexpr uint8_t   rotaryEncoderClkPin    = 31;
-inline constexpr uint8_t   rotaryEncoderDtPin     = 32;
+#define ROTARY_ENCODER
+inline constexpr uint8_t   rotaryEncoderClkPin    = 36;
+inline constexpr uint8_t   rotaryEncoderDtPin     = 37;
 
 /* uncomment the below line to enable the poti for volume setting
  * um den Poti zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
@@ -56,9 +56,12 @@ inline constexpr uint8_t   rotaryEncoderDtPin     = 32;
 //inline constexpr uint8_t   potiPin    = A14; // AiO+ PF4
 
 /* uncomment the below line to enable the neo ring
+ * To have more features (show volume setting) uncomment also NEO_RING_EXT
  * um den Neo Ring zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
+ * um weitere Features einzuschalten, auch den Kommentar für NEO_RING_EXT entfernen
  */
 //#define NEO_RING
+//#define NEO_RING_EXT
 inline constexpr uint8_t neoPixelRingPin = 10; // PB2 on AiOplus
 inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
 
