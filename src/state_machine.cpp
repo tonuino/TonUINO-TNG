@@ -498,7 +498,7 @@ void Idle::react(command_e const &cmd_e) {
     return;
   case command::pause:
     if (tonuino.getFolder() != 0) {
-      LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
+      LOG(state_log, s_debug, str_Idle(), str_to(), str_StartPlay());
       transit<StartPlay>();
       return;
     }
