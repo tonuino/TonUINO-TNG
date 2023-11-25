@@ -481,6 +481,9 @@ void Idle::react(command_e const &cmd_e) {
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::idle_pause);
 
+  if (tonuino.getActiveModifier().handleButton(cmd))
+    return;
+
   if (checkForShortcutAndShutdown(cmd))
     return;
 
@@ -488,11 +491,18 @@ void Idle::react(command_e const &cmd_e) {
   handleBrightness(cmd);
 #endif
 
-  if (not tonuino.getActiveModifier().handleButton(cmd)) switch (cmd) {
+  switch (cmd) {
   case command::admin:
     LOG(state_log, s_debug, str_Idle(), str_to(), str_Admin_Allow());
     transit<Admin_Allow>();
     return;
+  case command::pause:
+    if (tonuino.getFolder() != 0) {
+      LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
+      transit<StartPlay>();
+      return;
+    }
+    break;
   default:
     break;
   }
@@ -529,10 +539,13 @@ void Play::react(command_e const &cmd_e) {
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
 
+  if (tonuino.getActiveModifier().handleButton(cmd))
+    return;
+
   if (checkForShortcutAndShutdown(cmd))
     return;
 
-  if (not tonuino.getActiveModifier().handleButton(cmd)) switch (cmd) {
+  switch (cmd) {
   case command::admin:
     if (settings.adminMenuLocked != 1) { // only card is allowed
       LOG(state_log, s_debug, str_Play(), str_to(), str_Admin_Allow());
@@ -614,6 +627,9 @@ void Pause::react(command_e const &cmd_e) {
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::idle_pause);
 
+  if (tonuino.getActiveModifier().handleButton(cmd))
+    return;
+
   if (checkForShortcutAndShutdown(cmd))
     return;
 
@@ -621,7 +637,7 @@ void Pause::react(command_e const &cmd_e) {
   handleBrightness(cmd);
 #endif
 
-  if (not tonuino.getActiveModifier().handleButton(cmd)) switch (cmd) {
+  switch (cmd) {
   case command::admin:
     if (settings.adminMenuLocked != 1) { // only card is allowed
       LOG(state_log, s_debug, str_Pause(), str_to(), str_Admin_Allow());
