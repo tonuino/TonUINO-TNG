@@ -496,6 +496,7 @@ void Idle::react(command_e const &cmd_e) {
     LOG(state_log, s_debug, str_Idle(), str_to(), str_Admin_Allow());
     transit<Admin_Allow>();
     return;
+#ifdef REPLAY_ON_PLAY_BUTTON
   case command::pause:
     if (tonuino.getFolder() != 0) {
       LOG(state_log, s_debug, str_Idle(), str_to(), str_StartPlay());
@@ -503,6 +504,7 @@ void Idle::react(command_e const &cmd_e) {
       return;
     }
     break;
+#endif
   default:
     break;
   }

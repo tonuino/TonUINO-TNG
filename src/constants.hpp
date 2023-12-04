@@ -82,6 +82,13 @@ inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
  */
 //#define RESUME_ON_SAME_RFID
 
+/* uncomment the below line to replay the last card or short cut if pressed play/pause
+ * in Idle state
+ * um die letzte Karte oder den letzten Short Cut wieder abzuspielen, wenn die Play/Pause Taste
+ * im Idle State gedrückt wird, in der nächste Zeile den Kommentar entfernen
+ */
+//#define REPLAY_ON_PLAY_BUTTON
+
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
  * ##### mormalerweise müssen die folgende Zeilen nicht editiert werden ############################
