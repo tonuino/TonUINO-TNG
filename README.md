@@ -51,7 +51,8 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
-## Version 3.1.5 (04.12.2023)
+## Version 3.1.5 (05.12.2023)
+- [Issue 142](https://github.com/tonuino/TonUINO-TNG/issues/142): Restart last playback if Play/Pause pressed
 - [Issue 141](https://github.com/tonuino/TonUINO-TNG/issues/141): Enhance Features for Neo Pixel Ring
 
 ## Version 3.1.5 (21.11.2023)
