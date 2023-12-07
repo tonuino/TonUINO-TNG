@@ -80,7 +80,7 @@ void Mp3::waitForTrackToStart() {
   } while (!isPlaying() && millis() < currentTime + maxStartTime);
 }
 
-void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
+void Mp3::playAdvertisement(uint16_t track, bool /*olnyIfIsPlaying*/) {
   LOG(mp3_log, s_info, F("play adv: "), track);
 #ifdef DFMiniMp3_T_CHIP_LISP3
   advPlaying = true;
@@ -89,14 +89,16 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
     LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
   }
-  else if (not olnyIfIsPlaying) {
-    start();
-    loop();
-    LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
-    Base::playAdvertisement(track);
-    waitForTrackToFinish(); // TODO remove waitForTrackToFinish
-    pause();
-  }
+  // the following doesn't work
+//  else if (not olnyIfIsPlaying) {
+//    if (isPause)
+//    start();
+//    loop();
+//    LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
+//    Base::playAdvertisement(track);
+//    waitForTrackToFinish(); // TODO remove waitForTrackToFinish
+//    pause();
+//  }
 }
 
 void Mp3::playAdvertisement(advertTracks track, bool olnyIfIsPlaying) {
@@ -244,6 +246,9 @@ void Mp3::increaseVolume() {
     LOG(mp3_log, s_debug, F("setVolume: "), volume+1);
     Base::setVolume(++volume);
   }
+#ifdef NEO_RING_EXT
+  volumeChangedTimer.start(1000);
+#endif // NEO_RING_EXT
   logVolume();
 }
 
@@ -252,6 +257,9 @@ void Mp3::decreaseVolume() {
     LOG(mp3_log, s_debug, F("setVolume: "), volume-1);
     Base::setVolume(--volume);
   }
+#ifdef NEO_RING_EXT
+  volumeChangedTimer.start(1000);
+#endif // NEO_RING_EXT
   logVolume();
 }
 

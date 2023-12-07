@@ -7,6 +7,7 @@ public:
   bool isExpired();
   void stop();
   bool isActive() { return active; }
+  unsigned long remainingTime();
 private:
   unsigned long expireTime{0    };
   bool          active    {false};

@@ -35,6 +35,14 @@ void Ring::setAll(const color_t color) {
   showStrip();
 }
 
+void Ring::level(uint8_t l) {
+  const uint8_t last = static_cast<uint16_t>(l) * neoPixelNumber / 0xff;
+  setAll([last, this](uint8_t i) {
+    return (i <= last) ? wheel(static_cast<uint16_t>(i)*100/neoPixelNumber) : black;}
+  );
+}
+
+
 // Input a value 0 to 255 to get a color value.
 // The colors are a transition r - g - b - back to r.
 Ring::color_t Ring::wheel(byte WheelPos) const {
