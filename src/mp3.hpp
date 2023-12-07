@@ -189,7 +189,7 @@ public:
   uint16_t getFolderTrackCount(uint16_t folder);
 
 #ifdef CHECK_MISSING_ONPLAYFINISHED
-  void start() { isPause = false; Base::start(); }
+  void start() { if (isPause) { isPause = false; Base::start();} }
   void stop () { isPause = false; Base::stop (); }
   void pause() { isPause = true ; Base::pause(); }
 #endif
