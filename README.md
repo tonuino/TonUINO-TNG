@@ -51,8 +51,10 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
-## Version 3.1.5 (04.12.2023)
+## Version 3.1.5 (07.12.2023)
 - [Issue 143](https://github.com/tonuino/TonUINO-TNG/issues/143): With some players the start of a track stutters or goes into pause
+- [Issue 142](https://github.com/tonuino/TonUINO-TNG/issues/142): Restart last playback if Play/Pause pressed
+- [Issue 141](https://github.com/tonuino/TonUINO-TNG/issues/141): Enhance Features for Neo Pixel Ring
 
 ## Version 3.1.5 (21.11.2023)
 - [Issue 132](https://github.com/tonuino/TonUINO-TNG/issues/132): Support DF Player MP3-TF-16P V3.0 with the chip MH2024K-24SS

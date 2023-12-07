@@ -33,6 +33,7 @@ public:
   static constexpr color_t green {   0, 255,   0 };
   static constexpr color_t blue  {   0,   0, 255 };
   static constexpr color_t black {   0,   0,   0 };
+  static constexpr color_t orange{ 192,  64,   0 };
 
   void call_on_startup  () { setAll   (red  ); }
   void call_on_idle     () { pulse    (green); }
@@ -41,6 +42,10 @@ public:
   void call_on_pause    () { rainbow  (0    ); }
   void call_on_admin    () { pulse    (blue ); }
   void call_on_sleep    () { setAll   (black); }
+  void call_on_volume(uint8_t v)
+                           { level    (v    ); }
+  void call_on_sleep_timer() { static uint8_t c = 0; if (++c%4==0) setAll   (orange*random(100,255)); }
+  void call_before_sleep(uint8_t r) { setAll   (orange*r); }
 
   void brightness_up    () { if (brightness < brightness_max) ++brightness; strip.setBrightness(brightness); }
   void brightness_down  () { if (brightness > 0             ) --brightness; strip.setBrightness(brightness); }
@@ -55,6 +60,7 @@ private:
   void rainbow(uint8_t incr);
   void setAll(const color_t color);
   void setAll(auto&& f);
+  void level(uint8_t l);
 
   uint8_t brightness { brightness_init };
 

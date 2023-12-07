@@ -46,20 +46,39 @@
  * um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen (nur für AioPlus)
  */
 //#define ROTARY_ENCODER
-inline constexpr uint8_t   rotaryEncoderClkPin    = 31;
-inline constexpr uint8_t   rotaryEncoderDtPin     = 32;
+#ifdef ALLinONE_Plus
+// if using Rotary Encoder Buchse
+//inline constexpr uint8_t   rotaryEncoderClkPin    = 31; // PE2
+//inline constexpr uint8_t   rotaryEncoderDtPin     = 32; // PE3
+
+// if using Opt Leiste (Male)
+inline constexpr uint8_t   rotaryEncoderClkPin    = 36; // PF2
+inline constexpr uint8_t   rotaryEncoderDtPin     = 37; // PF3
+#endif // ALLinONE_Plus
+
 
 /* uncomment the below line to enable the poti for volume setting
  * um den Poti zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
  */
 //#define POTI
-//inline constexpr uint8_t   potiPin    = A14; // AiO+ PF4
+#ifdef ALLinONE_Plus
+inline constexpr uint8_t   potiPin    = A14; // AiO+ PF4
+#else
+inline constexpr uint8_t   potiPin    = A5 ; // AiO/Classic A5
+#endif // ALLinONE_Plus
 
 /* uncomment the below line to enable the neo ring
+ * To have more features (show volume setting) uncomment also NEO_RING_EXT
  * um den Neo Ring zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
+ * um weitere Features einzuschalten, auch den Kommentar für NEO_RING_EXT entfernen
  */
 //#define NEO_RING
-inline constexpr uint8_t neoPixelRingPin = 10; // PB2 on AiOplus
+//#define NEO_RING_EXT
+#ifdef ALLinONE_Plus
+inline constexpr uint8_t neoPixelRingPin = 10; // PB2 on AiOplus (Erweiterungsleiste (Female))
+#else
+inline constexpr uint8_t neoPixelRingPin =  5; // D5 on AiO/Classic
+#endif // ALLinONE_Plus
 inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
 
 /* uncomment the below line to enable the Speaker on/off on Pin D6 for Classic to suppress noise
@@ -81,6 +100,13 @@ inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
  * abgespielt wird, in der nächste Zeile den Kommentar entfernen
  */
 //#define RESUME_ON_SAME_RFID
+
+/* uncomment the below line to replay the last card or short cut if pressed play/pause
+ * in Idle state
+ * um die letzte Karte oder den letzten Short Cut wieder abzuspielen, wenn die Play/Pause Taste
+ * im Idle State gedrückt wird, in der nächste Zeile den Kommentar entfernen
+ */
+//#define REPLAY_ON_PLAY_BUTTON
 
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
