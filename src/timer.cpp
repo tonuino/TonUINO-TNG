@@ -20,3 +20,10 @@ bool Timer::isExpired() {
 void Timer::stop() {
   active = false;
 }
+
+unsigned long Timer::remainingTime() {
+  if (not active)
+    return 0xffffffff;
+  return expireTime - millis();
+}
+

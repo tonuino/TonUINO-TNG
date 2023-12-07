@@ -90,6 +90,15 @@ void Tonuino::loop() {
   SM_tonuino::dispatch(card_e(chip_card.getCardEvent()));
 
 #ifdef NEO_RING
+#ifdef NEO_RING_EXT
+  if (mp3.volumeChanged())
+    ring.call_on_volume(mp3.getVolumeRel());
+  else if (standbyTimer.remainingTime() < 60*1000ul)
+    ring.call_before_sleep(standbyTimer.remainingTime() / 1000 * 255 / 60);
+  else if (activeModifier->getActive() == pmode_t::sleep_timer)
+    ring.call_on_sleep_timer();
+  else
+#endif // NEO_RING_EXT
   if (SM_tonuino::is_in_state<Idle>())
     ring.call_on_idle();
   else if (SM_tonuino::is_in_state<StartPlay>())
@@ -100,7 +109,7 @@ void Tonuino::loop() {
     ring.call_on_pause();
   else // admin menu
     ring.call_on_admin();
-#endif
+#endif // NEO_RING
 
   unsigned long  stop_cycle = millis();
 
