@@ -138,7 +138,7 @@ TEST_F(mp3_test_fixture, enqueue_folder_tracks_and_jump) {
   EXPECT_EQ(mp3.df_folder, 1);
   EXPECT_EQ(mp3.df_folder_track, 2);
 
-  mp3.playNext();
+  mp3.playNext(1, false);
   execute_cycle();
   execute_cycle();
 
@@ -146,7 +146,7 @@ TEST_F(mp3_test_fixture, enqueue_folder_tracks_and_jump) {
   EXPECT_EQ(mp3.df_folder, 1);
   EXPECT_EQ(mp3.df_folder_track, 3);
 
-  mp3.playNext(2);
+  mp3.playNext(2, false);
   execute_cycle();
   execute_cycle();
 

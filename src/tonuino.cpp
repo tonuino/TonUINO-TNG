@@ -207,7 +207,7 @@ void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
     settings.writeFolderSettingToFlash(myFolder->folder, trackToSave);
     mp3.clearFolderQueue();
   }
-  mp3.playNext(tracks);
+  mp3.playNext(tracks, fromOnPlayFinished);
   if (mp3.isPlayingFolder() && (myFolder->mode == pmode_t::hoerbuch || myFolder->mode == pmode_t::hoerbuch_1)) {
     settings.writeFolderSettingToFlash(myFolder->folder, mp3.getCurrentTrack());
   }
