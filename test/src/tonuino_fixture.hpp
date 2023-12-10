@@ -15,6 +15,7 @@ public:
   , tonuino{Tonuino::getTonuino()}
   {
     getSettings().resetSettings();
+    tonuino.resetActiveModifier();
 #ifdef BUTTONS3X3
     pin_value[button3x3Pin] = Buttons3x3::maxLevel;
 #endif
