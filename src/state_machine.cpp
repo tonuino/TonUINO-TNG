@@ -580,6 +580,9 @@ void Play::react(command_e const &cmd_e) {
   case command::previous10:
     tonuino.previousTrack(10);
     break;
+  case command::to_first:
+    tonuino.previousTrack(0xff);
+    break;
   default:
     break;
   }
