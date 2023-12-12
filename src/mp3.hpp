@@ -30,9 +30,9 @@ class Mp3Notify;
 
 // define a handy type using serial and our notify class
 #ifdef DFMiniMp3_T_CHIP_VARIANT
-using DfMp3 = DFMiniMp3<SerialType, Mp3Notify, DFMiniMp3_T_CHIP_VARIANT, 1500>;
+using DfMp3 = DFMiniMp3<SerialType, Mp3Notify, DFMiniMp3_T_CHIP_VARIANT, 4000>;
 #else
-using DfMp3 = DFMiniMp3<SerialType, Mp3Notify, Mp3ChipOriginal         , 1500>;
+using DfMp3 = DFMiniMp3<SerialType, Mp3Notify, Mp3ChipOriginal         , 4000>;
 #endif
 
 enum class mp3Tracks: uint16_t {
@@ -188,11 +188,9 @@ public:
   uint8_t getCurrentTrack() { return playing ? q.get(current_track) : 0; }
   uint16_t getFolderTrackCount(uint16_t folder);
 
-#ifdef CHECK_MISSING_ONPLAYFINISHED
   void start() { if (isPause) { isPause = false; Base::start();} }
   void stop () { isPause = false; Base::stop (); }
   void pause() { isPause = true ; Base::pause(); }
-#endif
 
   void increaseVolume();
   void decreaseVolume();
@@ -237,11 +235,9 @@ private:
     play_mp3,
   };
   play_type            playing{play_none};
-#ifdef CHECK_MISSING_ONPLAYFINISHED
   Timer                startTrackTimer{};
   Timer                missingOnPlayFinishedTimer{};
   bool                 isPause{};
-#endif
 #ifdef DFMiniMp3_T_CHIP_LISP3
   bool                 advPlaying{false};
 #endif
