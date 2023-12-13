@@ -52,6 +52,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 # Change Log
 
 ## Version 3.1.5 (10.12.2023)
+- [Issue 148](https://github.com/tonuino/TonUINO-TNG/issues/148): New handling of prev and next button on first and last track
 - [Issue 147](https://github.com/tonuino/TonUINO-TNG/issues/147): No or bad saving of current track in hoerbuch mode when using prev, prev10 or next10 button
 
 ## Version 3.1.5 (07.12.2023)

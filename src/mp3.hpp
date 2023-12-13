@@ -183,7 +183,7 @@ public:
   void enqueueMp3FolderTrack(uint16_t  track, bool playAfter = false);
   void enqueueMp3FolderTrack(mp3Tracks track, bool playAfter = false);
   void playCurrent();
-  void playNext(uint8_t tracks = 1);
+  void playNext(uint8_t tracks, bool fromOnPlayFinished);
   void playPrevious(uint8_t tracks = 1);
   uint8_t getCurrentTrack() { return playing ? q.get(current_track) : 0; }
   uint16_t getFolderTrackCount(uint16_t folder);

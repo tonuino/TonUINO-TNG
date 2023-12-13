@@ -186,7 +186,7 @@ void Mp3::playCurrent() {
     }
   }
 }
-void Mp3::playNext(uint8_t tracks) {
+void Mp3::playNext(uint8_t tracks, bool fromOnPlayFinished) {
   if (playing == play_folder && (current_track+1 < q.size() || endless)) {
     current_track += tracks;
     if (current_track >= q.size())
@@ -198,23 +198,18 @@ void Mp3::playNext(uint8_t tracks) {
     LOG(mp3_log, s_debug, F("playNext mp3: "), mp3_track);
     playCurrent();
   }
-  else {
+  else if (fromOnPlayFinished) {
     LOG(mp3_log, s_debug, F("playNext: stop"));
     clearAllQueue();
     playing = play_none;
   }
 }
 void Mp3::playPrevious(uint8_t tracks) {
-  if (playing == play_folder && (current_track > 0 || endless)) {
+  if (playing == play_folder) {
     int current_track_tmp = static_cast<int>(current_track) - tracks;
     current_track = endless ? (current_track_tmp%q.size()+q.size()) % q.size() : max(current_track_tmp, 0);
     LOG(mp3_log, s_debug, F("playPrevious: "), current_track);
     playCurrent();
-  }
-  else {
-    LOG(mp3_log, s_debug, F("playPrevious: stop"));
-    clearAllQueue();
-    playing = play_none;
   }
 }
 
