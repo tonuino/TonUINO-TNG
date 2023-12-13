@@ -98,8 +98,8 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
     LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
     delay(dfPlayer_timeUntilStarts);
-    waitForTrackToFinish();
-    delay(1000);
+    waitForTrackToFinish(); // finish adv
+    waitForTrackToStart();  // start folder track
     pause();
     loop();
   }
