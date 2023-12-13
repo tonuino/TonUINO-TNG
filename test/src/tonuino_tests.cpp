@@ -1000,3 +1000,90 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_in_with_other) {
 
 //  EXPECT_TRUE(false) << "log: " << Print::get_output();
 }
+
+// =================== next/previous (play)
+TEST_F(tonuino_test_fixture, next_previous_in_play_hoerbuch_1) {
+  const uint8_t folder = 5;
+  uint8_t current_track = 2;
+  folderSettings card = { folder, pmode_t::hoerbuch_1, 0, 0 };
+  getSettings().writeFolderSettingToFlash(folder, current_track);
+  goto_play(card);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), current_track);
+  Print::clear_output();
+
+  button_for_command(command::next, state_for_command::play);
+  execute_cycle_for_ms(time_check_play);
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, card.folder);
+  EXPECT_EQ(getMp3().df_folder_track, ++current_track);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), current_track);
+
+  button_for_command(command::previous, state_for_command::play);
+  execute_cycle_for_ms(time_check_play);
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, card.folder);
+  EXPECT_EQ(getMp3().df_folder_track, --current_track);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), current_track);
+
+#ifdef FIVEBUTTONS
+  button_for_command(command::next10, state_for_command::play);
+  execute_cycle_for_ms(time_check_play);
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, card.folder);
+  current_track+=10;
+  EXPECT_EQ(getMp3().df_folder_track, current_track);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), current_track);
+
+  button_for_command(command::previous10, state_for_command::play);
+  execute_cycle_for_ms(time_check_play);
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, card.folder);
+  current_track-=10;
+  EXPECT_EQ(getMp3().df_folder_track, current_track);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), current_track);
+#endif
+}
+
+TEST_F(tonuino_test_fixture, next_previous_in_play_hoerbuch) {
+  const uint8_t folder = 5;
+  uint8_t current_track = 2;
+  folderSettings card = { folder, pmode_t::hoerbuch, 0, 0 };
+  getSettings().writeFolderSettingToFlash(folder, current_track);
+  goto_play(card);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), current_track);
+  Print::clear_output();
+
+  button_for_command(command::next, state_for_command::play);
+  execute_cycle_for_ms(time_check_play);
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, card.folder);
+  EXPECT_EQ(getMp3().df_folder_track, ++current_track);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), current_track);
+
+  button_for_command(command::previous, state_for_command::play);
+  execute_cycle_for_ms(time_check_play);
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, card.folder);
+  EXPECT_EQ(getMp3().df_folder_track, --current_track);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), current_track);
+
+#ifdef FIVEBUTTONS
+  button_for_command(command::next10, state_for_command::play);
+  execute_cycle_for_ms(time_check_play);
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, card.folder);
+  current_track+=10;
+  EXPECT_EQ(getMp3().df_folder_track, current_track);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), current_track);
+
+  button_for_command(command::previous10, state_for_command::play);
+  execute_cycle_for_ms(time_check_play);
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, card.folder);
+  current_track-=10;
+  EXPECT_EQ(getMp3().df_folder_track, current_track);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), current_track);
+#endif
+
+}
+

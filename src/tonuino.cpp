@@ -202,24 +202,25 @@ void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
   LOG(play_log, s_info, F("nextTrack"));
   if (activeModifier->handleNext())
     return;
-  if (mp3.isPlayingFolder() && (myFolder->mode == pmode_t::hoerbuch || myFolder->mode == pmode_t::hoerbuch_1)) {
+  if (fromOnPlayFinished && mp3.isPlayingFolder() && myFolder->mode == pmode_t::hoerbuch_1) {
     const uint8_t trackToSave = (mp3.getCurrentTrack() < numTracksInFolder) ? mp3.getCurrentTrack()+1 : 1;
     settings.writeFolderSettingToFlash(myFolder->folder, trackToSave);
-    if (fromOnPlayFinished && myFolder->mode == pmode_t::hoerbuch_1)
-      mp3.clearFolderQueue();
+    mp3.clearFolderQueue();
   }
   mp3.playNext(tracks);
+  if (mp3.isPlayingFolder() && (myFolder->mode == pmode_t::hoerbuch || myFolder->mode == pmode_t::hoerbuch_1)) {
+    settings.writeFolderSettingToFlash(myFolder->folder, mp3.getCurrentTrack());
+  }
 }
 
 void Tonuino::previousTrack(uint8_t tracks) {
   LOG(play_log, s_info, F("previousTrack"));
   if (activeModifier->handlePrevious())
     return;
-  if (mp3.isPlayingFolder() && (myFolder->mode == pmode_t::hoerbuch || myFolder->mode == pmode_t::hoerbuch_1)) {
-    const uint8_t trackToSave = (mp3.getCurrentTrack() > numTracksInFolder) ? mp3.getCurrentTrack()-1 : 1;
-    settings.writeFolderSettingToFlash(myFolder->folder, trackToSave);
-  }
   mp3.playPrevious(tracks);
+  if (mp3.isPlayingFolder() && (myFolder->mode == pmode_t::hoerbuch || myFolder->mode == pmode_t::hoerbuch_1)) {
+    settings.writeFolderSettingToFlash(myFolder->folder, mp3.getCurrentTrack());
+  }
 }
 
 // Funktionen für den Standby Timer (z.B. über Pololu-Switch oder Mosfet)

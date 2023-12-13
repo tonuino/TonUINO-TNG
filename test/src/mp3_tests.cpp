@@ -11,6 +11,7 @@ public:
   , mp3(tonuino.getMp3())
   {
     mp3.reset_to_initial_state();
+    mp3.clearAllQueue();
   }
 
   void execute_cycle() {
