@@ -151,7 +151,7 @@ TEST_F(tonuino_test_fixture, Locked_in_idle) {
 //  EXPECT_EQ(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_303_locked));
   card_out();
   EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
-  EXPECT_TRUE(getMp3().is_stopped());
+  EXPECT_TRUE(getMp3().is_stopped() || getMp3().is_pause());
 
   button_for_command(command::shortcut1, state_for_command::idle_pause);
   EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
@@ -268,7 +268,7 @@ TEST_F(tonuino_test_fixture, ToddlerMode_in_idle) {
 //  EXPECT_EQ(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_304_buttonslocked));
   card_out();
   EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
-  EXPECT_TRUE(getMp3().is_stopped());
+  EXPECT_TRUE(getMp3().is_stopped() || getMp3().is_pause());
 
   button_for_command(command::shortcut1, state_for_command::idle_pause);
   EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());

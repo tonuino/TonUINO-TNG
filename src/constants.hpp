@@ -178,7 +178,6 @@ inline constexpr uint8_t  cardRemoveDelay =  3;
 // ####### mp3 #########################################
 
 #define DFPlayerUsesSoftwareSerial
-#define CHECK_MISSING_ONPLAYFINISHED
 
 inline constexpr uint8_t       maxTracksInFolder        = 255;
 inline constexpr uint8_t       dfPlayer_receivePin      = 2;
@@ -239,7 +238,6 @@ inline constexpr uint8_t  cardRemoveDelay =  3;
 // ####### mp3 #########################################
 
 #define DFPlayerUsesHardwareSerial
-#define CHECK_MISSING_ONPLAYFINISHED
 
 inline constexpr uint8_t        maxTracksInFolder        = 255;
 // inline constexpr uint8_t        dfPlayer_receivePin      =  2;
@@ -302,7 +300,6 @@ inline constexpr uint8_t  cardRemoveDelay =  3;
 // ####### mp3 #########################################
 
 #define DFPlayerUsesSoftwareSerial
-#define CHECK_MISSING_ONPLAYFINISHED
 
 inline constexpr uint8_t       maxTracksInFolder        = 255;
 inline constexpr uint8_t       dfPlayer_receivePin      = 2;
