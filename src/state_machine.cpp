@@ -15,12 +15,14 @@ const __FlashStringHelper* str_ChFolder                () { return F("ChFolder")
 const __FlashStringHelper* str_ChTrack                 () { return F("ChTrack") ; }
 const __FlashStringHelper* str_ChFirstTrack            () { return F("ChFirstTrack") ; }
 const __FlashStringHelper* str_ChLastTrack             () { return F("ChLastTrack") ; }
+const __FlashStringHelper* str_ChNumAnswer             () { return F("ChNumAnswer") ; }
 const __FlashStringHelper* str_WriteCard               () { return F("WriteCard") ; }
 const __FlashStringHelper* str_Base                    () { return F("Base") ; }
 const __FlashStringHelper* str_Idle                    () { return F("Idle") ; }
 const __FlashStringHelper* str_StartPlay               () { return F("StartPlay") ; }
 const __FlashStringHelper* str_Play                    () { return F("Play") ; }
 const __FlashStringHelper* str_Pause                   () { return F("Pause") ; }
+const __FlashStringHelper* str_Quiz                    () { return F("Quiz") ; }
 const __FlashStringHelper* str_Admin_BaseSetting       () { return F("AdmBaseSetting") ; }
 const __FlashStringHelper* str_Admin_BaseWriteCard     () { return F("AdmBaseWriteCard") ; }
 const __FlashStringHelper* str_Admin_Allow             () { return F("AdmAllow") ; }
@@ -127,7 +129,7 @@ void ChMode::entry() {
 
   folder = folderSettings{};
 
-  numberOfOptions   = 11;
+  numberOfOptions   = 12;
   startMessage      = mp3Tracks::t_310_select_mode;
   messageOffset     = mp3Tracks::t_310_select_mode;
   preview           = false;
@@ -159,10 +161,15 @@ void ChMode::react(command_e const &cmd_e) {
     if (folder.mode == pmode_t::repeat_last) {
       folder.folder = 0xff; // dummy value > 0 to make readCard() returning true
       transit<finished>();
+      return;
     }
-    else {
-      transit<ChFolder>();
+#ifndef QUIZ_GAME
+    if (folder.mode == pmode_t::quiz_game) {
+      transit<finished_abort>();
+      return;
     }
+#endif
+    transit<ChFolder>();
     return;
   }
 }
@@ -195,6 +202,12 @@ void ChFolder::react(command_e const &cmd_e) {
   if (Commands::isSelect(cmd) && (currentValue != 0)) {
     folder.folder = currentValue;
     LOG(state_log, s_info, str_ChFolder(), F(": "), currentValue);
+#ifdef QUIZ_GAME
+    if (folder.mode == pmode_t::quiz_game) {
+      transit<ChNumAnswer>();
+      return;
+    }
+#endif
     if (folder.mode == pmode_t::einzel) {
       transit<ChTrack>();
       return;
@@ -313,6 +326,41 @@ void ChLastTrack::react(command_e const &cmd_e) {
 
 // #######################################################
 
+void ChNumAnswer::entry() {
+  LOG(state_log, s_info, str_enter(), str_ChNumAnswer());
+
+  numberOfOptions   = 2;
+  startMessage      = mp3Tracks::t_333_num_answer;
+  messageOffset     = mp3Tracks::t_333_num_answer;
+  preview           = false;
+  previewFromFolder = 0;
+
+  VoiceMenu::entry();
+
+  currentValue      = 0;
+}
+
+void ChNumAnswer::react(command_e const &cmd_e) {
+  if (cmd_e.cmd_raw != commandRaw::none) {
+    LOG(state_log, s_debug, str_ChNumAnswer(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
+  }
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
+
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
+    return;
+
+  if (Commands::isSelect(cmd) && (currentValue != 0)) {
+    folder.special = currentValue*2;
+    LOG(state_log, s_info, str_ChNumAnswer(), F(": "), currentValue);
+    transit<finished>();
+    return;
+  }
+}
+
+// #######################################################
+
 void WriteCard::entry() {
   LOG(state_log, s_info, str_enter(), str_WriteCard());
   current_subState = start_waitCardInserted;
@@ -406,6 +454,13 @@ bool Base::handleShortcut(uint8_t shortCut) {
     if (sc_folderSettings.mode != pmode_t::repeat_last)
       tonuino.setFolder(&sc_folderSettings);
     if (tonuino.getFolder() != 0) {
+#ifdef QUIZ_GAME
+      if (tonuino.getCard().nfcFolderSettings.mode == pmode_t::quiz_game) {
+        LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
+        transit<Quizz>();
+        return true;
+      }
+#endif // QUIZ_GAME
       LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
       transit<StartPlay>();
       return true;
@@ -418,6 +473,13 @@ void Base::handleReadCard() {
   if (lastCardRead.nfcFolderSettings.mode != pmode_t::repeat_last)
     tonuino.setCard(lastCardRead);
   if (tonuino.getCard().nfcFolderSettings.folder != 0) {
+#ifdef QUIZ_GAME
+    if (tonuino.getCard().nfcFolderSettings.mode == pmode_t::quiz_game) {
+      LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
+      transit<Quizz>();
+      return;
+    }
+#endif // QUIZ_GAME
     LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
     transit<StartPlay>();
   }
@@ -499,6 +561,13 @@ void Idle::react(command_e const &cmd_e) {
 #ifdef REPLAY_ON_PLAY_BUTTON
   case command::pause:
     if (tonuino.getFolder() != 0) {
+#ifdef QUIZ_GAME
+      if (tonuino.getCard().nfcFolderSettings.mode == pmode_t::quiz_game) {
+        LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
+        transit<Quizz>();
+        return;
+      }
+#endif // QUIZ_GAME
       LOG(state_log, s_debug, str_Idle(), str_to(), str_StartPlay());
       transit<StartPlay>();
       return;
@@ -709,6 +778,148 @@ void StartPlay::react(command_e const &/*cmd_e*/) {
     timer.start(dfPlayer_timeUntilStarts);
   }
 }
+
+// #######################################################
+
+void Quizz::entry() {
+  LOG(state_log, s_info, str_enter(), str_Quiz());
+  tonuino.disableStandbyTimer();
+  tonuino.playFolder();
+  numAnswer = tonuino.getCard().nfcFolderSettings.special;
+  if (numAnswer != 2 and numAnswer != 4) {
+    LOG(state_log, s_error, F("numAnswer falsch: "), numAnswer);
+    // error todo
+  }
+  quizState = QuizState::playQuestion;
+  numQuestion = tonuino.getNumTracksInFolder()/(numAnswer+1);
+
+  a.clear();
+  a.push(0);
+  a.push(1);
+  if (numAnswer == 4) {
+    a.push(2);
+    a.push(3);
+  }
+
+  timer.start(timeout);
+
+  mp3.enqueueMp3FolderTrack(mp3Tracks::t_500_quiz_game_intro);
+}
+
+void Quizz::react(command_e const &cmd_e) {
+  if (cmd_e.cmd_raw != commandRaw::none) {
+    timer.start(timeout);
+    LOG(state_log, s_debug, str_Quiz(), F("::react(cmd_e) "), static_cast<int>(cmd_e.cmd_raw));
+  }
+
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
+
+  if (tonuino.getActiveModifier().handleButton(cmd))
+    return;
+
+  if (checkForShortcutAndShutdown(cmd))
+    return;
+
+  switch (cmd) {
+  case command::admin:
+    if (settings.adminMenuLocked != 1) { // only card is allowed
+      LOG(state_log, s_debug, str_Quiz(), str_to(), str_Admin_Allow());
+      transit<Admin_Allow>();
+    }
+    return;
+  case command::pause:
+    LOG(state_log, s_debug, F("Pause Taste"));
+
+    switch (quizState) {
+    case QuizState::playQuestion:
+      question = random(0, numQuestion);
+      trackQuestion = question*(numAnswer+1)+1;
+      a.shuffle();
+      mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion);
+      quizState = QuizState::playAnswer;
+      actAnswer = 0xff;
+      break;
+    case QuizState::playAnswer:
+      if (actAnswer == 0) {
+        LOG(state_log, s_debug, F("richtig"));
+        mp3.enqueueMp3FolderTrack(mp3Tracks::t_501_quiz_game_ok);
+      }
+      else {
+        LOG(state_log, s_debug, F("falsch"));
+        mp3.enqueueMp3FolderTrack(mp3Tracks::t_502_quiz_game_bad);
+      }
+      quizState = QuizState::playQuestion;
+      break;
+    }
+    break;
+  case command::track:
+    if (quizState == QuizState::playAnswer) {
+      mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion);
+    }
+    break;
+  case command::volume_up:
+    if (quizState == QuizState::playAnswer) {
+      actAnswer = a.get(0);
+      mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+    }
+    break;
+  case command::next:
+    if (quizState == QuizState::playAnswer) {
+      actAnswer = a.get(1);
+      mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+    }
+    break;
+  case command::volume_down:
+    if (quizState == QuizState::playAnswer) {
+      actAnswer = a.get(2%numAnswer);
+      mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+    }
+    break;
+  case command::previous:
+    if (quizState == QuizState::playAnswer) {
+      actAnswer = a.get(3%numAnswer);
+      mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+    }
+    break;
+  case command::to_first:
+    finish();
+    return;
+  default:
+    break;
+  }
+  if (timer.isExpired()) {
+    finish();
+    return;
+  }
+}
+
+void Quizz::react(card_e const &c_e) {
+  if (c_e.card_ev != cardEvent::none) {
+    LOG(state_log, s_debug, str_Quiz(), F("::react(c) "), static_cast<int>(c_e.card_ev));
+  }
+  switch (c_e.card_ev) {
+  case cardEvent::inserted:
+    if (readCard()) {
+#ifdef DONT_ACCEPT_SAME_RFID_TWICE
+      if (not (tonuino.getCard() == lastCardRead))
+#endif
+        handleReadCard();
+    }
+    return;
+  default:
+    break;
+  }
+}
+
+void Quizz::finish() {
+  // todo play end
+  if (mp3.isPlaying()) {
+    mp3.clearAllQueue();
+    mp3.stop();
+  }
+  transit<Idle>();
+}
+
 
 // #######################################################
 
