@@ -35,7 +35,22 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
 - Die HW Variante (TonUINO_Classic, ALLinONE oder ALLinONE_Plus) sowie die Button Konfiguration (THREEBUTTONS, FIVEBUTTONS oder BUTTONS3X3) muss in der Datei constants.hpp durch Entfernen des entsprechenden Kommentars angegeben werden. 
 
 ## platform.io
-- geht out-of-the-box
+- Install platform.io
+  ```
+  pip install platformio
+  ```
+- Build (choose [specific environment](platformio.ini) by adding flag `-e <environment>`)
+  ```
+  pio run
+  ```
+- Upload (port can be found by `pio device list`)
+  ```
+  pio run -e <environment> -t upload --upload-port <port>
+  ```
+- Monitor
+  ```
+  pio device monitor -p <port>
+  ```
 
 ## Libraries
 - Es müssen folgende Versionen der Libraries verwendet werden:  
