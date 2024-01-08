@@ -130,11 +130,13 @@ private:
   enum class QuizState: uint8_t {
     playQuestion,
     playAnswer,
+    playSolution,
   };
 
   void finish();
 
   uint8_t   numAnswer;
+  uint8_t   numSolution;
   QuizState quizState;
   uint8_t   question;
   uint8_t   trackQuestion;

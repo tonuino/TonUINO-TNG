@@ -329,7 +329,7 @@ void ChLastTrack::react(command_e const &cmd_e) {
 void ChNumAnswer::entry() {
   LOG(state_log, s_info, str_enter(), str_ChNumAnswer());
 
-  numberOfOptions   = 2;
+  numberOfOptions   = 4;
   startMessage      = mp3Tracks::t_333_num_answer;
   messageOffset     = mp3Tracks::t_333_num_answer;
   preview           = false;
@@ -352,7 +352,8 @@ void ChNumAnswer::react(command_e const &cmd_e) {
     return;
 
   if (Commands::isSelect(cmd) && (currentValue != 0)) {
-    folder.special = currentValue*2;
+    folder.special  = ((currentValue-1)%2+1)*2;
+    folder.special2 = (currentValue-1) / 2;
     LOG(state_log, s_info, str_ChNumAnswer(), F(": "), currentValue);
     transit<finished>();
     return;
@@ -785,13 +786,20 @@ void Quizz::entry() {
   LOG(state_log, s_info, str_enter(), str_Quiz());
   tonuino.disableStandbyTimer();
   tonuino.playFolder();
-  numAnswer = tonuino.getCard().nfcFolderSettings.special;
+  numAnswer   = tonuino.getCard().nfcFolderSettings.special;
+  numSolution = tonuino.getCard().nfcFolderSettings.special2;
   if (numAnswer != 2 and numAnswer != 4) {
-    LOG(state_log, s_error, F("numAnswer falsch: "), numAnswer);
-    // error todo
+    LOG(state_log, s_error, F("numA: "), numAnswer);
+    finish();
+    return;
+  }
+  if (numSolution > 1) {
+    LOG(state_log, s_error, F("numS: "), numSolution);
+    finish();
+    return;
   }
   quizState = QuizState::playQuestion;
-  numQuestion = tonuino.getNumTracksInFolder()/(numAnswer+1);
+  numQuestion = tonuino.getNumTracksInFolder()/(numAnswer+numSolution+1);
 
   a.clear();
   a.push(0);
@@ -820,6 +828,11 @@ void Quizz::react(command_e const &cmd_e) {
   if (checkForShortcutAndShutdown(cmd))
     return;
 
+  if (quizState == QuizState::playSolution && not mp3.isPlayingMp3()) {
+    mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+numAnswer+1);
+    quizState = QuizState::playQuestion;
+  }
+
   switch (cmd) {
   case command::admin:
     if (settings.adminMenuLocked != 1) { // only card is allowed
@@ -832,8 +845,9 @@ void Quizz::react(command_e const &cmd_e) {
 
     switch (quizState) {
     case QuizState::playQuestion:
+    case QuizState::playSolution:
       question = random(0, numQuestion);
-      trackQuestion = question*(numAnswer+1)+1;
+      trackQuestion = question*(numAnswer+numSolution+1)+1;
       a.shuffle();
       mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion);
       quizState = QuizState::playAnswer;
@@ -842,13 +856,16 @@ void Quizz::react(command_e const &cmd_e) {
     case QuizState::playAnswer:
       if (actAnswer == 0) {
         LOG(state_log, s_debug, F("richtig"));
-        mp3.enqueueMp3FolderTrack(mp3Tracks::t_501_quiz_game_ok);
+        mp3.enqueueMp3FolderTrack(mp3Tracks::t_501_quiz_game_ok+numSolution*2);
       }
       else {
         LOG(state_log, s_debug, F("falsch"));
-        mp3.enqueueMp3FolderTrack(mp3Tracks::t_502_quiz_game_bad);
+        mp3.enqueueMp3FolderTrack(mp3Tracks::t_502_quiz_game_bad+numSolution*2);
       }
-      quizState = QuizState::playQuestion;
+      if (numSolution == 1)
+        quizState = QuizState::playSolution;
+      else
+        quizState = QuizState::playQuestion;
       break;
     }
     break;

@@ -30,12 +30,16 @@ mp3/0332.mp3|Ja, Nummer ansagen.
 mp3/0333_num_answer.mp3|Wieviel verschiedene Antworten hat das Quiz für eine Frage.
 mp3/0334_num_answer_2.mp3|2 Antworten.
 mp3/0334_num_answer_4.mp3|4 Antworten.
+mp3/0335_num_answer_2_1.mp3|2 Antworten und eine Lösung.
+mp3/0336_num_answer_4_1.mp3|4 Antworten und eine lösung.
 mp3/0400_ok.mp3|OK. Ich habe die Karte konfiguriert.
 mp3/0401_error.mp3|Oh weh! Das hat leider nicht geklappt!
 mp3/0402_ok_settings.mp3|Ok, ich habe die Einstellungen gespeichert
 mp3/0500_quiz_game_intro.mp3|Du spielst jetzt ein Quiz. Drücke die Pause Taste, um eine neue Frage zu erhalten. Danach drücke die Vor, Zurück oder die Lautstärke Tasten, um die verschiedenen Antworten zu hören. Wenn du denkst, dass du die richtige Antwort gehört hast, kannst du die Pause Taste drücken um zu erfahren, ob das die richtige Antwort ist. Wiederhole das Ganze so oft du willst. Du kannst das Quiz mit dem langen Druck auf die Vor- und Zurück Taste beenden.
 mp3/0501_quiz_game_ok.mp3|Ja, das ist die richtige Antwort. Gut gemacht. Weiter mit der Pause Taste. 
 mp3/0502_quiz_game_bad.mp3|Oh nein, das ist nicht die richtige Antwort. Versuche die nächste Frage. Weiter mit der Pause Taste. 
+mp3/0503_quiz_game_ok_with_solution.mp3|Ja, das ist die richtige Antwort. Gut gemacht. Hier ist die Erklärung für die Lösung. Anschließend weiter mit der Pause Taste. 
+mp3/0504_quiz_game_bad_with_solution.mp3|Oh nein, das ist nicht die richtige Antwort. Hier ist die Lösung. Anschließend weiter mit der Pause Taste. 
 mp3/0800_waiting_for_card.mp3|Bitte lege nun die Karte auf!
 mp3/0801_remove_card.mp3|Bitte die Karte vom Leser entfernen!
 mp3/0802_reset_aborted.mp3|OK, ich habe den Vorgang abgebrochen.
