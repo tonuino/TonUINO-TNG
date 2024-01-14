@@ -64,7 +64,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 # Change Log
 
-## Version 3.1.6 (08.01.2023)
+## Version 3.1.6 (14.01.2023)
 - [Issue 155](https://github.com/tonuino/TonUINO-TNG/issues/155): Implement a Quiz Game
 
 ## Version 3.1.5 (12.12.2023)
