@@ -329,7 +329,7 @@ void ChLastTrack::react(command_e const &cmd_e) {
 void ChNumAnswer::entry() {
   LOG(state_log, s_info, str_enter(), str_ChNumAnswer());
 
-  numberOfOptions   = 4;
+  numberOfOptions   = 5;
   startMessage      = mp3Tracks::t_333_num_answer;
   messageOffset     = mp3Tracks::t_333_num_answer;
   preview           = false;
@@ -352,8 +352,14 @@ void ChNumAnswer::react(command_e const &cmd_e) {
     return;
 
   if (Commands::isSelect(cmd) && (currentValue != 0)) {
-    folder.special  = ((currentValue-1)%2+1)*2;
-    folder.special2 = (currentValue-1) / 2;
+    if (currentValue == 5) {
+      folder.special  = 0;
+      folder.special2 = 1;
+    }
+    else {
+      folder.special  = ((currentValue-1)%2+1)*2;
+      folder.special2 = (currentValue-1) / 2;
+    }
     LOG(state_log, s_info, str_ChNumAnswer(), F(": "), currentValue);
     transit<finished>();
     return;
@@ -788,7 +794,7 @@ void Quizz::entry() {
   tonuino.playFolder();
   numAnswer   = tonuino.getCard().nfcFolderSettings.special;
   numSolution = tonuino.getCard().nfcFolderSettings.special2;
-  if (numAnswer != 2 and numAnswer != 4) {
+  if (numAnswer != 0 and numAnswer != 2 and numAnswer != 4) {
     LOG(state_log, s_error, F("numA: "), numAnswer);
     finish();
     return;
@@ -802,8 +808,10 @@ void Quizz::entry() {
   numQuestion = tonuino.getNumTracksInFolder()/(numAnswer+numSolution+1);
 
   a.clear();
-  a.push(0);
-  a.push(1);
+  if (numAnswer >= 2) {
+    a.push(0);
+    a.push(1);
+  }
   if (numAnswer == 4) {
     a.push(2);
     a.push(3);
@@ -811,7 +819,10 @@ void Quizz::entry() {
 
   timer.start(timeout);
 
-  mp3.enqueueMp3FolderTrack(mp3Tracks::t_500_quiz_game_intro);
+  if (numAnswer == 0)
+    mp3.enqueueMp3FolderTrack(mp3Tracks::t_507_quiz_game_buzzer_intro);
+  else
+    mp3.enqueueMp3FolderTrack(mp3Tracks::t_500_quiz_game_intro);
 }
 
 void Quizz::react(command_e const &cmd_e) {
@@ -854,7 +865,10 @@ void Quizz::react(command_e const &cmd_e) {
       actAnswer = 0xff;
       break;
     case QuizState::playAnswer:
-      if (actAnswer == 0) {
+      if (numAnswer == 0) {
+        // nothing
+      }
+      else if (actAnswer == 0) {
         LOG(state_log, s_debug, F("richtig"));
         mp3.enqueueMp3FolderTrack(mp3Tracks::t_501_quiz_game_ok+numSolution*2);
       }
@@ -876,26 +890,62 @@ void Quizz::react(command_e const &cmd_e) {
     break;
   case command::volume_up:
     if (quizState == QuizState::playAnswer) {
-      actAnswer = a.get(0);
-      mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+      if (numAnswer == 0) {
+        if (actAnswer == 0xff) {
+          LOG(state_log, s_info, F("Buzzer 2"));
+          mp3.enqueueMp3FolderTrack(mp3Tracks::t_506_quiz_game_buzzer_2);
+          actAnswer = 2;
+        }
+      }
+      else {
+        actAnswer = a.get(0);
+        mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+      }
     }
     break;
   case command::next:
     if (quizState == QuizState::playAnswer) {
-      actAnswer = a.get(1);
-      mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+      if (numAnswer == 0) {
+        if (actAnswer == 0xff) {
+          LOG(state_log, s_info, F("Buzzer 2"));
+          mp3.enqueueMp3FolderTrack(mp3Tracks::t_506_quiz_game_buzzer_2);
+          actAnswer = 2;
+        }
+      }
+      else {
+        actAnswer = a.get(1);
+        mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+      }
     }
     break;
   case command::volume_down:
     if (quizState == QuizState::playAnswer) {
-      actAnswer = a.get(2%numAnswer);
-      mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+      if (numAnswer == 0) {
+        if (actAnswer == 0xff) {
+          LOG(state_log, s_info, F("Buzzer 1"));
+          mp3.enqueueMp3FolderTrack(mp3Tracks::t_505_quiz_game_buzzer_1);
+          actAnswer = 1;
+        }
+      }
+      else {
+        actAnswer = a.get(2%numAnswer);
+        mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+      }
     }
     break;
   case command::previous:
     if (quizState == QuizState::playAnswer) {
-      actAnswer = a.get(3%numAnswer);
-      mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+      if (numAnswer == 0) {
+        if (actAnswer == 0xff) {
+          LOG(state_log, s_info, F("Buzzer 1"));
+          mp3.enqueueMp3FolderTrack(mp3Tracks::t_505_quiz_game_buzzer_1);
+          actAnswer = 1;
+        }
+      }
+      else {
+        actAnswer = a.get(3%numAnswer);
+        mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+      }
     }
     break;
   case command::to_first:
