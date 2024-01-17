@@ -120,7 +120,7 @@ public:
   void react(card_e    const &) override;
 };
 
-class Quizz: public Base
+class Quiz: public Base
 {
 public:
   void entry() override;

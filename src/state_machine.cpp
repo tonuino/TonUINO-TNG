@@ -464,7 +464,7 @@ bool Base::handleShortcut(uint8_t shortCut) {
 #ifdef QUIZ_GAME
       if (tonuino.getCard().nfcFolderSettings.mode == pmode_t::quiz_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
-        transit<Quizz>();
+        transit<Quiz>();
         return true;
       }
 #endif // QUIZ_GAME
@@ -483,7 +483,7 @@ void Base::handleReadCard() {
 #ifdef QUIZ_GAME
     if (tonuino.getCard().nfcFolderSettings.mode == pmode_t::quiz_game) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
-      transit<Quizz>();
+      transit<Quiz>();
       return;
     }
 #endif // QUIZ_GAME
@@ -788,7 +788,7 @@ void StartPlay::react(command_e const &/*cmd_e*/) {
 
 // #######################################################
 
-void Quizz::entry() {
+void Quiz::entry() {
   LOG(state_log, s_info, str_enter(), str_Quiz());
   tonuino.disableStandbyTimer();
   tonuino.playFolder();
@@ -825,7 +825,7 @@ void Quizz::entry() {
     mp3.enqueueMp3FolderTrack(mp3Tracks::t_500_quiz_game_intro);
 }
 
-void Quizz::react(command_e const &cmd_e) {
+void Quiz::react(command_e const &cmd_e) {
   if (cmd_e.cmd_raw != commandRaw::none) {
     timer.start(timeout);
     LOG(state_log, s_debug, str_Quiz(), F("::react(cmd_e) "), static_cast<int>(cmd_e.cmd_raw));
@@ -960,7 +960,7 @@ void Quizz::react(command_e const &cmd_e) {
   }
 }
 
-void Quizz::react(card_e const &c_e) {
+void Quiz::react(card_e const &c_e) {
   if (c_e.card_ev != cardEvent::none) {
     LOG(state_log, s_debug, str_Quiz(), F("::react(c) "), static_cast<int>(c_e.card_ev));
   }
@@ -978,7 +978,7 @@ void Quizz::react(card_e const &c_e) {
   }
 }
 
-void Quizz::finish() {
+void Quiz::finish() {
   // todo play end
   if (mp3.isPlaying()) {
     mp3.clearAllQueue();
