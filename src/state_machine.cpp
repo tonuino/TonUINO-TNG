@@ -820,7 +820,7 @@ void Quizz::entry() {
   timer.start(timeout);
 
   if (numAnswer == 0)
-    mp3.enqueueMp3FolderTrack(mp3Tracks::t_507_quiz_game_buzzer_intro);
+    mp3.enqueueMp3FolderTrack(mp3Tracks::t_509_quiz_game_buzzer_intro);
   else
     mp3.enqueueMp3FolderTrack(mp3Tracks::t_500_quiz_game_intro);
 }
@@ -891,10 +891,10 @@ void Quizz::react(command_e const &cmd_e) {
   case command::volume_up:
     if (quizState == QuizState::playAnswer) {
       if (numAnswer == 0) {
-        if (actAnswer == 0xff) {
-          LOG(state_log, s_info, F("Buzzer 2"));
-          mp3.enqueueMp3FolderTrack(mp3Tracks::t_506_quiz_game_buzzer_2);
-          actAnswer = 2;
+        if ((actAnswer == 0xff) || (actAnswer == 1)) {
+          LOG(state_log, s_debug, F("Buzzer vol up"));
+          mp3.enqueueMp3FolderTrack(mp3Tracks::t_508_quiz_game_buzzer_volu);
+          actAnswer = 1;
         }
       }
       else {
@@ -906,9 +906,9 @@ void Quizz::react(command_e const &cmd_e) {
   case command::next:
     if (quizState == QuizState::playAnswer) {
       if (numAnswer == 0) {
-        if (actAnswer == 0xff) {
-          LOG(state_log, s_info, F("Buzzer 2"));
-          mp3.enqueueMp3FolderTrack(mp3Tracks::t_506_quiz_game_buzzer_2);
+        if ((actAnswer == 0xff) || (actAnswer == 2)) {
+          LOG(state_log, s_debug, F("Buzzer up"));
+          mp3.enqueueMp3FolderTrack(mp3Tracks::t_506_quiz_game_buzzer_up);
           actAnswer = 2;
         }
       }
@@ -921,10 +921,10 @@ void Quizz::react(command_e const &cmd_e) {
   case command::volume_down:
     if (quizState == QuizState::playAnswer) {
       if (numAnswer == 0) {
-        if (actAnswer == 0xff) {
-          LOG(state_log, s_info, F("Buzzer 1"));
-          mp3.enqueueMp3FolderTrack(mp3Tracks::t_505_quiz_game_buzzer_1);
-          actAnswer = 1;
+        if ((actAnswer == 0xff) || (actAnswer == 3)) {
+          LOG(state_log, s_debug, F("Buzzer vol down"));
+          mp3.enqueueMp3FolderTrack(mp3Tracks::t_507_quiz_game_buzzer_vold);
+          actAnswer = 3;
         }
       }
       else {
@@ -936,10 +936,10 @@ void Quizz::react(command_e const &cmd_e) {
   case command::previous:
     if (quizState == QuizState::playAnswer) {
       if (numAnswer == 0) {
-        if (actAnswer == 0xff) {
-          LOG(state_log, s_info, F("Buzzer 1"));
-          mp3.enqueueMp3FolderTrack(mp3Tracks::t_505_quiz_game_buzzer_1);
-          actAnswer = 1;
+        if ((actAnswer == 0xff) || (actAnswer == 4)) {
+          LOG(state_log, s_debug, F("Buzzer down"));
+          mp3.enqueueMp3FolderTrack(mp3Tracks::t_505_quiz_game_buzzer_down);
+          actAnswer = 4;
         }
       }
       else {

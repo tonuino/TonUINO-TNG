@@ -41,9 +41,11 @@ mp3/0501_quiz_game_ok.mp3|Ja, das ist die richtige Antwort. Gut gemacht. Weiter 
 mp3/0502_quiz_game_bad.mp3|Oh nein, das ist nicht die richtige Antwort. Versuche die nächste Frage. Weiter mit der Pause Taste. 
 mp3/0503_quiz_game_ok_with_solution.mp3|Ja, das ist die richtige Antwort. Gut gemacht. Hier ist die Erklärung für die Lösung. Anschließend weiter mit der Pause Taste. 
 mp3/0504_quiz_game_bad_with_solution.mp3|Oh nein, das ist nicht die richtige Antwort. Hier ist die Lösung. Anschließend weiter mit der Pause Taste. 
-mp3/0505_quiz_game_buzzer_1.mp3|Spieler 1 war der erste! Wie lautet die Lösung? Spiele dann die Lösung mit der Pause Taste. 
-mp3/0506_quiz_game_buzzer_2.mp3|Spieler 2 war der erste! Wie lautet die Lösung? Spiele dann die Lösung mit der Pause Taste. 
-mp3/0507_quiz_game_buzzer_intro.mp3|Du spielst jetzt ein Quiz mit Buzzer. Drücke die Pause Taste, um eine neue Frage zu erhalten. Danach drückt die Zurück Taste als Buzzer eins bzw. die Vor Taste als Buzzer zwei. Wenn der schnellste Spieler die Antwort gesagt hat, kannst du die Pause Taste drücken um zu erfahren, ob das die richtige Antwort ist. Wiederhole das Ganze so oft du willst. Du kannst das Quiz mit dem langen Druck auf die Vor- und Zurück Taste beenden.
+mp3/0505_quiz_game_buzzer_down.mp3|Spieler zurück war der erste! Wie lautet die Lösung? Spiele dann die Lösung mit der Pause Taste. 
+mp3/0506_quiz_game_buzzer_up.mp3|Spieler vor war der erste! Wie lautet die Lösung? Spiele dann die Lösung mit der Pause Taste. 
+mp3/0507_quiz_game_buzzer_vol-.mp3|Spieler leiser war der erste! Wie lautet die Lösung? Spiele dann die Lösung mit der Pause Taste. 
+mp3/0508_quiz_game_buzzer_vol+.mp3|Spieler lauter war der erste! Wie lautet die Lösung? Spiele dann die Lösung mit der Pause Taste. 
+mp3/0509_quiz_game_buzzer_intro.mp3|Du spielst jetzt ein Quiz mit Buzzer. Drücke die Pause Taste, um eine neue Frage zu erhalten. Danach drückt die Zurück, Vor, Leiser und Lauter Taste als Buzzer. Wenn der schnellste Spieler die Antwort gesagt hat, kannst du die Pause Taste drücken um zu erfahren, ob das die richtige Antwort ist. Wiederhole das Ganze so oft du willst. Du kannst das Quiz mit dem langen Druck auf die Vor- und Zurück Taste beenden.
 mp3/0800_waiting_for_card.mp3|Bitte lege nun die Karte auf!
 mp3/0801_remove_card.mp3|Bitte die Karte vom Leser entfernen!
 mp3/0802_reset_aborted.mp3|OK, ich habe den Vorgang abgebrochen.
