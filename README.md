@@ -7,9 +7,9 @@ Falls du Interesse daran hast, zur Weiterentwicklung des TonUINO-Projekts beizut
 
 # Anleitung zum Compilieren
 
+## Arduino IDE
 Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TNG](https://www.tonuino.de/TNG) und hier [www.leiterkartenpiraten.de](https://www.leiterkartenpiraten.de)
 
-## Arduino IDE
 - Es ist unbedingt darauf zu achten, das das Verzeichnis in das das Repository gecloned oder heruntergeladen wird (also das Verzeichnis, in dem schließlich auch die TonUINO-TNG.ino zu finden ist, genau so heißt, wie die ino Datei, also in diesem Fall "TonUINO-TNG"!
 
 - Bei der classic und AiO HW Variante muss die Datei 'platform.local.txt' in den avr HW Ordner kopiert werden. Dieser Ordner ist gewöhnlich folgender:  
@@ -34,6 +34,7 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
 
 - Die HW Variante (TonUINO_Classic, ALLinONE oder ALLinONE_Plus) sowie die Button Konfiguration (THREEBUTTONS, FIVEBUTTONS oder BUTTONS3X3) muss in der Datei constants.hpp durch Entfernen des entsprechenden Kommentars angegeben werden. 
 
+<<<<<<< HEAD
 ## platform.io
 - Geht out-of-the-box
 - Es werden die gleichen HW Varianten angeboten wie beim Online Upload ohne die Datei constants.hpp editieren zu müssen
@@ -51,6 +52,9 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
 - wenn man die AiO oder AiOplus mit 3 Buttons hat, muss man in der Datei constants.hpp den Kommentar bei `#define THREEBUTTONS` entfernen. 
 
 ## Libraries
+=======
+**Libraries**
+>>>>>>> refs/remotes/origin/main
 - Es müssen folgende Versionen der Libraries verwendet werden:  
     - jchristensen/JC_Button: >= 2.1.2  
     - miguelbalboa/MFRC522: >= 1.4.10  
@@ -58,16 +62,49 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
     - adafruit/Adafruit NeoPixel: >= 1.11.0 (optional, nur bei Feature NEO_RING notwendig)
 
 
+
+## platform.io
+
+**Verwendung zusammen mit Visual Code**
+
+Eine Anleitung dafür findet man [hier](https://discourse.voss.earth/t/tonuino-software-mit-platformio-aufspielen/13468)
+
+**Nur platform.io (CLI)**
+- platform.io installieren
+
+```
+  pip install platformio
+```
+
+- Build (wähle [spezielle Variante](platformio.ini) mit dem Flag `-e <environment>`)
+
+```
+  pio run
+```
+
+- Upload (Der Port kann mit `pio device list` gefunden werden)
+
+```
+  pio run -e <environment> -t upload --upload-port <port>
+```
+
+- Monitor
+
+```
+  pio device monitor -p <port>
+```
+
 # Installation
 
 Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
 
 # Change Log
 
-## Version 3.1.6 (17.01.2023)
+## Version 3.1.6 (21.01.2024)
 - [Issue 155](https://github.com/tonuino/TonUINO-TNG/issues/155): Implement a Quiz Game
 
-## Version 3.1.5 (12.12.2023)
+## Version 3.1.5 (21.01.2024)
+- [Issue 160](https://github.com/tonuino/TonUINO-TNG/issues/160): Improve the description for platform.io in the Readme
 - [Issue 153](https://github.com/tonuino/TonUINO-TNG/issues/153): Some improvements of the DF Player handling
 - [Issue 149](https://github.com/tonuino/TonUINO-TNG/issues/149): Add possibility to reset the current track on hoerbuch mode
 - [Issue 148](https://github.com/tonuino/TonUINO-TNG/issues/148): New handling of prev and next button on first and last track
