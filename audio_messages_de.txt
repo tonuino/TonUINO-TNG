@@ -19,7 +19,7 @@ mp3/0317_special_random.mp3|Spezialmodus Von-Bis, Hörspiel: Eine zufällige Dat
 mp3/0318_special_album.mp3|Spezialmodus Von-Bis, Album: Alle Dateien zwischen der Start und Enddatei wiedergeben.
 mp3/0319_special_party.mp3|Spezialmodus Von-Bis, Party: Alle Dateien zwischen der Start und Enddatei zufällig wiedergeben.
 mp3/0320_mode_audio_book_single.mp3|Hörbuch Modus einzeln: Den nächsten Titel im Ordner wiedergeben und den Fortschritt speichern.
-mp3/0321_mode_repeat_last_card.mp3|Wiederhole Karte Modus: die letzte Karte oder der letzte Shortcut wird wiederholt.
+mp3/0321_mode_repeat_last_card.mp3|Wiederhole Karte Modus: Die letzte Karte oder der letzte Shortcut wird wiederholt.
 mp3/0327_select_file.mp3|OK, wähle nun bitte die Datei mit den Lautstärketasten aus.
 mp3/0328_select_first_file.mp3|OK, wähle nun bitte die Startdatei mit den Lautstärketasten aus.
 mp3/0329_select_last_file.mp3|Wähle nun bitte die Enddatei mit den Lautstärketasten aus.
@@ -46,7 +46,7 @@ mp3/0910_switch_volume.mp3|Funktion der Lautstärketasten umdrehen.
 mp3/0911_reset.mp3|Alle Einstellungen löschen.
 mp3/0912_admin_lock.mp3|Das Adminmenü absichern.
 mp3/0913_pause_on_card_removed.mp3|Pause, wenn Karte entfernt wird.
-mp3/0919_continue_admin.mp3|und weiter im Admin Menü. Durch einen langen Druck auf die Pausetaste kannst du das Admin Menü abbrechen.
+mp3/0919_continue_admin.mp3|Und weiter im Admin Menü. Durch einen langen Druck auf die Pausetaste kannst du das Admin Menü abbrechen.
 mp3/0920_eq_intro.mp3|Bitte wähle eine Einstellung für den EQ mit den Lautstärketasten aus und bestätige sie mit der Pausetaste.
 mp3/0921_normal.mp3|Normal
 mp3/0922_pop.mp3|Pop
@@ -71,7 +71,7 @@ mp3/0961_timer_5.mp3|5 Minuten.
 mp3/0962_timer_15.mp3|15 Minuten.
 mp3/0963_timer_30.mp3|30 Minuten.
 mp3/0964_timer_60.mp3|60 Minuten.
-mp3/0965_timer_disabled.mp3|nicht automatisch abschalten
+mp3/0965_timer_disabled.mp3|Nicht automatisch abschalten
 mp3/0970_modifier_Intro.mp3|Bitte wähle nun deine Modifikationskarte mit den Lautstärketasten aus.
 mp3/0971_modifier_SleepTimer.mp3|Schlummermodus
 mp3/0972_modifier_FreezeDance.mp3|Stopptanz - TonUINO spielt Stopptanz mit dir und hält zufällig für dich die Wiedergabe kurz an.
@@ -86,6 +86,6 @@ mp3/0983_admin_lock_pin.mp3|Codeeingabe - das Adminmenü wird durch eine vierste
 mp3/0984_admin_lock_calc.mp3|Rechenaufgabe - das Adminmenü kann nur durch Lösen einer Rechenaufgabe betreten werden.
 mp3/0991_admin_pin.mp3|Bitte gebe die Pin ein.
 mp3/0992_admin_calc.mp3|Wieviel ist
-mp3/0993_admin_calc.mp3|plus
-mp3/0994_admin_calc.mp3|minus
+mp3/0993_admin_calc.mp3|Plus
+mp3/0994_admin_calc.mp3|Minus
 mp3/0999_reset_ok.mp3|Reset wurde durchgeführt!
