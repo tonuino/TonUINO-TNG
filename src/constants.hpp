@@ -133,12 +133,13 @@ inline constexpr int getLevel(levelType t, level l) { return (l == level::inacti
                                                                                     : (t == levelType::activeHigh ? HIGH : LOW); }
 // ####### rules for buttons ############################
 
+inline constexpr uint8_t lastSortCut         =  24;
 #ifdef BUTTONS3X3
 #ifdef FIVEBUTTONS
 static_assert(false, "The 3x3 Button board doesn't have 5 Buttons");
 #endif
 inline constexpr uint8_t buttonExtSC_begin   = 101;
-inline constexpr uint8_t buttonExtSC_buttons =  18;
+inline constexpr uint8_t buttonExtSC_buttons =  18; // <= lastSortCut
 #endif // BUTTONS3X3
 
 inline constexpr uint32_t  buttonLongPress       = 1000; // timeout for long press button in ms

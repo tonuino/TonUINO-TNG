@@ -48,15 +48,15 @@ bool KindergardenMode::handleNext() {
     LOG(modifier_log, s_info, str_KindergardenMode(), F(" -> NEXT"));
     cardQueued = false;
 
-    tonuino.setCard(nextCard);
-    LOG(modifier_log, s_debug, F("Folder: "), nextCard.nfcFolderSettings.folder, F(" Mode: "), static_cast<uint8_t>(nextCard.nfcFolderSettings.mode));
+    tonuino.setMyFolder(nextCard, true /*myFolderIsCard*/);
+    LOG(modifier_log, s_debug, F("Folder: "), nextCard.folder, F(" Mode: "), static_cast<uint8_t>(nextCard.mode));
     tonuino.playFolder();
     mp3.loop(); // to start the new queue now and not going to Idle
     return true;
   }
   return false;
 }
-bool KindergardenMode::handleRFID(const nfcTagObject &newCard) {
+bool KindergardenMode::handleRFID(const folderSettings &newCard) {
   if (!mp3.isPlaying())
     return false;
 
@@ -107,7 +107,7 @@ bool RepeatSingleModifier::handlePrevious() {
 //  LOG(modifier_log, s_info, F("FeedbackModifier::handleVolumeUp()!"));
 //  return false;
 //}
-//bool FeedbackModifier::handleRFID(const nfcTagObject &/*newCard*/) {
+//bool FeedbackModifier::handleRFID(const folderSettings &/*newCard*/) {
 //  LOG(modifier_log, s_info, F("FeedbackModifier::handleRFID()"));
 //  return false;
 //}

@@ -10,7 +10,7 @@
 
 class Tonuino;
 class Mp3;
-struct nfcTagObject;
+struct folderSettings;
 
 class Modifier {
 public:
@@ -20,7 +20,7 @@ public:
   virtual bool handleNext          () { return false; }
   virtual bool handlePrevious      () { return false; }
   virtual bool handleButton(command ) { return false; }
-  virtual bool handleRFID(const nfcTagObject&)
+  virtual bool handleRFID(const folderSettings&)
                                       { return false; }
   virtual pmode_t getActive        () { return pmode_t::none; }
   virtual void init         (uint8_t) {}
@@ -63,7 +63,7 @@ class Locked: public Modifier {
 public:
   Locked(Tonuino &tonuino, Mp3 &mp3): Modifier(tonuino, mp3) {}
   bool handleButton(command) final { LOG(modifier_log, s_debug, F("Locked::Button -> LOCKED!"))    ; return true; }
-  bool handleRFID(const nfcTagObject&)
+  bool handleRFID(const folderSettings&)
                              final { LOG(modifier_log, s_debug, F("Locked::RFID -> LOCKED!"))      ; return true; }
 
   pmode_t getActive()        final { return pmode_t::locked; }
@@ -82,13 +82,13 @@ public:
   KindergardenMode(Tonuino &tonuino, Mp3 &mp3): Modifier(tonuino, mp3) {}
   bool handleNext  (                           ) final;
   bool handleButton(command cmd                ) final;
-  bool handleRFID  (const nfcTagObject &newCard) final;
+  bool handleRFID  (const folderSettings &newCard) final;
 
   pmode_t getActive (                          ) final { return pmode_t::kindergarden; }
   void   init       (uint8_t                   ) final { cardQueued = false; }
 
 private:
-  nfcTagObject nextCard{};
+  folderSettings nextCard{};
   bool cardQueued = false;
 };
 
@@ -109,7 +109,7 @@ public:
 //  FeedbackModifier(Tonuino &tonuino, Mp3 &mp3, const Settings &settings): Modifier(tonuino, mp3, settings) {}
 //  bool handleVolumeDown() final;
 //  bool handleVolumeUp  () final;
-//  bool handleRFID      (const nfcTagObject &newCard) final;
+//  bool handleRFID      (const folderSettings &newCard) final;
 //};
 
 #endif /* SRC_MODIFIER_HPP_ */

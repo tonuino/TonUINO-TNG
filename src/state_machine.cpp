@@ -336,8 +336,8 @@ void WriteCard::react(command_e const &cmd_e) {
     break;
   case run_writeCard:
     if (not chip_card.isCardRemoved()) {
-      nfcTagObject newCard;
-      newCard.nfcFolderSettings = folder;
+      folderSettings newCard;
+      newCard = folder;
       if (chip_card.writeCard(newCard))
         mp3.enqueueMp3FolderTrack(mp3Tracks::t_400_ok);
       else
@@ -368,8 +368,8 @@ bool Base::readCard() {
   case Chip_card::readCardEvent::none : return false;
 
   case Chip_card::readCardEvent::known:
-    if (lastCardRead.nfcFolderSettings.folder == 0) {
-      if (lastCardRead.nfcFolderSettings.mode == pmode_t::admin_card) {
+    if (lastCardRead.folder == 0) {
+      if (lastCardRead.mode == pmode_t::admin_card) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Admin_Entry());
         Admin_Entry::lastCurrentValue = 0;
         transit<Admin_Entry>();
@@ -393,7 +393,7 @@ bool Base::readCard() {
   if (tonuino.getActiveModifier().handleRFID(lastCardRead))
     return false;
 
-  if (lastCardRead.nfcFolderSettings.folder != 0) {
+  if (lastCardRead.folder != 0) {
     return true;
   }
 
@@ -401,10 +401,10 @@ bool Base::readCard() {
 }
 
 bool Base::handleShortcut(uint8_t shortCut) {
-  folderSettings &sc_folderSettings = settings.getShortCut(shortCut);
-  if (sc_folderSettings.folder != 0 && sc_folderSettings.folder != 0xff) {
+  folderSettings sc_folderSettings = settings.getShortCut(shortCut);
+  if (sc_folderSettings.folder != 0) {
     if (sc_folderSettings.mode != pmode_t::repeat_last)
-      tonuino.setFolder(&sc_folderSettings);
+      tonuino.setMyFolder(sc_folderSettings, false /*myFolderIsCard*/);
     if (tonuino.getFolder() != 0) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
       transit<StartPlay>();
@@ -415,9 +415,9 @@ bool Base::handleShortcut(uint8_t shortCut) {
 }
 
 void Base::handleReadCard() {
-  if (lastCardRead.nfcFolderSettings.mode != pmode_t::repeat_last)
-    tonuino.setCard(lastCardRead);
-  if (tonuino.getCard().nfcFolderSettings.folder != 0) {
+  if (lastCardRead.mode != pmode_t::repeat_last)
+    tonuino.setMyFolder(lastCardRead, true /*myFolderIsCard*/);
+  if (tonuino.getFolder() != 0) {
     LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
     transit<StartPlay>();
   }
@@ -671,7 +671,7 @@ void Pause::react(card_e const &c_e) {
 #endif
                             false;
 
-      if (resume_on_card && tonuino.getCard() == lastCardRead && not tonuino.getActiveModifier().handleButton(command::pause)) {
+      if (resume_on_card && tonuino.getMyFolder() == lastCardRead && not tonuino.getActiveModifier().handleButton(command::pause)) {
         transit<Play>();
         return;
       }
@@ -1528,7 +1528,7 @@ uint8_t   VoiceMenu<SMT>::currentValue     ;
 template<SM_type SMT>
 bool      VoiceMenu<SMT>::previewStarted   ;
 
-nfcTagObject Base::lastCardRead{};
+folderSettings Base::lastCardRead{};
 uint8_t Admin_Entry::lastCurrentValue{};
 Admin_SimpleSetting::Type Admin_SimpleSetting::type{};
 bool Admin_NewCard::return_to_idle{false};
