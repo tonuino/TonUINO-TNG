@@ -82,6 +82,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geän
 
 ## Version 3.1.5 (30.01.2024)
 - [Issue 166](https://github.com/tonuino/TonUINO-TNG/issues/166): Issue_166: generateRamdomSeed() does not generate a random value
+- [Issue 165](https://github.com/tonuino/TonUINO-TNG/issues/165): 'Play last card' does not work as ShortCut
 
 ## Version 3.1.5 (21.01.2024)
 - [Issue 162](https://github.com/tonuino/TonUINO-TNG/issues/162): Prepare optional feature ROTARY_ENCODER for Nano Every
