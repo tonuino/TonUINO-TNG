@@ -36,10 +36,10 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
 
 **Libraries**
 - Es müssen folgende Versionen der Libraries verwendet werden:  
-    - jchristensen/JC_Button: >= 2.1.2  
-    - miguelbalboa/MFRC522: >= 1.4.10  
+    - jchristensen/JC_Button: 2.1.2  
+    - miguelbalboa/MFRC522: 1.4.10  
     - makuna/DFPlayer Mini Mp3 by Makuna: 1.2.3
-    - adafruit/Adafruit NeoPixel: >= 1.11.0 (optional, nur bei Feature NEO_RING notwendig)
+    - adafruit/Adafruit NeoPixel: 1.11.0 (optional, nur bei Feature NEO_RING notwendig)
 
 ## platform.io
 
