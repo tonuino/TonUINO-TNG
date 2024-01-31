@@ -839,9 +839,13 @@ void Quiz::react(command_e const &cmd_e) {
   if (checkForShortcutAndShutdown(cmd))
     return;
 
+  if (quizState == QuizState::playWeiter && not mp3.isPlayingFolder()) {
+    mp3.enqueueMp3FolderTrack(mp3Tracks::t_510_quiz_game_continue);
+    quizState = QuizState::playQuestion;
+  }
   if (quizState == QuizState::playSolution && not mp3.isPlayingMp3()) {
     mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+numAnswer+1);
-    quizState = QuizState::playQuestion;
+    quizState = QuizState::playWeiter;
   }
 
   switch (cmd) {
@@ -857,6 +861,7 @@ void Quiz::react(command_e const &cmd_e) {
     switch (quizState) {
     case QuizState::playQuestion:
     case QuizState::playSolution:
+    case QuizState::playWeiter:
       question = random(0, numQuestion);
       trackQuestion = question*(numAnswer+numSolution+1)+1;
       a.shuffle();

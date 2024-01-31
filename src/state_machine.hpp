@@ -131,6 +131,7 @@ private:
     playQuestion,
     playAnswer,
     playSolution,
+    playWeiter,
   };
 
   void finish();

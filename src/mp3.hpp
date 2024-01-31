@@ -78,6 +78,7 @@ enum class mp3Tracks: uint16_t {
   t_507_quiz_game_buzzer_vold  = 507,
   t_508_quiz_game_buzzer_volu  = 508,
   t_509_quiz_game_buzzer_intro = 509,
+  t_510_quiz_game_continue     = 510,
   t_800_waiting_for_card       = 800,
   t_801_remove_card            = 801,
   t_802_reset_aborted          = 802,
