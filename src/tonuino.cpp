@@ -332,8 +332,8 @@ uint32_t Tonuino::generateRamdomSeed()
     uint32_t seedBitValue  = 0;
     for (uint8_t bitSum = 0; bitSum <= 8; bitSum++) {     // 8 samples of analog pin
       seedBitValue += analogRead(openAnalogPin);          // Flip the coin eight times, adding the results together
+      delay(1);                                             // Delay a single millisecond to allow the pin to fluctuate
     }
-    delay(1);                                             // Delay a single millisecond to allow the pin to fluctuate
     seedLongValue |= ((seedBitValue & 0x01) << bitShift); // Build a stack of 32 flipped coins
   }
   LOG(init_log, s_debug, F("RamdonSeed: "), seedLongValue);

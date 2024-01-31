@@ -457,7 +457,7 @@ bool Base::readCard() {
 
 bool Base::handleShortcut(uint8_t shortCut) {
   folderSettings &sc_folderSettings = settings.getShortCut(shortCut);
-  if (sc_folderSettings.folder != 0 && sc_folderSettings.folder != 0xff) {
+  if (sc_folderSettings.folder != 0) {
     if (sc_folderSettings.mode != pmode_t::repeat_last)
       tonuino.setFolder(&sc_folderSettings);
     if (tonuino.getFolder() != 0) {
