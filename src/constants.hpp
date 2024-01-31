@@ -115,7 +115,7 @@ inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
 /* uncomment the below line to enable the quiz game
  * um das Quiz Spile zu aktivieren, in der nächste Zeile den Kommentar entfernen
  */
-//#define QUIZ_GAME
+#define QUIZ_GAME
 
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################

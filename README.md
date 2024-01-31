@@ -34,9 +34,15 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
 
 - Die HW Variante (TonUINO_Classic, ALLinONE oder ALLinONE_Plus) sowie die Button Konfiguration (THREEBUTTONS, FIVEBUTTONS oder BUTTONS3X3) muss in der Datei constants.hpp durch Entfernen des entsprechenden Kommentars angegeben werden. 
 
-<<<<<<< HEAD
+**Libraries**
+- Es müssen folgende Versionen der Libraries verwendet werden:  
+    - jchristensen/JC_Button: >= 2.1.2  
+    - miguelbalboa/MFRC522: >= 1.4.10  
+    - makuna/DFPlayer Mini Mp3 by Makuna: 1.2.3
+    - adafruit/Adafruit NeoPixel: >= 1.11.0 (optional, nur bei Feature NEO_RING notwendig)
+
 ## platform.io
-- Geht out-of-the-box
+
 - Es werden die gleichen HW Varianten angeboten wie beim Online Upload ohne die Datei constants.hpp editieren zu müssen
 
 ```
@@ -50,20 +56,6 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
 ```
 
 - wenn man die AiO oder AiOplus mit 3 Buttons hat, muss man in der Datei constants.hpp den Kommentar bei `#define THREEBUTTONS` entfernen. 
-
-## Libraries
-=======
-**Libraries**
->>>>>>> refs/remotes/origin/main
-- Es müssen folgende Versionen der Libraries verwendet werden:  
-    - jchristensen/JC_Button: >= 2.1.2  
-    - miguelbalboa/MFRC522: >= 1.4.10  
-    - makuna/DFPlayer Mini Mp3 by Makuna: 1.2.3
-    - adafruit/Adafruit NeoPixel: >= 1.11.0 (optional, nur bei Feature NEO_RING notwendig)
-
-
-
-## platform.io
 
 **Verwendung zusammen mit Visual Code**
 
@@ -96,7 +88,7 @@ Eine Anleitung dafür findet man [hier](https://discourse.voss.earth/t/tonuino-s
 
 # Installation
 
-Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
+Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.5 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
 
 # Change Log
 
