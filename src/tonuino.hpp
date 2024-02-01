@@ -36,10 +36,12 @@ public:
   void disableStandbyTimer();
 
   void setMyFolder(const folderSettings &newFolder, bool a_myFolderIsCard) {
+#ifdef STORE_LAST_CARD
     if (not (myFolder == newFolder)) {
       LOG(init_log, s_debug, F("set last, folder: "), newFolder.folder, F(", mode: "), static_cast<uint8_t>(newFolder.mode));
       settings.writeExtShortCutToFlash(lastSortCut, newFolder);
     }
+#endif
     myFolderIsCard = a_myFolderIsCard;
     myFolder = newFolder;
   }

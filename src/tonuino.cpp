@@ -49,8 +49,10 @@ void Tonuino::setup() {
 
   // load Settings from EEPROM
   settings.loadSettingsFromFlash();
+#ifdef STORE_LAST_CARD
   settings.readExtShortCutFromFlash(lastSortCut, myFolder);
   LOG(init_log, s_debug, F("get last, folder: "), myFolder.folder, F(", mode: "), static_cast<uint8_t>(myFolder.mode));
+#endif
 
   // DFPlayer Mini initialisieren
   mp3.begin();

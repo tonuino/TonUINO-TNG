@@ -112,6 +112,11 @@ inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
  */
 //#define REPLAY_ON_PLAY_BUTTON
 
+/* uncomment the below line to store the last played card in EEPROM
+ * um die letzte Karte im EEPROM zu speichern, in der nächste Zeile den Kommentar entfernen
+ */
+//#define STORE_LAST_CARD
+
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
  * ##### mormalerweise müssen die folgende Zeilen nicht editiert werden ############################
