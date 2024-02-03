@@ -112,6 +112,17 @@ inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
  */
 //#define REPLAY_ON_PLAY_BUTTON
 
+/* uncomment the below line to enable tap detection via MPU6050 gyroscope
+ * um Tippgesten mittels MPU6050 Gyroscope zu erkennen, in der nächste Zeile den Kommentar entfernen
+ */
+#define MPU6050_TAP_DETECTION
+#define MPU6050_INT
+#ifdef ALLinONE_Plus
+inline uint8_t mpu6050InterruptPin = 10; // AiOplus: PB2
+#elif TonUINO_Every
+inline uint8_t mpu6050InterruptPin =  8; // Nona Every: D8
+#endif
+
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
  * ##### mormalerweise müssen die folgende Zeilen nicht editiert werden ############################

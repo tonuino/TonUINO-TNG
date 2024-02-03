@@ -65,6 +65,10 @@ void Tonuino::setup() {
     settings.loadSettingsFromFlash();
   }
 
+#ifdef MPU6050_TAP_DETECTION
+  mpu6050.init();
+#endif
+
   SM_tonuino::start();
 #if defined ALLinONE || defined ALLinONE_Plus || defined SPKONOFF
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
