@@ -7,7 +7,7 @@
  * Bitte die passende Platine durch entfernen der Kommentare in einer der folgenden Zeilen auswählen
  */
 //#define TonUINO_Classic
-//#define TonUINO_Every
+// #define TonUINO_Every
 //#define ALLinONE
 //#define ALLinONE_Plus
 
@@ -42,10 +42,21 @@
  */
 //#define DISABLE_SHUTDOWN_VIA_BUTTON
 
-/* uncomment the below line to enable the rotary encoder for volume setting (only for AiOplus)
- * um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen (nur für AioPlus)
+
+/* uncomment the below line to enable the rotary encoder for volume setting
+ * um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
  */
-//#define ROTARY_ENCODER
+// #define ROTARY_ENCODER
+
+/* uncomment the below line to enable the rotary encoder with long/short press like THREEBUTTON configuration
+ * um den Drehgeber mit lang/kurz Drehung wie 3-Knopf-Konfiguration zu benutzen bitte den Kommentar entferenen in der nächsten
+ * Zeile entfernen
+ */
+// #define ROTARY_LONGPRESS
+#ifdef ROTARY_LONGPRESS
+#define ROTARY_ENCODER
+#endif
+
 #ifdef ALLinONE_Plus
 // if using Rotary Encoder Buchse
 //inline constexpr uint8_t   rotaryEncoderClkPin    = 31; // PE2
@@ -162,6 +173,16 @@ inline constexpr uint8_t   buttonFivePin   = A2;
 #else
 inline constexpr uint8_t   buttonUpPin     = A1;
 inline constexpr uint8_t   buttonDownPin   = A2;
+#endif
+
+
+#if defined(ROTARY_ENCODER)
+// if using with THREEBUTTONS config
+inline constexpr uint8_t   rotaryEncoderClkPin    = A3;
+inline constexpr uint8_t   rotaryEncoderDtPin     = A4; 
+// if using together with FIVEBUTTON config
+// inline constexpr uint8_t   rotaryEncoderClkPin    = A5;
+// inline constexpr uint8_t   rotaryEncoderDtPin     = A6;
 #endif
 
 inline constexpr levelType buttonPinType   = levelType::activeLow;
