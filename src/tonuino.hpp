@@ -35,11 +35,19 @@ public:
   void setStandbyTimer();
   void disableStandbyTimer();
 
-  void setCard  (const nfcTagObject   &newCard) { myCard = newCard; setFolder(&myCard.nfcFolderSettings); }
-  const nfcTagObject& getCard() const           { return myCard; }
-  void setFolder(folderSettings *newFolder    ) { myFolder = newFolder; }
-  uint8_t getFolder()                           { return myFolder->folder; }
-  bool playingCard()                            { return myFolder == &myCard.nfcFolderSettings; }
+  void setMyFolder(const folderSettings &newFolder, bool a_myFolderIsCard) {
+#ifdef STORE_LAST_CARD
+    if (not (myFolder == newFolder)) {
+      LOG(init_log, s_debug, F("set last, folder: "), newFolder.folder, F(", mode: "), static_cast<uint8_t>(newFolder.mode));
+      settings.writeExtShortCutToFlash(lastSortCut, newFolder);
+    }
+#endif
+    myFolderIsCard = a_myFolderIsCard;
+    myFolder = newFolder;
+  }
+  const folderSettings& getMyFolder() const     { return myFolder; }
+  uint8_t getFolder()                           { return myFolder.folder; }
+  bool playingCard()                            { return myFolderIsCard; }
 
   Mp3&      getMp3      () { return mp3      ; }
   Commands& getCommands () { return commands ; }
@@ -62,7 +70,7 @@ private:
 
   void checkStandby();
 
-  bool specialCard(const nfcTagObject &nfcTag);
+  bool specialCard(const folderSettings &nfcTag);
 
   Settings             settings            {};
   Mp3                  mp3                 {settings};
@@ -115,8 +123,8 @@ private:
 
   Timer                standbyTimer        {};
 
-  nfcTagObject         myCard              {};
-  folderSettings*      myFolder            {&myCard.nfcFolderSettings};
+  folderSettings       myFolder            {};
+  bool                 myFolderIsCard      {};
   uint16_t             numTracksInFolder   {};
 };
 

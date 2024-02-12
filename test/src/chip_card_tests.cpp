@@ -77,10 +77,10 @@ TEST_F(chip_card_test_fixture, read_card_works) {
     cardEvent ce = execute_cycle();
     EXPECT_EQ(ce, cardEvent::inserted);
 
-    nfcTagObject nfcTag;
+    folderSettings nfcTag;
     Chip_card::readCardEvent rce = chip_card.readCard(nfcTag);
     EXPECT_EQ(rce, Chip_card::readCardEvent::known);
-    EXPECT_EQ(nfcTag.nfcFolderSettings, card);
+    EXPECT_EQ(nfcTag, card);
 
     card_out();
     execute_cycle();
@@ -96,7 +96,7 @@ TEST_F(chip_card_test_fixture, read_card_with_bad_version) {
   cardEvent ce = execute_cycle();
   EXPECT_EQ(ce, cardEvent::inserted);
 
-  nfcTagObject nfcTag;
+  folderSettings nfcTag;
   Chip_card::readCardEvent rce = chip_card.readCard(nfcTag);
   EXPECT_EQ(rce, Chip_card::readCardEvent::none);
 
@@ -127,7 +127,7 @@ TEST_F(chip_card_test_fixture, read_card_with_zero_cookie) {
   cardEvent ce = execute_cycle();
   EXPECT_EQ(ce, cardEvent::inserted);
 
-  nfcTagObject nfcTag;
+  folderSettings nfcTag;
   Chip_card::readCardEvent rce = chip_card.readCard(nfcTag);
   EXPECT_EQ(rce, Chip_card::readCardEvent::empty);
 
@@ -143,7 +143,7 @@ TEST_F(chip_card_test_fixture, read_card_with_bad_cookie) {
   cardEvent ce = execute_cycle();
   EXPECT_EQ(ce, cardEvent::inserted);
 
-  nfcTagObject nfcTag;
+  folderSettings nfcTag;
   Chip_card::readCardEvent rce = chip_card.readCard(nfcTag);
   EXPECT_EQ(rce, Chip_card::readCardEvent::none);
 
@@ -168,7 +168,7 @@ TEST_F(chip_card_test_fixture, write_card_works) {
   };
 
   for (folderSettings card: test_data) {
-    nfcTagObject nfcTag{card};
+    folderSettings nfcTag{card};
     card_in(0, 0, 0, 0, 0, 0);
     cardEvent ce = execute_cycle();
     EXPECT_EQ(ce, cardEvent::inserted);

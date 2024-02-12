@@ -24,13 +24,9 @@ constexpr uint16_t endAddress                 = 256;
 
 #ifdef BUTTONS3X3
 constexpr uint16_t maxExtraShortcuts = (endAddress - startAddressExtraShortcuts) / sizeof(folderSettings);
-static_assert(buttonExtSC_buttons <= maxExtraShortcuts, "Too many ExtraShortCuts");
+static_assert(buttonExtSC_buttons < maxExtraShortcuts, "Too many ExtraShortCuts");
 #endif
 }
-
-#ifdef BUTTONS3X3
-folderSettings Settings::extShortCut{};
-#endif
 
 void Settings::clearEEPROM() {
   LOG(settings_log, s_info, F("clEEPROM"));
@@ -121,17 +117,18 @@ void Settings::readExtShortCutFromFlash(uint8_t shortCut,       folderSettings& 
 }
 
 
-folderSettings& Settings::getShortCut(uint8_t shortCut) {
+folderSettings Settings::getShortCut(uint8_t shortCut) {
   if (shortCut > 0 && shortCut <= 4)
     return shortCuts[shortCut-1];
 #ifdef BUTTONS3X3
   else if (shortCut >= buttonExtSC_begin && shortCut < buttonExtSC_begin + buttonExtSC_buttons) {
+    folderSettings extShortCut;
     readExtShortCutFromFlash(shortCut-buttonExtSC_begin, extShortCut);
     return extShortCut;
   }
 #endif
 
-  return shortCuts[0];
+  return { 0, pmode_t::none, 0, 0 };
 }
 
 void Settings::setShortCut(uint8_t shortCut, const folderSettings& value) {

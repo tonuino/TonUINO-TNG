@@ -117,6 +117,11 @@ inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
  */
 //#define QUIZ_GAME
 
+/* uncomment the below line to store the last played card in EEPROM
+ * um die letzte Karte im EEPROM zu speichern, in der nächste Zeile den Kommentar entfernen
+ */
+//#define STORE_LAST_CARD
+
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
  * ##### mormalerweise müssen die folgende Zeilen nicht editiert werden ############################
@@ -138,12 +143,13 @@ inline constexpr int getLevel(levelType t, level l) { return (l == level::inacti
                                                                                     : (t == levelType::activeHigh ? HIGH : LOW); }
 // ####### rules for buttons ############################
 
+inline constexpr uint8_t lastSortCut         =  24;
 #ifdef BUTTONS3X3
 #ifdef FIVEBUTTONS
 static_assert(false, "The 3x3 Button board doesn't have 5 Buttons");
 #endif
 inline constexpr uint8_t buttonExtSC_begin   = 101;
-inline constexpr uint8_t buttonExtSC_buttons =  18;
+inline constexpr uint8_t buttonExtSC_buttons =  18; // <= lastSortCut
 #endif // BUTTONS3X3
 
 inline constexpr uint32_t  buttonLongPress       = 1000; // timeout for long press button in ms

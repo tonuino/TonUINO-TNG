@@ -92,7 +92,8 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.5 geän
 
 # Change Log
 
-## Version 3.1.6 (31.01.2024)
+## Version 3.1.6 (12.02.2024)
+- [Issue 167](https://github.com/tonuino/TonUINO-TNG/issues/167): Save the last played card in EEPROM and restore it at startup
 - [Issue 155](https://github.com/tonuino/TonUINO-TNG/issues/155): Implement a Quiz Game
 
 ## Version 3.1.5 (30.01.2024)

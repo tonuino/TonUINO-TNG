@@ -28,8 +28,8 @@ struct Settings {
   void    writeExtShortCutToFlash (uint8_t shortCut, const folderSettings& value);
   void    readExtShortCutFromFlash(uint8_t shortCut,       folderSettings& value);
 
-  folderSettings& getShortCut(uint8_t shortCut);
-  void            setShortCut(uint8_t shortCut, const folderSettings& value);
+  folderSettings getShortCut(uint8_t shortCut);
+  void           setShortCut(uint8_t shortCut, const folderSettings& value);
 
   uint32_t    cookie;
   byte        version;
@@ -44,10 +44,6 @@ struct Settings {
   uint8_t     adminMenuLocked;
   pin_t       adminMenuPin;
   uint8_t     pauseWhenCardRemoved;
-
-#ifdef BUTTONS3X3
-  static folderSettings extShortCut;
-#endif
 };
 
 // emulates EEPROM.put() .get() and .update() on LGT8F328P platform

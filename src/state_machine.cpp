@@ -391,8 +391,8 @@ void WriteCard::react(command_e const &cmd_e) {
     break;
   case run_writeCard:
     if (not chip_card.isCardRemoved()) {
-      nfcTagObject newCard;
-      newCard.nfcFolderSettings = folder;
+      folderSettings newCard;
+      newCard = folder;
       if (chip_card.writeCard(newCard))
         mp3.enqueueMp3FolderTrack(mp3Tracks::t_400_ok);
       else
@@ -423,8 +423,8 @@ bool Base::readCard() {
   case Chip_card::readCardEvent::none : return false;
 
   case Chip_card::readCardEvent::known:
-    if (lastCardRead.nfcFolderSettings.folder == 0) {
-      if (lastCardRead.nfcFolderSettings.mode == pmode_t::admin_card) {
+    if (lastCardRead.folder == 0) {
+      if (lastCardRead.mode == pmode_t::admin_card) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Admin_Entry());
         Admin_Entry::lastCurrentValue = 0;
         transit<Admin_Entry>();
@@ -448,7 +448,7 @@ bool Base::readCard() {
   if (tonuino.getActiveModifier().handleRFID(lastCardRead))
     return false;
 
-  if (lastCardRead.nfcFolderSettings.folder != 0) {
+  if (lastCardRead.folder != 0) {
     return true;
   }
 
@@ -456,13 +456,13 @@ bool Base::readCard() {
 }
 
 bool Base::handleShortcut(uint8_t shortCut) {
-  folderSettings &sc_folderSettings = settings.getShortCut(shortCut);
+  folderSettings sc_folderSettings = settings.getShortCut(shortCut);
   if (sc_folderSettings.folder != 0) {
     if (sc_folderSettings.mode != pmode_t::repeat_last)
-      tonuino.setFolder(&sc_folderSettings);
+      tonuino.setMyFolder(sc_folderSettings, false /*myFolderIsCard*/);
     if (tonuino.getFolder() != 0) {
 #ifdef QUIZ_GAME
-      if (tonuino.getCard().nfcFolderSettings.mode == pmode_t::quiz_game) {
+      if (tonuino.getMyFolder().mode == pmode_t::quiz_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
         transit<Quiz>();
         return true;
@@ -477,11 +477,11 @@ bool Base::handleShortcut(uint8_t shortCut) {
 }
 
 void Base::handleReadCard() {
-  if (lastCardRead.nfcFolderSettings.mode != pmode_t::repeat_last)
-    tonuino.setCard(lastCardRead);
-  if (tonuino.getCard().nfcFolderSettings.folder != 0) {
+  if (lastCardRead.mode != pmode_t::repeat_last)
+    tonuino.setMyFolder(lastCardRead, true /*myFolderIsCard*/);
+  if (tonuino.getFolder() != 0) {
 #ifdef QUIZ_GAME
-    if (tonuino.getCard().nfcFolderSettings.mode == pmode_t::quiz_game) {
+    if (tonuino.getMyFolder().mode == pmode_t::quiz_game) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
       transit<Quiz>();
       return;
@@ -569,9 +569,9 @@ void Idle::react(command_e const &cmd_e) {
   case command::pause:
     if (tonuino.getFolder() != 0) {
 #ifdef QUIZ_GAME
-      if (tonuino.getCard().nfcFolderSettings.mode == pmode_t::quiz_game) {
+      if (tonuino.getMyFolder().mode == pmode_t::quiz_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
-        transit<Quizz>();
+        transit<Quiz>();
         return;
       }
 #endif // QUIZ_GAME
@@ -747,7 +747,7 @@ void Pause::react(card_e const &c_e) {
 #endif
                             false;
 
-      if (resume_on_card && tonuino.getCard() == lastCardRead && not tonuino.getActiveModifier().handleButton(command::pause)) {
+      if (resume_on_card && tonuino.getMyFolder() == lastCardRead && not tonuino.getActiveModifier().handleButton(command::pause)) {
         transit<Play>();
         return;
       }
@@ -792,8 +792,8 @@ void Quiz::entry() {
   LOG(state_log, s_info, str_enter(), str_Quiz());
   tonuino.disableStandbyTimer();
   tonuino.playFolder();
-  numAnswer   = tonuino.getCard().nfcFolderSettings.special;
-  numSolution = tonuino.getCard().nfcFolderSettings.special2;
+  numAnswer   = tonuino.getMyFolder().special;
+  numSolution = tonuino.getMyFolder().special2;
   if (numAnswer != 0 and numAnswer != 2 and numAnswer != 4) {
     LOG(state_log, s_error, F("numA: "), numAnswer);
     finish();
@@ -844,7 +844,7 @@ void Quiz::react(command_e const &cmd_e) {
     quizState = QuizState::playQuestion;
   }
   if (quizState == QuizState::playSolution && not mp3.isPlayingMp3()) {
-    mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+numAnswer+1);
+    mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+numAnswer+1);
     quizState = QuizState::playWeiter;
   }
 
@@ -865,7 +865,7 @@ void Quiz::react(command_e const &cmd_e) {
       question = random(0, numQuestion);
       trackQuestion = question*(numAnswer+numSolution+1)+1;
       a.shuffle();
-      mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion);
+      mp3.enqueueTrack(tonuino.getFolder(), trackQuestion);
       quizState = QuizState::playAnswer;
       actAnswer = 0xff;
       break;
@@ -890,7 +890,7 @@ void Quiz::react(command_e const &cmd_e) {
     break;
   case command::track:
     if (quizState == QuizState::playAnswer) {
-      mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion);
+      mp3.enqueueTrack(tonuino.getFolder(), trackQuestion);
     }
     break;
   case command::volume_up:
@@ -904,7 +904,7 @@ void Quiz::react(command_e const &cmd_e) {
       }
       else {
         actAnswer = a.get(0);
-        mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+        mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+actAnswer+1);
       }
     }
     break;
@@ -919,7 +919,7 @@ void Quiz::react(command_e const &cmd_e) {
       }
       else {
         actAnswer = a.get(1);
-        mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+        mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+actAnswer+1);
       }
     }
     break;
@@ -934,7 +934,7 @@ void Quiz::react(command_e const &cmd_e) {
       }
       else {
         actAnswer = a.get(2%numAnswer);
-        mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+        mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+actAnswer+1);
       }
     }
     break;
@@ -949,7 +949,7 @@ void Quiz::react(command_e const &cmd_e) {
       }
       else {
         actAnswer = a.get(3%numAnswer);
-        mp3.enqueueTrack(tonuino.getCard().nfcFolderSettings.folder, trackQuestion+actAnswer+1);
+        mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+actAnswer+1);
       }
     }
     break;
@@ -1811,7 +1811,7 @@ uint8_t   VoiceMenu<SMT>::currentValue     ;
 template<SM_type SMT>
 bool      VoiceMenu<SMT>::previewStarted   ;
 
-nfcTagObject Base::lastCardRead{};
+folderSettings Base::lastCardRead{};
 uint8_t Admin_Entry::lastCurrentValue{};
 Admin_SimpleSetting::Type Admin_SimpleSetting::type{};
 bool Admin_NewCard::return_to_idle{false};

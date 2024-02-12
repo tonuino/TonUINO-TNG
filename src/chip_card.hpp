@@ -52,14 +52,6 @@ struct folderSettings {
   }
 };
 
-// this object stores nfc tag data
-struct nfcTagObject {
-  folderSettings nfcFolderSettings;
-  bool operator==(const nfcTagObject& rhs) const {
-    return nfcFolderSettings == rhs.nfcFolderSettings;
-  }
-};
-
 enum class cardEvent : uint8_t {
   none    ,
   removed ,
@@ -93,8 +85,8 @@ public:
     empty,
   };
 
-  readCardEvent readCard (      nfcTagObject &nfcTag);
-  bool writeCard         (const nfcTagObject &nfcTag);
+  readCardEvent readCard (      folderSettings &nfcTag);
+  bool writeCard         (const folderSettings &nfcTag);
   void sleepCard         ();
   void initCard          ();
   cardEvent getCardEvent ();

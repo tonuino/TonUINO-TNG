@@ -86,7 +86,7 @@ protected:
 #ifdef NEO_RING
   void handleBrightness(command cmd);
 #endif
-  static nfcTagObject lastCardRead;
+  static folderSettings lastCardRead;
 };
 
 class Idle: public Base
