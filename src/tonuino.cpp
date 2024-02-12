@@ -111,6 +111,10 @@ void Tonuino::loop() {
     ring.call_on_play();
   else if (SM_tonuino::is_in_state<Pause>())
     ring.call_on_pause();
+#ifdef QUIZ_GAME
+  else if (SM_tonuino::is_in_state<Quiz>())
+    ring.call_on_quiz();
+#endif // QUIZ_GAME
   else // admin menu
     ring.call_on_admin();
 #endif // NEO_RING

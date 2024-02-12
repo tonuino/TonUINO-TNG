@@ -112,6 +112,11 @@ inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
  */
 //#define REPLAY_ON_PLAY_BUTTON
 
+/* uncomment the below line to enable the quiz game
+ * um das Quiz Spile zu aktivieren, in der nächste Zeile den Kommentar entfernen
+ */
+//#define QUIZ_GAME
+
 /* uncomment the below line to store the last played card in EEPROM
  * um die letzte Karte im EEPROM zu speichern, in der nächste Zeile den Kommentar entfernen
  */

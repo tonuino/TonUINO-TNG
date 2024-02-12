@@ -39,6 +39,7 @@ public:
   void call_on_idle     () { pulse    (green); }
   void call_on_startPlay() { pulse    (red  ); }
   void call_on_play     () { rainbow  (5    ); }
+  void call_on_quiz     () { rainbow  (10   ); }
   void call_on_pause    () { rainbow  (0    ); }
   void call_on_admin    () { pulse    (blue ); }
   void call_on_sleep    () { setAll   (black); }
