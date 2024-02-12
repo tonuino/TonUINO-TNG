@@ -56,6 +56,8 @@ public:
 
   void shutdown();
 
+  uint16_t getNumTracksInFolder() const {return numTracksInFolder; }
+
 private:
 
   void checkStandby();
