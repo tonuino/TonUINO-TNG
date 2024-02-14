@@ -19,16 +19,34 @@ mp3/0317_special_random.mp3|Spezialmodus Von-Bis, Hörspiel: Eine zufällige Dat
 mp3/0318_special_album.mp3|Spezialmodus Von-Bis, Album: Alle Dateien zwischen der Start und Enddatei wiedergeben.
 mp3/0319_special_party.mp3|Spezialmodus Von-Bis, Party: Alle Dateien zwischen der Start und Enddatei zufällig wiedergeben.
 mp3/0320_mode_audio_book_single.mp3|Hörbuch Modus einzeln: Den nächsten Titel im Ordner wiedergeben und den Fortschritt speichern.
-mp3/0321_mode_repeat_last_card.mp3|Wiederhole Karte Modus: die letzte Karte oder der letzte Shortcut wird wiederholt.
+mp3/0321_mode_repeat_last_card.mp3|Wiederhole Karte Modus: Die letzte Karte oder der letzte Shortcut wird wiederholt.
+mp3/0322_mode_quiz_game.mp3|Quiz Spiel Modus: Spiele ein Quiz.
 mp3/0327_select_file.mp3|OK, wähle nun bitte die Datei mit den Lautstärketasten aus.
 mp3/0328_select_first_file.mp3|OK, wähle nun bitte die Startdatei mit den Lautstärketasten aus.
 mp3/0329_select_last_file.mp3|Wähle nun bitte die Enddatei mit den Lautstärketasten aus.
 mp3/0330.mp3|Soll ich vor einer Datei jeweils die Nummer ansagen? Du kannst jederzeit durch einen langen Druck auf die Pausetaste die aktuelle Nummer abfragen.
 mp3/0331.mp3|Nein, Nummer nicht ansagen.
 mp3/0332.mp3|Ja, Nummer ansagen.
+mp3/0333_num_answer.mp3|Wieviel verschiedene Antworten hat das Quiz für eine Frage.
+mp3/0334_num_answer_2.mp3|2 Antworten.
+mp3/0335_num_answer_4.mp3|4 Antworten.
+mp3/0336_num_answer_2_1.mp3|2 Antworten und eine Lösung.
+mp3/0337_num_answer_4_1.mp3|4 Antworten und eine Lösung.
+mp3/0338_num_answer_0_1.mp3|Nur eine Lösung mit Buzzer.
 mp3/0400_ok.mp3|OK. Ich habe die Karte konfiguriert.
 mp3/0401_error.mp3|Oh weh! Das hat leider nicht geklappt!
 mp3/0402_ok_settings.mp3|Ok, ich habe die Einstellungen gespeichert
+mp3/0500_quiz_game_intro.mp3|Du spielst jetzt ein Quiz. Drücke die Pause Taste, um eine neue Frage zu erhalten. Danach drücke die Vor, Zurück oder die Lautstärke Tasten, um die verschiedenen Antworten zu hören. Wenn du denkst, dass du die richtige Antwort gehört hast, kannst du die Pause Taste drücken um zu erfahren, ob das die richtige Antwort ist. Wiederhole das Ganze so oft du willst. Du kannst das Quiz mit dem langen Druck auf die Vor- und Zurück Taste beenden.
+mp3/0501_quiz_game_ok.mp3|Ja, das ist die richtige Antwort. Gut gemacht. Weiter mit der Pause Taste. 
+mp3/0502_quiz_game_bad.mp3|Oh nein, das ist nicht die richtige Antwort. Versuche die nächste Frage. Weiter mit der Pause Taste. 
+mp3/0503_quiz_game_ok_with_solution.mp3|Ja, das ist die richtige Antwort. Gut gemacht. Hier ist die Erklärung für die Lösung. 
+mp3/0504_quiz_game_bad_with_solution.mp3|Oh nein, das ist nicht die richtige Antwort. Hier ist die Lösung. 
+mp3/0505_quiz_game_buzzer_down.mp3|Spieler zurück war der erste! Wie lautet die Lösung? Spiele dann die Lösung mit der Pause Taste. 
+mp3/0506_quiz_game_buzzer_up.mp3|Spieler vor war der erste! Wie lautet die Lösung? Spiele dann die Lösung mit der Pause Taste. 
+mp3/0507_quiz_game_buzzer_vol-.mp3|Spieler leiser war der erste! Wie lautet die Lösung? Spiele dann die Lösung mit der Pause Taste. 
+mp3/0508_quiz_game_buzzer_vol+.mp3|Spieler lauter war der erste! Wie lautet die Lösung? Spiele dann die Lösung mit der Pause Taste. 
+mp3/0509_quiz_game_buzzer_intro.mp3|Du spielst jetzt ein Quiz mit Buzzer. Drücke die Pause Taste, um eine neue Frage zu erhalten. Danach drückt die Zurück, Vor, Leiser und Lauter Taste als Buzzer. Wenn der schnellste Spieler die Antwort gesagt hat, kannst du die Pause Taste drücken um zu erfahren, ob das die richtige Antwort ist. Wiederhole das Ganze so oft du willst. Du kannst das Quiz mit dem langen Druck auf die Vor- und Zurück Taste beenden.
+mp3/0510_quiz_game_continue.mp3|Weiter mit der Pause Taste. 
 mp3/0800_waiting_for_card.mp3|Bitte lege nun die Karte auf!
 mp3/0801_remove_card.mp3|Bitte die Karte vom Leser entfernen!
 mp3/0802_reset_aborted.mp3|OK, ich habe den Vorgang abgebrochen.
@@ -46,7 +64,7 @@ mp3/0910_switch_volume.mp3|Funktion der Lautstärketasten umdrehen.
 mp3/0911_reset.mp3|Alle Einstellungen löschen.
 mp3/0912_admin_lock.mp3|Das Adminmenü absichern.
 mp3/0913_pause_on_card_removed.mp3|Pause, wenn Karte entfernt wird.
-mp3/0919_continue_admin.mp3|und weiter im Admin Menü. Durch einen langen Druck auf die Pausetaste kannst du das Admin Menü abbrechen.
+mp3/0919_continue_admin.mp3|Und weiter im Admin Menü. Durch einen langen Druck auf die Pausetaste kannst du das Admin Menü abbrechen.
 mp3/0920_eq_intro.mp3|Bitte wähle eine Einstellung für den EQ mit den Lautstärketasten aus und bestätige sie mit der Pausetaste.
 mp3/0921_normal.mp3|Normal
 mp3/0922_pop.mp3|Pop
@@ -71,7 +89,7 @@ mp3/0961_timer_5.mp3|5 Minuten.
 mp3/0962_timer_15.mp3|15 Minuten.
 mp3/0963_timer_30.mp3|30 Minuten.
 mp3/0964_timer_60.mp3|60 Minuten.
-mp3/0965_timer_disabled.mp3|nicht automatisch abschalten
+mp3/0965_timer_disabled.mp3|Nicht automatisch abschalten
 mp3/0970_modifier_Intro.mp3|Bitte wähle nun deine Modifikationskarte mit den Lautstärketasten aus.
 mp3/0971_modifier_SleepTimer.mp3|Schlummermodus
 mp3/0972_modifier_FreezeDance.mp3|Stopptanz - TonUINO spielt Stopptanz mit dir und hält zufällig für dich die Wiedergabe kurz an.
@@ -86,6 +104,6 @@ mp3/0983_admin_lock_pin.mp3|Codeeingabe - das Adminmenü wird durch eine vierste
 mp3/0984_admin_lock_calc.mp3|Rechenaufgabe - das Adminmenü kann nur durch Lösen einer Rechenaufgabe betreten werden.
 mp3/0991_admin_pin.mp3|Bitte gebe die Pin ein.
 mp3/0992_admin_calc.mp3|Wieviel ist
-mp3/0993_admin_calc.mp3|plus
-mp3/0994_admin_calc.mp3|minus
+mp3/0993_admin_calc.mp3|Plus
+mp3/0994_admin_calc.mp3|Minus
 mp3/0999_reset_ok.mp3|Reset wurde durchgeführt!

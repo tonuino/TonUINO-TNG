@@ -7,9 +7,9 @@ Falls du Interesse daran hast, zur Weiterentwicklung des TonUINO-Projekts beizut
 
 # Anleitung zum Compilieren
 
+## Arduino IDE
 Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TNG](https://www.tonuino.de/TNG) und hier [www.leiterkartenpiraten.de](https://www.leiterkartenpiraten.de)
 
-## Arduino IDE
 - Es ist unbedingt darauf zu achten, das das Verzeichnis in das das Repository gecloned oder heruntergeladen wird (also das Verzeichnis, in dem schließlich auch die TonUINO-TNG.ino zu finden ist, genau so heißt, wie die ino Datei, also in diesem Fall "TonUINO-TNG"!
 
 - Bei der classic und AiO HW Variante muss die Datei 'platform.local.txt' in den avr HW Ordner kopiert werden. Dieser Ordner ist gewöhnlich folgender:  
@@ -34,30 +34,77 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
 
 - Die HW Variante (TonUINO_Classic, ALLinONE oder ALLinONE_Plus) sowie die Button Konfiguration (THREEBUTTONS, FIVEBUTTONS oder BUTTONS3X3) muss in der Datei constants.hpp durch Entfernen des entsprechenden Kommentars angegeben werden. 
 
-## platform.io
-- geht out-of-the-box
-
-## Libraries
+**Libraries**
 - Es müssen folgende Versionen der Libraries verwendet werden:  
     - jchristensen/JC_Button: 2.1.2  
     - miguelbalboa/MFRC522: 1.4.10  
     - makuna/DFPlayer Mini Mp3 by Makuna: 1.2.3
     - adafruit/Adafruit NeoPixel: 1.11.0 (optional, nur bei Feature NEO_RING notwendig)
 
+## platform.io
+
+- Es werden die gleichen HW Varianten angeboten wie beim Online Upload ohne die Datei constants.hpp editieren zu müssen
+
+```
+  Classic 
+    3 Buttons
+    5 Buttons
+    3x3 Button Board
+  AiO und AiOplus
+    5 Buttons
+    3x3 Button Board
+```
+
+- wenn man die AiO oder AiOplus mit 3 Buttons hat, muss man in der Datei constants.hpp den Kommentar bei `#define THREEBUTTONS` entfernen. 
+
+**Verwendung zusammen mit Visual Code**
+
+Eine Anleitung dafür findet man [hier](https://discourse.voss.earth/t/tonuino-software-mit-platformio-aufspielen/13468)
+
+**Nur platform.io (CLI)**
+- platform.io installieren
+
+```
+  pip install platformio
+```
+
+- Build (wähle [spezielle Variante](platformio.ini) mit dem Flag `-e <environment>`)
+
+```
+  pio run
+```
+
+- Upload (Der Port kann mit `pio device list` gefunden werden)
+
+```
+  pio run -e <environment> -t upload --upload-port <port>
+```
+
+- Monitor
+
+```
+  pio device monitor -p <port>
+```
 
 # Installation
 
-Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.2 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
+Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.5 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
 
 # Change Log
 
-## Version 3.1.5 (12.12.2023)
+## Version 3.1.6 (12.02.2024)
+- [Issue 167](https://github.com/tonuino/TonUINO-TNG/issues/167): Save the last played card in EEPROM and restore it at startup
+- [Issue 155](https://github.com/tonuino/TonUINO-TNG/issues/155): Implement a Quiz Game
+
+## Version 3.1.5 (30.01.2024)
+- [Issue 166](https://github.com/tonuino/TonUINO-TNG/issues/166): Issue_166: generateRamdomSeed() does not generate a random value
+- [Issue 165](https://github.com/tonuino/TonUINO-TNG/issues/165): 'Play last card' does not work as ShortCut
+- [Issue 162](https://github.com/tonuino/TonUINO-TNG/issues/162): Prepare optional feature ROTARY_ENCODER for Nano Every
+- [Issue 160](https://github.com/tonuino/TonUINO-TNG/issues/160): Improve the description for platform.io in the Readme
 - [Issue 153](https://github.com/tonuino/TonUINO-TNG/issues/153): Some improvements of the DF Player handling
 - [Issue 149](https://github.com/tonuino/TonUINO-TNG/issues/149): Add possibility to reset the current track on hoerbuch mode
 - [Issue 148](https://github.com/tonuino/TonUINO-TNG/issues/148): New handling of prev and next button on first and last track
 - [Issue 147](https://github.com/tonuino/TonUINO-TNG/issues/147): No or bad saving of current track in hoerbuch mode when using prev, prev10 or next10 button
-
-## Version 3.1.5 (07.12.2023)
 - [Issue 143](https://github.com/tonuino/TonUINO-TNG/issues/143): With some players the start of a track stutters or goes into pause
 - [Issue 142](https://github.com/tonuino/TonUINO-TNG/issues/142): Restart last playback if Play/Pause pressed
 - [Issue 141](https://github.com/tonuino/TonUINO-TNG/issues/141): Enhance Features for Neo Pixel Ring

@@ -86,7 +86,7 @@ protected:
 #ifdef NEO_RING
   void handleBrightness(command cmd);
 #endif
-  static nfcTagObject lastCardRead;
+  static folderSettings lastCardRead;
 };
 
 class Idle: public Base
@@ -118,6 +118,33 @@ public:
   void entry() override;
   void react(command_e const &) override;
   void react(card_e    const &) override;
+};
+
+class Quiz: public Base
+{
+public:
+  void entry() override;
+  void react(command_e const &) override;
+  void react(card_e    const &) override;
+private:
+  enum class QuizState: uint8_t {
+    playQuestion,
+    playAnswer,
+    playSolution,
+    playWeiter,
+  };
+
+  void finish();
+
+  uint8_t   numAnswer;
+  uint8_t   numSolution;
+  QuizState quizState;
+  uint8_t   question;
+  uint8_t   trackQuestion;
+  uint8_t   numQuestion;
+  uint8_t   actAnswer;
+  queue<uint8_t, 4> a;
+  static constexpr long timeout{ 5 * 60 * 1000l};
 };
 
 // ----------------------------------------------------------------------------
@@ -181,6 +208,13 @@ public:
 };
 
 class ChLastTrack : public VoiceMenu_setupCard
+{
+public:
+  void entry() final;
+  void react(command_e const &) final;
+};
+
+class ChNumAnswer : public VoiceMenu_setupCard
 {
 public:
   void entry() final;
