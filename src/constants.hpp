@@ -42,10 +42,15 @@
  */
 //#define DISABLE_SHUTDOWN_VIA_BUTTON
 
-/* uncomment the below line to enable the rotary encoder for volume setting (only for AiOplus and Nano Every)
- * um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen (nur für AioPlus und Nano Every)
+/* uncomment the below line to enable the rotary encoder for volume setting
+ * um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
  */
 //#define ROTARY_ENCODER
+/* uncomment the below line to enable the rotary encoder also for next and previous (only one click in one second)
+ * um den Drehgeber auch für vor und zurück zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
+ */
+//#define ROTARY_ENCODER_LONGPRESS
+
 #ifdef ALLinONE_Plus
 // if using Rotary Encoder Buchse
 //inline constexpr uint8_t   rotaryEncoderClkPin    = 31; // PE2
@@ -54,11 +59,10 @@
 // if using Opt Leiste (Male)
 inline constexpr uint8_t   rotaryEncoderClkPin    = 36; // PF2
 inline constexpr uint8_t   rotaryEncoderDtPin     = 37; // PF3
+#else
+inline constexpr uint8_t   rotaryEncoderClkPin    =  6; // D6
+inline constexpr uint8_t   rotaryEncoderDtPin     =  8; // D8
 #endif // ALLinONE_Plus
-#ifdef TonUINO_Every
-inline constexpr uint8_t   rotaryEncoderClkPin    =  8; // D8
-inline constexpr uint8_t   rotaryEncoderDtPin     =  6; // D6
-#endif // TonUINO_Every
 
 
 /* uncomment the below line to enable the poti for volume setting

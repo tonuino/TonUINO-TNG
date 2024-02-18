@@ -5,11 +5,19 @@
 #ifdef ROTARY_ENCODER
 #include "logger.hpp"
 
-#if not defined(ALLinONE_Plus) and not defined(TonUINO_Every)
-static_assert(false, "The rotary encoder only works with AiOplus or Nano Every");
-#endif
+volatile int8_t  RotaryEncoder::pos = 0;
 
-volatile int8_t RotaryEncoder::pos = 0;
+#ifdef ROTARY_ENCODER_USES_TIMER1
+volatile uint8_t RotaryEncoder::clk = 0;
+
+void RotaryEncoder::timer_loop() {
+  const uint8_t old_clk = clk;
+  clk = digitalRead(rotaryEncoderClkPin);
+  if (clk < old_clk){
+    RotaryEncoder::changed();
+  }
+}
+#endif
 
 void RotaryEncoder::changed() {
   const uint8_t dt = digitalRead(rotaryEncoderDtPin);
@@ -23,43 +31,97 @@ void RotaryEncoder::changed() {
 RotaryEncoder::RotaryEncoder(const Settings& settings)
 : CommandSource()
 , settings(settings)
+#ifdef ROTARY_ENCODER_LONGPRESS
+, vol_timer()
+, long_timer()
+#endif
 {
   pinMode(rotaryEncoderClkPin, INPUT_PULLUP);
   pinMode(rotaryEncoderDtPin , INPUT_PULLUP);
 
+#ifndef ROTARY_ENCODER_USES_TIMER1
   attachInterrupt(digitalPinToInterrupt(rotaryEncoderClkPin), RotaryEncoder::changed, FALLING);
+#endif // ROTARY_ENCODER_USES_TIMER1
 }
 
 commandRaw RotaryEncoder::getCommandRaw() {
   commandRaw ret = commandRaw::none;
 
-  const int8_t new_pos = pos;
-
-  if (new_pos == old_pos)
+  if (pos == 0)
     return ret;
 
-  bool cw = (new_pos > old_pos);
-  if (abs(new_pos - old_pos) > 200) // overflow
-    cw = !cw;
+#ifndef ROTARY_ENCODER_LONGPRESS
 
-  if (cw) {
-#ifdef FIVEBUTTONS
-    ret = commandRaw::four;
-
-#else
-    ret = (settings.invertVolumeButtons==1)? commandRaw::up : commandRaw::upLong;
-#endif
+  if (pos > 0) {
+    ret = getCommandRawFromCommand(command::volume_up);
   }
   else {
-#ifdef FIVEBUTTONS
-    ret = commandRaw::five;
-#else
-    ret = (settings.invertVolumeButtons==1)? commandRaw::down : commandRaw::downLong;
-#endif
+    ret = getCommandRawFromCommand(command::volume_down);
   }
-  old_pos = new_pos;
+
+#else
+
+  if ((pos > 1) ||
+      (pos > 0 && vol_timer.isActive() && not vol_timer.isExpired())) {
+    ret = getCommandRawFromCommand(command::volume_up);
+    vol_timer.start(buttonLongPress);
+    long_timer.stop();
+  }
+  else if ((pos < -1) ||
+           (pos < 0 && vol_timer.isActive() && not vol_timer.isExpired())){
+    ret = getCommandRawFromCommand(command::volume_down);
+    vol_timer.start(buttonLongPress);
+    long_timer.stop();
+  }
+  else if (abs(pos) == 1 && not long_timer.isActive()) {
+    long_timer.start(buttonLongPress);
+  }
+  else   if ((pos == 1) && long_timer.isActive() && long_timer.isExpired()) {
+    ret = getCommandRawFromCommand(command::next);
+  }
+  else   if ((pos == -1) && long_timer.isActive() && long_timer.isExpired()) {
+    ret = getCommandRawFromCommand(command::previous);
+  }
+
+#endif // ROTARY_ENCODER_LONGPRESS
+
+  if (ret != commandRaw::none) {
+    LOG(button_log, s_debug, F("Rot Env raw: "), static_cast<uint8_t>(ret));
+    pos = 0;
+  }
 
   return ret;
+}
+
+commandRaw RotaryEncoder::getCommandRawFromCommand(const command& cmd) {
+  switch(cmd) {
+
+#ifdef FIVEBUTTONS
+
+  case command::next:
+    return commandRaw::up;
+  case command::previous:
+    return commandRaw::five;
+  case command::volume_up:
+    return commandRaw::four;
+  case command::volume_down:
+    return commandRaw::five;
+
+#else
+
+  case command::next:
+    return (settings.invertVolumeButtons==1)? commandRaw::upLong : commandRaw::up;
+  case command::previous:
+    return (settings.invertVolumeButtons==1)? commandRaw::downLong : commandRaw::down;
+  case command::volume_up:
+    return (settings.invertVolumeButtons==1)? commandRaw::up : commandRaw::upLong;
+  case command::volume_down:
+    return (settings.invertVolumeButtons==1)? commandRaw::down : commandRaw::downLong;
+
+#endif
+  default: return commandRaw::none;
+  }
+  return commandRaw::none;
 }
 
 #endif // ROTARY_ENCODER
