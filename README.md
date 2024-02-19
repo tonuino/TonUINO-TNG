@@ -96,6 +96,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.5 geän
 - [Issue 173](https://github.com/tonuino/TonUINO-TNG/issues/173): Improve Rorary Encoder implementation (also for UNO and optional for next/previous)
 
 ## Version 3.1.6 (12.02.2024)
+- [Issue 135](https://github.com/tonuino/TonUINO-TNG/issues/135): Make new variants available for online upload (3 butonn variants)
 - [Issue 167](https://github.com/tonuino/TonUINO-TNG/issues/167): Save the last played card in EEPROM and restore it at startup
 - [Issue 155](https://github.com/tonuino/TonUINO-TNG/issues/155): Implement a Quiz Game
 
