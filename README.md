@@ -88,9 +88,12 @@ Eine Anleitung dafür findet man [hier](https://discourse.voss.earth/t/tonuino-s
 
 # Installation
 
-Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.5 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
+Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.6 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
 
 # Change Log
+
+## Version 3.1.7 (26.02.2024)
+- [Issue 176](https://github.com/tonuino/TonUINO-TNG/issues/176): Implement the memory game
 
 ## Version 3.1.6 (12.02.2024)
 - [Issue 167](https://github.com/tonuino/TonUINO-TNG/issues/167): Save the last played card in EEPROM and restore it at startup
