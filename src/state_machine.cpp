@@ -1958,10 +1958,22 @@ void Admin_MemoryGameCards::react(command_e const &cmd_e) {
   if (isAbort(cmd))
     return;
 
-  if (cmd == command::select) {
+  switch (cmd) {
+  case command::select:
     LOG(state_log, s_debug, str_Admin_MemoryGameCards(), str_to(), str_Idle());
     transit<Admin_End>();
     return;
+  case command::next:
+    ++folder.special;
+    current_subState = prepare_writeCard;
+    break;
+  case command::previous:
+    if (folder.special > 1)
+      --folder.special;
+    current_subState = prepare_writeCard;
+    break;
+  default:
+    break;
   }
 
   switch (current_subState) {
