@@ -1967,9 +1967,23 @@ void Admin_MemoryGameCards::react(command_e const &cmd_e) {
     ++folder.special;
     current_subState = prepare_writeCard;
     break;
+  case command::next10:
+    if (folder.special <= 254-10)
+      folder.special += 10;
+    else
+      folder.special = 254;
+    current_subState = prepare_writeCard;
+    break;
   case command::previous:
     if (folder.special > 1)
       --folder.special;
+    current_subState = prepare_writeCard;
+    break;
+  case command::previous10:
+    if (folder.special >= 1+10)
+      folder.special -= 10;
+    else
+      folder.special = 1;
     current_subState = prepare_writeCard;
     break;
   default:
