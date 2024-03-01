@@ -16,7 +16,30 @@ const __FlashStringHelper* str_bis      () { return F(" bis "); }
 
 } // anonymous namespace
 
+#ifdef USE_TIMER1
+ISR(TIMER1_COMPA_vect){
+  TCNT1  = 0;
+#ifdef ROTARY_ENCODER_USES_TIMER1
+  RotaryEncoder::timer_loop();
+#endif
+}
+#endif
+
 void Tonuino::setup() {
+#ifdef USE_TIMER1
+  cli();//stop interrupts
+
+  TCCR1A = 0;              // set entire TCCR1A register to 0
+  TCCR1B = 0;              // same for TCCR1B
+  TCNT1  = 0;              // initialize counter value to 0;
+  OCR1A  = 10000U;         // set timer count for frequency = (16*10^6) / (F*8) - 1, F=200Hz
+  TCCR1B |= (1 << WGM12);  // turn on CTC mode
+  TCCR1B |= (1 << CS11);   // Set CS11 bit for 8 prescaler
+  TIMSK1 |= (1 << OCIE1A); // enable timer compare interrupt
+
+  sei();//allow interrupts
+#endif
+
 #ifdef BUTTONS3X3
 #if defined(ALLinONE_Plus) or defined(TonUINO_Every)
   analogReference(INTERNAL2V5);
