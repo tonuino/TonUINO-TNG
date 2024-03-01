@@ -60,8 +60,8 @@
 inline constexpr uint8_t   rotaryEncoderClkPin    = 36; // PF2
 inline constexpr uint8_t   rotaryEncoderDtPin     = 37; // PF3
 #else
-inline constexpr uint8_t   rotaryEncoderClkPin    =  6; // D6
-inline constexpr uint8_t   rotaryEncoderDtPin     =  8; // D8
+inline constexpr uint8_t   rotaryEncoderClkPin    = A3; // A3
+inline constexpr uint8_t   rotaryEncoderDtPin     = A4; // A4
 #endif // ALLinONE_Plus
 
 
@@ -72,7 +72,7 @@ inline constexpr uint8_t   rotaryEncoderDtPin     =  8; // D8
 #ifdef ALLinONE_Plus
 inline constexpr uint8_t   potiPin    = A14; // AiO+ PF4
 #else
-inline constexpr uint8_t   potiPin    = A5 ; // AiO/Classic A5
+inline constexpr uint8_t   potiPin    = A3 ; // AiO/Classic A3
 #endif // ALLinONE_Plus
 
 /* uncomment the below line to enable the neo ring
@@ -125,6 +125,21 @@ inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
  * um die letzte Karte im EEPROM zu speichern, in der nächste Zeile den Kommentar entfernen
  */
 //#define STORE_LAST_CARD
+
+/* #################################################################################################
+ * Default Pins for Classic/AiO Variant
+ *                         A0 A1 A2 A3 A4 A5 A6 A7 D5 D6 D7 D8
+ * 3 Button                x  x  x
+ * 5 Button                x  x  x  x  x
+ * 3x3 Button Board        x  x  x  x
+ * Open pin for random                          x
+ * Rotary encoder                   x  x
+ * Poti                             x
+ * Neo Ring/LED animat.                            x
+ * Speaker off                                        x
+ * Shutdown                                              x
+ * #################################################################################################
+ */
 
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################

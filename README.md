@@ -93,7 +93,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.5 geän
 # Change Log
 
 ## Version 3.1.6 (18.02.2024)
-- [Issue 173](https://github.com/tonuino/TonUINO-TNG/issues/173): Improve Rorary Encoder implementation (also for UNO and optional for next/previous)
+- [Issue 173](https://github.com/tonuino/TonUINO-TNG/issues/173): Improve Rorary Encoder implementation (also for NANO and optional for next/previous)
 
 ## Version 3.1.6 (12.02.2024)
 - [Issue 135](https://github.com/tonuino/TonUINO-TNG/issues/135): Make new variants available for online upload (3 butonn variants)
