@@ -92,7 +92,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.6 geän
 
 # Change Log
 
-## Version 3.1.7 (26.02.2024)
+## Version 3.1.7 (01.03.2024)
 - [Issue 176](https://github.com/tonuino/TonUINO-TNG/issues/176): Implement the memory game
 
 ## Version 3.1.6 (12.02.2024)

@@ -1084,6 +1084,15 @@ void Memory::react(command_e const &cmd_e) {
     }
     break;
 
+  case command::track:
+    if (second != 0)
+      mp3.enqueueTrack(tonuino.getFolder(), second);
+    else if (first != 0)
+      mp3.enqueueTrack(tonuino.getFolder(), first);
+    else
+      mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
+    break;
+
   case command::volume_up:
     mp3.increaseVolume();
     break;
