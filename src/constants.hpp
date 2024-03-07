@@ -42,10 +42,15 @@
  */
 //#define DISABLE_SHUTDOWN_VIA_BUTTON
 
-/* uncomment the below line to enable the rotary encoder for volume setting (only for AiOplus and Nano Every)
- * um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen (nur für AioPlus und Nano Every)
+/* uncomment the below line to enable the rotary encoder for volume setting
+ * um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
  */
 //#define ROTARY_ENCODER
+/* uncomment the below line to enable the rotary encoder also for next and previous (only one click in one second)
+ * um den Drehgeber auch für vor und zurück zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
+ */
+//#define ROTARY_ENCODER_LONGPRESS
+
 #ifdef ALLinONE_Plus
 // if using Rotary Encoder Buchse
 //inline constexpr uint8_t   rotaryEncoderClkPin    = 31; // PE2
@@ -54,11 +59,10 @@
 // if using Opt Leiste (Male)
 inline constexpr uint8_t   rotaryEncoderClkPin    = 36; // PF2
 inline constexpr uint8_t   rotaryEncoderDtPin     = 37; // PF3
+#else
+inline constexpr uint8_t   rotaryEncoderClkPin    = A3; // A3
+inline constexpr uint8_t   rotaryEncoderDtPin     = A4; // A4
 #endif // ALLinONE_Plus
-#ifdef TonUINO_Every
-inline constexpr uint8_t   rotaryEncoderClkPin    =  8; // D8
-inline constexpr uint8_t   rotaryEncoderDtPin     =  6; // D6
-#endif // TonUINO_Every
 
 
 /* uncomment the below line to enable the poti for volume setting
@@ -68,7 +72,7 @@ inline constexpr uint8_t   rotaryEncoderDtPin     =  6; // D6
 #ifdef ALLinONE_Plus
 inline constexpr uint8_t   potiPin    = A14; // AiO+ PF4
 #else
-inline constexpr uint8_t   potiPin    = A5 ; // AiO/Classic A5
+inline constexpr uint8_t   potiPin    = A3 ; // AiO/Classic A3
 #endif // ALLinONE_Plus
 
 /* uncomment the below line to enable the neo ring
@@ -122,6 +126,21 @@ inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
  * um die letzte Karte im EEPROM zu speichern, in der nächste Zeile den Kommentar entfernen
  */
 //#define STORE_LAST_CARD
+
+/* #################################################################################################
+ * Default Pins for Classic/AiO Variant
+ *                         A0 A1 A2 A3 A4 A5 A6 A7 D5 D6 D7 D8
+ * 3 Button                x  x  x
+ * 5 Button                x  x  x  x  x
+ * 3x3 Button Board        x  x  x  x
+ * Open pin for random                          x
+ * Rotary encoder                   x  x
+ * Poti                             x
+ * Neo Ring/LED animat.                            x
+ * Speaker off                                        x
+ * Shutdown                                              x
+ * #################################################################################################
+ */
 
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
