@@ -38,13 +38,12 @@ void Mp3Notify::OnPlayFinished(DfMp3&, DfMp3_PlaySources /*source*/, uint16_t tr
   Tonuino::getTonuino().nextTrack(1/*tracks*/, true/*fromOnPlayFinished*/);
 }
 
-#ifdef DFPlayerUsesSoftwareSerial
+#ifndef DFPlayerUsesHardwareSerial
 Mp3::Mp3(const Settings& settings)
 : Base{softwareSerial}
 , softwareSerial{dfPlayer_receivePin, dfPlayer_transmitPin}
 , settings{settings}
-#endif /* DFPlayerUsesSoftwareSerial */
-#ifdef DFPlayerUsesHardwareSerial
+#else
 Mp3::Mp3(const Settings &settings)
 : Base{dfPlayer_serial}
 , settings{settings}
