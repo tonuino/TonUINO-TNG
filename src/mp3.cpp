@@ -39,18 +39,23 @@ void Mp3Notify::OnPlayFinished(DfMp3&, DfMp3_PlaySources /*source*/, uint16_t tr
 }
 
 #ifndef DFPlayerUsesHardwareSerial
-Mp3::Mp3(const Settings& settings)
+Mp3::Mp3(Settings& settings)
 : Base{softwareSerial}
 , softwareSerial{dfPlayer_receivePin, dfPlayer_transmitPin}
 , settings{settings}
 #else
-Mp3::Mp3(const Settings &settings)
+Mp3::Mp3(Settings &settings)
 : Base{dfPlayer_serial}
 , settings{settings}
 #endif /* DFPlayerUsesHardwareSerial */
 {
   // Busy Pin
-  pinMode(dfPlayer_busyPin, dfPlayer_busyPinType == levelType::activeHigh ? INPUT : INPUT_PULLUP);
+  pinMode(dfPlayer_busyPin              , dfPlayer_busyPinType               == levelType::activeHigh ? INPUT : INPUT_PULLUP);
+
+#ifdef HPJACKDETECT
+  // Headphone Jack Detection
+  pinMode(dfPlayer_noHeadphoneJackDetect, dfPlayer_noHeadphoneJackDetectType == levelType::activeHigh ? INPUT : INPUT_PULLUP);
+#endif
 }
 
 bool Mp3::isPlaying() const {
@@ -229,16 +234,16 @@ uint16_t Mp3::getFolderTrackCount(uint16_t folder)
     LOG(mp3_log, s_debug, F("getFolderTrackCount return: "), ret);
 
 #ifdef DFMiniMp3_T_CHIP_GD3200B
-    Base::setVolume(volume);
+    Base::setVolume(*volume);
 #endif
 
     return ret;
 }
 
 void Mp3::increaseVolume() {
-  if (volume < settings.maxVolume) {
-    LOG(mp3_log, s_debug, F("setVolume: "), volume+1);
-    Base::setVolume(++volume);
+  if (*volume < *maxVolume) {
+    LOG(mp3_log, s_debug, F("setVolume: "), *volume+1);
+    Base::setVolume(++*volume);
   }
 #ifdef NEO_RING_EXT
   volumeChangedTimer.start(1000);
@@ -247,9 +252,9 @@ void Mp3::increaseVolume() {
 }
 
 void Mp3::decreaseVolume() {
-  if (volume > settings.minVolume) {
-    LOG(mp3_log, s_debug, F("setVolume: "), volume-1);
-    Base::setVolume(--volume);
+  if (*volume > *minVolume) {
+    LOG(mp3_log, s_debug, F("setVolume: "), *volume-1);
+    Base::setVolume(--*volume);
   }
 #ifdef NEO_RING_EXT
   volumeChangedTimer.start(1000);
@@ -258,12 +263,15 @@ void Mp3::decreaseVolume() {
 }
 
 void Mp3::setVolume() {
-  volume = settings.initVolume;
+  spkVolume = settings.spkInitVolume;
+#ifdef HPJACKDETECT
+  hpVolume  = settings.hpInitVolume;
+#endif
   LOG(mp3_log, s_debug, F("setVolume: "), volume);
   uint8_t max_loop = 20; // 4 seconds
-  while((--max_loop>0) && (Base::getVolume() != volume)) {
+  while((--max_loop>0) && (Base::getVolume() != *volume)) {
     delay(100);
-    Base::setVolume(volume);
+    Base::setVolume(*volume);
     delay(100);
   }
   LOG(mp3_log, s_debug, F("setVolume loops: "), 20-max_loop);
@@ -271,17 +279,42 @@ void Mp3::setVolume() {
 }
 
 void Mp3::setVolume(uint8_t v) {
-  volume = v;
-  LOG(mp3_log, s_debug, F("setVolume: "), volume);
-  Base::setVolume(volume);
+  *volume = v;
+  LOG(mp3_log, s_debug, F("setVolume: "), *volume);
+  Base::setVolume(*volume);
   logVolume();
 }
 
 void Mp3::logVolume() {
-  LOG(mp3_log, s_info, F("Volume: "), volume);
+  LOG(mp3_log, s_info, F("Volume: "), *volume);
 }
 
 void Mp3::loop() {
+
+#ifdef HPJACKDETECT
+  const level noHeadphoneJackDetect_now = getLevel(dfPlayer_noHeadphoneJackDetectType, digitalRead(dfPlayer_noHeadphoneJackDetect));
+
+  if (noHeadphoneJackDetect != noHeadphoneJackDetect_now) {
+    noHeadphoneJackDetect = noHeadphoneJackDetect_now;
+    LOG(mp3_log, s_info, F("hpJackDetect: "), noHeadphoneJackDetect == level::active ? 0 : 1);
+    digitalWrite(ampEnablePin, getLevel(ampEnablePinType, noHeadphoneJackDetect));
+    if (isHeadphoneJackDetect()) {
+      volume     = &hpVolume;
+      maxVolume  = &settings.hpMaxVolume;
+      minVolume  = &settings.hpMinVolume;
+      initVolume = &settings.hpInitVolume;
+    } else {
+      volume     = &spkVolume;
+      maxVolume  = &settings.spkMaxVolume;
+      minVolume  = &settings.spkMinVolume;
+      initVolume = &settings.spkInitVolume;
+    }
+    Base::setVolume(*volume);
+    logVolume();
+  }
+#endif
+
+
   if (not isPause && playing != play_none && startTrackTimer.isExpired() && not isPlaying()) {
     if (not missingOnPlayFinishedTimer.isActive())
       missingOnPlayFinishedTimer.start(dfPlayer_timeUntilStarts);

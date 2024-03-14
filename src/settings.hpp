@@ -19,7 +19,6 @@ struct Settings {
 
   void writeSettingsToFlash();
   void resetSettings();
-  //void migrateSettings(int oldVersion);
   void loadSettingsFromFlash();
 
   void    writeFolderSettingToFlash (uint8_t folder, uint8_t track);
@@ -33,9 +32,9 @@ struct Settings {
 
   uint32_t    cookie;
   byte        version;
-  uint8_t     maxVolume;
-  uint8_t     minVolume;
-  uint8_t     initVolume;
+  uint8_t     spkMaxVolume ;
+  uint8_t     spkMinVolume ;
+  uint8_t     spkInitVolume;
   uint8_t     eq;
   uint8_t     dummy;
   uint32_t    standbyTimer;
@@ -44,6 +43,9 @@ struct Settings {
   uint8_t     adminMenuLocked;
   pin_t       adminMenuPin;
   uint8_t     pauseWhenCardRemoved;
+  uint8_t     hpMaxVolume ;
+  uint8_t     hpMinVolume ;
+  uint8_t     hpInitVolume;
 };
 
 // emulates EEPROM.put() .get() and .update() on LGT8F328P platform

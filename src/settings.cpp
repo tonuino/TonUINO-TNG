@@ -8,8 +8,8 @@ namespace {
 //  ############### EEPROM ################################
 //  Address       Usage
 //    0- 99       Folder Settings (Hoerbuch Fortschritt)
-//  100-137       AdminSettings (38 Byte)
-//  138-155       reserved (18 Byte)
+//  100-140       AdminSettings (41 Byte)
+//  141-155       reserved (15 Byte)
 //  156-255       extra Shortcuts (100 Byte, max. 25 Shortcuts)
 
 // Nano:      2048 byte
@@ -45,9 +45,9 @@ void Settings::resetSettings() {
   LOG(settings_log, s_debug, F("resetSettings"));
   cookie               = cardCookie;
   version              =  2;
-  maxVolume            = 25;
-  minVolume            =  5;
-  initVolume           = 15;
+  spkMaxVolume         = 25;
+  spkMinVolume         =  5;
+  spkInitVolume        = 15;
   eq                   =  1;
   dummy                =  0;
   standbyTimer         =  0;
@@ -62,33 +62,33 @@ void Settings::resetSettings() {
   adminMenuPin[2]      =  1;
   adminMenuPin[3]      =  1;
   pauseWhenCardRemoved =  0;
+  hpMaxVolume          = 25;
+  hpMinVolume          =  5;
+  hpInitVolume         = 15;
 
   writeSettingsToFlash();
 }
-
-//void Settings::migrateSettings(int oldVersion) {
-//  if (oldVersion == 1) {
-//    LOG(settings_log, s_info, F("1->2"));
-//    version              = 2;
-//    adminMenuLocked      = 0;
-//    adminMenuPin[0]      = 1;
-//    adminMenuPin[1]      = 1;
-//    adminMenuPin[2]      = 1;
-//    adminMenuPin[3]      = 1;
-//    pauseWhenCardRemoved = 0;
-//    writeSettingsToFlash();
-//  }
-//}
 
 void Settings::loadSettingsFromFlash() {
   LOG(settings_log, s_debug, F("loadSettings"));
   EEPROM_get(startAddressAdminSettings, *this);
   if (cookie != cardCookie)
     resetSettings();
-  //migrateSettings(version);
+
+  if (pauseWhenCardRemoved == 255) {
+    pauseWhenCardRemoved = 0;
+    writeSettingsToFlash();
+  }
+
+  if (hpMaxVolume == 255 || hpMinVolume == 255 || hpInitVolume == 255) {
+    hpMaxVolume          = 25;
+    hpMinVolume          =  5;
+    hpInitVolume         = 15;
+    writeSettingsToFlash();
+  }
 
   LOG(settings_log, s_info, F("Ver:"), version);
-  LOG(settings_log, s_info, F("Vol:"), maxVolume, F(" "), minVolume, F(" "), initVolume);
+  LOG(settings_log, s_info, F("Vol:"), spkMaxVolume, F(" "), spkMinVolume, F(" "), spkInitVolume, F(" "), hpMaxVolume, F(" "), hpMinVolume, F(" "), hpInitVolume);
   LOG(settings_log, s_info, F("EQ:" ), eq);
   LOG(settings_log, s_info, F("ST:" ), standbyTimer);
   LOG(settings_log, s_info, F("IB:" ), invertVolumeButtons);
