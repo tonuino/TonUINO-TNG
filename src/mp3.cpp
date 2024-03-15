@@ -54,7 +54,11 @@ Mp3::Mp3(Settings &settings)
 
 #ifdef HPJACKDETECT
   // Headphone Jack Detection
-  pinMode(dfPlayer_noHeadphoneJackDetect, dfPlayer_noHeadphoneJackDetectType == levelType::activeHigh ? INPUT : INPUT_PULLUP);
+#ifdef ALLinONE_Plus
+  pinMode(dfPlayer_noHeadphoneJackDetect, INPUT);
+#else
+  pinMode(dfPlayer_noHeadphoneJackDetect, INPUT_PULLUP);
+#endif
 #endif
 }
 

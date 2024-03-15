@@ -113,20 +113,19 @@ inline constexpr uint8_t neoPixelRingPin =  5; // D5 on AiO/Classic
 inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
 
 /* uncomment the below line to enable the Speaker on/off on Pin D6 for Classic to suppress noise
- * on startup and shutdown
+ * on startup and shutdown (automatically enabled on AiO and AiOplus)
  * um den Lautsprecher ein/aus Schalter über D6 für die Classic Variante zu unterstützen bitte
  * in der nächste Zeile den Kommentar entfernen (zur Unterdrückung der Ein- und Ausschaltgeräusche)
+ * (automatisch eingeschaltet für AiO und AiOplus)
  */
 //#define SPKONOFF
 
-/* uncomment the below line to enable the Headphone Jack detection
+/* uncomment the below line to enable the Headphone Jack detection (automatically enabled on AiOplus)
  * um die Kopfhörer Erkennung einzuschalten bitte in der nächste Zeile den Kommentar entfernen
+ * (automatisch eingeschaltet für AiOplus)
  */
 //#define HPJACKDETECT
-#ifdef ALLinONE_Plus
-inline constexpr uint8_t       dfPlayer_noHeadphoneJackDetect     = 21;
-inline constexpr levelType     dfPlayer_noHeadphoneJackDetectType = levelType::activeLow;
-#else
+#ifndef ALLinONE_Plus
 inline constexpr uint8_t       dfPlayer_noHeadphoneJackDetect     = 8;
 inline constexpr levelType     dfPlayer_noHeadphoneJackDetectType = levelType::activeLow;
 #endif
@@ -267,6 +266,9 @@ inline constexpr unsigned long cycleTime        = 50;
 #define FIVEBUTTONS
 #endif
 
+#define SPKONOFF
+#define HPJACKDETECT
+
 inline constexpr uint8_t   buttonPausePin  = A0;
 
 #ifdef BUTTONS3X3
@@ -304,6 +306,8 @@ inline constexpr uint8_t        maxTracksInFolder        = 255;
 inline constexpr uint8_t        dfPlayer_busyPin         = 13;
 inline constexpr levelType      dfPlayer_busyPinType     = levelType::activeHigh;
 inline constexpr unsigned long  dfPlayer_timeUntilStarts = 1000;
+inline constexpr uint8_t        dfPlayer_noHeadphoneJackDetect     = 21;
+inline constexpr levelType      dfPlayer_noHeadphoneJackDetectType = levelType::activeLow;
 
 // ####### tonuino #####################################
 
@@ -327,6 +331,8 @@ inline constexpr unsigned long cycleTime        = 50;
 #if not defined(THREEBUTTONS) and not defined(BUTTONS3X3)
 #define FIVEBUTTONS
 #endif
+
+#define SPKONOFF
 
 inline constexpr uint8_t   buttonPausePin  = A0;
 

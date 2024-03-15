@@ -80,7 +80,7 @@ void Settings::loadSettingsFromFlash() {
     writeSettingsToFlash();
   }
 
-  if (hpMaxVolume == 255 || hpMinVolume == 255 || hpInitVolume == 255) {
+  if (hpMaxVolume == 255 || hpMaxVolume == 0) {
     hpMaxVolume          = 25;
     hpMinVolume          =  5;
     hpInitVolume         = 15;

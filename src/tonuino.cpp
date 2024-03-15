@@ -55,7 +55,7 @@ void Tonuino::setup() {
 
   randomSeed(generateRamdomSeed());
 
-#if defined ALLinONE || defined ALLinONE_Plus || defined SPKONOFF
+#if defined SPKONOFF
   pinMode(ampEnablePin, OUTPUT);
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
 #endif
@@ -91,7 +91,7 @@ void Tonuino::setup() {
   }
 
   // DFPlayer Mini initialisieren (2)
-#if defined ALLinONE || defined ALLinONE_Plus || defined SPKONOFF
+#if defined SPKONOFF
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
 #endif
   mp3.setVolume();
@@ -287,7 +287,7 @@ void Tonuino::shutdown() {
   ring.call_on_sleep();
 #endif
 
-#if defined ALLinONE || defined ALLinONE_Plus || defined SPKONOFF
+#if defined SPKONOFF
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
   delay(1000);
 #endif
