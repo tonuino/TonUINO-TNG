@@ -35,9 +35,9 @@ TEST_F(tonuino_test_fixture, initial_state) {
 
   EXPECT_EQ(getSettings().cookie              ,  cardCookie);
   EXPECT_EQ(getSettings().version             , cardVersion);
-  EXPECT_EQ(getSettings().maxVolume           ,          25);
-  EXPECT_EQ(getSettings().minVolume           ,           5);
-  EXPECT_EQ(getSettings().initVolume          ,          15);
+  EXPECT_EQ(getSettings().spkMaxVolume        ,          25);
+  EXPECT_EQ(getSettings().spkMinVolume        ,           5);
+  EXPECT_EQ(getSettings().spkInitVolume       ,          15);
   EXPECT_EQ(getSettings().eq                  ,           1);
   EXPECT_EQ(getSettings().dummy               ,       false);
   EXPECT_EQ(getSettings().standbyTimer        ,           0);
@@ -54,7 +54,7 @@ TEST_F(tonuino_test_fixture, initial_state) {
   EXPECT_EQ(getSettings().pauseWhenCardRemoved,           0);
 
   EXPECT_TRUE(getMp3().called_begin);
-  EXPECT_EQ(getMp3().current_volume, getSettings().initVolume);
+  EXPECT_EQ(getMp3().current_volume, getSettings().spkInitVolume);
   EXPECT_EQ(getMp3().current_eq    , getSettings().eq-1      );
 
   EXPECT_TRUE(getMFRC522().called_Init);
@@ -724,21 +724,21 @@ TEST_F(tonuino_test_fixture, adm_end_in_admin) {
 // =================== volume
 TEST_F(tonuino_test_fixture, volume_settings) {
 
-  getSettings().maxVolume  = 22;
-  getSettings().minVolume  = 11;
-  getSettings().initVolume = 13;
+  getSettings().spkMaxVolume  = 22;
+  getSettings().spkMinVolume  = 11;
+  getSettings().spkInitVolume = 13;
 
   getSettings().writeSettingsToFlash();
 
-  getSettings().maxVolume  = 20;
-  getSettings().minVolume  = 10;
-  getSettings().initVolume = 12;
+  getSettings().spkMaxVolume  = 20;
+  getSettings().spkMinVolume  = 10;
+  getSettings().spkInitVolume = 12;
 
   tonuino.setup();
 
-  EXPECT_EQ(getSettings().maxVolume , 22);
-  EXPECT_EQ(getSettings().minVolume , 11);
-  EXPECT_EQ(getSettings().initVolume, 13);
+  EXPECT_EQ(getSettings().spkMaxVolume , 22);
+  EXPECT_EQ(getSettings().spkMinVolume , 11);
+  EXPECT_EQ(getSettings().spkInitVolume, 13);
 
   EXPECT_EQ(getVolume(), 13);
 }

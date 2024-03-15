@@ -12,9 +12,9 @@ public:
   const Settings default_settings = {
       cardCookie    ,//uint32_t    cookie;
       2             ,//byte        version;
-      25            ,//uint8_t     maxVolume;
-      5             ,//uint8_t     minVolume;
-      15            ,//uint8_t     initVolume;
+      25            ,//uint8_t     spkMaxVolume;
+      5             ,//uint8_t     spkMinVolume;
+      15            ,//uint8_t     spkInitVolume;
       1             ,//uint8_t     eq;
       false         ,//bool        locked;
       0             ,//long        standbyTimer;
@@ -28,13 +28,16 @@ public:
       0             ,//uint8_t     adminMenuLocked;
       {{1,1,1,1}}   ,//pin_t       adminMenuPin;
       0             ,//uint8_t     pauseWhenCardRemoved;
+      25            ,//uint8_t     hpMaxVolume;
+      5             ,//uint8_t     hpMinVolume;
+      15            ,//uint8_t     hpInitVolume;
   };
   const Settings other_settings = {
       cardCookie    ,//uint32_t    cookie;
       2             ,//byte        version;
-      26            ,//uint8_t     maxVolume;
-      6             ,//uint8_t     minVolume;
-      16            ,//uint8_t     initVolume;
+      26            ,//uint8_t     spkMaxVolume;
+      6             ,//uint8_t     spkMinVolume;
+      16            ,//uint8_t     spkInitVolume;
       1             ,//uint8_t     eq;
       false         ,//bool        locked;
       1000          ,//long        standbyTimer;
@@ -48,6 +51,9 @@ public:
       0             ,//uint8_t     adminMenuLocked;
       {{1,2,3,4}}   ,//pin_t       adminMenuPin;
       1             ,//uint8_t     pauseWhenCardRemoved;
+      24            ,//uint8_t     hpMaxVolume;
+      4             ,//uint8_t     hpMinVolume;
+      16            ,//uint8_t     hpInitVolume;
   };
 
   const int startAddressAdminSettings = sizeof(folderSettings::folder) * 100;
@@ -67,9 +73,9 @@ bool operator==(const Settings &lhs, const Settings &rhs) {
   return
   lhs.cookie               == rhs.cookie               &&
   lhs.version              == rhs.version              &&
-  lhs.maxVolume            == rhs.maxVolume            &&
-  lhs.minVolume            == rhs.minVolume            &&
-  lhs.initVolume           == rhs.initVolume           &&
+  lhs.spkMaxVolume         == rhs.spkMaxVolume         &&
+  lhs.spkMinVolume         == rhs.spkMinVolume         &&
+  lhs.spkInitVolume        == rhs.spkInitVolume        &&
   lhs.eq                   == rhs.eq                   &&
   lhs.dummy                == rhs.dummy                &&
   lhs.standbyTimer         == rhs.standbyTimer         &&
@@ -83,7 +89,10 @@ bool operator==(const Settings &lhs, const Settings &rhs) {
   lhs.adminMenuPin[1]      == rhs.adminMenuPin[1]      &&
   lhs.adminMenuPin[2]      == rhs.adminMenuPin[2]      &&
   lhs.adminMenuPin[3]      == rhs.adminMenuPin[3]      &&
-  lhs.pauseWhenCardRemoved == rhs.pauseWhenCardRemoved;
+  lhs.pauseWhenCardRemoved == rhs.pauseWhenCardRemoved &&
+  lhs.hpMaxVolume          == rhs.hpMaxVolume          &&
+  lhs.hpMinVolume          == rhs.hpMinVolume          &&
+  lhs.hpInitVolume         == rhs.hpInitVolume         ;
 }
 
 TEST_F(settings_test_fixture, initial_state_on_brand_new_box) {
@@ -101,8 +110,8 @@ TEST_F(settings_test_fixture, initial_state_on_old_box) {
 TEST_F(settings_test_fixture, initial_state_on_old_box_from_v2) {
   Settings t_settings = default_settings;
   init_with_settings(t_settings);
-  std::size_t addr_pauseWhenCardRemoved = offsetof(Settings, pauseWhenCardRemoved);
-  EEPROM.eeprom_mem[startAddressAdminSettings+addr_pauseWhenCardRemoved] = 0xff;
+  std::size_t addr_hpInitVolume = offsetof(Settings, hpInitVolume);
+  EEPROM.eeprom_mem[startAddressAdminSettings+addr_hpInitVolume] = 0xff;
   settings.loadSettingsFromFlash();
   EXPECT_EQ(settings.pauseWhenCardRemoved==1, default_settings.pauseWhenCardRemoved==1);
 

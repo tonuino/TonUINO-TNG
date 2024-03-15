@@ -35,7 +35,7 @@ public:
   MFRC522&   getMFRC522 () { return getChipCard().mfrc522; }
   Modifier&  getModifier() { return tonuino.getActiveModifier(); }
 
-  uint8_t    getVolume  () { return getMp3().volume; }
+  uint8_t    getVolume  () { return *getMp3().volume; }
 
   Initializer initializer;
 
