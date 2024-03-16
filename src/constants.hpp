@@ -150,10 +150,11 @@ inline constexpr levelType     dfPlayer_noHeadphoneJackDetectType = levelType::a
  */
 //#define REPLAY_ON_PLAY_BUTTON
 
-/* uncomment the below line to enable the quiz game
- * um das Quiz Spile zu aktivieren, in der nächste Zeile den Kommentar entfernen
+/* uncomment the below line(s) to enable the quiz or memory game
+ * um das Quiz oder Memory Spiel zu aktivieren, in der nächste Zeile(n) den Kommentar entfernen
  */
 //#define QUIZ_GAME
+//#define MEMORY_GAME
 
 /* uncomment the below line to store the last played card in EEPROM
  * um die letzte Karte im EEPROM zu speichern, in der nächste Zeile den Kommentar entfernen
