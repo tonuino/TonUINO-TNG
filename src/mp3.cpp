@@ -131,6 +131,10 @@ void Mp3::clearMp3Queue() {
   mp3_track_next = 0;
 }
 void Mp3::enqueueTrack(uint8_t folder, uint8_t firstTrack, uint8_t lastTrack, uint8_t currentTrack) {
+#ifdef HPJACKDETECT
+  if (tempSpkOn > 0)
+    --tempSpkOn;
+#endif
   clearAllQueue();
   current_folder = folder;
   endless = false;
@@ -195,6 +199,10 @@ void Mp3::playCurrent() {
   }
 }
 void Mp3::playNext(uint8_t tracks, bool fromOnPlayFinished) {
+#ifdef HPJACKDETECT
+  if (playing == play_folder)
+    tempSpkOn = 0;
+#endif
   if (playing == play_folder && (current_track+1 < q.size() || endless)) {
     current_track += tracks;
     if (current_track >= q.size())
@@ -214,6 +222,9 @@ void Mp3::playNext(uint8_t tracks, bool fromOnPlayFinished) {
 }
 void Mp3::playPrevious(uint8_t tracks) {
   if (playing == play_folder) {
+#ifdef HPJACKDETECT
+    tempSpkOn = 0;
+#endif
     int current_track_tmp = static_cast<int>(current_track) - tracks;
     current_track = endless ? (current_track_tmp%q.size()+q.size()) % q.size() : max(current_track_tmp, 0);
     LOG(mp3_log, s_debug, F("playPrevious: "), current_track);
@@ -296,7 +307,9 @@ void Mp3::logVolume() {
 void Mp3::loop() {
 
 #ifdef HPJACKDETECT
-  const level noHeadphoneJackDetect_now = getLevel(dfPlayer_noHeadphoneJackDetectType, digitalRead(dfPlayer_noHeadphoneJackDetect));
+  level noHeadphoneJackDetect_now = getLevel(dfPlayer_noHeadphoneJackDetectType, digitalRead(dfPlayer_noHeadphoneJackDetect));
+  if (tempSpkOn)
+    noHeadphoneJackDetect_now = level::active;
 
   if (noHeadphoneJackDetect != noHeadphoneJackDetect_now) {
     noHeadphoneJackDetect = noHeadphoneJackDetect_now;

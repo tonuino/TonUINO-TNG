@@ -234,6 +234,7 @@ public:
 
 #ifdef HPJACKDETECT
   bool isHeadphoneJackDetect() { return noHeadphoneJackDetect == level::inactive; }
+  void setTempSpkOn()          { tempSpkOn = 2; }
 #endif
 
 private:
@@ -285,6 +286,7 @@ private:
 
 #ifdef HPJACKDETECT
   level                noHeadphoneJackDetect{level::unknown};
+  uint8_t              tempSpkOn{};
 #endif
 
 };

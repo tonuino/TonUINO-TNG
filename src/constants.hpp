@@ -76,8 +76,8 @@ inline constexpr level getLevel(levelType t, int   l) { return (l == LOW)       
 
 #ifdef ALLinONE_Plus
 // if using Rotary Encoder Buchse
-//inline constexpr uint8_t   rotaryEncoderClkPin    = 31; // PE2
-//inline constexpr uint8_t   rotaryEncoderDtPin     = 32; // PE3
+//inline constexpr uint8_t   rotaryEncoderClkPin    = 31; // PE1
+//inline constexpr uint8_t   rotaryEncoderDtPin     = 32; // PE2
 
 // if using Opt Leiste (Male)
 inline constexpr uint8_t   rotaryEncoderClkPin    = 36; // PF2
@@ -112,13 +112,17 @@ inline constexpr uint8_t neoPixelRingPin =  5; // D5 on AiO/Classic
 #endif // ALLinONE_Plus
 inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
 
-/* uncomment the below line to enable the Speaker on/off on Pin D6 for Classic to suppress noise
+/* uncomment the below line to enable the Speaker on/off for Classic to suppress noise
  * on startup and shutdown (automatically enabled on AiO and AiOplus)
- * um den Lautsprecher ein/aus Schalter über D6 für die Classic Variante zu unterstützen bitte
+ * um den Lautsprecher ein/aus Schalter für die Classic Variante zu unterstützen bitte
  * in der nächste Zeile den Kommentar entfernen (zur Unterdrückung der Ein- und Ausschaltgeräusche)
  * (automatisch eingeschaltet für AiO und AiOplus)
  */
 //#define SPKONOFF
+#if not defined(ALLinONE_Plus) and not defined(ALLinONE)
+inline constexpr uint8_t       ampEnablePin     = 6;
+inline constexpr levelType     ampEnablePinType = levelType::activeHigh;
+#endif
 
 /* uncomment the below line to enable the Headphone Jack detection (automatically enabled on AiOplus)
  * um die Kopfhörer Erkennung einzuschalten bitte in der nächste Zeile den Kommentar entfernen
@@ -161,6 +165,20 @@ inline constexpr levelType     dfPlayer_noHeadphoneJackDetectType = levelType::a
  */
 //#define STORE_LAST_CARD
 
+/* uncomment the below line to enable special shortcut on startup via GPIO
+ * um den spezial Shortcut beim Start via GPIO zu aktivieren, in der nächste Zeile den Kommentar entfernen
+ */
+//#define SPECIAL_START_SHORTCUT
+#ifdef ALLinONE_Plus
+inline constexpr uint8_t   specialStartShortcutPin     = 33; // PE3
+#else
+inline constexpr uint8_t   specialStartShortcutPin     = A6; // A6 on AiO/Classic
+#endif // ALLinONE_Plus
+inline constexpr levelType specialStartShortcutPinType = levelType::activeHigh;
+inline constexpr uint8_t   specialStartShortcutFolder  = 1;
+inline constexpr uint8_t   specialStartShortcutTrack   = 1;
+
+
 /* #################################################################################################
  * Default Pins for Classic/AiO Variant
  *                         A0 A1 A2 A3 A4 A5 A6 A7 D5 D6 D7 D8
@@ -174,6 +192,7 @@ inline constexpr levelType     dfPlayer_noHeadphoneJackDetectType = levelType::a
  * Speaker off                                        x
  * Shutdown                                              x
  * headphone jack detection                                 x
+ * special start shortcut                    x
  * #################################################################################################
  */
 
@@ -250,8 +269,6 @@ inline constexpr unsigned long dfPlayer_timeUntilStarts = 1000;
 
 inline constexpr uint8_t       shutdownPin      = 7;
 inline constexpr levelType     shutdownPinType  = levelType::activeLow;
-inline constexpr uint8_t       ampEnablePin     = 6;
-inline constexpr levelType     ampEnablePinType = levelType::activeHigh;
 inline constexpr uint8_t       openAnalogPin    = A7;
 inline constexpr unsigned long cycleTime        = 50;
 #endif /* TonUINO_Classic or TonUINO_Every */

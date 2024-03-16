@@ -33,6 +33,9 @@ const command cmd_table[][4] PROGMEM = {
 /*  downLongRepeat, */ ,{ command::none      , command::none       , command::volume_down, command::none        }
 /*  updownLong,     */ ,{ command::none      , command::shortcut1  , command::to_first   , command::to_first    }
 #endif
+#ifdef SPECIAL_START_SHORTCUT
+/*  specialStart,   */ ,{ command::none      , command::specialStart,command::none       , command::none        }
+#endif
 #ifdef SerialInputAsCommand
 /*  menu_jump ,     */ ,{ command::menu_jump , command::none       , command::none       , command::none        }
 #endif

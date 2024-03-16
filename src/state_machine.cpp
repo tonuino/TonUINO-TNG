@@ -614,6 +614,13 @@ void Idle::react(command_e const &cmd_e) {
     }
     break;
 #endif
+#ifdef SPECIAL_START_SHORTCUT
+    case command::specialStart:
+      tonuino.setMyFolder({specialStartShortcutFolder, pmode_t::einzel, specialStartShortcutTrack, 0}, true /*myFolderIsCard*/);
+      LOG(state_log, s_debug, str_Idle(), str_to(), str_StartPlay());
+      transit<StartPlay>();
+      break;
+#endif
   default:
     break;
   }
