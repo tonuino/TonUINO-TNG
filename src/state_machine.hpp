@@ -147,6 +147,21 @@ private:
   static constexpr long timeout{ 5 * 60 * 1000l};
 };
 
+class Memory: public Base
+{
+public:
+  void entry() override;
+  void react(command_e const &) override;
+  void react(card_e    const &) override;
+private:
+
+  void finish();
+
+  uint8_t     first;
+  uint8_t     second;
+  static constexpr long timeout{ 5 * 60 * 1000l};
+};
+
 // ----------------------------------------------------------------------------
 // State Machine end states
 //
@@ -404,5 +419,22 @@ public:
   void entry() final;
   void react(command_e const &) final;
 };
+
+#ifdef MEMORY_GAME
+class Admin_MemoryGameCards: public Amin_BaseWriteCard
+{
+public:
+  void entry() final;
+  void react(command_e const &) final;
+private:
+  enum subState: uint8_t {
+    prepare_writeCard,
+    start_writeCard,
+    run_writeCard,
+  };
+  subState current_subState;
+};
+#endif
+
 
 #endif /* SRC_STATE_MACHINE_HPP_ */
