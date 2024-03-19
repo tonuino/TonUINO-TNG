@@ -40,7 +40,7 @@ void Tonuino::setup() {
   sei();//allow interrupts
 #endif
 
-#ifdef BUTTONS3X3
+#if defined(BUTTONS3X3) or defined(BAT_VOLTAGE_MEASUREMENT)
 #if defined(ALLinONE_Plus) or defined(TonUINO_Every)
   analogReference(INTERNAL2V5);
 #endif
@@ -124,6 +124,11 @@ void Tonuino::loop() {
 
   unsigned long  start_cycle = millis();
   checkStandby();
+
+#ifdef BAT_VOLTAGE_MEASUREMENT
+  if (batVoltage.check())
+    shutdown();
+#endif
 
   mp3.loop();
 
