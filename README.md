@@ -92,6 +92,9 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.6 geän
 
 # Change Log
 
+## Version 3.1.7 (21.03.2024)
+- [Issue 182](https://github.com/tonuino/TonUINO-TNG/issues/182): Quiz game: do not repeat a question until no question remains
+
 ## Version 3.1.7 (01.03.2024)
 - [Issue 176](https://github.com/tonuino/TonUINO-TNG/issues/176): Implement the memory game
 
