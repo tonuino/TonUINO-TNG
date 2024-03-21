@@ -31,19 +31,19 @@ struct Settings {
   folderSettings getShortCut(uint8_t shortCut);
   void           setShortCut(uint8_t shortCut, const folderSettings& value);
 
-  uint32_t    cookie;
-  byte        version;
-  uint8_t     maxVolume;
-  uint8_t     minVolume;
-  uint8_t     initVolume;
-  uint8_t     eq;
-  uint8_t     dummy;
-  uint32_t    standbyTimer;
-  uint8_t     invertVolumeButtons;
-  shortCuts_t shortCuts;
-  uint8_t     adminMenuLocked;
-  pin_t       adminMenuPin;
-  uint8_t     pauseWhenCardRemoved;
+  uint32_t    cookie              {};
+  byte        version             {};
+  uint8_t     maxVolume           {};
+  uint8_t     minVolume           {};
+  uint8_t     initVolume          {};
+  uint8_t     eq                  {};
+  uint8_t     dummy               {};
+  uint32_t    standbyTimer        {};
+  uint8_t     invertVolumeButtons {};
+  shortCuts_t shortCuts           {};
+  uint8_t     adminMenuLocked     {};
+  pin_t       adminMenuPin        {};
+  uint8_t     pauseWhenCardRemoved{};
 };
 
 // emulates EEPROM.put() .get() and .update() on LGT8F328P platform

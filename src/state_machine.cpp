@@ -850,6 +850,8 @@ void Quiz::entry() {
     a.push(3);
   }
 
+  remainingQuestions = 0;
+
   timer.start(timeout);
 
   if (numAnswer == 0)
@@ -895,7 +897,33 @@ void Quiz::react(command_e const &cmd_e) {
     case QuizState::playQuestion:
     case QuizState::playSolution:
     case QuizState::playWeiter:
-      question = random(0, numQuestion);
+      if (remainingQuestions == 0) {
+        remainingQuestions = numQuestion;
+        r.setAll(0xFF);
+      }
+      question = random(0, remainingQuestions);
+      LOG(state_log, s_debug, F("random: "), question, F(", remain: "), remainingQuestions);
+      {
+        uint8_t i = 0;
+        while (true) {
+          if (question == 0) {
+            while (not r.getBit(i)) ++i;
+            question = i;
+            r.clearBit(i);
+            LOG(state_log, s_debug, F("question: "), question);
+            break;
+          }
+          if (r.getBit(i++)) {
+            --question;
+          }
+        }
+      }
+      --remainingQuestions;
+      LOG(state_log, s_debug, F("r: "), lf_no);
+      for (uint8_t i = 0; i<numQuestion; ++i)
+        LOG(state_log, s_debug, r.getBit(i), lf_no);
+      LOG(state_log, s_debug, F(" "));
+
       trackQuestion = question*(numAnswer+numSolution+1)+1;
       a.shuffle();
       mp3.enqueueTrack(tonuino.getFolder(), trackQuestion);
