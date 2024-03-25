@@ -968,6 +968,9 @@ void Quiz::react(command_e const &cmd_e) {
         mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+actAnswer+1);
       }
     }
+    else {
+      mp3.increaseVolume();
+    }
     break;
   case command::next:
     if (quizState == QuizState::playAnswer) {
@@ -997,6 +1000,9 @@ void Quiz::react(command_e const &cmd_e) {
         actAnswer = a.get(2%numAnswer);
         mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+actAnswer+1);
       }
+    }
+    else {
+      mp3.decreaseVolume();
     }
     break;
   case command::previous:
