@@ -11,7 +11,6 @@ class Poti: public CommandSource {
 public:
 
   Poti(const Settings& settings, Mp3& mp3);
-  virtual ~Poti() {}
   commandRaw getCommandRaw() override;
 
 private:

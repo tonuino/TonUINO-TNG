@@ -90,11 +90,12 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.6 geän
 
 # Change Log
 
-## Version 3.1.7 (14.03.2024)
+## Version 3.1.7 (27.03.2024)
 - [Issue 056](https://github.com/tonuino/TonUINO-TNG/issues/56): Implement headphone jack detection
-
-## Version 3.1.7 (09.03.2024)
 - [Issue 178](https://github.com/tonuino/TonUINO-TNG/issues/178): Use Nano Every optional with HW Serial connection to the DfPlayer
+
+## Version 3.1.7 (25.03.2024)
+- [Issue 182](https://github.com/tonuino/TonUINO-TNG/issues/182): Quiz game: do not repeat a question until no question remains
 - [Issue 176](https://github.com/tonuino/TonUINO-TNG/issues/176): Implement the memory game
 
 ## Version 3.1.6 (18.02.2024)
