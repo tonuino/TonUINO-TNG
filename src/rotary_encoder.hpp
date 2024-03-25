@@ -19,7 +19,6 @@ class RotaryEncoder: public CommandSource {
 public:
 
   RotaryEncoder(const Settings& settings);
-  virtual ~RotaryEncoder() {}
   commandRaw getCommandRaw() override;
 
   static void changed();
