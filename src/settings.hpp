@@ -30,22 +30,22 @@ struct Settings {
   folderSettings getShortCut(uint8_t shortCut);
   void           setShortCut(uint8_t shortCut, const folderSettings& value);
 
-  uint32_t    cookie;
-  byte        version;
-  uint8_t     spkMaxVolume ;
-  uint8_t     spkMinVolume ;
-  uint8_t     spkInitVolume;
-  uint8_t     eq;
-  uint8_t     dummy;
-  uint32_t    standbyTimer;
-  uint8_t     invertVolumeButtons;
-  shortCuts_t shortCuts;
-  uint8_t     adminMenuLocked;
-  pin_t       adminMenuPin;
-  uint8_t     pauseWhenCardRemoved;
-  uint8_t     hpMaxVolume ;
-  uint8_t     hpMinVolume ;
-  uint8_t     hpInitVolume;
+  uint32_t    cookie              {};
+  byte        version             {};
+  uint8_t     spkMaxVolume        {};
+  uint8_t     spkMinVolume        {};
+  uint8_t     spkInitVolume       {};
+  uint8_t     eq                  {};
+  uint8_t     dummy               {};
+  uint32_t    standbyTimer        {};
+  uint8_t     invertVolumeButtons {};
+  shortCuts_t shortCuts           {};
+  uint8_t     adminMenuLocked     {};
+  pin_t       adminMenuPin        {};
+  uint8_t     pauseWhenCardRemoved{};
+  uint8_t     hpMaxVolume         {};
+  uint8_t     hpMinVolume         {};
+  uint8_t     hpInitVolume        {};
 };
 
 // emulates EEPROM.put() .get() and .update() on LGT8F328P platform

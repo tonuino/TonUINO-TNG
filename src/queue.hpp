@@ -3,6 +3,22 @@
 
 #include "array.hpp"
 
+inline void setBit  (uint8_t &v, uint8_t b) { v |=  (1<<b); }
+inline void clearBit(uint8_t &v, uint8_t b) { v &= ~(1<<b); }
+inline bool getBit  (uint8_t &v, uint8_t b) { return v & (1<<b); }
+
+template<uint8_t BITS>
+class bitfield {
+public:
+  void setBit  (uint8_t n) { uint8_t &v = bits[n/8]; ::setBit  (v, n%8); }
+  void clearBit(uint8_t n) { uint8_t &v = bits[n/8]; ::clearBit(v, n%8); }
+  bool getBit  (uint8_t n) { uint8_t &v = bits[n/8]; return ::getBit(v, n%8); }
+  void setAll  (uint8_t v) { for (uint8_t i = 0; i < BITS/8+1; ++i) bits[i] = v; }
+
+private:
+  uint8_t bits[BITS/8+1]{};
+};
+
 template<typename T>
 void swap(T &lhs, T &rhs) {
   const T t = lhs;
