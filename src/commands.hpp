@@ -61,6 +61,9 @@ enum class commandRaw: uint8_t {
   fiveLong,
   fiveLongRepeat,
 #endif
+#ifdef SPECIAL_START_SHORTCUT
+  specialStart,
+#endif
 #ifdef SerialInputAsCommand
   menu_jump,
 #endif
@@ -101,6 +104,9 @@ enum class command: uint8_t {
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
   ext_end   = ext_begin +  buttonExtSC_buttons,
+#endif
+#ifdef SPECIAL_START_SHORTCUT
+  specialStart,
 #endif
 };
 

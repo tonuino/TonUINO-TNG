@@ -65,6 +65,11 @@ void Tonuino::setup() {
   digitalWrite(usbAccessPin, getLevel(usbAccessPinType, level::inactive));
 #endif
 
+#ifdef SPECIAL_START_SHORTCUT
+  pinMode(specialStartShortcutPin, INPUT);
+#endif
+
+
 #ifdef NEO_RING
   ring.init();
   ring.call_on_startup();
@@ -104,7 +109,15 @@ void Tonuino::setup() {
   commands.getCommandRaw();
 
   // Start Shortcut "at Startup" - e.g. Welcome Sound
-  SM_tonuino::dispatch(command_e(commandRaw::start));
+#ifdef SPECIAL_START_SHORTCUT
+  if (getLevel(specialStartShortcutPinType, digitalRead(specialStartShortcutPin)) == level::active) {
+#ifdef HPJACKDETECT
+    mp3.setTempSpkOn();
+#endif // HPJACKDETECT
+    SM_tonuino::dispatch(command_e(commandRaw::specialStart));
+  } else
+#endif // SPECIAL_START_SHORTCUT
+    SM_tonuino::dispatch(command_e(commandRaw::start));
 }
 
 void Tonuino::loop() {
