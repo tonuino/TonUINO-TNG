@@ -717,7 +717,7 @@ void Play::react(card_e const &c_e) {
   case cardEvent::inserted:
     if (readCard()) {
 #ifdef DONT_ACCEPT_SAME_RFID_TWICE
-      if (not (tonuino.getCard() == lastCardRead))
+      if (not (tonuino.getMyFolder() == lastCardRead))
 #endif
         handleReadCard();
     }
@@ -1047,7 +1047,7 @@ void Quiz::react(card_e const &c_e) {
   case cardEvent::inserted:
     if (readCard()) {
 #ifdef DONT_ACCEPT_SAME_RFID_TWICE
-      if (not (tonuino.getCard() == lastCardRead))
+      if (not (tonuino.getMyFolder() == lastCardRead))
 #endif
         handleReadCard();
     }
@@ -1163,7 +1163,7 @@ void Memory::react(card_e const &c_e) {
   case cardEvent::inserted:
     if (readCard()) {
 #ifdef DONT_ACCEPT_SAME_RFID_TWICE
-      if (not (tonuino.getCard() == lastCardRead))
+      if (not (tonuino.getMyFolder() == lastCardRead))
 #endif
         handleReadCard();
     }

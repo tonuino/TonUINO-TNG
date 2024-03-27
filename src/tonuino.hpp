@@ -11,6 +11,7 @@
 #include "mp3.hpp"
 #include "modifier.hpp"
 #include "timer.hpp"
+#include "batVoltage.hpp"
 #ifdef NEO_RING
 #include "ring.hpp"
 #endif
@@ -75,6 +76,9 @@ private:
   Settings             settings            {};
   Mp3                  mp3                 {settings};
   Buttons              buttons             {};
+#ifdef BAT_VOLTAGE_MEASUREMENT
+       BatVoltage      batVoltage          {mp3};
+#endif
 #ifdef SerialInputAsCommand
   SerialInput          serialInput         {};
 #endif
