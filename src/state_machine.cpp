@@ -1506,26 +1506,26 @@ void Admin_NewCard::react(command_e const &cmd_e) {
 void Admin_SimpleSetting::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_SimpleSetting(), type);
 
-  numberOfOptions   = type == maxVolume  ? 30 - settings.minVolume                        :
-                      type == minVolume  ? settings.maxVolume - 1                         :
-                      type == initVolume ? settings.maxVolume - settings.minVolume + 1    :
+  numberOfOptions   = type == maxVolume  ? 30 - mp3.getMinVolume()                        :
+                      type == minVolume  ? mp3.getMaxVolume() - 1                         :
+                      type == initVolume ? mp3.getMaxVolume() - mp3.getMinVolume() + 1    :
                       type == eq         ? 6                                              : 0;
   startMessage      = type == maxVolume  ? mp3Tracks::t_930_max_volume_intro              :
                       type == minVolume  ? mp3Tracks::t_931_min_volume_into               :
                       type == initVolume ? mp3Tracks::t_932_init_volume_into              :
                       type == eq         ? mp3Tracks::t_920_eq_intro                      : mp3Tracks::t_0;
-  messageOffset     = type == maxVolume  ? static_cast<mp3Tracks>(settings.minVolume)     :
+  messageOffset     = type == maxVolume  ? static_cast<mp3Tracks>(mp3.getMinVolume())     :
                       type == minVolume  ? mp3Tracks::t_0                                 :
-                      type == initVolume ? static_cast<mp3Tracks>(settings.minVolume - 1) :
+                      type == initVolume ? static_cast<mp3Tracks>(mp3.getMinVolume() - 1) :
                       type == eq         ? mp3Tracks::t_920_eq_intro                      : mp3Tracks::t_0;
   preview           = false;
   previewFromFolder = 0;
 
   VoiceMenu::entry();
 
-  currentValue      = type == maxVolume  ? settings.maxVolume - settings.minVolume        :
-                      type == minVolume  ? settings.minVolume                             :
-                      type == initVolume ? settings.initVolume - settings.minVolume + 1   :
+  currentValue      = type == maxVolume  ? mp3.getMaxVolume()  - mp3.getMinVolume()        :
+                      type == minVolume  ? mp3.getMinVolume()                             :
+                      type == initVolume ? mp3.getInitVolume() - mp3.getMinVolume() + 1   :
                       type == eq         ? settings.eq                                    : 0;
 }
 
@@ -1542,9 +1542,9 @@ void Admin_SimpleSetting::react(command_e const &cmd_e) {
 
   if (Commands::isSelect(cmd) && (currentValue != 0)) {
     switch (type) {
-    case maxVolume : settings.maxVolume  = currentValue + settings.minVolume    ; break;
-    case minVolume : settings.minVolume  = currentValue                         ; break;
-    case initVolume: settings.initVolume = currentValue + settings.minVolume - 1; break;
+    case maxVolume : mp3.getMaxVolume () = currentValue + mp3.getMinVolume()    ; break;
+    case minVolume : mp3.getMinVolume () = currentValue                         ; break;
+    case initVolume: mp3.getInitVolume() = currentValue + mp3.getMinVolume() - 1; break;
     case eq        : settings.eq = currentValue;
                      mp3.setEq(static_cast<DfMp3_Eq>(settings.eq - 1))          ; break;
 

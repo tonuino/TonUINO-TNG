@@ -55,7 +55,7 @@ void Tonuino::setup() {
 
   randomSeed(generateRamdomSeed());
 
-#if defined ALLinONE || defined ALLinONE_Plus || defined SPKONOFF
+#if defined SPKONOFF
   pinMode(ampEnablePin, OUTPUT);
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
 #endif
@@ -80,8 +80,6 @@ void Tonuino::setup() {
   // DFPlayer Mini initialisieren
   mp3.begin();
   delay(2000);
-  mp3.setVolume();
-  mp3.setEq(static_cast<DfMp3_Eq>(settings.eq - 1));
 
   // NFC Leser initialisieren
   chip_card.initCard();
@@ -92,10 +90,15 @@ void Tonuino::setup() {
     settings.loadSettingsFromFlash();
   }
 
-  SM_tonuino::start();
-#if defined ALLinONE || defined ALLinONE_Plus || defined SPKONOFF
+  // DFPlayer Mini initialisieren (2)
+#if defined SPKONOFF
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
 #endif
+  mp3.setVolume();
+  mp3.setEq(static_cast<DfMp3_Eq>(settings.eq - 1));
+  mp3.loop();
+
+  SM_tonuino::start();
 
   // ignore commands, if buttons already pressed during startup
   commands.getCommandRaw();
@@ -284,7 +287,7 @@ void Tonuino::shutdown() {
   ring.call_on_sleep();
 #endif
 
-#if defined ALLinONE || defined ALLinONE_Plus || defined SPKONOFF
+#if defined SPKONOFF
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
   delay(1000);
 #endif

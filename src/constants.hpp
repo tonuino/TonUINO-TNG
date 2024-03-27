@@ -3,6 +3,24 @@
 
 #include <Arduino.h>
 
+// ####### helper for level ############################
+
+enum class level : uint8_t {
+  inactive,
+  active  ,
+  unknown ,
+};
+enum class levelType : uint8_t {
+  activeHigh, // normally open
+  activeLow , // normally closed
+};
+
+inline constexpr int   getLevel(levelType t, level l) { return (l == level::inactive) ? (t == levelType::activeHigh ? LOW : HIGH)
+                                                                                      : (t == levelType::activeHigh ? HIGH : LOW); }
+inline constexpr level getLevel(levelType t, int   l) { return (l == LOW)             ? (t == levelType::activeHigh ? level::inactive : level::active  )
+                                                                                      : (t == levelType::activeHigh ? level::active   : level::inactive); }
+// ####### variant and feature configuration ############################
+
 /* Select the right PCB by uncommenting one of the following lines
  * Bitte die passende Platine durch entfernen der Kommentare in einer der folgenden Zeilen auswählen
  */
@@ -95,11 +113,22 @@ inline constexpr uint8_t neoPixelRingPin =  5; // D5 on AiO/Classic
 inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
 
 /* uncomment the below line to enable the Speaker on/off on Pin D6 for Classic to suppress noise
- * on startup and shutdown
+ * on startup and shutdown (automatically enabled on AiO and AiOplus)
  * um den Lautsprecher ein/aus Schalter über D6 für die Classic Variante zu unterstützen bitte
  * in der nächste Zeile den Kommentar entfernen (zur Unterdrückung der Ein- und Ausschaltgeräusche)
+ * (automatisch eingeschaltet für AiO und AiOplus)
  */
 //#define SPKONOFF
+
+/* uncomment the below line to enable the Headphone Jack detection (automatically enabled on AiOplus)
+ * um die Kopfhörer Erkennung einzuschalten bitte in der nächste Zeile den Kommentar entfernen
+ * (automatisch eingeschaltet für AiOplus)
+ */
+//#define HPJACKDETECT
+#ifndef ALLinONE_Plus
+inline constexpr uint8_t       dfPlayer_noHeadphoneJackDetect     = 8;
+inline constexpr levelType     dfPlayer_noHeadphoneJackDetectType = levelType::activeLow;
+#endif
 
 /* uncomment the below line to ignore the RFID if it is already playing
  * um die selbe RFID zu ignorieren, wenn die bereits spielt, in der nächste
@@ -144,6 +173,7 @@ inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
  * Neo Ring/LED animat.                            x
  * Speaker off                                        x
  * Shutdown                                              x
+ * headphone jack detection                                 x
  * #################################################################################################
  */
 
@@ -153,19 +183,6 @@ inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
  * #################################################################################################
  */
 
-// ####### helper for level ############################
-
-enum class level : uint8_t {
-  inactive,
-  active  ,
-};
-enum class levelType : uint8_t {
-  activeHigh, // normally open
-  activeLow , // normally closed
-};
-
-inline constexpr int getLevel(levelType t, level l) { return (l == level::inactive) ? (t == levelType::activeHigh ? LOW : HIGH)
-                                                                                    : (t == levelType::activeHigh ? HIGH : LOW); }
 // ####### rules for buttons ############################
 
 inline constexpr uint8_t lastSortCut         =  24;
@@ -250,6 +267,9 @@ inline constexpr unsigned long cycleTime        = 50;
 #define FIVEBUTTONS
 #endif
 
+#define SPKONOFF
+#define HPJACKDETECT
+
 inline constexpr uint8_t   buttonPausePin  = A0;
 
 #ifdef BUTTONS3X3
@@ -287,6 +307,8 @@ inline constexpr uint8_t        maxTracksInFolder        = 255;
 inline constexpr uint8_t        dfPlayer_busyPin         = 13;
 inline constexpr levelType      dfPlayer_busyPinType     = levelType::activeHigh;
 inline constexpr unsigned long  dfPlayer_timeUntilStarts = 1000;
+inline constexpr uint8_t        dfPlayer_noHeadphoneJackDetect     = 21;
+inline constexpr levelType      dfPlayer_noHeadphoneJackDetectType = levelType::activeLow;
 
 // ####### tonuino #####################################
 
@@ -310,6 +332,8 @@ inline constexpr unsigned long cycleTime        = 50;
 #if not defined(THREEBUTTONS) and not defined(BUTTONS3X3)
 #define FIVEBUTTONS
 #endif
+
+#define SPKONOFF
 
 inline constexpr uint8_t   buttonPausePin  = A0;
 

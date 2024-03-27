@@ -183,7 +183,7 @@ class Mp3: public DfMp3 {
 public:
   using Base = DfMp3;
 
-  Mp3(const Settings& settings);
+  Mp3(Settings& settings);
 
   bool isPlaying() const;
   void waitForTrackToFinish();
@@ -222,10 +222,19 @@ public:
   void setVolume     ();
   void setVolume     (uint8_t);
 #ifdef NEO_RING_EXT
-  uint8_t getVolumeRel() const { return static_cast<uint16_t>(volume-settings.minVolume)*0xff/(settings.maxVolume-settings.minVolume); }
+  uint8_t getVolumeRel() const { return static_cast<uint16_t>(*volume-*minVolume)*0xff/(*maxVolume-*minVolume); }
   bool volumeChanged () { return not volumeChangedTimer.isExpired(); }
 #endif // NEO_RING_EXT
   void loop          ();
+
+  uint8_t& getVolume    () { return *volume    ; }
+  uint8_t& getMaxVolume () { return *maxVolume ; }
+  uint8_t& getMinVolume () { return *minVolume ; }
+  uint8_t& getInitVolume() { return *initVolume; }
+
+#ifdef HPJACKDETECT
+  bool isHeadphoneJackDetect() { return noHeadphoneJackDetect == level::inactive; }
+#endif
 
 private:
   friend class tonuino_fixture;
@@ -237,9 +246,16 @@ private:
 #ifndef DFPlayerUsesHardwareSerial
   SoftwareSerial       softwareSerial;
 #endif /* not DFPlayerUsesHardwareSerial */
-  const Settings&      settings;
+  Settings&            settings;
 
-  uint8_t              volume{};
+  uint8_t              spkVolume{};
+#ifdef HPJACKDETECT
+  uint8_t              hpVolume{};
+#endif
+  uint8_t*             volume    {&spkVolume};
+  uint8_t*             maxVolume {&settings.spkMaxVolume};
+  uint8_t*             minVolume {&settings.spkMinVolume};
+  uint8_t*             initVolume{&settings.spkInitVolume};
 #ifdef NEO_RING_EXT
   Timer                volumeChangedTimer{};
 #endif // NEO_RING_EXT
@@ -265,6 +281,10 @@ private:
   bool                 isPause{};
 #ifdef DFMiniMp3_T_CHIP_LISP3
   bool                 advPlaying{false};
+#endif
+
+#ifdef HPJACKDETECT
+  level                noHeadphoneJackDetect{level::unknown};
 #endif
 
 };
