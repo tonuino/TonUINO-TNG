@@ -12,19 +12,22 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
 
 - Es ist unbedingt darauf zu achten, das das Verzeichnis in das das Repository gecloned oder heruntergeladen wird (also das Verzeichnis, in dem schließlich auch die TonUINO-TNG.ino zu finden ist, genau so heißt, wie die ino Datei, also in diesem Fall "TonUINO-TNG"!
 
-- Bei der classic und AiO HW Variante muss die Datei 'platform.local.txt' in den avr HW Ordner kopiert werden. Dieser Ordner ist gewöhnlich folgender:  
+- Bei der classic (Nano und Every) und AiO HW Variante muss die Datei 'platform.local.txt' in den avr HW Ordner kopiert werden. Dieser Ordner ist gewöhnlich folgender:  
 
 ```
     Windows:  
       Classic:  C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6
+      Every:    C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\arduino\hardware\megaavr\1.8.8
       AiO:      C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\LGT8fx Boards\hardware\avr\1.0.7
 
     Linux:  
       Classic:  ~/.arduino15/packages/arduino/hardware/avr/1.8.6
+      Every:    ~/.arduino15/packages/arduino/hardware/megaavr/1.8.8
       Aio:      ~/.arduino15/packages/LGT8fx Boards/hardware/avr/1.0.7
 
     MacOS 13.x:  
       Classic:  ~/Library/Arduino15/packages/arduino/hardware/avr/1.8.6
+      Every:    ~/Library/Arduino15/packages/arduino/hardware/megaavr/1.8.8
       AiO:      ~/Library/Arduino15/packages/LGT8fx Boards/hardware/avr/1.0.7
 ```
 
@@ -46,16 +49,11 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
 - Es werden die gleichen HW Varianten angeboten wie beim Online Upload ohne die Datei constants.hpp editieren zu müssen
 
 ```
-  Classic 
+  Classic, Every, AiO und AiOplus
     3 Buttons
     5 Buttons
     3x3 Button Board
-  AiO und AiOplus
-    5 Buttons
-    3x3 Button Board
 ```
-
-- wenn man die AiO oder AiOplus mit 3 Buttons hat, muss man in der Datei constants.hpp den Kommentar bei `#define THREEBUTTONS` entfernen. 
 
 **Verwendung zusammen mit Visual Code**
 
@@ -92,10 +90,11 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.6 geän
 
 # Change Log
 
+## Version 3.1.7 (26.03.2024)
+- [Issue 178](https://github.com/tonuino/TonUINO-TNG/issues/178): Use Nano Every optional with HW Serial connection to the DfPlayer
+
 ## Version 3.1.7 (25.03.2024)
 - [Issue 182](https://github.com/tonuino/TonUINO-TNG/issues/182): Quiz game: do not repeat a question until no question remains
-
-## Version 3.1.7 (01.03.2024)
 - [Issue 176](https://github.com/tonuino/TonUINO-TNG/issues/176): Implement the memory game
 
 ## Version 3.1.6 (18.02.2024)

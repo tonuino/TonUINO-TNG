@@ -10,11 +10,10 @@
 #include "queue.hpp"
 #include "timer.hpp"
 
-#ifdef DFPlayerUsesSoftwareSerial // make sure to include "constants.hpp" before this line!
+#ifndef DFPlayerUsesHardwareSerial // make sure to include "constants.hpp" before this line!
 #include <SoftwareSerial.h>
 using SerialType = SoftwareSerial;
-#endif // DFPlayerUsesSoftwareSerial
-#ifdef DFPlayerUsesHardwareSerial
+#else
 using SerialType = HardwareSerial;
 #endif // DFPlayerUsesHardwareSerial
 
@@ -235,9 +234,9 @@ private:
 
   typedef queue<uint8_t, maxTracksInFolder> track_queue;
 
-#ifdef DFPlayerUsesSoftwareSerial
+#ifndef DFPlayerUsesHardwareSerial
   SoftwareSerial       softwareSerial;
-#endif /* DFPlayerUsesSoftwareSerial */
+#endif /* not DFPlayerUsesHardwareSerial */
   const Settings&      settings;
 
   uint8_t              volume{};

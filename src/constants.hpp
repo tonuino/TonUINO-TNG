@@ -11,6 +11,11 @@
 //#define ALLinONE
 //#define ALLinONE_Plus
 
+/* If using Nano Every with connected DfPlayer Rx/Tx to D0/D1 uncomment the following lines
+ * Wenn der Nano Every verwendet wird und Rx/Tx vom DfPlayer mit D0/D1 verbunden ist, den Kommentare der folgenden Zeile entfernen
+ */
+//#define DFPlayerUsesHardwareSerial
+
 /* uncomment one of the below lines to enable special button support
  * um die Tasten zu konfigurieren, bitte eine der nächsten Zeilen auskommentieren
  * default: THREEBUTTONS for classic/every
@@ -212,11 +217,14 @@ inline constexpr uint8_t  cardRemoveDelay =  3;
 
 // ####### mp3 #########################################
 
-#define DFPlayerUsesSoftwareSerial
-
-inline constexpr uint8_t       maxTracksInFolder        = 255;
+#ifdef DFPlayerUsesHardwareSerial
+inline constexpr HardwareSerial &dfPlayer_serial         = Serial1;
+#else
 inline constexpr uint8_t       dfPlayer_receivePin      = 2;
 inline constexpr uint8_t       dfPlayer_transmitPin     = 3;
+#endif
+
+inline constexpr uint8_t       maxTracksInFolder        = 255;
 inline constexpr uint8_t       dfPlayer_busyPin         = 4;
 inline constexpr levelType     dfPlayer_busyPinType     = levelType::activeHigh;
 inline constexpr unsigned long dfPlayer_timeUntilStarts = 1000;
@@ -224,7 +232,7 @@ inline constexpr unsigned long dfPlayer_timeUntilStarts = 1000;
 // ####### tonuino #####################################
 
 inline constexpr uint8_t       shutdownPin      = 7;
-inline constexpr levelType     shutdownPinType  = levelType::activeHigh;
+inline constexpr levelType     shutdownPinType  = levelType::activeLow;
 inline constexpr uint8_t       ampEnablePin     = 6;
 inline constexpr levelType     ampEnablePinType = levelType::activeHigh;
 inline constexpr uint8_t       openAnalogPin    = A7;
@@ -273,14 +281,13 @@ inline constexpr uint8_t  cardRemoveDelay =  3;
 // ####### mp3 #########################################
 
 #define DFPlayerUsesHardwareSerial
+inline constexpr HardwareSerial &dfPlayer_serial         = Serial3;
 
 inline constexpr uint8_t        maxTracksInFolder        = 255;
-// inline constexpr uint8_t        dfPlayer_receivePin      =  2;
-// inline constexpr uint8_t        dfPlayer_transmitPin     =  3;
 inline constexpr uint8_t        dfPlayer_busyPin         = 13;
 inline constexpr levelType      dfPlayer_busyPinType     = levelType::activeHigh;
 inline constexpr unsigned long  dfPlayer_timeUntilStarts = 1000;
-inline constexpr HardwareSerial &dfPlayer_serial         = Serial3;
+
 // ####### tonuino #####################################
 
 inline constexpr uint8_t       shutdownPin      = 27;
@@ -334,11 +341,10 @@ inline constexpr uint8_t  cardRemoveDelay =  3;
 
 // ####### mp3 #########################################
 
-#define DFPlayerUsesSoftwareSerial
-
-inline constexpr uint8_t       maxTracksInFolder        = 255;
 inline constexpr uint8_t       dfPlayer_receivePin      = 2;
 inline constexpr uint8_t       dfPlayer_transmitPin     = 3;
+
+inline constexpr uint8_t       maxTracksInFolder        = 255;
 inline constexpr uint8_t       dfPlayer_busyPin         = 4;
 inline constexpr levelType     dfPlayer_busyPinType     = levelType::activeHigh;
 inline constexpr unsigned long dfPlayer_timeUntilStarts = 1000;
