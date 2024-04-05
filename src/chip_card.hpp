@@ -22,6 +22,8 @@ enum class pmode_t: uint8_t {
   party_vb      =   9,
   hoerbuch_1    =  10,
   repeat_last   =  11,
+  quiz_game     =  12,
+  memory_game   =  13,
 
   // modifier modes
   sleep_timer   =   1,
@@ -48,14 +50,6 @@ struct folderSettings {
         (special != rhs.special || special2 != rhs.special2))
       return false;
     return true;
-  }
-};
-
-// this object stores nfc tag data
-struct nfcTagObject {
-  folderSettings nfcFolderSettings;
-  bool operator==(const nfcTagObject& rhs) const {
-    return nfcFolderSettings == rhs.nfcFolderSettings;
   }
 };
 
@@ -92,8 +86,8 @@ public:
     empty,
   };
 
-  readCardEvent readCard (      nfcTagObject &nfcTag);
-  bool writeCard         (const nfcTagObject &nfcTag);
+  readCardEvent readCard (      folderSettings &nfcTag);
+  bool writeCard         (const folderSettings &nfcTag);
   void sleepCard         ();
   void initCard          ();
   cardEvent getCardEvent ();

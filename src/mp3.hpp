@@ -10,11 +10,10 @@
 #include "queue.hpp"
 #include "timer.hpp"
 
-#ifdef DFPlayerUsesSoftwareSerial // make sure to include "constants.hpp" before this line!
+#ifndef DFPlayerUsesHardwareSerial // make sure to include "constants.hpp" before this line!
 #include <SoftwareSerial.h>
 using SerialType = SoftwareSerial;
-#endif // DFPlayerUsesSoftwareSerial
-#ifdef DFPlayerUsesHardwareSerial
+#else
 using SerialType = HardwareSerial;
 #endif // DFPlayerUsesHardwareSerial
 
@@ -52,15 +51,39 @@ enum class mp3Tracks: uint16_t {
   t_319_special_party          = 319,
   t_320_mode_audio_book_single = 320,
   t_321_mode_repeat_last_card  = 321,
+  t_322_mode_quiz_game         = 322,
+  t_323_mode_memory_game       = 323,
   t_327_select_file            = 327,
   t_328_select_first_file      = 328,
   t_329_select_last_file       = 329,
   t_330_select_say_number      = 330,
   t_331_do_not_say_number      = 331,
   t_332_say_number             = 332,
+  t_333_num_answer             = 333,
+  t_334_num_answer_2           = 334,
+  t_335_num_answer_4           = 335,
+  t_336_num_answer_2_1         = 336,
+  t_337_num_answer_4_1         = 337,
+  t_338_num_answer_0_1         = 338,
   t_400_ok                     = 400,
   t_401_error                  = 401,
   t_402_ok_settings            = 402,
+  t_500_quiz_game_intro        = 500,
+  t_501_quiz_game_ok           = 501,
+  t_502_quiz_game_bad          = 502,
+  t_503_quiz_game_ok_with_sol  = 503,
+  t_504_quiz_game_bad_with_sol = 504,
+  t_505_quiz_game_buzzer_down  = 505,
+  t_506_quiz_game_buzzer_up    = 506,
+  t_507_quiz_game_buzzer_vold  = 507,
+  t_508_quiz_game_buzzer_volu  = 508,
+  t_509_quiz_game_buzzer_intro = 509,
+  t_510_quiz_game_continue     = 510,
+  t_520_memory_game_intro      = 520,
+  t_521_memory_game_ok         = 521,
+  t_522_memory_game_bad        = 522,
+  t_523_memory_game_1          = 523,
+  t_524_memory_game_2          = 524,
   t_800_waiting_for_card       = 800,
   t_801_remove_card            = 801,
   t_802_reset_aborted          = 802,
@@ -78,6 +101,7 @@ enum class mp3Tracks: uint16_t {
   t_911_reset                  = 911,
   t_912_admin_lock             = 912,
   t_913_pause_on_card_removed  = 913,
+  t_914_memory_game_cards      = 914,
   t_919_continue_admin         = 919,
   t_920_eq_intro               = 920,
   t_921_normal                 = 921,
@@ -93,6 +117,7 @@ enum class mp3Tracks: uint16_t {
   t_934_no                     = 934,
   t_935_yes                    = 935,
   t_936_batch_cards_intro      = 936,
+  t_937_memory_game_cards_intro= 937,
   t_940_shortcut_into          = 940,
   t_941_pause                  = 941,
   t_942_up                     = 942,
@@ -158,7 +183,7 @@ class Mp3: public DfMp3 {
 public:
   using Base = DfMp3;
 
-  Mp3(const Settings& settings);
+  Mp3(Settings& settings);
 
   bool isPlaying() const;
   void waitForTrackToFinish();
@@ -197,10 +222,20 @@ public:
   void setVolume     ();
   void setVolume     (uint8_t);
 #ifdef NEO_RING_EXT
-  uint8_t getVolumeRel() const { return static_cast<uint16_t>(volume-settings.minVolume)*0xff/(settings.maxVolume-settings.minVolume); }
+  uint8_t getVolumeRel() const { return static_cast<uint16_t>(*volume-*minVolume)*0xff/(*maxVolume-*minVolume); }
   bool volumeChanged () { return not volumeChangedTimer.isExpired(); }
 #endif // NEO_RING_EXT
   void loop          ();
+
+  uint8_t& getVolume    () { return *volume    ; }
+  uint8_t& getMaxVolume () { return *maxVolume ; }
+  uint8_t& getMinVolume () { return *minVolume ; }
+  uint8_t& getInitVolume() { return *initVolume; }
+
+#ifdef HPJACKDETECT
+  bool isHeadphoneJackDetect() { return noHeadphoneJackDetect == level::inactive; }
+  void setTempSpkOn()          { tempSpkOn = 2; }
+#endif
 
 private:
   friend class tonuino_fixture;
@@ -209,12 +244,19 @@ private:
 
   typedef queue<uint8_t, maxTracksInFolder> track_queue;
 
-#ifdef DFPlayerUsesSoftwareSerial
+#ifndef DFPlayerUsesHardwareSerial
   SoftwareSerial       softwareSerial;
-#endif /* DFPlayerUsesSoftwareSerial */
-  const Settings&      settings;
+#endif /* not DFPlayerUsesHardwareSerial */
+  Settings&            settings;
 
-  uint8_t              volume{};
+  uint8_t              spkVolume{};
+#ifdef HPJACKDETECT
+  uint8_t              hpVolume{};
+#endif
+  uint8_t*             volume    {&spkVolume};
+  uint8_t*             maxVolume {&settings.spkMaxVolume};
+  uint8_t*             minVolume {&settings.spkMinVolume};
+  uint8_t*             initVolume{&settings.spkInitVolume};
 #ifdef NEO_RING_EXT
   Timer                volumeChangedTimer{};
 #endif // NEO_RING_EXT
@@ -240,6 +282,11 @@ private:
   bool                 isPause{};
 #ifdef DFMiniMp3_T_CHIP_LISP3
   bool                 advPlaying{false};
+#endif
+
+#ifdef HPJACKDETECT
+  level                noHeadphoneJackDetect{level::unknown};
+  uint8_t              tempSpkOn{};
 #endif
 
 };

@@ -86,7 +86,7 @@ protected:
 #ifdef NEO_RING
   void handleBrightness(command cmd);
 #endif
-  static nfcTagObject lastCardRead;
+  static folderSettings lastCardRead;
 };
 
 class Idle: public Base
@@ -118,6 +118,50 @@ public:
   void entry() override;
   void react(command_e const &) override;
   void react(card_e    const &) override;
+};
+
+class Quiz: public Base
+{
+public:
+  void entry() override;
+  void react(command_e const &) override;
+  void react(card_e    const &) override;
+private:
+  enum class QuizState: uint8_t {
+    playQuestion,
+    playAnswer,
+    playSolution,
+    playWeiter,
+  };
+
+  void finish();
+
+  uint8_t   numAnswer    {};
+  uint8_t   numSolution  {};
+  QuizState quizState    {};
+  uint8_t   question     {};
+  uint8_t   trackQuestion{};
+  uint8_t   numQuestion  {};
+  uint8_t   actAnswer    {};
+  queue<uint8_t, 4>     a{};
+  bitfield<128>         r{}; // max in buzzer mode (num answer = 0, num solution = 1)
+  uint8_t remainingQuestions{};
+  static constexpr long timeout{ 5 * 60 * 1000l};
+};
+
+class Memory: public Base
+{
+public:
+  void entry() override;
+  void react(command_e const &) override;
+  void react(card_e    const &) override;
+private:
+
+  void finish();
+
+  uint8_t     first {};
+  uint8_t     second{};
+  static constexpr long timeout{ 5 * 60 * 1000l};
 };
 
 // ----------------------------------------------------------------------------
@@ -187,6 +231,13 @@ public:
   void react(command_e const &) final;
 };
 
+class ChNumAnswer : public VoiceMenu_setupCard
+{
+public:
+  void entry() final;
+  void react(command_e const &) final;
+};
+
 class WriteCard : public SM_writeCard
 {
 public:
@@ -199,7 +250,7 @@ private:
     end_writeCard,
     run_waitCardRemoved,
   };
-  subState current_subState;
+  subState current_subState{};
 };
 
 class Admin_BaseSetting: public VoiceMenu_tonuino
@@ -231,10 +282,10 @@ private:
     allow,
     not_allow,
   };
-  subState current_subState;
-  Settings::pin_t pin;
-  uint8_t         pin_number;
-//  uint8_t         av, bv, cv;
+  subState        current_subState{};
+  Settings::pin_t pin             {};
+  uint8_t         pin_number      {};
+//  uint8_t         av{}, bv{}, cv{};
 };
 
 class Admin_Entry: public VoiceMenu_tonuino
@@ -261,7 +312,7 @@ private:
     start_writeCard,
     run_writeCard,
   };
-  subState current_subState;
+  subState current_subState{};
 };
 
 class Admin_SimpleSetting: public Admin_BaseSetting
@@ -284,13 +335,13 @@ public:
   void entry() final;
   void react(command_e const &) final;
 private:
-  pmode_t mode;
   enum subState: uint8_t {
     start_writeCard,
     run_writeCard,
   };
-  subState current_subState;
-  bool     readyToWrite;
+  pmode_t mode             {};
+  subState current_subState{};
+  bool     readyToWrite    {};
 };
 
 class Admin_ShortCut: public Admin_BaseSetting
@@ -304,8 +355,8 @@ private:
     run_setupCard,
     end_setupCard,
   };
-  subState current_subState;
-  uint8_t  shortcut;
+  subState current_subState{};
+  uint8_t  shortcut        {};
 };
 
 class Admin_StandbyTimer: public Admin_BaseSetting
@@ -329,9 +380,9 @@ private:
     start_writeCard,
     run_writeCard,
   };
-  subState current_subState;
-  uint8_t special;
-  uint8_t special2;
+  subState current_subState{};
+  uint8_t special          {};
+  uint8_t special2         {};
 };
 
 class Admin_InvButtons: public Admin_BaseSetting
@@ -359,9 +410,9 @@ private:
     get_pin,
     finished,
   };
-  subState current_subState;
-  Settings::pin_t pin;
-  uint8_t         pin_number;
+  subState        current_subState{};
+  Settings::pin_t pin             {};
+  uint8_t         pin_number      {};
 };
 
 class Admin_PauseIfCardRemoved: public Admin_BaseSetting
@@ -370,5 +421,22 @@ public:
   void entry() final;
   void react(command_e const &) final;
 };
+
+#ifdef MEMORY_GAME
+class Admin_MemoryGameCards: public Amin_BaseWriteCard
+{
+public:
+  void entry() final;
+  void react(command_e const &) final;
+private:
+  enum subState: uint8_t {
+    prepare_writeCard,
+    start_writeCard,
+    run_writeCard,
+  };
+  subState current_subState{};
+};
+#endif
+
 
 #endif /* SRC_STATE_MACHINE_HPP_ */

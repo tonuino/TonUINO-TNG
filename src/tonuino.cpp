@@ -16,8 +16,31 @@ const __FlashStringHelper* str_bis      () { return F(" bis "); }
 
 } // anonymous namespace
 
+#ifdef USE_TIMER1
+ISR(TIMER1_COMPA_vect){
+  TCNT1  = 0;
+#ifdef ROTARY_ENCODER_USES_TIMER1
+  RotaryEncoder::timer_loop();
+#endif
+}
+#endif
+
 void Tonuino::setup() {
-#ifdef BUTTONS3X3
+#ifdef USE_TIMER1
+  cli();//stop interrupts
+
+  TCCR1A = 0;              // set entire TCCR1A register to 0
+  TCCR1B = 0;              // same for TCCR1B
+  TCNT1  = 0;              // initialize counter value to 0;
+  OCR1A  = 10000U;         // set timer count for frequency = (16*10^6) / (F*8) - 1, F=200Hz
+  TCCR1B |= (1 << WGM12);  // turn on CTC mode
+  TCCR1B |= (1 << CS11);   // Set CS11 bit for 8 prescaler
+  TIMSK1 |= (1 << OCIE1A); // enable timer compare interrupt
+
+  sei();//allow interrupts
+#endif
+
+#if defined(BUTTONS3X3) or defined(BAT_VOLTAGE_MEASUREMENT)
 #if defined(ALLinONE_Plus) or defined(TonUINO_Every)
   analogReference(INTERNAL2V5);
 #endif
@@ -32,7 +55,7 @@ void Tonuino::setup() {
 
   randomSeed(generateRamdomSeed());
 
-#if defined ALLinONE || defined ALLinONE_Plus || defined SPKONOFF
+#if defined SPKONOFF
   pinMode(ampEnablePin, OUTPUT);
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
 #endif
@@ -42,6 +65,11 @@ void Tonuino::setup() {
   digitalWrite(usbAccessPin, getLevel(usbAccessPinType, level::inactive));
 #endif
 
+#ifdef SPECIAL_START_SHORTCUT
+  pinMode(specialStartShortcutPin, INPUT);
+#endif
+
+
 #ifdef NEO_RING
   ring.init();
   ring.call_on_startup();
@@ -49,12 +77,14 @@ void Tonuino::setup() {
 
   // load Settings from EEPROM
   settings.loadSettingsFromFlash();
+#ifdef STORE_LAST_CARD
+  settings.readExtShortCutFromFlash(lastSortCut, myFolder);
+  LOG(init_log, s_debug, F("get last, folder: "), myFolder.folder, F(", mode: "), static_cast<uint8_t>(myFolder.mode));
+#endif
 
   // DFPlayer Mini initialisieren
   mp3.begin();
   delay(2000);
-  mp3.setVolume();
-  mp3.setEq(static_cast<DfMp3_Eq>(settings.eq - 1));
 
   // NFC Leser initialisieren
   chip_card.initCard();
@@ -69,22 +99,40 @@ void Tonuino::setup() {
   mpu6050.init();
 #endif
 
-  SM_tonuino::start();
-#if defined ALLinONE || defined ALLinONE_Plus || defined SPKONOFF
+  // DFPlayer Mini initialisieren (2)
+#if defined SPKONOFF
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
 #endif
+  mp3.setVolume();
+  mp3.setEq(static_cast<DfMp3_Eq>(settings.eq - 1));
+  mp3.loop();
+
+  SM_tonuino::start();
 
   // ignore commands, if buttons already pressed during startup
   commands.getCommandRaw();
 
   // Start Shortcut "at Startup" - e.g. Welcome Sound
-  SM_tonuino::dispatch(command_e(commandRaw::start));
+#ifdef SPECIAL_START_SHORTCUT
+  if (getLevel(specialStartShortcutPinType, digitalRead(specialStartShortcutPin)) == level::active) {
+#ifdef HPJACKDETECT
+    mp3.setTempSpkOn();
+#endif // HPJACKDETECT
+    SM_tonuino::dispatch(command_e(commandRaw::specialStart));
+  } else
+#endif // SPECIAL_START_SHORTCUT
+    SM_tonuino::dispatch(command_e(commandRaw::start));
 }
 
 void Tonuino::loop() {
 
   unsigned long  start_cycle = millis();
   checkStandby();
+
+#ifdef BAT_VOLTAGE_MEASUREMENT
+  if (batVoltage.check())
+    shutdown();
+#endif
 
   mp3.loop();
 
@@ -111,6 +159,10 @@ void Tonuino::loop() {
     ring.call_on_play();
   else if (SM_tonuino::is_in_state<Pause>())
     ring.call_on_pause();
+#ifdef QUIZ_GAME
+  else if (SM_tonuino::is_in_state<Quiz>())
+    ring.call_on_quiz();
+#endif // QUIZ_GAME
   else // admin menu
     ring.call_on_admin();
 #endif // NEO_RING
@@ -123,50 +175,50 @@ void Tonuino::loop() {
 
 void Tonuino::playFolder() {
   LOG(play_log, s_debug, F("playFolder"));
-  numTracksInFolder = mp3.getFolderTrackCount(myFolder->folder);
-  LOG(play_log, s_warning, numTracksInFolder, F(" tr in folder "), myFolder->folder);
+  numTracksInFolder = mp3.getFolderTrackCount(myFolder.folder);
+  LOG(play_log, s_warning, numTracksInFolder, F(" tr in folder "), myFolder.folder);
   numTracksInFolder = min(numTracksInFolder, 0xffu);
   mp3.clearAllQueue();
 
-  switch (myFolder->mode) {
+  switch (myFolder.mode) {
 
   case pmode_t::hoerspiel:
     // Hörspielmodus: eine zufällige Datei aus dem Ordner
-    myFolder->special = 1;
-    myFolder->special2 = numTracksInFolder;
+    myFolder.special = 1;
+    myFolder.special2 = numTracksInFolder;
     __attribute__ ((fallthrough));
     /* no break */
   case pmode_t::hoerspiel_vb:
     // Spezialmodus Von-Bin: Hörspiel: eine zufällige Datei aus dem Ordner
     LOG(play_log, s_info, F("Hörspiel"));
-    LOG(play_log, s_info, myFolder->special, str_bis(), myFolder->special2);
-    mp3.enqueueTrack(myFolder->folder, random(myFolder->special, myFolder->special2 + 1));
+    LOG(play_log, s_info, myFolder.special, str_bis(), myFolder.special2);
+    mp3.enqueueTrack(myFolder.folder, random(myFolder.special, myFolder.special2 + 1));
     break;
 
   case pmode_t::album:
     // Album Modus: kompletten Ordner spielen
-    myFolder->special = 1;
-    myFolder->special2 = numTracksInFolder;
+    myFolder.special = 1;
+    myFolder.special2 = numTracksInFolder;
     __attribute__ ((fallthrough));
     /* no break */
   case pmode_t::album_vb:
     // Spezialmodus Von-Bis: Album: alle Dateien zwischen Start und Ende spielen
     LOG(play_log, s_info, F("Album"));
-    LOG(play_log, s_info, myFolder->special, str_bis() , myFolder->special2);
-    mp3.enqueueTrack(myFolder->folder, myFolder->special, myFolder->special2);
+    LOG(play_log, s_info, myFolder.special, str_bis() , myFolder.special2);
+    mp3.enqueueTrack(myFolder.folder, myFolder.special, myFolder.special2);
     break;
 
   case pmode_t::party:
     // Party Modus: Ordner in zufälliger Reihenfolge
-    myFolder->special = 1;
-    myFolder->special2 = numTracksInFolder;
+    myFolder.special = 1;
+    myFolder.special2 = numTracksInFolder;
     __attribute__ ((fallthrough));
     /* no break */
   case pmode_t::party_vb:
     // Spezialmodus Von-Bis: Party Ordner in zufälliger Reihenfolge
     LOG(play_log, s_info, F("Party"));
-    LOG(play_log, s_info, myFolder->special, str_bis(), myFolder->special2);
-    mp3.enqueueTrack(myFolder->folder, myFolder->special, myFolder->special2);
+    LOG(play_log, s_info, myFolder.special, str_bis(), myFolder.special2);
+    mp3.enqueueTrack(myFolder.folder, myFolder.special, myFolder.special2);
     mp3.shuffleQueue();
     mp3.setEndless();
     break;
@@ -174,7 +226,7 @@ void Tonuino::playFolder() {
   case pmode_t::einzel:
     // Einzel Modus: eine Datei aus dem Ordner abspielen
     LOG(play_log, s_info, F("Einzel"));
-    mp3.enqueueTrack(myFolder->folder, myFolder->special);
+    mp3.enqueueTrack(myFolder.folder, myFolder.special);
     break;
 
   case pmode_t::hoerbuch:
@@ -182,10 +234,10 @@ void Tonuino::playFolder() {
   {
     // Hörbuch Modus: kompletten Ordner spielen und Fortschritt merken (oder nur eine Datei)
     LOG(play_log, s_info, F("Hörbuch"));
-    uint16_t startTrack = settings.readFolderSettingFromFlash(myFolder->folder);
+    uint16_t startTrack = settings.readFolderSettingFromFlash(myFolder.folder);
     if ((startTrack == 0) || (startTrack > numTracksInFolder))
       startTrack = 1;
-    mp3.enqueueTrack(myFolder->folder, 1, numTracksInFolder, startTrack-1);
+    mp3.enqueueTrack(myFolder.folder, 1, numTracksInFolder, startTrack-1);
   }
     break;
 
@@ -206,14 +258,14 @@ void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
   LOG(play_log, s_info, F("nextTrack"));
   if (activeModifier->handleNext())
     return;
-  if (fromOnPlayFinished && mp3.isPlayingFolder() && myFolder->mode == pmode_t::hoerbuch_1) {
+  if (fromOnPlayFinished && mp3.isPlayingFolder() && myFolder.mode == pmode_t::hoerbuch_1) {
     const uint8_t trackToSave = (mp3.getCurrentTrack() < numTracksInFolder) ? mp3.getCurrentTrack()+1 : 1;
-    settings.writeFolderSettingToFlash(myFolder->folder, trackToSave);
+    settings.writeFolderSettingToFlash(myFolder.folder, trackToSave);
     mp3.clearFolderQueue();
   }
   mp3.playNext(tracks, fromOnPlayFinished);
-  if (mp3.isPlayingFolder() && (myFolder->mode == pmode_t::hoerbuch || myFolder->mode == pmode_t::hoerbuch_1)) {
-    settings.writeFolderSettingToFlash(myFolder->folder, mp3.getCurrentTrack());
+  if (mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1)) {
+    settings.writeFolderSettingToFlash(myFolder.folder, mp3.getCurrentTrack());
   }
 }
 
@@ -222,8 +274,8 @@ void Tonuino::previousTrack(uint8_t tracks) {
   if (activeModifier->handlePrevious())
     return;
   mp3.playPrevious(tracks);
-  if (mp3.isPlayingFolder() && (myFolder->mode == pmode_t::hoerbuch || myFolder->mode == pmode_t::hoerbuch_1)) {
-    settings.writeFolderSettingToFlash(myFolder->folder, mp3.getCurrentTrack());
+  if (mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1)) {
+    settings.writeFolderSettingToFlash(myFolder.folder, mp3.getCurrentTrack());
   }
 }
 
@@ -257,7 +309,7 @@ void Tonuino::shutdown() {
   ring.call_on_sleep();
 #endif
 
-#if defined ALLinONE || defined ALLinONE_Plus || defined SPKONOFF
+#if defined SPKONOFF
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
   delay(1000);
 #endif
@@ -276,16 +328,16 @@ void Tonuino::shutdown() {
   sleep_mode();
 }
 
-bool Tonuino::specialCard(const nfcTagObject &nfcTag) {
-  LOG(card_log, s_debug, F("special card, mode = "), static_cast<uint8_t>(nfcTag.nfcFolderSettings.mode));
-  if (activeModifier->getActive() == nfcTag.nfcFolderSettings.mode) {
+bool Tonuino::specialCard(const folderSettings &nfcTag) {
+  LOG(card_log, s_debug, F("special card, mode = "), static_cast<uint8_t>(nfcTag.mode));
+  if (activeModifier->getActive() == nfcTag.mode) {
     resetActiveModifier();
     LOG(card_log, s_info, F("modifier removed"));
     mp3.playAdvertisement(advertTracks::t_261_deactivate_mod_card, false/*olnyIfIsPlaying*/);
     return true;
   }
 
-  switch (nfcTag.nfcFolderSettings.mode) {
+  switch (nfcTag.mode) {
   case pmode_t::sleep_timer:  LOG(card_log, s_info, F("act. sleepTimer"));
                               mp3.playAdvertisement(advertTracks::t_302_sleep            , false/*olnyIfIsPlaying*/);
                               activeModifier = &sleepTimer;
@@ -318,7 +370,7 @@ bool Tonuino::specialCard(const nfcTagObject &nfcTag) {
 
   default:                    return false;
   }
-  activeModifier->init(nfcTag.nfcFolderSettings.special);
+  activeModifier->init(nfcTag.special);
   return true;
 }
 
@@ -332,7 +384,7 @@ uint32_t Tonuino::generateRamdomSeed()
     uint32_t seedBitValue  = 0;
     for (uint8_t bitSum = 0; bitSum <= 8; bitSum++) {     // 8 samples of analog pin
       seedBitValue += analogRead(openAnalogPin);          // Flip the coin eight times, adding the results together
-      delay(1);                                             // Delay a single millisecond to allow the pin to fluctuate
+      delay(1);                                           // Delay a single millisecond to allow the pin to fluctuate
     }
     seedLongValue |= ((seedBitValue & 0x01) << bitShift); // Build a stack of 32 flipped coins
   }

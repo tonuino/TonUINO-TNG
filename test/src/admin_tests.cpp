@@ -490,7 +490,7 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_maxVolume) {
 
   Print::clear_output();
 
-  getSettings().maxVolume = 10;
+  getSettings().spkMaxVolume = 10;
 
   const uint8_t maxVolume = 21;
 
@@ -498,7 +498,7 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_maxVolume) {
   ASSERT_TRUE(SM_tonuino::is_in_state<Admin_SimpleSetting>());
 
   // ===== select volume
-  for (uint8_t volume = getSettings().maxVolume+1; volume <= maxVolume; ++volume) {
+  for (uint8_t volume = getSettings().spkMaxVolume+1; volume <= maxVolume; ++volume) {
     // button up --> play number
     button_for_command(command::next, state_for_command::admin);
     execute_cycle_for_ms(time_check_play);
@@ -519,9 +519,9 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_maxVolume) {
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_919_continue_admin));
 
-  EXPECT_EQ(getSettings().maxVolume, maxVolume);
+  EXPECT_EQ(getSettings().spkMaxVolume, maxVolume);
   getSettings().loadSettingsFromFlash();
-  EXPECT_EQ(getSettings().maxVolume, maxVolume);
+  EXPECT_EQ(getSettings().spkMaxVolume, maxVolume);
 
   goto_idle();
 
@@ -537,7 +537,7 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_minVolume) {
 
   Print::clear_output();
 
-  getSettings().minVolume = 10;
+  getSettings().spkMinVolume = 10;
 
   const uint8_t minVolume = 16;
 
@@ -545,7 +545,7 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_minVolume) {
   ASSERT_TRUE(SM_tonuino::is_in_state<Admin_SimpleSetting>());
 
   // ===== select volume
-  for (uint8_t volume = getSettings().minVolume+1; volume <= minVolume; ++volume) {
+  for (uint8_t volume = getSettings().spkMinVolume+1; volume <= minVolume; ++volume) {
     // button up --> play number
     button_for_command(command::next, state_for_command::admin);
     execute_cycle_for_ms(time_check_play);
@@ -566,9 +566,9 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_minVolume) {
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_919_continue_admin));
 
-  EXPECT_EQ(getSettings().minVolume, minVolume);
+  EXPECT_EQ(getSettings().spkMinVolume, minVolume);
   getSettings().loadSettingsFromFlash();
-  EXPECT_EQ(getSettings().minVolume, minVolume);
+  EXPECT_EQ(getSettings().spkMinVolume, minVolume);
 
   goto_idle();
 
@@ -584,7 +584,7 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_initVolume) {
 
   Print::clear_output();
 
-  getSettings().initVolume = 10;
+  getSettings().spkInitVolume = 10;
 
   const uint8_t initVolume = 16;
 
@@ -592,7 +592,7 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_initVolume) {
   ASSERT_TRUE(SM_tonuino::is_in_state<Admin_SimpleSetting>());
 
   // ===== select volume
-  for (uint8_t volume = getSettings().initVolume+1; volume <= initVolume; ++volume) {
+  for (uint8_t volume = getSettings().spkInitVolume+1; volume <= initVolume; ++volume) {
     // button up --> play number
     button_for_command(command::next, state_for_command::admin);
     execute_cycle_for_ms(time_check_play);
@@ -613,9 +613,9 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_initVolume) {
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_919_continue_admin));
 
-  EXPECT_EQ(getSettings().initVolume, initVolume);
+  EXPECT_EQ(getSettings().spkInitVolume, initVolume);
   getSettings().loadSettingsFromFlash();
-  EXPECT_EQ(getSettings().initVolume, initVolume);
+  EXPECT_EQ(getSettings().spkInitVolume, initVolume);
 
   goto_idle();
 
@@ -1193,9 +1193,9 @@ inline bool operator==(const Settings &lhs, const Settings &rhs) {
   return
   lhs.cookie               == rhs.cookie               &&
   lhs.version              == rhs.version              &&
-  lhs.maxVolume            == rhs.maxVolume            &&
-  lhs.minVolume            == rhs.minVolume            &&
-  lhs.initVolume           == rhs.initVolume           &&
+  lhs.spkMaxVolume         == rhs.spkMaxVolume         &&
+  lhs.spkMinVolume         == rhs.spkMinVolume         &&
+  lhs.spkInitVolume        == rhs.spkInitVolume        &&
   lhs.eq                   == rhs.eq                   &&
   lhs.dummy                == rhs.dummy                &&
   lhs.standbyTimer         == rhs.standbyTimer         &&
@@ -1209,7 +1209,10 @@ inline bool operator==(const Settings &lhs, const Settings &rhs) {
   lhs.adminMenuPin[1]      == rhs.adminMenuPin[1]      &&
   lhs.adminMenuPin[2]      == rhs.adminMenuPin[2]      &&
   lhs.adminMenuPin[3]      == rhs.adminMenuPin[3]      &&
-  lhs.pauseWhenCardRemoved == rhs.pauseWhenCardRemoved;
+  lhs.pauseWhenCardRemoved == rhs.pauseWhenCardRemoved &&
+  lhs.hpMaxVolume          == rhs.hpMaxVolume          &&
+  lhs.hpMinVolume          == rhs.hpMinVolume          &&
+  lhs.hpInitVolume         == rhs.hpInitVolume         ;
 }
 
 TEST_F(admin_test_fixture, Admin_ResetEeprom) {
@@ -1217,9 +1220,9 @@ TEST_F(admin_test_fixture, Admin_ResetEeprom) {
   const Settings default_settings = {
       cardCookie    ,//uint32_t    cookie;
       2             ,//byte        version;
-      25            ,//uint8_t     maxVolume;
-      5             ,//uint8_t     minVolume;
-      15            ,//uint8_t     initVolume;
+      25            ,//uint8_t     spkMaxVolume;
+      5             ,//uint8_t     spkMinVolume;
+      15            ,//uint8_t     spkInitVolume;
       1             ,//uint8_t     eq;
       false         ,//bool        locked;
       0             ,//long        standbyTimer;
@@ -1233,13 +1236,16 @@ TEST_F(admin_test_fixture, Admin_ResetEeprom) {
       0             ,//uint8_t     adminMenuLocked;
       {{1,1,1,1}}   ,//pin_t       adminMenuPin;
       0             ,//uint8_t     pauseWhenCardRemoved;
+      25            ,//uint8_t     hpMaxVolume;
+      5             ,//uint8_t     hpMinVolume;
+      15            ,//uint8_t     hpInitVolume;
   };
   const Settings other_settings = {
       cardCookie    ,//uint32_t    cookie;
       2             ,//byte        version;
-      26            ,//uint8_t     maxVolume;
-      6             ,//uint8_t     minVolume;
-      16            ,//uint8_t     initVolume;
+      26            ,//uint8_t     spkMaxVolume;
+      6             ,//uint8_t     spkMinVolume;
+      16            ,//uint8_t     spkInitVolume;
       1             ,//uint8_t     eq;
       false         ,//bool        locked;
       1000          ,//long        standbyTimer;
@@ -1253,6 +1259,9 @@ TEST_F(admin_test_fixture, Admin_ResetEeprom) {
       0             ,//uint8_t     adminMenuLocked;
       {{1,2,3,4}}   ,//pin_t       adminMenuPin;
       1             ,//uint8_t     pauseWhenCardRemoved;
+      24            ,//uint8_t     hpMaxVolume;
+      4             ,//uint8_t     hpMinVolume;
+      16            ,//uint8_t     hpInitVolume;
   };
   Print::clear_output();
 
