@@ -101,7 +101,7 @@ commandRaw RotaryEncoder::getCommandRawFromCommand(const command& cmd) {
   case command::next:
     return commandRaw::up;
   case command::previous:
-    return commandRaw::five;
+    return commandRaw::down;
   case command::volume_up:
     return commandRaw::four;
   case command::volume_down:
