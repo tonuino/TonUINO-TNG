@@ -9,8 +9,8 @@
 
 namespace {
 
-constexpr uint16_t avr_weight = 2;
-constexpr int16_t  tabLimit   = 1000;
+constexpr uint16_t avr_weight = 4;
+constexpr int16_t  tabLimit   = 2000;
 constexpr uint16_t blockTime  = 500;
 
 constexpr uint8_t MPU6050_ADDR         = 0x68; // Alternatively set AD0 to HIGH  --> Address = 0x69
@@ -71,6 +71,18 @@ void MPU6050_wakeUp(){
 
 void MPU6050_sleep(){
   writeRegister(MPU6050_PWR_MGT_1, 1<<MPU6050_SLEEP);
+}
+
+int16_t getAccX() {
+  Wire.beginTransmission(MPU6050_ADDR);
+  Wire.write(MPU6050_ACCEL_XOUT_H);
+  Wire.endTransmission(false);
+
+  Wire.requestFrom(MPU6050_ADDR, 2u, true);
+
+  const int16_t accX  = Wire.read()<<8 | Wire.read(); // reading registers: 0x3B (ACCEL_XOUT_H) and 0x3C (ACCEL_XOUT_L)
+
+  return accX;
 }
 
 #ifdef MPU6050_INT
@@ -155,18 +167,6 @@ commandRaw Mpu6050::getCommandRaw() {
     LOG(button_log, s_debug, F("Mpu6050 raw: "), static_cast<uint8_t>(ret));
   }
   return ret;
-}
-
-int16_t Mpu6050::getAccX() {
-  Wire.beginTransmission(MPU6050_ADDR);
-  Wire.write(MPU6050_ACCEL_XOUT_H);
-  Wire.endTransmission(false);
-
-  Wire.requestFrom(MPU6050_ADDR, 2u, true);
-
-  const int16_t accX  = Wire.read()<<8 | Wire.read(); // reading registers: 0x3B (ACCEL_XOUT_H) and 0x3C (ACCEL_XOUT_L)
-
-  return accX;
 }
 
 #endif // MPU6050_TAP_DETECTION

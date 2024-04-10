@@ -16,8 +16,6 @@ public:
 
 private:
 
-  int16_t getAccX();
-
   const Settings& settings;
 
   int32_t         avr;
