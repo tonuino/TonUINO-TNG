@@ -21,26 +21,28 @@
  * headphone jack detection|   |   |   |   |   |   |   |   |   |   |   | x |
  * special start shortcut  |   |   |   |   |   |   | x |   |   |   |   |   |
  * bat voltage measurement |   |   |   |   |   | x |   |   |   |   |   |   |
+ * MPU6050 tap detection   |   |   |   |   |SDA|SCL|   |   |   |   |   |(I)|
  * #########################################################################
  */
 
-/* ### AiOplus #####################################################################################
- *                         | A0| A1| A2| A3| A4| A5| A6| A7|D10|D19|D21|D27|D31|D32|D33|D36|D37|A14|
- *                         |   |   |   |   |   |   |   |   |PB2|PC5|PC7|PD5|PE1|PE2|PE3|PF2|PF3|PF4|
- * ------------------------+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
- * 3 Button                | P | D | U |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
- * 5 Button                | P | D | U | V-| V+|   |   |   |   |   |   |   |   |   |   |   |   |   |
- * 3x3 Button Board        | P |   | A | D | U |   |   |   |   |   |   |   |   |   |   |   |   |   |
- * Open pin for random     |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |
- * Rotary encoder          |   |   |   |   |   |   |   |   |   |   |   |   |CLK| DT|   |CLK| DT|   |
- * Poti                    |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |
- * Neo Ring/LED animat.    |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |
- * Speaker off             |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |
- * Shutdown                |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |
- * headphone jack detection|   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |
- * special start shortcut  |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |
- * bat voltage measurement |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |
- * #################################################################################################
+/* ### AiOplus #############################################################################################
+ *                         | A0| A1| A2| A3| A4| A5| A6| A7|D02|D03|D10|D19|D21|D27|D31|D32|D33|D36|D37|A14|
+ *                         |PD0|PD1|PD2|PD3|PD4|PD5|PD6|PD7|PA2|PA3|PB2|PC5|PC7|PD5|PE1|PE2|PE3|PF2|PF3|PF4|
+ * ------------------------+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+ * 3 Button                | P | D | U |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+ * 5 Button                | P | D | U | V-| V+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+ * 3x3 Button Board        | P |   | A | D | U |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+ * Open pin for random     |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |   |
+ * Rotary encoder          |   |   |   |   |   |   |   |   |   |   |   |   |   |   |CLK| DT|   |CLK| DT|   |
+ * Poti                    |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |
+ * Neo Ring/LED animat.    |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |
+ * Speaker off             |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |
+ * Shutdown                |   |   |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |
+ * headphone jack detection|   |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |
+ * special start shortcut  |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |
+ * bat voltage measurement |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |   |   |
+ * MPU6050 tap detection   |   |   |   |   |   |   |   |   |SDA|SCL|(I)|   |   |   |   |   |   |   |   |   |
+ * #########################################################################################################
  */
 
 /* ### AiO #################################################################
@@ -270,6 +272,22 @@ inline constexpr float   voltageMeasurementCorrection  = 2.007; // Spannungsteil
 
 inline constexpr float   batVoltageLow                 = 2.95;
 inline constexpr float   batVoltageEmpty               = 2.90;
+
+/* uncomment the below line to enable tap detection via MPU6050 gyroscope
+ * um Tippgesten mittels MPU6050 Gyroscope zu erkennen, in der nächste Zeile den Kommentar entfernen
+ *
+ *     Nano AiOplus
+ * SDA  A4   PA2
+ * SCL  A5   PA3
+ */
+//#define MPU6050_TAP_DETECTION
+
+//#define MPU6050_INT
+#ifdef ALLinONE_Plus
+inline constexpr uint8_t mpu6050InterruptPin = 10; // AiOplus: PB2
+#elif TonUINO_Every
+inline constexpr uint8_t mpu6050InterruptPin =  8; // Nano Every: D8
+#endif
 
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################

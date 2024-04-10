@@ -8,6 +8,7 @@
 #include "rotary_encoder.hpp"
 #include "poti.hpp"
 #include "serial_input.hpp"
+#include "mpu6050.hpp"
 #include "mp3.hpp"
 #include "modifier.hpp"
 #include "timer.hpp"
@@ -91,6 +92,9 @@ private:
 #ifdef POTI
   Poti                 poti                {settings, mp3};
 #endif
+#ifdef MPU6050_TAP_DETECTION
+  Mpu6050              mpu6050             {settings};
+#endif
   Commands             commands            {
                                             settings
                                           , &buttons
@@ -105,6 +109,9 @@ private:
 #endif
 #ifdef POTI
                                           , &poti
+#endif
+#ifdef MPU6050_TAP_DETECTION
+                                          , &mpu6050
 #endif
                                            };
   Chip_card            chip_card           {mp3};
