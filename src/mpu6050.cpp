@@ -78,7 +78,7 @@ int16_t getAccX() {
   Wire.write(MPU6050_ACCEL_XOUT_H);
   Wire.endTransmission(false);
 
-  Wire.requestFrom(MPU6050_ADDR, 2u, true);
+  Wire.requestFrom(MPU6050_ADDR, 2u, 1u);
 
   const int16_t accX  = Wire.read()<<8 | Wire.read(); // reading registers: 0x3B (ACCEL_XOUT_H) and 0x3C (ACCEL_XOUT_L)
 
