@@ -108,7 +108,7 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
     delay(300);
     waitForTrackToFinish(); // finish adv
     waitForTrackToStart();  // start folder track
-    delay(50);
+    delay(20);
     pause();
     loop();
   }
