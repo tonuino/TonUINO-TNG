@@ -588,6 +588,9 @@ void Idle::react(command_e const &cmd_e) {
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::idle_pause);
 
+  if (cmd == command::none)
+    return;
+
   if (tonuino.getActiveModifier().handleButton(cmd))
     return;
 
@@ -681,6 +684,9 @@ void Play::react(command_e const &cmd_e) {
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
 
+  if (cmd == command::none)
+    return;
+
   if (tonuino.getActiveModifier().handleButton(cmd))
     return;
 
@@ -727,7 +733,7 @@ void Play::react(command_e const &cmd_e) {
     break;
   }
 #ifdef NEGATIVE_NOTIFICATION
-    mp3.playAdvertisement(advertTracks::t_263_neg_notification, false /*olnyIfIsPlaying*/);
+  mp3.playAdvertisement(advertTracks::t_263_neg_notification, false /*olnyIfIsPlaying*/);
 #endif // NEGATIVE_NOTIFICATION
 }
 
@@ -771,6 +777,9 @@ void Pause::react(command_e const &cmd_e) {
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::idle_pause);
 
+  if (cmd == command::none)
+    return;
+
   if (tonuino.getActiveModifier().handleButton(cmd))
     return;
 
@@ -802,7 +811,7 @@ void Pause::react(command_e const &cmd_e) {
     break;
   }
 #ifdef NEGATIVE_NOTIFICATION
-    mp3.playAdvertisement(advertTracks::t_263_neg_notification, false /*olnyIfIsPlaying*/);
+  mp3.playAdvertisement(advertTracks::t_263_neg_notification, false /*olnyIfIsPlaying*/);
 #endif // NEGATIVE_NOTIFICATION
 }
 
