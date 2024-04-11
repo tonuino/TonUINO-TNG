@@ -70,7 +70,7 @@ void Mp3::waitForTrackToFinish() {
   LOG(mp3_log, s_debug, F("waitForTrackToFinish "), isPlaying());
 
   do {
-    loop();
+    delay(1);
   } while (isPlaying());
   LOG(mp3_log, s_debug, F("waitForTrackToFinish End "), isPlaying());
 }
@@ -81,7 +81,7 @@ void Mp3::waitForTrackToStart() {
   timer.start(dfPlayer_timeUntilStarts);
 
   do {
-    loop();
+    delay(1);
   } while (!isPlaying() && not timer.isExpired());
   LOG(mp3_log, s_debug, F("waitForTrackToStart End "), isPlaying());
 }
@@ -105,10 +105,10 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
     waitForTrackToStart();
     LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
-    delay(dfPlayer_timeUntilStarts);
+    delay(300);
     waitForTrackToFinish(); // finish adv
     waitForTrackToStart();  // start folder track
-    delay(10);
+    delay(50);
     pause();
     loop();
   }
@@ -283,7 +283,7 @@ void Mp3::setVolume() {
 #ifdef HPJACKDETECT
   hpVolume  = settings.hpInitVolume;
 #endif
-  LOG(mp3_log, s_debug, F("setVolume: "), volume);
+  LOG(mp3_log, s_debug, F("setVolume: "), *volume);
   uint8_t max_loop = 20; // 4 seconds
   while((--max_loop>0) && (Base::getVolume() != *volume)) {
     delay(100);

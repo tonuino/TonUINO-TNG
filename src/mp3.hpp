@@ -154,6 +154,7 @@ enum class advertTracks: uint16_t {
   t_260_activate_mod_card      = 260,
   t_261_deactivate_mod_card    = 261,
   t_262_pling                  = 262,
+  t_263_neg_notification       = 263,
   t_300_freeze_into            = 300,
   t_301_freeze_freeze          = 301,
   t_302_sleep                  = 302,

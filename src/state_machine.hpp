@@ -84,7 +84,7 @@ protected:
   void handleReadCard();
   bool checkForShortcutAndShutdown(command cmd);
 #ifdef NEO_RING
-  void handleBrightness(command cmd);
+  bool handleBrightness(command cmd);
 #endif
   static folderSettings lastCardRead;
 };

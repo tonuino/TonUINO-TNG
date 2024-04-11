@@ -234,6 +234,13 @@ inline constexpr levelType     dfPlayer_noHeadphoneJackDetectType = levelType::a
 
 // ######################################################################
 
+/* uncomment the below line to have negative notification for buttons without action
+ * um Rückmeldung über Tastendrücke ohne Funktion zu erhalten, in der nächste Zeile den Kommentar entfernen
+ */
+//#define NEGATIVE_NOTIFICATION
+
+// ######################################################################
+
 /* uncomment the below line to enable special shortcut on startup via GPIO
  * um den spezial Shortcut beim Start via GPIO zu aktivieren, in der nächste Zeile den Kommentar entfernen
  */

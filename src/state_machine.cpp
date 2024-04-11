@@ -516,6 +516,11 @@ void Base::handleReadCard() {
     LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
     transit<StartPlay>();
   }
+#ifdef NEGATIVE_NOTIFICATION
+  else {
+    mp3.playAdvertisement(advertTracks::t_263_neg_notification, false /*olnyIfIsPlaying*/);
+  }
+#endif // NEGATIVE_NOTIFICATION
 }
 
 bool Base::checkForShortcutAndShutdown(command cmd) {
@@ -541,23 +546,29 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
     shortCut = static_cast<uint8_t>(cmd);
 #endif
   if (shortCut != 0xff) {
-    if (tonuino.getActiveModifier().handleButton(command::shortcut1))
-      return false;
-    if (handleShortcut(shortCut))
-      return true;
+    if (tonuino.getActiveModifier().handleButton(static_cast<command>(static_cast<uint8_t>(command::shortcut1)+shortCut-1u)))
+      ; // nothing to do
+    else if (handleShortcut(shortCut))
+      ; // nothing to do
     else if (shortCut == 4)
       mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
+#ifdef NEGATIVE_NOTIFICATION
+    else
+      mp3.playAdvertisement(advertTracks::t_263_neg_notification, false /*olnyIfIsPlaying*/);
+#endif // NEGATIVE_NOTIFICATION
+    return true;
   }
   return false;
 }
 
 #ifdef NEO_RING
-void Base::handleBrightness(command cmd) {
+bool Base::handleBrightness(command cmd) {
   switch (cmd) {
-  case command::bright_up  : tonuino.getRing().brightness_up  (); break;
-  case command::bright_down: tonuino.getRing().brightness_down(); break;
+  case command::bright_up  : tonuino.getRing().brightness_up  (); return true;
+  case command::bright_down: tonuino.getRing().brightness_down(); return true;
   default                  :                                      break;
   }
+  return false;
 }
 #endif
 
@@ -570,9 +581,10 @@ void Idle::entry() {
 }
 
 void Idle::react(command_e const &cmd_e) {
-  if (cmd_e.cmd_raw != commandRaw::none) {
-    LOG(state_log, s_debug, str_Idle(), F("::react(cmd_e) "), static_cast<int>(cmd_e.cmd_raw));
-  }
+  if (cmd_e.cmd_raw == commandRaw::none)
+    return;
+
+  LOG(state_log, s_debug, str_Idle(), F("::react(cmd_e) "), static_cast<int>(cmd_e.cmd_raw));
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::idle_pause);
 
@@ -583,7 +595,8 @@ void Idle::react(command_e const &cmd_e) {
     return;
 
 #ifdef NEO_RING
-  handleBrightness(cmd);
+  if (handleBrightness(cmd))
+    return;
 #endif
 
   switch (cmd) {
@@ -622,6 +635,9 @@ void Idle::react(command_e const &cmd_e) {
       break;
 #endif
   default:
+#ifdef NEGATIVE_NOTIFICATION
+    mp3.playAdvertisement(advertTracks::t_263_neg_notification, false /*olnyIfIsPlaying*/);
+#endif
     break;
   }
 }
@@ -651,9 +667,17 @@ void Play::entry() {
 }
 
 void Play::react(command_e const &cmd_e) {
-  if (cmd_e.cmd_raw != commandRaw::none) {
-    LOG(state_log, s_debug, str_Play(), F("::react(cmd_e) "), static_cast<int>(cmd_e.cmd_raw));
+
+  if (not mp3.isPlayingFolder()) {
+    if (mp3.isPlaying())
+      mp3.stop();
+    transit<Idle>();
   }
+
+  if (cmd_e.cmd_raw == commandRaw::none)
+    return;
+
+  LOG(state_log, s_debug, str_Play(), F("::react(cmd_e) "), static_cast<int>(cmd_e.cmd_raw));
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
 
@@ -700,12 +724,10 @@ void Play::react(command_e const &cmd_e) {
     tonuino.previousTrack(0xff);
     break;
   default:
+#ifdef NEGATIVE_NOTIFICATION
+    mp3.playAdvertisement(advertTracks::t_263_neg_notification, false /*olnyIfIsPlaying*/);
+#endif // NEGATIVE_NOTIFICATION
     break;
-  }
-  if (not mp3.isPlayingFolder()) {
-    if (mp3.isPlaying())
-      mp3.stop();
-    transit<Idle>();
   }
 }
 
@@ -742,9 +764,10 @@ void Pause::entry() {
 }
 
 void Pause::react(command_e const &cmd_e) {
-  if (cmd_e.cmd_raw != commandRaw::none) {
-    LOG(state_log, s_debug, str_Pause(), F("::react(b) "), static_cast<int>(cmd_e.cmd_raw));
-  }
+  if (cmd_e.cmd_raw == commandRaw::none)
+    return;
+
+  LOG(state_log, s_debug, str_Pause(), F("::react(b) "), static_cast<int>(cmd_e.cmd_raw));
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::idle_pause);
 
@@ -755,7 +778,8 @@ void Pause::react(command_e const &cmd_e) {
     return;
 
 #ifdef NEO_RING
-  handleBrightness(cmd);
+  if (handleBrightness(cmd))
+    return;
 #endif
 
   switch (cmd) {
@@ -770,6 +794,9 @@ void Pause::react(command_e const &cmd_e) {
     transit<Play>();
     return;
   default:
+#ifdef NEGATIVE_NOTIFICATION
+    mp3.playAdvertisement(advertTracks::t_263_neg_notification, false /*olnyIfIsPlaying*/);
+#endif // NEGATIVE_NOTIFICATION
     break;
   }
 }
