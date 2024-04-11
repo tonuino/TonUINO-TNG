@@ -632,14 +632,14 @@ void Idle::react(command_e const &cmd_e) {
       tonuino.setMyFolder({specialStartShortcutFolder, pmode_t::einzel, specialStartShortcutTrack, 0}, true /*myFolderIsCard*/);
       LOG(state_log, s_debug, str_Idle(), str_to(), str_StartPlay());
       transit<StartPlay>();
-      break;
+      return;
 #endif
   default:
-#ifdef NEGATIVE_NOTIFICATION
-    mp3.playAdvertisement(advertTracks::t_263_neg_notification, false /*olnyIfIsPlaying*/);
-#endif
     break;
   }
+#ifdef NEGATIVE_NOTIFICATION
+  mp3.playAdvertisement(advertTracks::t_263_neg_notification, false /*olnyIfIsPlaying*/);
+#endif
 }
 
 void Idle::react(card_e const &c_e) {
@@ -701,34 +701,34 @@ void Play::react(command_e const &cmd_e) {
     return;
   case command::track:
     tonuino.playTrackNumber();
-    break;
+    return;
   case command::volume_up:
     mp3.increaseVolume();
-    break;
+    return;
   case command::next:
     tonuino.nextTrack();
-    break;
+    return;
   case command::next10:
     tonuino.nextTrack(10);
-    break;
+    return;
   case command::volume_down:
     mp3.decreaseVolume();
-    break;
+    return;
   case command::previous:
     tonuino.previousTrack();
-    break;
+    return;
   case command::previous10:
     tonuino.previousTrack(10);
-    break;
+    return;
   case command::to_first:
     tonuino.previousTrack(0xff);
-    break;
+    return;
   default:
+    break;
+  }
 #ifdef NEGATIVE_NOTIFICATION
     mp3.playAdvertisement(advertTracks::t_263_neg_notification, false /*olnyIfIsPlaying*/);
 #endif // NEGATIVE_NOTIFICATION
-    break;
-  }
 }
 
 void Play::react(card_e const &c_e) {
@@ -790,15 +790,20 @@ void Pause::react(command_e const &cmd_e) {
     }
     return;
   case command::pause:
-    LOG(state_log, s_debug, str_Pause(), str_to(), str_Play());
-    transit<Play>();
-    return;
+    if ( (settings.pauseWhenCardRemoved!=1) ||
+        ((settings.pauseWhenCardRemoved==1) && not chip_card.isCardRemoved())
+       ) {
+      LOG(state_log, s_debug, str_Pause(), str_to(), str_Play());
+      transit<Play>();
+      return;
+    }
+    break;
   default:
+    break;
+  }
 #ifdef NEGATIVE_NOTIFICATION
     mp3.playAdvertisement(advertTracks::t_263_neg_notification, false /*olnyIfIsPlaying*/);
 #endif // NEGATIVE_NOTIFICATION
-    break;
-  }
 }
 
 void Pause::react(card_e const &c_e) {
@@ -808,11 +813,11 @@ void Pause::react(card_e const &c_e) {
   switch (c_e.card_ev) {
   case cardEvent::inserted:
     if (readCard()) {
-      bool resume_on_card = settings.pauseWhenCardRemoved==1 ||
+      bool resume_on_card = settings.pauseWhenCardRemoved==1
 #ifdef RESUME_ON_SAME_RFID
-                            true ||
+                            || true
 #endif
-                            false;
+                            ;
 
       if (resume_on_card && tonuino.getMyFolder() == lastCardRead && not tonuino.getActiveModifier().handleButton(command::pause)) {
         transit<Play>();
