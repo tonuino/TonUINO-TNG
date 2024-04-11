@@ -329,9 +329,9 @@ public:
     }
   }
 
-  void goto_play(const folderSettings& card) {
+  void goto_play(const folderSettings& card, uint16_t track_count = 99) {
     goto_idle();
-    card_in(card);
+    card_in(card, track_count);
     EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
 
     // play t_262_pling
