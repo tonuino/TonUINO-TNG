@@ -17,7 +17,7 @@ const command cmd_table[][4] PROGMEM = {
 /*  down,           */ ,{ command::previous  , command::bright_down, command::previous   , command::none        }
 /*  downLong,       */ ,{ command::previous10, command::shortcut3  , command::previous10 , command::none        }
 /*  downLongRepeat, */ ,{ command::none      , command::none       , command::none       , command::none        }
-/*  updownLong,     */ ,{ command::none      , command::shortcut1  , command::to_first   , command::to_first    }
+/*  updownLong,     */ ,{ command::none      , command::shortcut1  , command::to_first   , command::none        }
 /*  four,           */ ,{ command::next      , command::bright_up  , command::volume_up  , command::none        }
 /*  fourLong,       */ ,{ command::next10    , command::none       , command::volume_up  , command::none        }
 /*  fourLongRepeat, */ ,{ command::none      , command::none       , command::volume_up  , command::none        }

@@ -766,8 +766,12 @@ void Pause::react(command_e const &cmd_e) {
     }
     return;
   case command::pause:
-    LOG(state_log, s_debug, str_Pause(), str_to(), str_Play());
-    transit<Play>();
+    if ( (settings.pauseWhenCardRemoved!=1) ||
+        ((settings.pauseWhenCardRemoved==1) && not chip_card.isCardRemoved())
+       ) {
+      LOG(state_log, s_debug, str_Pause(), str_to(), str_Play());
+      transit<Play>();
+    }
     return;
   default:
     break;
