@@ -104,6 +104,11 @@
 
 /* uncomment one of the below lines to support a special chip on the DfMiniMp3 player
  * um einen speziellen Chip auf dem DfMiniMp3 Player zu ünterstützen bitte in eine der nächste Zeilen den Kommentar entfernen
+ *
+ * GD3200B:     bad behavior of getFolderTrackCount() - ignores the parameter folder
+ * MH2024K16SS: no checksums
+ * LISP3:       bad behavior of callback OnPlayFinished - it is also called on advertise tracks (also on some MH2024K24SS)
+ * LKP Player:  no ACK for requests (use Mp3ChipIncongruousNoAck for them)
  */
 //#define DFMiniMp3_T_CHIP_GD3200B
 //#define DFMiniMp3_T_CHIP_MH2024K16SS
@@ -162,12 +167,22 @@ inline constexpr uint8_t   potiPin    = A3 ; // AiO/Classic A3
  */
 //#define NEO_RING
 //#define NEO_RING_EXT
+//#define NEO_RING_2
+
 #ifdef ALLinONE_Plus
 inline constexpr uint8_t neoPixelRingPin = 10; // PB2 on AiOplus (Erweiterungsleiste (Female))
 #else
 inline constexpr uint8_t neoPixelRingPin =  5; // D5 on AiO/Classic
 #endif // ALLinONE_Plus
 inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
+#ifdef NEO_RING_2
+#ifdef ALLinONE_Plus
+inline constexpr uint8_t neoPixelRingPin2= 14; // PC0 on AiOplus (Erweiterungsleiste (Female))
+#else
+inline constexpr uint8_t neoPixelRingPin2=  2; // D2 on AiO/Classic (only Every)
+#endif // ALLinONE_Plus
+inline constexpr uint8_t neoPixelNumber2 = 24; // Total Number of Pixels
+#endif // NEO_RING_2
 
 // ######################################################################
 

@@ -811,11 +811,11 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_works) {
 
   uint16_t track_count = 10;
 
-  getSettings().pauseWhenCardRemoved = 1;
-
   int ind = 0;
   for (folderSettings card: test_data) {
     goto_idle();
+    getSettings().pauseWhenCardRemoved = 1;
+
     Print::clear_output();
 
     card_in(card, track_count);
@@ -841,7 +841,42 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_works) {
     ASSERT_TRUE(getMp3().is_playing_folder()) << "Index: " << ind;
     EXPECT_EQ(getMp3().df_folder, card.folder);
 
+    // button pause --> pause
+    button_for_command(command::pause, state_for_command::play);
+    ASSERT_TRUE(SM_tonuino::is_in_state<Pause>()) << "Index: " << ind;
+    execute_cycle();
+    EXPECT_TRUE(getMp3().is_pause());
+
+    // button pause --> remains in pause if card is out
     card_out();
+    button_for_command(command::pause, state_for_command::play);
+    ASSERT_TRUE(SM_tonuino::is_in_state<Pause>()) << "Index: " << ind;
+    execute_cycle();
+    EXPECT_TRUE(getMp3().is_pause());
+
+    // card in --> play
+    card_in(card, track_count);
+    ASSERT_TRUE(SM_tonuino::is_in_state<Play>()) << "Index: " << ind;
+    execute_cycle_for_ms(time_check_play);
+    ASSERT_TRUE(getMp3().is_playing_folder()) << "Index: " << ind;
+    EXPECT_EQ(getMp3().df_folder, card.folder);
+
+    // button pause --> pause
+    button_for_command(command::pause, state_for_command::play);
+    ASSERT_TRUE(SM_tonuino::is_in_state<Pause>()) << "Index: " << ind;
+    execute_cycle();
+    EXPECT_TRUE(getMp3().is_pause());
+
+    // button pause --> play if card is in
+    button_for_command(command::pause, state_for_command::play);
+    ASSERT_TRUE(SM_tonuino::is_in_state<Play>()) << "Index: " << ind;
+    execute_cycle_for_ms(time_check_play);
+    ASSERT_TRUE(getMp3().is_playing_folder()) << "Index: " << ind;
+    EXPECT_EQ(getMp3().df_folder, card.folder);
+
+    card_out();
+    getSettings().pauseWhenCardRemoved = 0;
+
     ++ind;
   }
 //  EXPECT_TRUE(false) << "log: " << Print::get_output();
@@ -852,9 +887,8 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_out_early) {
   folderSettings card = { 1, pmode_t::album        , 0, 0 };
   uint16_t track_count = 10;
 
-  getSettings().pauseWhenCardRemoved = 1;
-
   goto_idle();
+  getSettings().pauseWhenCardRemoved = 1;
   Print::clear_output();
 
   card_in(card, track_count);
@@ -960,11 +994,10 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_in_with_other) {
 
   uint16_t track_count = 10;
 
-  getSettings().pauseWhenCardRemoved = 1;
-
   int ind = 0;
   for (card_data_2 data: test_data) {
     goto_idle();
+    getSettings().pauseWhenCardRemoved = 1;
     Print::clear_output();
 
     card_in(data.card1, track_count);
@@ -995,6 +1028,7 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_in_with_other) {
     EXPECT_EQ(getMp3().df_folder, data.card2.folder);
 
     card_out();
+    getSettings().pauseWhenCardRemoved = 0;
     ++ind;
   }
 
