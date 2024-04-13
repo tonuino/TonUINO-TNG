@@ -92,6 +92,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.6 geän
 
 ## Version 3.1.7 (08.04.2024)
 - [Issue 190](https://github.com/tonuino/TonUINO-TNG/issues/190): Neo Pixel Ring: Add the possibility to have 2 rings remains
+- [Issue 188](https://github.com/tonuino/TonUINO-TNG/issues/188): Pause when card removed modus: do not go to Play via button if card is not present
 
 ## Version 3.1.7 (29.03.2024)
 - [Issue 184](https://github.com/tonuino/TonUINO-TNG/issues/184): #define DONT_ACCEPT_SAME_RFID_TWICE makes the error: 'class Tonuino' has no member named 'getCard'
