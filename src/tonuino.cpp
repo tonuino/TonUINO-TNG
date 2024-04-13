@@ -157,8 +157,12 @@ void Tonuino::loop() {
     ring.call_on_pause();
 #ifdef QUIZ_GAME
   else if (SM_tonuino::is_in_state<Quiz>())
-    ring.call_on_quiz();
+    ring.call_on_game();
 #endif // QUIZ_GAME
+#ifdef MEMORY_GAME
+  else if (SM_tonuino::is_in_state<Memory>())
+    ring.call_on_game();
+#endif // MEMORY_GAME
   else // admin menu
     ring.call_on_admin();
 #endif // NEO_RING
