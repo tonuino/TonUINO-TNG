@@ -1121,3 +1121,58 @@ TEST_F(tonuino_test_fixture, next_previous_in_play_hoerbuch) {
 
 }
 
+// =================== end of hoerbuch
+TEST_F(tonuino_test_fixture, end_play_hoerbuch) {
+  const uint8_t folder = 5;
+  uint8_t track_count = 10;
+  folderSettings card = { folder, pmode_t::hoerbuch, 0, 0 };
+  getSettings().writeFolderSettingToFlash(folder, track_count); // last track
+  goto_play(card, track_count);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), track_count);
+  Print::clear_output();
+
+  // nothing happen on next button
+  button_for_command(command::next, state_for_command::play);
+  execute_cycle_for_ms(time_check_play);
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, card.folder);
+  EXPECT_EQ(getMp3().df_folder_track, track_count);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), track_count);
+
+  // end if finished
+  getMp3().end_track();
+  execute_cycle();
+  EXPECT_TRUE(getMp3().is_stopped());
+  EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), 1);
+
+  card_out();
+}
+
+TEST_F(tonuino_test_fixture, end_play_hoerbuch_1) {
+  const uint8_t folder = 5;
+  uint8_t track_count = 10;
+  folderSettings card = { folder, pmode_t::hoerbuch_1, 0, 0 };
+  getSettings().writeFolderSettingToFlash(folder, track_count); // last track
+  goto_play(card, track_count);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), track_count);
+  Print::clear_output();
+
+  // nothing happen on next button
+  button_for_command(command::next, state_for_command::play);
+  execute_cycle_for_ms(time_check_play);
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, card.folder);
+  EXPECT_EQ(getMp3().df_folder_track, track_count);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), track_count);
+
+  // end if finished
+  getMp3().end_track();
+  execute_cycle();
+  EXPECT_TRUE(getMp3().is_stopped());
+  EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), 1);
+
+  card_out();
+}
+

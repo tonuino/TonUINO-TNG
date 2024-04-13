@@ -90,7 +90,8 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.6 geän
 
 # Change Log
 
-## Version 3.1.7 (08.04.2024)
+## Version 3.1.7 (11.04.2024)
+- [Issue 193](https://github.com/tonuino/TonUINO-TNG/issues/193): Hoerbuch mode: after playing last track it does not change to first track on next start
 - [Issue 190](https://github.com/tonuino/TonUINO-TNG/issues/190): Neo Pixel Ring: Add the possibility to have 2 rings remains
 - [Issue 188](https://github.com/tonuino/TonUINO-TNG/issues/188): Pause when card removed modus: do not go to Play via button if card is not present
 
