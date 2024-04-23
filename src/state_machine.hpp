@@ -62,12 +62,6 @@ public:
 
   static folderSettings folder;
 protected:
-  static Tonuino        &tonuino;
-  static Mp3            &mp3;
-  static Commands       &commands;
-  static Settings       &settings;
-  static Chip_card      &chip_card;
-
   static Timer          timer;
   static bool           waitForPlayFinish; // with this it needs 66 Byte lesser program code ;-)
 };
