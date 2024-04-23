@@ -110,13 +110,21 @@ void Tonuino::setup() {
 
   // Start Shortcut "at Startup" - e.g. Welcome Sound
 #ifdef SPECIAL_START_SHORTCUT
+
+#ifdef TonUINO_Classic
+  if (getLevel(specialStartShortcutPinType, (analogRead(specialStartShortcutPin)<512)?0:1) == level::active) {
+#else // TonUINO_Classic
   if (getLevel(specialStartShortcutPinType, digitalRead(specialStartShortcutPin)) == level::active) {
+#endif // TonUINO_Classic
+
 #ifdef HPJACKDETECT
     mp3.setTempSpkOn();
 #endif // HPJACKDETECT
     SM_tonuino::dispatch(command_e(commandRaw::specialStart));
   } else
+
 #endif // SPECIAL_START_SHORTCUT
+
     SM_tonuino::dispatch(command_e(commandRaw::start));
 }
 
