@@ -238,6 +238,13 @@ public:
   void react(command_e const &) final;
 };
 
+class ChNumTracks : public VoiceMenu_setupCard
+{
+public:
+  void entry() final;
+  void react(command_e const &) final;
+};
+
 class WriteCard : public SM_writeCard
 {
 public:

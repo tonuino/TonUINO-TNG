@@ -16,6 +16,7 @@ const __FlashStringHelper* str_ChTrack                 () { return F("ChTrack") 
 const __FlashStringHelper* str_ChFirstTrack            () { return F("ChFirstTrack") ; }
 const __FlashStringHelper* str_ChLastTrack             () { return F("ChLastTrack") ; }
 const __FlashStringHelper* str_ChNumAnswer             () { return F("ChNumAnswer") ; }
+const __FlashStringHelper* str_ChNumTracks             () { return F("ChNumTracks") ; }
 const __FlashStringHelper* str_WriteCard               () { return F("WriteCard") ; }
 const __FlashStringHelper* str_Base                    () { return F("Base") ; }
 const __FlashStringHelper* str_Idle                    () { return F("Idle") ; }
@@ -222,6 +223,10 @@ void ChFolder::react(command_e const &cmd_e) {
       transit<ChTrack>();
       return;
     }
+    if (folder.mode == pmode_t::hoerbuch_1) {
+      transit<ChNumTracks>();
+      return;
+    }
     if (  ( folder.mode == pmode_t::hoerspiel_vb)
         ||( folder.mode == pmode_t::album_vb    )
         ||( folder.mode == pmode_t::party_vb    )) {
@@ -371,6 +376,41 @@ void ChNumAnswer::react(command_e const &cmd_e) {
       folder.special2 = (currentValue-1) / 2;
     }
     LOG(state_log, s_info, str_ChNumAnswer(), F(": "), currentValue);
+    transit<finished>();
+    return;
+  }
+}
+
+// #######################################################
+
+void ChNumTracks::entry() {
+  LOG(state_log, s_info, str_enter(), str_ChNumTracks());
+
+  numberOfOptions   = 5;
+  startMessage      = mp3Tracks::t_340_num_tracks;
+  messageOffset     = mp3Tracks::t_0;
+  preview           = false;
+  previewFromFolder = 0;
+
+  VoiceMenu::entry();
+
+  currentValue      = 0;
+}
+
+void ChNumTracks::react(command_e const &cmd_e) {
+  if (cmd_e.cmd_raw != commandRaw::none) {
+    LOG(state_log, s_debug, str_ChNumTracks(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
+  }
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
+
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
+    return;
+
+  if (Commands::isSelect(cmd) && (currentValue != 0)) {
+    folder.special  = currentValue-1;
+    LOG(state_log, s_info, str_ChNumTracks(), F(": "), currentValue);
     transit<finished>();
     return;
   }

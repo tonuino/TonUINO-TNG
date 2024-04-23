@@ -65,6 +65,7 @@ enum class mp3Tracks: uint16_t {
   t_336_num_answer_2_1         = 336,
   t_337_num_answer_4_1         = 337,
   t_338_num_answer_0_1         = 338,
+  t_340_num_tracks             = 340,
   t_400_ok                     = 400,
   t_401_error                  = 401,
   t_402_ok_settings            = 402,
