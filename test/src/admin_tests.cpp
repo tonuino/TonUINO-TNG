@@ -686,7 +686,8 @@ TEST_F(admin_test_fixture, Admin_ModCard) {
       pmode_t::repeat_single,
   };
   uint8_t timer_set = 4;
-  uint8_t timer_expect = 60;
+  uint8_t mode_set = 2;
+  uint8_t special_expect = 60 + 0x80;
 
   Print::clear_output();
 
@@ -718,7 +719,21 @@ TEST_F(admin_test_fixture, Admin_ModCard) {
       }
       // button select --> select timer
       button_for_command(command::select, state_for_command::admin);
-    }
+
+      // select mode
+      execute_cycle_for_ms(time_check_play);
+      EXPECT_TRUE(getMp3().is_playing_mp3());
+      EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_938_modifier_sleep_mode));
+      for (uint8_t t = 1; t <= mode_set; ++t) {
+        // button up --> play mode
+        button_for_command(command::next, state_for_command::admin);
+        execute_cycle_for_ms(time_check_play);
+        EXPECT_TRUE(getMp3().is_playing_mp3());
+        EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_933_switch_volume_intro) + t);
+      }
+      // button select --> select timer
+      button_for_command(command::select, state_for_command::admin);
+}
 
     execute_cycle(); // --> start_writeCard
     execute_cycle(); // --> run_writeCard
@@ -726,7 +741,7 @@ TEST_F(admin_test_fixture, Admin_ModCard) {
 
     folderSettings card_expected = { 0, mode , 0, 0 };
     if (mode == pmode_t::sleep_timer)
-      card_expected.special = timer_expect;
+      card_expected.special = special_expect;
 
     EXPECT_EQ(card_expected, card_decode());
 

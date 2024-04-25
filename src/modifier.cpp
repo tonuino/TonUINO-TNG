@@ -7,6 +7,9 @@
 
 namespace {
 
+Tonuino        &tonuino   = Tonuino::getTonuino();
+Mp3            &mp3       = tonuino.getMp3();
+
 const __FlashStringHelper* str_SleepTimer          () { return F("SleepTimer")  ; }
 const __FlashStringHelper* str_FreezeDance         () { return F("FreezeDance") ; }
 const __FlashStringHelper* str_KindergardenMode    () { return F("Kita")        ; }
@@ -16,17 +19,40 @@ const __FlashStringHelper* str_RepeatSingleModifier() { return F("RepeatSingle")
 
 void SleepTimer::loop() {
   if (sleepTimer.isActive() && sleepTimer.isExpired()) {
+    LOG(modifier_log, s_info, str_SleepTimer(), F(" -> expired"));
+    if (not stopAfterTrackFinished || stopAfterTrackFinished_active) {
+      LOG(modifier_log, s_info, str_SleepTimer(), F(" -> SLEEP!"));
+      if (SM_tonuino::is_in_state<Play>())
+        SM_tonuino::dispatch(command_e(commandRaw::pause));
+      //tonuino.resetActiveModifier();
+    }
+    else {
+      stopAfterTrackFinished_active = true;
+      sleepTimer.start(10 * 60000);
+    }
+  }
+}
+bool SleepTimer::handleNext() {
+  if (stopAfterTrackFinished_active) {
     LOG(modifier_log, s_info, str_SleepTimer(), F(" -> SLEEP!"));
-    if (SM_tonuino::is_in_state<Play>())
-      SM_tonuino::dispatch(command_e(commandRaw::pause));
+    mp3.clearFolderQueue();
+    stopAfterTrackFinished_active = false;
+    sleepTimer.stop();
     //tonuino.resetActiveModifier();
   }
+  return false;
 }
 
 void SleepTimer::init(uint8_t special /* is minutes*/) {
   LOG(modifier_log, s_info, str_SleepTimer(), F(" minutes: "), special);
+  stopAfterTrackFinished_active = false;
+  if (special > 0x80) {
+    stopAfterTrackFinished = true;
+    special -= 0x80;
+  } else {
+    stopAfterTrackFinished = false;
+  }
   sleepTimer.start(special * 60000);
-  //playAdvertisement(advertTracks::t_302_sleep);
 }
 
 void FreezeDance::loop() {
@@ -88,26 +114,3 @@ bool RepeatSingleModifier::handleNext() {
 bool RepeatSingleModifier::handlePrevious() {
   return handleNext();
 }
-
-//bool FeedbackModifier::handleVolumeDown() {
-//  if (volume > settings.minVolume) {
-//    playAdvertisement(volume - 1, false);
-//  } else {
-//    playAdvertisement(volume, false);
-//  }
-//  LOG(modifier_log, s_info, F("FeedbackModifier::handleVolumeDown()!"));
-//  return false;
-//}
-//bool FeedbackModifier::handleVolumeUp() {
-//  if (volume < settings.maxVolume) {
-//    playAdvertisement(volume + 1, false);
-//  } else {
-//    playAdvertisement(volume, false);
-//  }
-//  LOG(modifier_log, s_info, F("FeedbackModifier::handleVolumeUp()!"));
-//  return false;
-//}
-//bool FeedbackModifier::handleRFID(const folderSettings &/*newCard*/) {
-//  LOG(modifier_log, s_info, F("FeedbackModifier::handleRFID()"));
-//  return false;
-//}

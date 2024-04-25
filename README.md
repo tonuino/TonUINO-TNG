@@ -90,7 +90,8 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.6 geän
 
 # Change Log
 
-## Version 3.1.7 (14.04.2024)
+## Version 3.1.7 (26.04.2024)
+- [Issue 202](https://github.com/tonuino/TonUINO-TNG/issues/202): Enhance modifier card SleepTimer to stop only after the track finished
 - [Issue 197](https://github.com/tonuino/TonUINO-TNG/issues/197): SPECIAL_START_SHORTCUT: pin A6 cannot be read digital on Nano
 
 ## Version 3.1.7 (11.04.2024)

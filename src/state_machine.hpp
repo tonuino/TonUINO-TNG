@@ -336,12 +336,13 @@ public:
   void react(command_e const &) final;
 private:
   enum subState: uint8_t {
+    get_mode,
+    get_sleeptime_timer,
+    get_sleeptime_mode,
     start_writeCard,
     run_writeCard,
   };
-  pmode_t mode             {};
   subState current_subState{};
-  bool     readyToWrite    {};
 };
 
 class Admin_ShortCut: public Admin_BaseSetting
