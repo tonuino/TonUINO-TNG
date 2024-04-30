@@ -13,7 +13,7 @@ jobs:
     # install dependencies
     - name: dependencies
       run: |
-        sudo rm /etc/apt/sources.list.d/microsoft-prod.list
+        # sudo rm /etc/apt/sources.list.d/microsoft-prod.list
         sudo apt-get update && sudo apt-get install -yq libgtest-dev cmake
     # build project
     - name: build
