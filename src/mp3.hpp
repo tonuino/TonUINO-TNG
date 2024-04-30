@@ -119,6 +119,7 @@ enum class mp3Tracks: uint16_t {
   t_935_yes                    = 935,
   t_936_batch_cards_intro      = 936,
   t_937_memory_game_cards_intro= 937,
+  t_938_modifier_sleep_mode    = 938,
   t_940_shortcut_into          = 940,
   t_941_pause                  = 941,
   t_942_up                     = 942,

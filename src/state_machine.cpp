@@ -1624,9 +1624,12 @@ void Admin_ModCard::entry() {
 
   VoiceMenu::entry();
 
-  mode              = pmode_t::none;
-  current_subState  = start_writeCard;
-  readyToWrite      = false;
+  current_subState  = get_mode;
+
+  folder.mode     = pmode_t::none;
+  folder.folder   = 0;
+  folder.special  = 0;
+  folder.special2 = 0;
 }
 
 void Admin_ModCard::react(command_e const &cmd_e) {
@@ -1635,65 +1638,68 @@ void Admin_ModCard::react(command_e const &cmd_e) {
   }
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
 
-  if (not readyToWrite)
+  if (current_subState != start_writeCard && current_subState != run_writeCard)
     VoiceMenu::react(cmd);
 
   if (isAbort(cmd))
     return;
 
-  if (readyToWrite) {
-    switch (current_subState) {
-    case start_writeCard:
-      folder.folder = 0;
-      folder.special = 0;
-      folder.special2 = 0;
-      folder.mode = mode;
-      if (mode == pmode_t::sleep_timer)
-        switch (currentValue) {
-        case 1:
-          folder.special = 5;
-          break;
-        case 2:
-          folder.special = 15;
-          break;
-        case 3:
-          folder.special = 30;
-          break;
-        case 4:
-          folder.special = 60;
-          break;
-        }
-      SM_writeCard::folder = folder;
-      SM_writeCard::start();
-      current_subState = run_writeCard;
-      break;
-    case run_writeCard:
-      if (handleWriteCard(cmd_e))
-        return;
-      break;
-    default:
-      break;
-    }
-    return;
-  }
-  else if (Commands::isSelect(cmd) && (currentValue != 0)) {
-    if (mode == pmode_t::none) {
-      mode = static_cast<pmode_t>(currentValue);
-      if (mode != pmode_t::sleep_timer) {
+  switch (current_subState) {
+  case get_mode           :
+    if (Commands::isSelect(cmd) && (currentValue != 0)) {
+      folder.mode = static_cast<pmode_t>(currentValue);
+      if (folder.mode != pmode_t::sleep_timer) {
         mp3.clearMp3Queue();
-        readyToWrite = true;
+        current_subState = start_writeCard;
       }
       else {
         numberOfOptions   = 4;
         startMessage      = mp3Tracks::t_960_timer_intro;
         messageOffset     = mp3Tracks::t_960_timer_intro;
         VoiceMenu::entry();
+        current_subState = get_sleeptime_timer;
       }
     }
-    else {
-      mp3.clearMp3Queue();
-      readyToWrite = true;
+    break;
+  case get_sleeptime_timer:
+    if (Commands::isSelect(cmd) && (currentValue != 0)) {
+      switch (currentValue) {
+      case 1:
+        folder.special = 5;
+        break;
+      case 2:
+        folder.special = 15;
+        break;
+      case 3:
+        folder.special = 30;
+        break;
+      case 4:
+        folder.special = 60;
+        break;
+      }
+      numberOfOptions   = 2;
+      startMessage      = mp3Tracks::t_938_modifier_sleep_mode;
+      messageOffset     = mp3Tracks::t_933_switch_volume_intro;
+      VoiceMenu::entry();
+      current_subState = get_sleeptime_mode;
     }
+    break;
+  case get_sleeptime_mode :
+    if (Commands::isSelect(cmd) && (currentValue != 0)) {
+      if (currentValue == 2)
+        folder.special += 0x80;
+      current_subState = start_writeCard;
+    }
+    break;
+  case start_writeCard    :
+    SM_writeCard::folder = folder;
+    SM_writeCard::start();
+    current_subState = run_writeCard;
+    break;
+  case run_writeCard      :
+    if (handleWriteCard(cmd_e))
+      return;
+    break;
   }
 }
 
