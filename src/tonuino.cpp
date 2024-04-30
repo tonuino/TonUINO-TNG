@@ -269,8 +269,12 @@ void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
   if (fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1)) {
     const uint8_t trackToSave = (mp3.getCurrentTrack() < numTracksInFolder) ? mp3.getCurrentTrack()+1 : 1;
     settings.writeFolderSettingToFlash(myFolder.folder, trackToSave);
-    if (myFolder.mode == pmode_t::hoerbuch_1)
-      mp3.clearFolderQueue();
+    if (myFolder.mode == pmode_t::hoerbuch_1) {
+      if (myFolder.special > 0)
+        --myFolder.special;
+      else
+        mp3.clearFolderQueue();
+    }
   }
   mp3.playNext(tracks, fromOnPlayFinished);
   if (not fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1)) {
