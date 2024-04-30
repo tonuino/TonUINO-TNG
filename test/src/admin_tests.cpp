@@ -170,22 +170,43 @@ public:
     // button select --> select folder
     button_for_command(command::select, state_for_command::admin);
     if (card.mode == pmode_t::hoerspiel || card.mode == pmode_t::album    ||
-        card.mode == pmode_t::party     || card.mode == pmode_t::hoerbuch ||
-        card.mode == pmode_t::hoerbuch_1                                    ) {
+        card.mode == pmode_t::party     || card.mode == pmode_t::hoerbuch   ) {
       EXPECT_TRUE(SM_setupCard::is_in_state<finished_setupCard>());
       ASSERT_EQ(SM_setupCard::folder, card);
       return;
     }
     if (card.mode == pmode_t::einzel)
       EXPECT_TRUE(SM_setupCard::is_in_state<ChTrack>());
+    else if (card.mode == pmode_t::hoerbuch_1)
+      EXPECT_TRUE(SM_setupCard::is_in_state<ChNumTracks>());
     else
       EXPECT_TRUE(SM_setupCard::is_in_state<ChFirstTrack>());
     execute_cycle_for_ms(time_check_play);
     EXPECT_TRUE(getMp3().is_playing_mp3());
     if (card.mode == pmode_t::einzel)
       EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_327_select_file));
+    else if (card.mode == pmode_t::hoerbuch_1)
+      EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_340_num_tracks));
     else
       EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_328_select_first_file));
+
+    if (card.mode == pmode_t::hoerbuch_1) {
+      // ===== select number of tracks
+      for (uint8_t num = 1; num <= 5; ++num) {
+        // button up --> play track number and track
+        button_for_command(command::next, state_for_command::admin);
+        EXPECT_TRUE(SM_setupCard::is_in_state<ChNumTracks>());
+        execute_cycle_for_ms(time_check_play);
+        EXPECT_TRUE(getMp3().is_playing_mp3());
+        EXPECT_EQ(getMp3().df_mp3_track, num);
+        getMp3().end_track();
+      }
+      // button select --> finish
+      button_for_command(command::select, state_for_command::admin);
+      EXPECT_TRUE(SM_setupCard::is_in_state<finished_setupCard>());
+      EXPECT_EQ(SM_setupCard::folder.special, 5-1);
+      return;
+    }
 
     // ===== select track/first track
     for (uint8_t track = 1; track <= card.special; ++track) {

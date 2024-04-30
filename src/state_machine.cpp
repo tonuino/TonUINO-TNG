@@ -10,12 +10,19 @@ using Admin_End = Admin_Entry; // use this if you want continue admin menu after
 
 namespace {
 
+Tonuino        &tonuino   = Tonuino::getTonuino();
+Mp3            &mp3       = tonuino.getMp3();
+Commands       &commands  = tonuino.getCommands();
+Settings       &settings  = tonuino.getSettings();
+Chip_card      &chip_card = tonuino.getChipCard();
+
 const __FlashStringHelper* str_ChMode                  () { return F("ChMode") ; }
 const __FlashStringHelper* str_ChFolder                () { return F("ChFolder") ; }
 const __FlashStringHelper* str_ChTrack                 () { return F("ChTrack") ; }
 const __FlashStringHelper* str_ChFirstTrack            () { return F("ChFirstTrack") ; }
 const __FlashStringHelper* str_ChLastTrack             () { return F("ChLastTrack") ; }
 const __FlashStringHelper* str_ChNumAnswer             () { return F("ChNumAnswer") ; }
+const __FlashStringHelper* str_ChNumTracks             () { return F("ChNumTracks") ; }
 const __FlashStringHelper* str_WriteCard               () { return F("WriteCard") ; }
 const __FlashStringHelper* str_Base                    () { return F("Base") ; }
 const __FlashStringHelper* str_Idle                    () { return F("Idle") ; }
@@ -53,7 +60,7 @@ const __FlashStringHelper* str_abort                   () { return F(" abort") ;
 template<SM_type SMT>
 bool SM<SMT>::isAbort(command cmd) {
   if (cmd == command::adm_end) {
-    SM<SMT>::mp3.enqueueMp3FolderTrack(mp3Tracks::t_802_reset_aborted);
+    mp3.enqueueMp3FolderTrack(mp3Tracks::t_802_reset_aborted);
     LOG(state_log, s_info, F("SM"), str_abort());
     this->template transit<finished_abort>();
     return true;
@@ -67,14 +74,14 @@ template<SM_type SMT>
 void VoiceMenu<SMT>::entry(bool entryPlayAfter) {
   LOG(state_log, s_debug, str_VoiceMenu(), F("::entry() "), static_cast<int>(startMessage));
   if (startMessage != mp3Tracks::t_0)
-    SM<SMT>::mp3.enqueueMp3FolderTrack(startMessage, entryPlayAfter);
+    mp3.enqueueMp3FolderTrack(startMessage, entryPlayAfter);
 
   currentValue      = 0;
 }
 
 template<SM_type SMT>
 void VoiceMenu<SMT>::playCurrentValue() {
-  SM<SMT>::mp3.enqueueMp3FolderTrack(messageOffset + currentValue);
+  mp3.enqueueMp3FolderTrack(messageOffset + currentValue);
   previewStarted = false;
 }
 
@@ -83,13 +90,13 @@ void VoiceMenu<SMT>::react(command cmd) {
   if (   currentValue != 0
       && preview
       && not previewStarted
-      && not SM<SMT>::mp3.isPlayingMp3())
+      && not mp3.isPlayingMp3())
   {
     LOG(state_log, s_debug, str_VoiceMenu(), F("::react() start preview "), currentValue);
     if (previewFromFolder == 0)
-      SM<SMT>::mp3.enqueueTrack(currentValue, 1);
+      mp3.enqueueTrack(currentValue, 1);
     else
-      SM<SMT>::mp3.enqueueTrack(previewFromFolder, currentValue);
+      mp3.enqueueTrack(previewFromFolder, currentValue);
     previewStarted = true;
   }
 
@@ -116,7 +123,7 @@ void VoiceMenu<SMT>::react(command cmd) {
 
 #ifdef SerialInputAsCommand
   case command::menu_jump:
-    currentValue = min(max(this->tonuino.getMenuJump(), 1),numberOfOptions);
+    currentValue = min(max(tonuino.getMenuJump(), 1),numberOfOptions);
     playCurrentValue();
     break;
 #endif
@@ -143,7 +150,7 @@ void ChMode::entry() {
 }
 
 void ChMode::react(command_e const &cmd_e) {
-  if (cmd_e.cmd_raw != commandRaw::none) {
+  if (cmd_e.cmd_raw == commandRaw::none) {
     LOG(state_log, s_debug, str_ChMode(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
@@ -220,6 +227,10 @@ void ChFolder::react(command_e const &cmd_e) {
 #endif
     if (folder.mode == pmode_t::einzel) {
       transit<ChTrack>();
+      return;
+    }
+    if (folder.mode == pmode_t::hoerbuch_1) {
+      transit<ChNumTracks>();
       return;
     }
     if (  ( folder.mode == pmode_t::hoerspiel_vb)
@@ -371,6 +382,41 @@ void ChNumAnswer::react(command_e const &cmd_e) {
       folder.special2 = (currentValue-1) / 2;
     }
     LOG(state_log, s_info, str_ChNumAnswer(), F(": "), currentValue);
+    transit<finished>();
+    return;
+  }
+}
+
+// #######################################################
+
+void ChNumTracks::entry() {
+  LOG(state_log, s_info, str_enter(), str_ChNumTracks());
+
+  numberOfOptions   = 5;
+  startMessage      = mp3Tracks::t_340_num_tracks;
+  messageOffset     = mp3Tracks::t_0;
+  preview           = false;
+  previewFromFolder = 0;
+
+  VoiceMenu::entry();
+
+  currentValue      = 0;
+}
+
+void ChNumTracks::react(command_e const &cmd_e) {
+  if (cmd_e.cmd_raw != commandRaw::none) {
+    LOG(state_log, s_debug, str_ChNumTracks(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
+  }
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
+
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
+    return;
+
+  if (Commands::isSelect(cmd) && (currentValue != 0)) {
+    folder.special  = currentValue-1;
+    LOG(state_log, s_info, str_ChNumTracks(), F(": "), currentValue);
     transit<finished>();
     return;
   }
@@ -2098,19 +2144,9 @@ FSM_INITIAL_STATE(SM_tonuino  , Idle)
 template<SM_type SMT>
 folderSettings  SM<SMT>::folder{};
 template<SM_type SMT>
-Tonuino        &SM<SMT>::tonuino   = Tonuino::getTonuino();
-template<SM_type SMT>
-Mp3            &SM<SMT>::mp3       = Tonuino::getTonuino().getMp3();
-template<SM_type SMT>
-Commands       &SM<SMT>::commands  = Tonuino::getTonuino().getCommands();
-template<SM_type SMT>
-Settings       &SM<SMT>::settings  = Tonuino::getTonuino().getSettings();
-template<SM_type SMT>
-Chip_card      &SM<SMT>::chip_card = Tonuino::getTonuino().getChipCard();
-template<SM_type SMT>
 Timer           SM<SMT>::timer{};
 template<SM_type SMT>
-bool           SM<SMT>::waitForPlayFinish{};
+bool            SM<SMT>::waitForPlayFinish{};
 
 template<SM_type SMT>
 uint8_t   VoiceMenu<SMT>::numberOfOptions  ;

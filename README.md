@@ -86,12 +86,14 @@ Eine Anleitung dafür findet man [hier](https://discourse.voss.earth/t/tonuino-s
 
 # Installation
 
-Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.6 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
+Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.7 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
 
 # Change Log
 
-## Version 3.1.7 (26.04.2024)
+## Version 3.1.8 (26.04.2024)
 - [Issue 202](https://github.com/tonuino/TonUINO-TNG/issues/202): Enhance modifier card SleepTimer to stop only after the track finished
+- [Issue 200](https://github.com/tonuino/TonUINO-TNG/issues/200): Add possibility to use Pololu-Powerswitch for shutdown
+- [Issue 196](https://github.com/tonuino/TonUINO-TNG/issues/196): Enhance Hoerbuch_1 mode to play more tracks
 - [Issue 197](https://github.com/tonuino/TonUINO-TNG/issues/197): SPECIAL_START_SHORTCUT: pin A6 cannot be read digital on Nano
 
 ## Version 3.1.7 (11.04.2024)
