@@ -1176,3 +1176,56 @@ TEST_F(tonuino_test_fixture, end_play_hoerbuch_1) {
   card_out();
 }
 
+TEST_F(tonuino_test_fixture, end_play_after_1_track_hoerbuch_1) {
+  const uint8_t folder = 5;
+  uint8_t track_count = 10;
+  folderSettings card = { folder, pmode_t::hoerbuch_1, 0, 0 };
+  getSettings().writeFolderSettingToFlash(folder, track_count-1); // 1 before last track
+  goto_play(card, track_count);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), track_count-1);
+  Print::clear_output();
+
+  // end if finished
+  getMp3().end_track();
+  execute_cycle();
+  EXPECT_TRUE(getMp3().is_stopped());
+  EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), track_count);
+
+  card_out();
+}
+
+TEST_F(tonuino_test_fixture, end_play_after_2_track_hoerbuch_1) {
+  const uint8_t folder = 5;
+  uint8_t track_count = 10;
+  folderSettings card = { folder, pmode_t::hoerbuch_1, 1, 0 };
+  getSettings().writeFolderSettingToFlash(folder, track_count-3); // 1 before last track
+  goto_play(card, track_count);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), track_count-3);
+  Print::clear_output();
+
+  // playing 1st track (track_count-3)
+  execute_cycle_for_ms(time_check_play);
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, card.folder);
+  EXPECT_EQ(getMp3().df_folder_track, track_count-3);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), track_count-3);
+
+  // playing 1st track (track_count-2)
+  getMp3().end_track();
+  execute_cycle_for_ms(time_check_play);
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, card.folder);
+  EXPECT_EQ(getMp3().df_folder_track, track_count-2);
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), track_count-2);
+
+  // end if finished
+  getMp3().end_track();
+  execute_cycle();
+  EXPECT_TRUE(getMp3().is_stopped());
+  EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
+  EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), track_count-1);
+
+  card_out();
+}
+
