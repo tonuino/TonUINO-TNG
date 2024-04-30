@@ -286,6 +286,13 @@ inline constexpr float   voltageMeasurementCorrection  = 2.007; // Spannungsteil
 inline constexpr float   batVoltageLow                 = 2.95;
 inline constexpr float   batVoltageEmpty               = 2.90;
 
+// ######################################################################
+
+/* uncomment the below line if you use Pololu Powerswitch for shutdown
+ * wenn der Pololu Powerswitch für das Shutdown verwendet wird, in der nächste Zeile den Kommentar entfernen
+ */
+//#define USE_POLOLU_SHUTDOWN
+
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
  * ##### mormalerweise müssen die folgende Zeilen nicht editiert werden ############################
@@ -358,7 +365,11 @@ inline constexpr unsigned long dfPlayer_timeUntilStarts = 1000;
 // ####### tonuino #####################################
 
 inline constexpr uint8_t       shutdownPin      = 7;
+#ifdef USE_POLOLU_SHUTDOWN
+inline constexpr levelType     shutdownPinType  = levelType::activeHigh;
+#else
 inline constexpr levelType     shutdownPinType  = levelType::activeLow;
+#endif
 inline constexpr uint8_t       openAnalogPin    = A7;
 inline constexpr unsigned long cycleTime        = 50;
 #endif /* TonUINO_Classic or TonUINO_Every */
