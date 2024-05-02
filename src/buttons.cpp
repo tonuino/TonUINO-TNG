@@ -2,6 +2,7 @@
 
 #include "constants.hpp"
 #include "logger.hpp"
+#include <Arduino.h>
 
 namespace {
 constexpr bool buttonPinIsActiveLow = (buttonPinType == levelType::activeLow);
