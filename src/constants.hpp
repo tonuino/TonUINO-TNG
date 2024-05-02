@@ -98,7 +98,7 @@
  * -1: up/downLong -2: down       -3: downLong
  * number n > 0: Springe im Voice Menü zum n-ten Eintrag und selektiere ihn
  */
-#define SerialInputAsCommand
+//#define SerialInputAsCommand
 
 // ######################################################################
 
@@ -223,14 +223,14 @@ inline constexpr levelType     dfPlayer_noHeadphoneJackDetectType = levelType::a
  * um die Wiedergabe fortzusetzen, wenn die selbe RFID erkannt wird, die bereits
  * abgespielt wird, in der nächste Zeile den Kommentar entfernen
  */
-//#define RESUME_ON_SAME_RFID
+#define RESUME_ON_SAME_RFID
 
 /* uncomment the below line to replay the last card or short cut if pressed play/pause
  * in Idle state
  * um die letzte Karte oder den letzten Short Cut wieder abzuspielen, wenn die Play/Pause Taste
  * im Idle State gedrückt wird, in der nächste Zeile den Kommentar entfernen
  */
-//#define REPLAY_ON_PLAY_BUTTON
+#define REPLAY_ON_PLAY_BUTTON
 
 // ######################################################################
 
@@ -291,7 +291,7 @@ inline constexpr float   batVoltageEmpty               = 2.90;
 /* uncomment the below line if you use Pololu Powerswitch for shutdown
  * wenn der Pololu Powerswitch für das Shutdown verwendet wird, in der nächste Zeile den Kommentar entfernen
  */
-//#define USE_POLOLU_SHUTDOWN
+#define USE_POLOLU_SHUTDOWN
 
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
