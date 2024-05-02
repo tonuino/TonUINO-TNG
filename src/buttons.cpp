@@ -21,7 +21,7 @@ Buttons::Buttons()
   buttonPause    .begin();
   buttonUp       .begin();
   buttonDown     .begin();
-  //buttonShutdown .begin();
+  buttonShutdown .begin();
 #ifdef FIVEBUTTONS
   buttonFour .begin();
   buttonFive .begin();
@@ -153,8 +153,8 @@ commandRaw Buttons::getCommandRaw() {
     LOG(button_log, s_debug, F("Button raw: "), static_cast<uint8_t>(ret));
   }
 
-  /*if (buttonShutdown.pressedFor(200) && millis()> 3000)
-  {ret = commandRaw::pauseLong;}*/
+  if (buttonShutdown.pressedFor(200) && millis()> 3000)
+  {ret = commandRaw::pauseLong;}
 
   return ret;
 }
@@ -181,7 +181,7 @@ void Buttons::readButtons() {
   buttonPause   .read();
   buttonUp      .read();
   buttonDown    .read();
-  //buttonShutdown.read();
+  buttonShutdown.read();
 
   
 #ifdef FIVEBUTTONS
