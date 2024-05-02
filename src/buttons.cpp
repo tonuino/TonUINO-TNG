@@ -13,6 +13,7 @@ Buttons::Buttons()
 , buttonPause(buttonPausePin, buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
 , buttonUp   (buttonUpPin   , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
 , buttonDown (buttonDownPin , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
+, buttonShutdown (powerswitchPin , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
 #ifdef FIVEBUTTONS
 , buttonFour (buttonFourPin , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
 , buttonFive (buttonFivePin , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
