@@ -9,10 +9,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     # install dependencies
     - name: dependencies
-      run: sudo apt-get update && sudo apt-get install -yq libgtest-dev cmake
+      run: |
+        # sudo rm /etc/apt/sources.list.d/microsoft-prod.list
+        sudo apt-get update && sudo apt-get install -yq libgtest-dev cmake
     # build project
     - name: build
       run: |
@@ -30,14 +32,14 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cache/pip
             ~/.platformio/.cache
           key: ${{ runner.os }}-pio
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.9'
       - name: Install PlatformIO Core
@@ -49,15 +51,15 @@ jobs:
       - name: Zip sd_card
         run: zip -r sd-card.zip sd-card
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: TonUINO_firmware
           path: .pio/build/**/firmware.hex
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: TonUINO_sd_card
           path: sd-card.zip
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: TonUINO_online_upload
           path: .github/online_upload
@@ -77,28 +79,28 @@ jobs:
         run: mkdir deploy
       
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: TonUINO_firmware
           path: deploy
       
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: TonUINO_sd_card
           path: deploy
       
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: TonUINO_online_upload
           path: deploy
       
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: deploy
       
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4

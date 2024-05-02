@@ -6,10 +6,12 @@
 #include "buttons.hpp"
 #include "buttons3x3.hpp"
 #include "rotary_encoder.hpp"
+#include "poti.hpp"
 #include "serial_input.hpp"
 #include "mp3.hpp"
 #include "modifier.hpp"
 #include "timer.hpp"
+#include "batVoltage.hpp"
 #ifdef NEO_RING
 #include "ring.hpp"
 #endif
@@ -34,10 +36,19 @@ public:
   void setStandbyTimer();
   void disableStandbyTimer();
 
-  void setCard  (const nfcTagObject   &newCard) { myCard = newCard; setFolder(&myCard.nfcFolderSettings); }
-  const nfcTagObject& getCard() const           { return myCard; }
-  void setFolder(folderSettings *newFolder    ) { myFolder = newFolder; }
-  uint8_t getFolder()                           { return myFolder->folder; }
+  void setMyFolder(const folderSettings &newFolder, bool a_myFolderIsCard) {
+#ifdef STORE_LAST_CARD
+    if (not (myFolder == newFolder)) {
+      LOG(init_log, s_debug, F("set last, folder: "), newFolder.folder, F(", mode: "), static_cast<uint8_t>(newFolder.mode));
+      settings.writeExtShortCutToFlash(lastSortCut, newFolder);
+    }
+#endif
+    myFolderIsCard = a_myFolderIsCard;
+    myFolder = newFolder;
+  }
+  const folderSettings& getMyFolder() const     { return myFolder; }
+  uint8_t getFolder()                           { return myFolder.folder; }
+  bool playingCard()                            { return myFolderIsCard; }
 
   Mp3&      getMp3      () { return mp3      ; }
   Commands& getCommands () { return commands ; }
@@ -54,15 +65,20 @@ public:
 
   void shutdown();
 
+  uint16_t getNumTracksInFolder() const {return numTracksInFolder; }
+
 private:
 
   void checkStandby();
 
-  bool specialCard(const nfcTagObject &nfcTag);
+  bool specialCard(const folderSettings &nfcTag);
 
   Settings             settings            {};
   Mp3                  mp3                 {settings};
   Buttons              buttons             {};
+#ifdef BAT_VOLTAGE_MEASUREMENT
+       BatVoltage      batVoltage          {mp3};
+#endif
 #ifdef SerialInputAsCommand
   SerialInput          serialInput         {};
 #endif
@@ -71,6 +87,9 @@ private:
 #endif
 #ifdef ROTARY_ENCODER
   RotaryEncoder        rotaryEncoder       {settings};
+#endif
+#ifdef POTI
+  Poti                 poti                {settings, mp3};
 #endif
   Commands             commands            {
                                             settings
@@ -84,6 +103,9 @@ private:
 #ifdef ROTARY_ENCODER
                                           , &rotaryEncoder
 #endif
+#ifdef POTI
+                                          , &poti
+#endif
                                            };
   Chip_card            chip_card           {mp3};
 #ifdef NEO_RING
@@ -92,21 +114,20 @@ private:
 
   friend class Base;
 
-  Modifier             noneModifier        {*this, mp3};
-  SleepTimer           sleepTimer          {*this, mp3};
-  FreezeDance          freezeDance         {*this, mp3};
-  Locked               locked              {*this, mp3};
-  ToddlerMode          toddlerMode         {*this, mp3};
-  KindergardenMode     kindergardenMode    {*this, mp3};
-  RepeatSingleModifier repeatSingleModifier{*this, mp3};
-  //FeedbackModifier     feedbackModifier    {*this, mp3};
+  Modifier             noneModifier        {};
+  SleepTimer           sleepTimer          {};
+  FreezeDance          freezeDance         {};
+  Locked               locked              {};
+  ToddlerMode          toddlerMode         {};
+  KindergardenMode     kindergardenMode    {};
+  RepeatSingleModifier repeatSingleModifier{};
 
   Modifier*            activeModifier      {&noneModifier};
 
   Timer                standbyTimer        {};
 
-  nfcTagObject         myCard              {};
-  folderSettings*      myFolder            {&myCard.nfcFolderSettings};
+  folderSettings       myFolder            {};
+  bool                 myFolderIsCard      {};
   uint16_t             numTracksInFolder   {};
 };
 

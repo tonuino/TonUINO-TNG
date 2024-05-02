@@ -17,7 +17,7 @@ const command cmd_table[][4] PROGMEM = {
 /*  down,           */ ,{ command::previous  , command::bright_down, command::previous   , command::none        }
 /*  downLong,       */ ,{ command::previous10, command::shortcut3  , command::previous10 , command::none        }
 /*  downLongRepeat, */ ,{ command::none      , command::none       , command::none       , command::none        }
-/*  updownLong,     */ ,{ command::none      , command::shortcut1  , command::none       , command::none        }
+/*  updownLong,     */ ,{ command::none      , command::shortcut1  , command::to_first   , command::none        }
 /*  four,           */ ,{ command::next      , command::bright_up  , command::volume_up  , command::none        }
 /*  fourLong,       */ ,{ command::next10    , command::none       , command::volume_up  , command::none        }
 /*  fourLongRepeat, */ ,{ command::none      , command::none       , command::volume_up  , command::none        }
@@ -31,7 +31,10 @@ const command cmd_table[][4] PROGMEM = {
 /*  down,           */ ,{ command::previous  , command::bright_down, command::previous   , command::volume_down }
 /*  downLong,       */ ,{ command::previous10, command::shortcut3  , command::volume_down, command::previous    }
 /*  downLongRepeat, */ ,{ command::none      , command::none       , command::volume_down, command::none        }
-/*  updownLong,     */ ,{ command::none      , command::shortcut1  , command::none       , command::none        }
+/*  updownLong,     */ ,{ command::none      , command::shortcut1  , command::to_first   , command::to_first    }
+#endif
+#ifdef SPECIAL_START_SHORTCUT
+/*  specialStart,   */ ,{ command::none      , command::specialStart,command::none       , command::none        }
 #endif
 #ifdef SerialInputAsCommand
 /*  menu_jump ,     */ ,{ command::menu_jump , command::none       , command::none       , command::none        }
@@ -66,7 +69,7 @@ command Commands::getCommand(commandRaw b, state_for_command s) {
 #endif
 
 #ifndef FIVEBUTTONS
-  if (s == state_for_command::play && settings.invertVolumeButtons)
+  if (s == state_for_command::play && (settings.invertVolumeButtons==1))
     s = state_for_command::play_invert;
 #endif
 

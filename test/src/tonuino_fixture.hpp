@@ -15,6 +15,7 @@ public:
   , tonuino{Tonuino::getTonuino()}
   {
     getSettings().resetSettings();
+    tonuino.resetActiveModifier();
 #ifdef BUTTONS3X3
     pin_value[button3x3Pin] = Buttons3x3::maxLevel;
 #endif
@@ -34,7 +35,7 @@ public:
   MFRC522&   getMFRC522 () { return getChipCard().mfrc522; }
   Modifier&  getModifier() { return tonuino.getActiveModifier(); }
 
-  uint8_t    getVolume  () { return getMp3().volume; }
+  uint8_t    getVolume  () { return *getMp3().volume; }
 
   Initializer initializer;
 
@@ -328,9 +329,9 @@ public:
     }
   }
 
-  void goto_play(const folderSettings& card) {
+  void goto_play(const folderSettings& card, uint16_t track_count = 99) {
     goto_idle();
-    card_in(card);
+    card_in(card, track_count);
     EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
 
     // play t_262_pling

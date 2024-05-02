@@ -101,7 +101,7 @@ bool Chip_card::auth(MFRC522::PICC_Type piccType) {
   return true;
 }
 
-Chip_card::readCardEvent Chip_card::readCard(nfcTagObject &nfcTag) {
+Chip_card::readCardEvent Chip_card::readCard(folderSettings &nfcTag) {
   // Show some details of the PICC (that is: the tag/card)
   LOG(card_log, s_debug, F("Card UID: "), dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size));
   const MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
@@ -161,22 +161,22 @@ Chip_card::readCardEvent Chip_card::readCard(nfcTagObject &nfcTag) {
       return readCardEvent::none;
   }
   const uint32_t version              = buffer[4];
-  if (version == cardVersion) {
-    nfcTag.nfcFolderSettings.folder   = buffer[5];
-    nfcTag.nfcFolderSettings.mode     = static_cast<pmode_t>(buffer[6]);
-    nfcTag.nfcFolderSettings.special  = buffer[7];
-    nfcTag.nfcFolderSettings.special2 = buffer[8];
+  if ((version != 0) && (version <= cardVersion)) {
+    nfcTag.folder   = buffer[5];
+    nfcTag.mode     = static_cast<pmode_t>(buffer[6]);
+    nfcTag.special  = buffer[7];
+    nfcTag.special2 = buffer[8];
   }
   else {
     LOG(card_log, s_warning, F("bad ver "), version);
-    nfcTag.nfcFolderSettings.folder   = 0;
-    nfcTag.nfcFolderSettings.mode     = pmode_t::none;
+    nfcTag.folder   = 0;
+    nfcTag.mode     = pmode_t::none;
     return readCardEvent::none;
   }
   return readCardEvent::known;
 }
 
-bool Chip_card::writeCard(const nfcTagObject &nfcTag) {
+bool Chip_card::writeCard(const folderSettings &nfcTag) {
 
   constexpr byte coockie_4 = (cardCookie & 0x000000ff) >>  0;
   constexpr byte coockie_3 = (cardCookie & 0x0000ff00) >>  8;
@@ -185,10 +185,10 @@ bool Chip_card::writeCard(const nfcTagObject &nfcTag) {
   byte buffer[buffferSizeWrite] = {coockie_1, coockie_2, coockie_3, coockie_4,          // 0x1337 0xb347 magic cookie to
                                                                                         // identify our nfc tags
                                    cardVersion,                                         // version 1
-                                   nfcTag.nfcFolderSettings.folder,                     // the folder picked by the user
-                                   static_cast<uint8_t>(nfcTag.nfcFolderSettings.mode), // the playback mode picked by the user
-                                   nfcTag.nfcFolderSettings.special,                    // track or function for admin cards
-                                   nfcTag.nfcFolderSettings.special2,
+                                   nfcTag.folder,                     // the folder picked by the user
+                                   static_cast<uint8_t>(nfcTag.mode), // the playback mode picked by the user
+                                   nfcTag.special,                    // track or function for admin cards
+                                   nfcTag.special2,
                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
                                   };
 
