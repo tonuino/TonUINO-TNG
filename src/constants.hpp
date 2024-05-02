@@ -270,7 +270,7 @@ inline constexpr uint8_t   specialStartShortcutTrack   = 1;
  */
 //#define BAT_VOLTAGE_MEASUREMENT
 #if not defined(ALLinONE_Plus) and not defined(ALLinONE)
-inline constexpr uint8_t voltageMeasurementPin         = A5;
+inline constexpr uint8_t voltageMeasurementPin         = A6;
 #endif // ALLinONE_Plus
 
 #ifdef ALLinONE_Plus
