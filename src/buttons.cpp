@@ -152,9 +152,16 @@ commandRaw Buttons::getCommandRaw() {
     LOG(button_log, s_debug, F("Button raw: "), static_cast<uint8_t>(ret));
   }
 
-  if (buttonShutdown.pressedFor(200) && millis()> 3000)
+
+  // schlecht eingebauter Ausschalter....
+  
+  if (digitalread(powerswitchPin) && millis()> 3000)
   {ret = commandRaw::pauseLong;}
 
+   // schlecht eingebauter Ausschalter....
+
+
+  
   return ret;
 }
 
