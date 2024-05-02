@@ -13,7 +13,6 @@ Buttons::Buttons()
 , buttonPause(buttonPausePin, buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
 , buttonUp   (buttonUpPin   , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
 , buttonDown (buttonDownPin , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
-, buttonShutdown (powerswitchPin , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
 #ifdef FIVEBUTTONS
 , buttonFour (buttonFourPin , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
 , buttonFive (buttonFivePin , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
@@ -22,7 +21,6 @@ Buttons::Buttons()
   buttonPause    .begin();
   buttonUp       .begin();
   buttonDown     .begin();
-  buttonShutdown .begin();
 #ifdef FIVEBUTTONS
   buttonFour .begin();
   buttonFive .begin();
@@ -182,7 +180,6 @@ void Buttons::readButtons() {
   buttonPause   .read();
   buttonUp      .read();
   buttonDown    .read();
-  buttonShutdown.read();
 
   
 #ifdef FIVEBUTTONS
