@@ -1,0 +1,21 @@
+version: 2.1
+orbs:
+  python: circleci/python@1.4.0
+
+jobs:
+  build:
+    executor: python/default
+    steps:
+      - checkout  # checkout source code to working directory
+      - run:
+          name: Install PlatformIO
+          command: pip install --upgrade platformio     
+      - run:
+          name: Compile Project
+          command: pio run
+
+
+workflows:
+  main:
+    jobs:
+      - build
