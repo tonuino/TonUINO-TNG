@@ -12,7 +12,7 @@ jobs:
           command: pip install --upgrade platformio     
       - run:
           name: Compile Project
-          command: pio run --verbose
+          command: pio run
 
 
 workflows:
