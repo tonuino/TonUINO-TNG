@@ -3,9 +3,12 @@ advert/0301_freeze_freeze1.mp3|Und Stopp!
 advert/0301_freeze_freeze2.mp3|Nicht bewegen!
 advert/0301_freeze_freeze3.mp3|weiter geht´s!
 advert/0302_sleep.mp3|Schlummerfunktion aktiviert.
-advert/0303_locked.mp3|TonUINO ist nun gesperrt.
+advert/0303_fi_wa_ai.mp3|Wir spielen jetzt Feuer, Wasser und Luft. Bei Feuer laufe in eine Ecke, bei Wasser klettere irgendwo hoch und bei Luft lege dich flach hin. 
 advert/0304_buttonslocked.mp3|Tasten sind nun gesperrt.
 advert/0305_kindergarden.mp3|KiTa-Modus aktiviert.
+advert/0306_fire.mp3|Feuer....10s....und weiter geht's
+advert/0307_water.mp3|Wasser....10s....und weiter geht's
+advert/0308_air.mp3|Luft....10s....und weiter geht's
 mp3/0300_new_tag.mp3|Oh, eine neue Karte!
 mp3/0301_select_folder.mp3|Ok, verwende nun die Lautstärketasten um einen Ordner für die Karte auszuwählen.
 mp3/0310.mp3|Wähle mit den Lautstärketasten den Wiedergabemodus aus. Drücke die Pausetaste um fortzufahren.
@@ -101,7 +104,7 @@ mp3/0965_timer_disabled.mp3|Nicht automatisch abschalten
 mp3/0970_modifier_Intro.mp3|Bitte wähle nun deine Modifikationskarte mit den Lautstärketasten aus.
 mp3/0971_modifier_SleepTimer.mp3|Schlummermodus
 mp3/0972_modifier_FreezeDance.mp3|Stopptanz - TonUINO spielt Stopptanz mit dir und hält zufällig für dich die Wiedergabe kurz an.
-mp3/0973_modifier_Locked.mp3|TonUINO Sperren
+mp3/0973_modifier_FiWaAi.mp3|Feuer, Wasser und Luft Spiel.
 mp3/0974_modifier_Toddler.mp3|Krabbler-Modus - Alle Tasten vom TonUINO werden für die ganz Kleinen gesperrt. Karten funktionieren weiterhin.
 mp3/0975_modifier_KinderGarden.mp3|KiTa-Modus - Damit es keinen Streit mehr gibt werden neue Karten nicht sofort gespielt sondern erst nachdem das aktuelle Lied vorbei ist. Die Vor- und Zurücktasten sind gesperrt.
 mp3/0976_modifier_repeat1.mp3|Titel wiederholen - den aktuellen Titel endlos wiederholen.

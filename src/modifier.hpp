@@ -43,30 +43,21 @@ private:
   bool  stopAfterTrackFinished_active{};
 };
 
-class FreezeDance: public Modifier {
+class DanceGame: public Modifier {
 public:
-  FreezeDance() {}
+  DanceGame() {}
   void   loop       () final;
 
-  pmode_t getActive () final { return pmode_t::freeze_dance; }
-  void   init(uint8_t) final { setNextStopAtMillis(); }
+  pmode_t getActive ()        final { return mode; }
+  void   init(uint8_t a_mode) final { mode = static_cast<pmode_t>(a_mode); setNextStop(); }
 
 private:
-  void setNextStopAtMillis();
+  void setNextStop();
 
   Timer stopTimer{};
-  static constexpr uint8_t minSecondsBetweenStops =  5;
+  static constexpr uint8_t minSecondsBetweenStops = 5;
   static constexpr uint8_t maxSecondsBetweenStops = 30;
-};
-
-class Locked: public Modifier {
-public:
-  Locked() {}
-  bool handleButton(command) final { LOG(modifier_log, s_debug, F("Locked::Button -> LOCKED!"))    ; return true; }
-  bool handleRFID(const folderSettings&)
-                             final { LOG(modifier_log, s_debug, F("Locked::RFID -> LOCKED!"))      ; return true; }
-
-  pmode_t getActive()        final { return pmode_t::locked; }
+  pmode_t mode{};
 };
 
 class ToddlerMode: public Modifier {
@@ -89,7 +80,7 @@ public:
 
 private:
   folderSettings nextCard{};
-  bool cardQueued = false;
+  bool cardQueued{false};
 };
 
 class RepeatSingleModifier: public Modifier {

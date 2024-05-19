@@ -701,7 +701,7 @@ TEST_F(admin_test_fixture, Admin_ModCard) {
   pmode_t modes[] = {
       pmode_t::sleep_timer  ,
       pmode_t::freeze_dance ,
-      pmode_t::locked       ,
+      pmode_t::fi_wa_ai     ,
       pmode_t::toddler      ,
       pmode_t::kindergarden ,
       pmode_t::repeat_single,

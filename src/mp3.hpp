@@ -159,9 +159,12 @@ enum class advertTracks: uint16_t {
   t_300_freeze_into            = 300,
   t_301_freeze_freeze          = 301,
   t_302_sleep                  = 302,
-  t_303_locked                 = 303,
+  t_303_fi_wa_ai               = 303,
   t_304_buttonslocked          = 304,
   t_305_kindergarden           = 305,
+  t_306_fire                   = 306,
+  t_307_water                  = 307,
+  t_308_air                    = 308,
 };
 
 // implement a notification class,

@@ -11,7 +11,7 @@ Tonuino        &tonuino   = Tonuino::getTonuino();
 Mp3            &mp3       = tonuino.getMp3();
 
 const __FlashStringHelper* str_SleepTimer          () { return F("SleepTimer")  ; }
-const __FlashStringHelper* str_FreezeDance         () { return F("FreezeDance") ; }
+const __FlashStringHelper* str_danceGame           () { return F("DanceGame") ; }
 const __FlashStringHelper* str_KindergardenMode    () { return F("Kita")        ; }
 const __FlashStringHelper* str_RepeatSingleModifier() { return F("RepeatSingle"); }
 
@@ -55,17 +55,38 @@ void SleepTimer::init(uint8_t special /* is minutes*/) {
   sleepTimer.start(special * 60000);
 }
 
-void FreezeDance::loop() {
-  if (stopTimer.isExpired()) {
-    LOG(modifier_log, s_info, str_FreezeDance(), F(" -> FREEZE!"));
-    mp3.playAdvertisement(advertTracks::t_301_freeze_freeze);
-    setNextStopAtMillis();
+void DanceGame::loop() {
+  if (SM_tonuino::is_in_state<Play>()) {
+    if (not stopTimer.isActive()) {
+      setNextStop();
+    }
+    if (stopTimer.isExpired()) {
+      switch (mode) {
+      case pmode_t::freeze_dance:
+        LOG(modifier_log, s_info, str_danceGame(), F(" -> FREEZE!"));
+        mp3.playAdvertisement(advertTracks::t_301_freeze_freeze);
+        setNextStop();
+        break;
+      case pmode_t::fi_wa_ai:
+        LOG(modifier_log, s_info, str_danceGame(), F(" -> Action!"));
+        mp3.playAdvertisement(static_cast<uint16_t>(advertTracks::t_306_fire)+random(0, 3));
+        setNextStop();
+        break;
+      default:
+        break;
+      }
+    }
+  }
+  else {
+    stopTimer.stop();
   }
 }
 
-void FreezeDance::setNextStopAtMillis() {
-  const uint16_t seconds = random(minSecondsBetweenStops, maxSecondsBetweenStops + 1);
-  LOG(modifier_log, s_info, str_FreezeDance(), F(" next stop in "), seconds);
+void DanceGame::setNextStop() {
+  uint16_t seconds = random(minSecondsBetweenStops, maxSecondsBetweenStops + 1);
+  if (mode == pmode_t::fi_wa_ai)
+    seconds += 13;
+  LOG(modifier_log, s_info, str_danceGame(), F(" next stop in "), seconds);
   stopTimer.start(seconds * 1000);
 }
 

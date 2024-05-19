@@ -28,7 +28,7 @@ enum class pmode_t: uint8_t {
   // modifier modes
   sleep_timer   =   1,
   freeze_dance  =   2,
-  locked        =   3,
+  fi_wa_ai      =   3,
   toddler       =   4,
   kindergarden  =   5,
   repeat_single =   6,
