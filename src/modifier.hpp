@@ -49,15 +49,17 @@ public:
   void   loop       () final;
 
   pmode_t getActive ()        final { return mode; }
-  void   init(uint8_t a_mode) final { mode = static_cast<pmode_t>(a_mode); setNextStop(); }
+  void   init(uint8_t a_mode) final;
 
 private:
   void setNextStop();
 
   Timer stopTimer{};
-  static constexpr uint8_t minSecondsBetweenStops = 5;
-  static constexpr uint8_t maxSecondsBetweenStops = 30;
+  static constexpr uint8_t minSecondsBetweenStops       = 5;
+  static constexpr uint8_t maxSecondsBetweenStops       = 30;
+  static constexpr uint8_t addSecondsBetweenStopsFiWaAi = 17;
   pmode_t mode{};
+  uint8_t lastFiWaAi{};
 };
 
 class ToddlerMode: public Modifier {

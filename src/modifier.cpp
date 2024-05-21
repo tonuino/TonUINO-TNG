@@ -55,6 +55,13 @@ void SleepTimer::init(uint8_t special /* is minutes*/) {
   sleepTimer.start(special * 60000);
 }
 
+void DanceGame::init(uint8_t a_mode) {
+  mode = static_cast<pmode_t>(a_mode);
+  if (mode == pmode_t::fi_wa_ai) lastFiWaAi = random(0, 3);
+  setNextStop();
+}
+
+
 void DanceGame::loop() {
   if (SM_tonuino::is_in_state<Play>()) {
     if (not stopTimer.isActive()) {
@@ -68,8 +75,9 @@ void DanceGame::loop() {
         setNextStop();
         break;
       case pmode_t::fi_wa_ai:
-        LOG(modifier_log, s_info, str_danceGame(), F(" -> Action!"));
-        mp3.playAdvertisement(static_cast<uint16_t>(advertTracks::t_306_fire)+random(0, 3));
+        LOG(modifier_log, s_info, str_danceGame(), F(" -> Action! "));
+        lastFiWaAi = (lastFiWaAi+random(1, 3))%3;
+        mp3.playAdvertisement(static_cast<uint16_t>(advertTracks::t_306_fire)+lastFiWaAi);
         setNextStop();
         break;
       default:
@@ -85,7 +93,7 @@ void DanceGame::loop() {
 void DanceGame::setNextStop() {
   uint16_t seconds = random(minSecondsBetweenStops, maxSecondsBetweenStops + 1);
   if (mode == pmode_t::fi_wa_ai)
-    seconds += 13;
+    seconds += addSecondsBetweenStopsFiWaAi;
   LOG(modifier_log, s_info, str_danceGame(), F(" next stop in "), seconds);
   stopTimer.start(seconds * 1000);
 }
