@@ -90,6 +90,9 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.7 geän
 
 # Change Log
 
+## Version 3.1.8 (27.05.2024)
+- [Issue 207](https://github.com/tonuino/TonUINO-TNG/issues/207): Use poti for setting the volume: add threshold to prevent continuously switching volume
+
 ## Version 3.1.8 (26.04.2024)
 - [Issue 202](https://github.com/tonuino/TonUINO-TNG/issues/202): Enhance modifier card SleepTimer to stop only after the track finished
 - [Issue 200](https://github.com/tonuino/TonUINO-TNG/issues/200): Add possibility to use Pololu-Powerswitch for shutdown
