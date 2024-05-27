@@ -13,9 +13,8 @@
 #endif
 
 
-Poti::Poti(const Settings& settings, Mp3& mp3)
+Poti::Poti(Mp3& mp3)
 : CommandSource()
-, settings(settings)
 , mp3(mp3)
 {
   pinMode(potiPin, INPUT);

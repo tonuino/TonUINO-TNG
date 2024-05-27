@@ -10,11 +10,10 @@ class Mp3;
 class Poti: public CommandSource {
 public:
 
-  Poti(const Settings& settings, Mp3& mp3);
+  Poti(Mp3& mp3);
   commandRaw getCommandRaw() override;
 
 private:
-  const Settings& settings;
   Mp3&            mp3;
 };
 
