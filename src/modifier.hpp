@@ -51,9 +51,9 @@ public:
   pmode_t getActive ()        final { return mode; }
   void   init(uint8_t a_mode) final;
 
-  static constexpr uint8_t minSecondsBetweenStops       = 5;
+  static constexpr uint8_t minSecondsBetweenStops       = 13;
   static constexpr uint8_t maxSecondsBetweenStops       = 30;
-  static constexpr uint8_t addSecondsBetweenStopsFiWaAi = 17;
+  static constexpr uint8_t addSecondsBetweenStopsFiWaAi = 10;
 
 private:
   void setNextStop();
