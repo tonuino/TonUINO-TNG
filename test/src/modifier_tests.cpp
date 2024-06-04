@@ -91,8 +91,9 @@ TEST_F(tonuino_test_fixture, SleepTimer_in_idle) {
 // Test FreezeDance
 // =======================================================
 
-constexpr uint8_t maxSecondsBetweenStops = DanceGame::maxSecondsBetweenStops;
-constexpr uint8_t addSecondsBetweenStopsFiWaAi = DanceGame::addSecondsBetweenStopsFiWaAi;
+constexpr uint8_t maxSecondsBetweenStops        = DanceGame::maxSecondsBetweenStops[0];
+constexpr uint8_t addSecondsBetweenStopsFreezeD = DanceGame::addSecondsBetweenStopsFreezeD;
+constexpr uint8_t addSecondsBetweenStopsFiWaAi  = DanceGame::addSecondsBetweenStopsFiWaAi;
 
 TEST_F(tonuino_test_fixture, FreezeDance) {
 
@@ -112,7 +113,7 @@ TEST_F(tonuino_test_fixture, FreezeDance) {
   EXPECT_EQ(getMp3().df_folder_track, 1);
 
   int loop_count = 0;
-  while (getMp3().is_playing_folder() && ++loop_count < maxSecondsBetweenStops * 1000 / cycleTime) {
+  while (getMp3().is_playing_folder() && ++loop_count < (maxSecondsBetweenStops+addSecondsBetweenStopsFreezeD) * 1000 / cycleTime) {
     execute_cycle();
   }
   EXPECT_TRUE(getMp3().is_playing_adv());

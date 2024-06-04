@@ -23,7 +23,7 @@ public:
   virtual bool handleRFID(const folderSettings&)
                                       { return false; }
   virtual pmode_t getActive        () { return pmode_t::none; }
-  virtual void init         (uint8_t) {}
+  virtual void init         (pmode_t, uint8_t) {}
 
   Modifier& operator=(const Modifier&) = delete;
 };
@@ -35,7 +35,7 @@ public:
   bool   handleNext () final;
 
   pmode_t getActive () final { return pmode_t::sleep_timer; }
-  void   init(uint8_t) final;
+  void   init(pmode_t, uint8_t) final;
 
 private:
   Timer sleepTimer{};
@@ -49,18 +49,20 @@ public:
   void   loop       () final;
 
   pmode_t getActive ()        final { return mode; }
-  void   init(uint8_t a_mode) final;
+  void   init(pmode_t, uint8_t) final;
 
-  static constexpr uint8_t minSecondsBetweenStops       = 13;
-  static constexpr uint8_t maxSecondsBetweenStops       = 30;
-  static constexpr uint8_t addSecondsBetweenStopsFiWaAi = 10;
+  static constexpr uint8_t minSecondsBetweenStops[]      = {15, 25, 35};
+  static constexpr uint8_t maxSecondsBetweenStops[]      = {30, 40, 50};
+  static constexpr uint8_t addSecondsBetweenStopsFreezeD =  6;
+  static constexpr uint8_t addSecondsBetweenStopsFiWaAi  = 17;
 
 private:
-  void setNextStop();
+  void setNextStop(bool addAdvTime);
 
   Timer stopTimer{};
   pmode_t mode{};
   uint8_t lastFiWaAi{};
+  uint8_t t{0};
 };
 
 class ToddlerMode: public Modifier {
@@ -79,7 +81,7 @@ public:
   bool handleRFID  (const folderSettings &newCard) final;
 
   pmode_t getActive (                          ) final { return pmode_t::kindergarden; }
-  void   init       (uint8_t                   ) final { cardQueued = false; }
+  void   init       (pmode_t, uint8_t          ) final { cardQueued = false; }
 
 private:
   folderSettings nextCard{};

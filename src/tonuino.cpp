@@ -354,41 +354,36 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
   case pmode_t::sleep_timer:  LOG(card_log, s_info, F("act. sleepTimer"));
                               mp3.playAdvertisement(advertTracks::t_302_sleep            , false/*olnyIfIsPlaying*/);
                               activeModifier = &sleepTimer;
-                              activeModifier->init(nfcTag.special);
                               break;
 
   case pmode_t::freeze_dance: LOG(card_log, s_info, F("act. freezeDance"));
                               mp3.playAdvertisement(advertTracks::t_300_freeze_into      , false/*olnyIfIsPlaying*/);
                               activeModifier = &danceGame;
-                              activeModifier->init(static_cast<uint8_t>(pmode_t::freeze_dance));
                               break;
 
   case pmode_t::fi_wa_ai:     LOG(card_log, s_info, F("act. FeWaLu"));
                               mp3.playAdvertisement(advertTracks::t_303_fi_wa_ai         , false/*olnyIfIsPlaying*/);
                               activeModifier = &danceGame;
-                              activeModifier->init(static_cast<uint8_t>(pmode_t::fi_wa_ai));
                               break;
 
   case pmode_t::toddler:      LOG(card_log, s_info, F("act. toddlerMode"));
                               mp3.playAdvertisement(advertTracks::t_304_buttonslocked    , false/*olnyIfIsPlaying*/);
                               activeModifier = &toddlerMode;
-                              //activeModifier->init(nfcTag.special);
                               break;
 
   case pmode_t::kindergarden: LOG(card_log, s_info, F("act. kindergardenMode"));
                               mp3.playAdvertisement(advertTracks::t_305_kindergarden     , false/*olnyIfIsPlaying*/);
                               activeModifier = &kindergardenMode;
-                              activeModifier->init(nfcTag.special);
                               break;
 
   case pmode_t::repeat_single:LOG(card_log, s_info, F("act. repeatSingleModifier"));
                               mp3.playAdvertisement(advertTracks::t_260_activate_mod_card, false/*olnyIfIsPlaying*/);
                               activeModifier = &repeatSingleModifier;
-                              //activeModifier->init(nfcTag.special);
                               break;
 
   default:                    return false;
   }
+  activeModifier->init(nfcTag.mode, nfcTag.special);
   return true;
 }
 
