@@ -358,12 +358,12 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
 
   case pmode_t::freeze_dance: LOG(card_log, s_info, F("act. freezeDance"));
                               mp3.playAdvertisement(advertTracks::t_300_freeze_into      , false/*olnyIfIsPlaying*/);
-                              activeModifier = &freezeDance;
+                              activeModifier = &danceGame;
                               break;
 
-  case pmode_t::locked:       LOG(card_log, s_info, F("act. locked"));
-                              mp3.playAdvertisement(advertTracks::t_303_locked           , false/*olnyIfIsPlaying*/);
-                              activeModifier = &locked;
+  case pmode_t::fi_wa_ai:     LOG(card_log, s_info, F("act. FeWaLu"));
+                              mp3.playAdvertisement(advertTracks::t_303_fi_wa_ai         , false/*olnyIfIsPlaying*/);
+                              activeModifier = &danceGame;
                               break;
 
   case pmode_t::toddler:      LOG(card_log, s_info, F("act. toddlerMode"));
@@ -383,7 +383,7 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
 
   default:                    return false;
   }
-  activeModifier->init(nfcTag.special);
+  activeModifier->init(nfcTag.mode, nfcTag.special);
   return true;
 }
 

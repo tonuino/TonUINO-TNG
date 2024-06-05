@@ -86,9 +86,12 @@ Eine Anleitung dafür findet man [hier](https://discourse.voss.earth/t/tonuino-s
 
 # Installation
 
-Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.7 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
+Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.8 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
 
 # Change Log
+
+## Version 3.1.9 (05.06.2024)
+- [Issue 205](https://github.com/tonuino/TonUINO-TNG/issues/205): Implement the game "Feuer, Wasser, Luft" as modification card
 
 ## Version 3.1.8 (26.04.2024)
 - [Issue 202](https://github.com/tonuino/TonUINO-TNG/issues/202): Enhance modifier card SleepTimer to stop only after the track finished

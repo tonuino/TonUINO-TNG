@@ -23,7 +23,7 @@ public:
   virtual bool handleRFID(const folderSettings&)
                                       { return false; }
   virtual pmode_t getActive        () { return pmode_t::none; }
-  virtual void init         (uint8_t) {}
+  virtual void init         (pmode_t, uint8_t) {}
 
   Modifier& operator=(const Modifier&) = delete;
 };
@@ -35,7 +35,7 @@ public:
   bool   handleNext () final;
 
   pmode_t getActive () final { return pmode_t::sleep_timer; }
-  void   init(uint8_t) final;
+  void   init(pmode_t, uint8_t) final;
 
 private:
   Timer sleepTimer{};
@@ -43,30 +43,26 @@ private:
   bool  stopAfterTrackFinished_active{};
 };
 
-class FreezeDance: public Modifier {
+class DanceGame: public Modifier {
 public:
-  FreezeDance() {}
+  DanceGame() {}
   void   loop       () final;
 
-  pmode_t getActive () final { return pmode_t::freeze_dance; }
-  void   init(uint8_t) final { setNextStopAtMillis(); }
+  pmode_t getActive ()        final { return mode; }
+  void   init(pmode_t, uint8_t) final;
+
+  static constexpr uint8_t minSecondsBetweenStops[]      = {15, 25, 35};
+  static constexpr uint8_t maxSecondsBetweenStops[]      = {30, 40, 50};
+  static constexpr uint8_t addSecondsBetweenStopsFreezeD =  6;
+  static constexpr uint8_t addSecondsBetweenStopsFiWaAi  = 17;
 
 private:
-  void setNextStopAtMillis();
+  void setNextStop(bool addAdvTime);
 
   Timer stopTimer{};
-  static constexpr uint8_t minSecondsBetweenStops =  5;
-  static constexpr uint8_t maxSecondsBetweenStops = 30;
-};
-
-class Locked: public Modifier {
-public:
-  Locked() {}
-  bool handleButton(command) final { LOG(modifier_log, s_debug, F("Locked::Button -> LOCKED!"))    ; return true; }
-  bool handleRFID(const folderSettings&)
-                             final { LOG(modifier_log, s_debug, F("Locked::RFID -> LOCKED!"))      ; return true; }
-
-  pmode_t getActive()        final { return pmode_t::locked; }
+  pmode_t mode{};
+  uint8_t lastFiWaAi{};
+  uint8_t t{0};
 };
 
 class ToddlerMode: public Modifier {
@@ -85,11 +81,11 @@ public:
   bool handleRFID  (const folderSettings &newCard) final;
 
   pmode_t getActive (                          ) final { return pmode_t::kindergarden; }
-  void   init       (uint8_t                   ) final { cardQueued = false; }
+  void   init       (pmode_t, uint8_t          ) final { cardQueued = false; }
 
 private:
   folderSettings nextCard{};
-  bool cardQueued = false;
+  bool cardQueued{false};
 };
 
 class RepeatSingleModifier: public Modifier {

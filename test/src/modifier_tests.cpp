@@ -91,7 +91,9 @@ TEST_F(tonuino_test_fixture, SleepTimer_in_idle) {
 // Test FreezeDance
 // =======================================================
 
-constexpr uint8_t maxSecondsBetweenStops = 30;
+constexpr uint8_t maxSecondsBetweenStops        = DanceGame::maxSecondsBetweenStops[0];
+constexpr uint8_t addSecondsBetweenStopsFreezeD = DanceGame::addSecondsBetweenStopsFreezeD;
+constexpr uint8_t addSecondsBetweenStopsFiWaAi  = DanceGame::addSecondsBetweenStopsFiWaAi;
 
 TEST_F(tonuino_test_fixture, FreezeDance) {
 
@@ -111,7 +113,7 @@ TEST_F(tonuino_test_fixture, FreezeDance) {
   EXPECT_EQ(getMp3().df_folder_track, 1);
 
   int loop_count = 0;
-  while (getMp3().is_playing_folder() && ++loop_count < maxSecondsBetweenStops * 1000 / cycleTime) {
+  while (getMp3().is_playing_folder() && ++loop_count < (maxSecondsBetweenStops+addSecondsBetweenStopsFreezeD) * 1000 / cycleTime) {
     execute_cycle();
   }
   EXPECT_TRUE(getMp3().is_playing_adv());
@@ -135,114 +137,43 @@ TEST_F(tonuino_test_fixture, FreezeDance) {
 }
 
 // =======================================================
-// Test Locked
+// Test Fire, Water, Air
 // =======================================================
 
-TEST_F(tonuino_test_fixture, Locked_in_idle) {
-
-  goto_idle();
-  card_out();
-  Print::clear_output();
-
-  card_in({ 0, pmode_t::locked, 0, 0 });
-
-  EXPECT_EQ(getModifier().getActive(), pmode_t::locked);
-//  EXPECT_TRUE(getMp3().is_playing_adv());
-//  EXPECT_EQ(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_303_locked));
-  card_out();
-  EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
-  EXPECT_TRUE(getMp3().is_stopped() || getMp3().is_pause());
-
-  button_for_command(command::shortcut1, state_for_command::idle_pause);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
-
-  button_for_command(command::shortcut2, state_for_command::idle_pause);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
-
-  button_for_command(command::shortcut3, state_for_command::idle_pause);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
-
-  button_for_command(command::admin, state_for_command::idle_pause);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
-
-  card_in({ 3, pmode_t::album, 0, 0 });
-  EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
-  card_out();
-
-  card_in({ 0, pmode_t::locked, 0, 0 });
-  card_out();
-
-  EXPECT_EQ(getModifier().getActive(), pmode_t::none);
-
-  goto_idle();
-  //EXPECT_TRUE(false) << "log: " << Print::get_output();
-}
-
-TEST_F(tonuino_test_fixture, Locked_in_play) {
+TEST_F(tonuino_test_fixture, FiWaAi) {
 
   goto_play({ 2, pmode_t::album, 0, 0 });
   card_out();
   Print::clear_output();
 
-  card_in({ 0, pmode_t::locked, 0, 0 });
+  card_in({ 0, pmode_t::fi_wa_ai, 0, 0 });
 
-  EXPECT_EQ(getModifier().getActive(), pmode_t::locked);
+  EXPECT_EQ(getModifier().getActive(), pmode_t::fi_wa_ai);
   EXPECT_TRUE(getMp3().is_playing_adv());
-  EXPECT_EQ(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_303_locked));
+  EXPECT_EQ(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_303_fi_wa_ai));
   card_out();
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, 2);
   EXPECT_EQ(getMp3().df_folder_track, 1);
 
-  button_for_command(command::pause, state_for_command::play);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
+  int loop_count = 0;
+  while (getMp3().is_playing_folder() && ++loop_count < (maxSecondsBetweenStops+addSecondsBetweenStopsFiWaAi) * 1000 / cycleTime) {
+    execute_cycle();
+  }
+  EXPECT_TRUE(getMp3().is_playing_adv());
+  EXPECT_GE(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_306_fire));
+  EXPECT_LE(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_308_air));
 
-  button_for_command(command::next, state_for_command::play);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
-  EXPECT_TRUE(getMp3().is_playing_folder());
-  EXPECT_EQ(getMp3().df_folder, 2);
-  EXPECT_EQ(getMp3().df_folder_track, 1);
-
-  button_for_command(command::previous, state_for_command::play);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
-  EXPECT_TRUE(getMp3().is_playing_folder());
-  EXPECT_EQ(getMp3().df_folder, 2);
-  EXPECT_EQ(getMp3().df_folder_track, 1);
-
-#ifdef FIVEBUTTONS
-  button_for_command(command::next10, state_for_command::play);
+  execute_cycle();
+  execute_cycle();
+  execute_cycle();
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, 2);
   EXPECT_EQ(getMp3().df_folder_track, 1);
 
-  button_for_command(command::previous10, state_for_command::play);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
-  EXPECT_TRUE(getMp3().is_playing_folder());
-  EXPECT_EQ(getMp3().df_folder, 2);
-  EXPECT_EQ(getMp3().df_folder_track, 1);
-#endif
-
-  const uint8_t old_volume = getMp3().current_volume;
-
-  button_for_command(command::volume_up, state_for_command::play);
-  EXPECT_EQ(getMp3().current_volume, old_volume);
-
-  button_for_command(command::volume_down, state_for_command::play);
-  EXPECT_EQ(getMp3().current_volume, old_volume);
-
-  button_for_command(command::admin, state_for_command::play);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
-
-  card_in({ 3, pmode_t::einzel, 4, 0 });
-  EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
-  EXPECT_TRUE(getMp3().is_playing_folder());
-  EXPECT_EQ(getMp3().df_folder, 2);
-  EXPECT_EQ(getMp3().df_folder_track, 1);
-  card_out();
-
-  card_in({ 0, pmode_t::locked, 0, 0 });
+  card_in({ 0, pmode_t::fi_wa_ai, 0, 0 });
   card_out();
 
   EXPECT_EQ(getModifier().getActive(), pmode_t::none);

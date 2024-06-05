@@ -340,6 +340,7 @@ private:
     get_mode,
     get_sleeptime_timer,
     get_sleeptime_mode,
+    get_play_time,
     start_writeCard,
     run_writeCard,
   };

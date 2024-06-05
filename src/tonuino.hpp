@@ -116,8 +116,7 @@ private:
 
   Modifier             noneModifier        {};
   SleepTimer           sleepTimer          {};
-  FreezeDance          freezeDance         {};
-  Locked               locked              {};
+  DanceGame            danceGame           {};
   ToddlerMode          toddlerMode         {};
   KindergardenMode     kindergardenMode    {};
   RepeatSingleModifier repeatSingleModifier{};
