@@ -1648,16 +1648,24 @@ void Admin_ModCard::react(command_e const &cmd_e) {
   case get_mode           :
     if (Commands::isSelect(cmd) && (currentValue != 0)) {
       folder.mode = static_cast<pmode_t>(currentValue);
-      if (folder.mode != pmode_t::sleep_timer) {
-        mp3.clearMp3Queue();
-        current_subState = start_writeCard;
-      }
-      else {
+
+      if (folder.mode == pmode_t::sleep_timer) {
         numberOfOptions   = 4;
         startMessage      = mp3Tracks::t_960_timer_intro;
         messageOffset     = mp3Tracks::t_960_timer_intro;
         VoiceMenu::entry();
         current_subState = get_sleeptime_timer;
+      }
+      else if (folder.mode == pmode_t::freeze_dance || folder.mode == pmode_t::fi_wa_ai) {
+        numberOfOptions   = 3;
+        startMessage      = mp3Tracks::t_966_dance_pause_intro;
+        messageOffset     = mp3Tracks::t_966_dance_pause_intro;
+        VoiceMenu::entry();
+        current_subState = get_play_time;
+      }
+      else {
+        mp3.clearMp3Queue();
+        current_subState = start_writeCard;
       }
     }
     break;
@@ -1688,6 +1696,12 @@ void Admin_ModCard::react(command_e const &cmd_e) {
     if (Commands::isSelect(cmd) && (currentValue != 0)) {
       if (currentValue == 2)
         folder.special += 0x80;
+      current_subState = start_writeCard;
+    }
+    break;
+  case get_play_time:
+    if (Commands::isSelect(cmd) && (currentValue != 0)) {
+      folder.special = currentValue-1;
       current_subState = start_writeCard;
     }
     break;
