@@ -101,6 +101,10 @@ mp3/0962_timer_15.mp3|15 Minuten.
 mp3/0963_timer_30.mp3|30 Minuten.
 mp3/0964_timer_60.mp3|60 Minuten.
 mp3/0965_timer_disabled.mp3|Nicht automatisch abschalten
+mp3/0966_dance_pause_intro.mp3|Wielange soll die Musik zwischen den Pausen spielen?
+mp3/0967_dance_pause_15_30.mp3|15 bis 30 Sekunden
+mp3/0968_dance_pause_25_40.mp3|25 bis 40 Sekunden
+mp3/0969_dance_pause_35_50.mp3|35 bis 50 Sekunden
 mp3/0970_modifier_Intro.mp3|Bitte wähle nun deine Modifikationskarte mit den Lautstärketasten aus.
 mp3/0971_modifier_SleepTimer.mp3|Schlummermodus
 mp3/0972_modifier_FreezeDance.mp3|Stopptanz - TonUINO spielt Stopptanz mit dir und hält zufällig für dich die Wiedergabe kurz an.
