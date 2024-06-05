@@ -89,7 +89,7 @@ private:
   RotaryEncoder        rotaryEncoder       {settings};
 #endif
 #ifdef POTI
-  Poti                 poti                {settings, mp3};
+  Poti                 poti                {mp3};
 #endif
   Commands             commands            {
                                             settings

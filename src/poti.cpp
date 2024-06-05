@@ -13,20 +13,23 @@
 #endif
 
 
-Poti::Poti(const Settings& settings, Mp3& mp3)
+Poti::Poti(Mp3& mp3)
 : CommandSource()
-, settings(settings)
 , mp3(mp3)
 {
   pinMode(potiPin, INPUT);
 }
 
 commandRaw Poti::getCommandRaw() {
-  const uint8_t volume = map( analogRead(potiPin), 0, maxLevel, settings.minVolume, settings.maxVolume);
+  const uint8_t volume = map( analogRead(potiPin), 0, maxLevel, mp3.getMinVolume(), mp3.getMaxVolume());
 
-  if (volume != mp3.getVolume()) {
+  if (volume < mp3.getVolume()) {
     LOG(button_log, s_debug, F("poti volume: "), volume);
     mp3.setVolume(volume);
+  }
+  else if (volume > mp3.getVolume()+1) {
+    LOG(button_log, s_debug, F("poti volume: "), volume-1);
+    mp3.setVolume(volume-1);
   }
 
   return commandRaw::none;

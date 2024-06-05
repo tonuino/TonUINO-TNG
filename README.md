@@ -91,6 +91,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.8 geän
 # Change Log
 
 ## Version 3.1.9 (05.06.2024)
+- [Issue 207](https://github.com/tonuino/TonUINO-TNG/issues/207): Use poti for setting the volume: add threshold to prevent continuously switching volume
 - [Issue 205](https://github.com/tonuino/TonUINO-TNG/issues/205): Implement the game "Feuer, Wasser, Luft" as modification card
 
 ## Version 3.1.8 (26.04.2024)
