@@ -37,6 +37,28 @@ void setup()
   LOG(init_log, s_error, F("Information and contribution at https://tonuino.de.\n"));
   LOG(init_log, s_error, F("V3.1.10 27.06.24\n"));
 
+#ifdef TonUINO_Classic
+  LOG(init_log, s_error, F("C "));
+#endif
+#ifdef TonUINO_Every
+  LOG(init_log, s_error, F("E "));
+#endif
+#ifdef ALLinONE
+  LOG(init_log, s_error, F("A "));
+#endif
+#ifdef ALLinONE_Plus
+  LOG(init_log, s_error, F("A+ "));
+#endif
+
+#ifdef FIVEBUTTONS
+  LOG(init_log, s_error, F("5\n"));
+#elif  BUTTONS3X3
+  LOG(init_log, s_error, F("3x3\n"));
+#else
+  LOG(init_log, s_error, F("3\n"));
+#endif
+
+
   Tonuino::getTonuino().setup();
 }
 
