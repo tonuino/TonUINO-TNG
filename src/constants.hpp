@@ -4,43 +4,48 @@
 #include <Arduino.h>
 #include "gpioHelper.hpp"
 
+// ######################################################################
 // ####### default pins #################################################
+// ######################################################################
 
-/* #### Classic/Every ######################################################
- *                         | A0| A1| A2| A3| A4| A5| A6| A7| D5| D6| D7| D8|
- * ------------------------+---+---+---+---+---+---+---+---+---+---+---+---+
- * 3 Button                | P | U | D |   |   |   |   |   |   |   |   |   |
- * 5 Button                | P | V+| V-| U | D |   |   |   |   |   |   |   |
- * 3x3 Button Board        | P | U | D | A |   |   |   |   |   |   |   |   |
- * Open pin for random     |   |   |   |   |   |   |   | x |   |   |   |   |
- * Rotary encoder          |   |   |   |CLK| DT|   |   |   |   |   |   |   |
- * Poti                    |   |   |   | x |   |   |   |   |   |   |   |   |
- * Neo Ring/LED animat.    |   |   |   |   |   |   |   |   | x |   |   |   |
- * Speaker off             |   |   |   |   |   |   |   |   |   | x |   |   |
- * Shutdown                |   |   |   |   |   |   |   |   |   |   | x |   |
- * headphone jack detection|   |   |   |   |   |   |   |   |   |   |   | x |
- * special start shortcut  |   |   |   |   |   |   | x |   |   |   |   |   |
- * bat voltage measurement |   |   |   |   |   | x |   |   |   |   |   |   |
- * #########################################################################
+/* #### Classic/Every ######################################################################
+ *                         | A0| A1| A2| A3| A4| A5| A6| A7| D0| D1| D2| D3| D5| D6| D7| D8|
+ * ------------------------+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+ * Com to DF Player        |   |   |   |   |   |   |   |   |RX*|TX*| RX| TX|   |   |   |   |
+ * 3 Button                | P | U | D |   |   |   |   |   |   |   |   |   |   |   |   |   |
+ * 5 Button                | P | V+| V-| U | D |   |   |   |   |   |   |   |   |   |   |   |
+ * 3x3 Button Board        | P | U | D | A |   |   |   |   |   |   |   |   |   |   |   |   |
+ * Open pin for random     |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |
+ * Rotary encoder          |   |   |   |CLK| DT|   |   |   |   |   |   |   |   |   |   |   |
+ * Poti                    |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |   |
+ * Neo Ring/LED animat.    |   |   |   |   |   |   |   |   |   |   |(x)|   | x |   |   |   |
+ * Speaker off             |   |   |   |   |   |   |   |   |   |   |   |   |   | x |   |   |
+ * Shutdown                |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |   |
+ * headphone jack detection|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |
+ * special start shortcut  |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |
+ * bat voltage measurement |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |
+ * #########################################################################################
+ *
+ * (*) Hardware Serial on Every
  */
 
-/* ### AiOplus #####################################################################################
- *                         | A0| A1| A2| A3| A4| A5| A6| A7|D10|D19|D21|D27|D31|D32|D33|D36|D37|A14|
- *                         |   |   |   |   |   |   |   |   |PB2|PC5|PC7|PD5|PE1|PE2|PE3|PF2|PF3|PF4|
- * ------------------------+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
- * 3 Button                | P | D | U |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
- * 5 Button                | P | D | U | V-| V+|   |   |   |   |   |   |   |   |   |   |   |   |   |
- * 3x3 Button Board        | P |   | A | D | U |   |   |   |   |   |   |   |   |   |   |   |   |   |
- * Open pin for random     |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |
- * Rotary encoder          |   |   |   |   |   |   |   |   |   |   |   |   |CLK| DT|   |CLK| DT|   |
- * Poti                    |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |
- * Neo Ring/LED animat.    |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |
- * Speaker off             |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |
- * Shutdown                |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |
- * headphone jack detection|   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |
- * special start shortcut  |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |
- * bat voltage measurement |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |
- * #################################################################################################
+/* ### AiOplus #########################################################################################
+ *                         | A0| A1| A2| A3| A4| A5| A6| A7|D10|D14|D19|D21|D27|D31|D32|D33|D36|D37|A14|
+ *                         |   |   |   |   |   |   |   |   |PB2|PC0|PC5|PC7|PD5|PE1|PE2|PE3|PF2|PF3|PF4|
+ * ------------------------+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+ * 3 Button                | P | D | U |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+ * 5 Button                | P | D | U | V-| V+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+ * 3x3 Button Board        | P |   | A | D | U |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+ * Open pin for random     |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |
+ * Rotary encoder          |   |   |   |   |   |   |   |   |   |   |   |   |   |CLK| DT|   |CLK| DT|   |
+ * Poti                    |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |
+ * Neo Ring/LED animat.    |   |   |   |   |   |   |   |   | x |(x)|   |   |   |   |   |   |   |   |   |
+ * Speaker off             |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |
+ * Shutdown                |   |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |
+ * headphone jack detection|   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |
+ * special start shortcut  |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |
+ * bat voltage measurement |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |   |
+ * #####################################################################################################
  */
 
 /* ### AiO #################################################################
@@ -351,7 +356,7 @@ inline constexpr uint8_t  cardRemoveDelay =  3;
 // ####### mp3 #########################################
 
 #ifdef DFPlayerUsesHardwareSerial
-inline constexpr HardwareSerial &dfPlayer_serial         = Serial1;
+inline constexpr HardwareSerial &dfPlayer_serial         = Serial1; // D0 RX, D1 TX (Every)
 #else
 inline constexpr uint8_t       dfPlayer_receivePin      = 2;
 inline constexpr uint8_t       dfPlayer_transmitPin     = 3;
