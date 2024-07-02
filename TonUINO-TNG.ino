@@ -38,24 +38,24 @@ void setup()
   LOG(init_log, s_error, F("V3.1.10 27.06.24\n"));
 
 #ifdef TonUINO_Classic
-  LOG(init_log, s_error, F("C "));
+  LOG(init_log, s_error, F("C "), lf_no);
 #endif
 #ifdef TonUINO_Every
-  LOG(init_log, s_error, F("E "));
+  LOG(init_log, s_error, F("E "), lf_no);
 #endif
 #ifdef ALLinONE
-  LOG(init_log, s_error, F("A "));
+  LOG(init_log, s_error, F("A "), lf_no);
 #endif
 #ifdef ALLinONE_Plus
-  LOG(init_log, s_error, F("A+ "));
+  LOG(init_log, s_error, F("A+ "), lf_no);
 #endif
 
 #ifdef FIVEBUTTONS
-  LOG(init_log, s_error, F("5\n"));
+  LOG(init_log, s_error, F("5"));
 #elif  BUTTONS3X3
-  LOG(init_log, s_error, F("3x3\n"));
+  LOG(init_log, s_error, F("3x3"));
 #else
-  LOG(init_log, s_error, F("3\n"));
+  LOG(init_log, s_error, F("3"));
 #endif
 
 
