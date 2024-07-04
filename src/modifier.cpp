@@ -25,6 +25,7 @@ void SleepTimer::loop() {
       if (SM_tonuino::is_in_state<Play>())
         SM_tonuino::dispatch(command_e(commandRaw::pause));
       //tonuino.resetActiveModifier();
+      tonuino.shutdown();
     }
     else {
       stopAfterTrackFinished_active = true;
@@ -39,6 +40,7 @@ bool SleepTimer::handleNext() {
     stopAfterTrackFinished_active = false;
     sleepTimer.stop();
     //tonuino.resetActiveModifier();
+    tonuino.shutdown();
   }
   return false;
 }
