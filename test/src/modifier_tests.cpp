@@ -46,6 +46,7 @@ TEST_F(tonuino_test_fixture, SleepTimer_in_play) {
   execute_cycle_for_ms(1000);
   EXPECT_TRUE(SM_tonuino::is_in_state<Pause>());
 
+  tonuino.resetActiveModifier();
   goto_idle();
   //EXPECT_TRUE(false) << "log: " << Print::get_output();
 }
@@ -83,6 +84,7 @@ TEST_F(tonuino_test_fixture, SleepTimer_in_idle) {
   execute_cycle_for_ms(1000);
   EXPECT_TRUE(SM_tonuino::is_in_state<Pause>());
 
+  tonuino.resetActiveModifier();
   goto_idle();
   //EXPECT_TRUE(false) << "log: " << Print::get_output();
 }

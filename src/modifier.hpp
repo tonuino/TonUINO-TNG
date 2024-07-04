@@ -33,7 +33,8 @@ public:
   SleepTimer() {}
   void   loop       () final;
   bool   handleNext () final;
-  bool handleButton(command cmd) final;
+  bool handleButton(command cmd                  ) final;
+  bool handleRFID  (const folderSettings &newCard) final;
 
   pmode_t getActive () final { return pmode_t::sleep_timer; }
   void   init(pmode_t, uint8_t) final;
@@ -42,6 +43,7 @@ private:
   Timer sleepTimer{};
   bool  stopAfterTrackFinished{};
   bool  stopAfterTrackFinished_active{};
+  bool  fired{};
 };
 
 class DanceGame: public Modifier {
