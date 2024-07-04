@@ -25,7 +25,6 @@ void SleepTimer::loop() {
       if (SM_tonuino::is_in_state<Play>())
         SM_tonuino::dispatch(command_e(commandRaw::pause));
       //tonuino.resetActiveModifier();
-      tonuino.shutdown();
     }
     else {
       stopAfterTrackFinished_active = true;
@@ -40,7 +39,6 @@ bool SleepTimer::handleNext() {
     stopAfterTrackFinished_active = false;
     sleepTimer.stop();
     //tonuino.resetActiveModifier();
-    tonuino.shutdown();
   }
   return false;
 }
@@ -56,6 +54,15 @@ void SleepTimer::init(pmode_t, uint8_t special /* is minutes*/) {
   }
   sleepTimer.start(special * 60000);
 }
+
+bool SleepTimer::handleButton(command cmd) {
+  if (cmd == command::pause && (not sleepTimer.isActive() || stopAfterTrackFinished_active)) {
+    LOG(modifier_log, s_debug, F("SleepTimer::PauseButton -> LOCKED!"));
+    return true;
+  }
+  return false;
+}
+
 
 void DanceGame::init(pmode_t a_mode, uint8_t a_t) {
   LOG(modifier_log, s_info, str_danceGame(), F("t : "), a_t);

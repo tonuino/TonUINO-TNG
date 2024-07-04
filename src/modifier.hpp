@@ -33,6 +33,7 @@ public:
   SleepTimer() {}
   void   loop       () final;
   bool   handleNext () final;
+  bool handleButton(command cmd) final;
 
   pmode_t getActive () final { return pmode_t::sleep_timer; }
   void   init(pmode_t, uint8_t) final;
