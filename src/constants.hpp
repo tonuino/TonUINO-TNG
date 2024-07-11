@@ -71,7 +71,7 @@
 /* Select the right PCB by uncommenting one of the following lines
  * Bitte die passende Platine durch entfernen der Kommentare in einer der folgenden Zeilen auswählen
  */
-//#define TonUINO_Classic
+#define TonUINO_Classic
 //#define TonUINO_Every
 //#define ALLinONE
 //#define ALLinONE_Plus
@@ -84,7 +84,7 @@
  *          FIVEBUTTONS  for AiO and AiO+
  */
 //#define THREEBUTTONS
-//#define FIVEBUTTONS
+#define FIVEBUTTONS
 //#define BUTTONS3X3
 
 // ######################################################################
