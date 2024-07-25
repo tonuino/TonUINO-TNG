@@ -142,6 +142,7 @@ enum class mp3Tracks: uint16_t {
   t_974_modifier_Toddler       = 974,
   t_975_modifier_KinderGarden  = 975,
   t_976_modifier_repeat1       = 976,
+  t_977_modifier_bluetooth     = 977,
   t_980_admin_lock_intro       = 980,
   t_981_admin_lock_disabled    = 981,
   t_982_admin_lock_card        = 982,
@@ -169,6 +170,9 @@ enum class advertTracks: uint16_t {
   t_306_fire                   = 306,
   t_307_water                  = 307,
   t_308_air                    = 308,
+  t_320_bt_on                  = 320,
+  t_321_bt_off                 = 321,
+  t_322_bt_pairing             = 322,
 };
 
 // implement a notification class,

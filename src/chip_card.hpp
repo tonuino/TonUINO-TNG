@@ -32,6 +32,7 @@ enum class pmode_t: uint8_t {
   toddler       =   4,
   kindergarden  =   5,
   repeat_single =   6,
+  bt_module     =   7,
 
   admin_card    = 0xff,
 };

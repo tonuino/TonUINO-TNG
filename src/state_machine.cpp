@@ -722,6 +722,11 @@ void Play::react(command_e const &cmd_e) {
     transit<Pause>();
     return;
   case command::track:
+#ifdef BT_MODULE
+    if (tonuino.isBtModuleOn())
+      tonuino.btModulePairing();
+    else
+#endif
     tonuino.playTrackNumber();
     break;
   case command::volume_up:
@@ -1616,7 +1621,7 @@ void Admin_SimpleSetting::react(command_e const &cmd_e) {
 void Admin_ModCard::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_ModCard());
 
-  numberOfOptions   = 6;
+  numberOfOptions   = 7;
   startMessage      = mp3Tracks::t_970_modifier_Intro;
   messageOffset     = mp3Tracks::t_970_modifier_Intro;
   preview           = false;

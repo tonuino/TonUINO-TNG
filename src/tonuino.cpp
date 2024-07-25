@@ -69,6 +69,12 @@ void Tonuino::setup() {
   pinMode(specialStartShortcutPin, INPUT);
 #endif
 
+#ifdef BT_MODULE
+  pinMode(btModuleOnPin          , OUTPUT);
+  pinMode(btModulePairingPin     , OUTPUT);
+  digitalWrite(btModuleOnPin     , getLevel(btModuleOnPinType     , level::inactive));
+  digitalWrite(btModulePairingPin, getLevel(btModulePairingPinType, level::inactive));
+#endif // BT_MODULE
 
 #ifdef NEO_RING
   ring.init();
@@ -174,6 +180,12 @@ void Tonuino::loop() {
   else // admin menu
     ring.call_on_admin();
 #endif // NEO_RING
+
+#ifdef BT_MODULE
+  if (btModulePairingTimer.isActive() && btModulePairingTimer.isExpired())
+    digitalWrite(btModulePairingPin, getLevel(btModulePairingPinType, level::inactive));
+#endif // BT_MODULE
+
 
   unsigned long  stop_cycle = millis();
 
@@ -341,6 +353,16 @@ void Tonuino::shutdown() {
   sleep_mode();
 }
 
+#ifdef BT_MODULE
+void Tonuino::btModulePairing() {
+  if (not btModulePairingTimer.isActive()) {
+    mp3.playAdvertisement(advertTracks::t_322_bt_pairing, false/*olnyIfIsPlaying*/);
+    btModulePairingTimer.start(btModulePairingPulse);
+    digitalWrite(btModulePairingPin, getLevel(btModulePairingPinType, level::active));
+  }
+}
+#endif // BT_MODULE
+
 bool Tonuino::specialCard(const folderSettings &nfcTag) {
   LOG(card_log, s_debug, F("special card, mode = "), static_cast<uint8_t>(nfcTag.mode));
   if (activeModifier->getActive() == nfcTag.mode) {
@@ -380,6 +402,17 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
                               mp3.playAdvertisement(advertTracks::t_260_activate_mod_card, false/*olnyIfIsPlaying*/);
                               activeModifier = &repeatSingleModifier;
                               break;
+
+#ifdef BT_MODULE
+  case pmode_t::bt_module:    LOG(card_log, s_info, F("toggle bt module from "), btModuleOn);
+                              btModuleOn = not btModuleOn;
+                              if (btModuleOn)
+                                mp3.playAdvertisement(advertTracks::t_320_bt_on , false/*olnyIfIsPlaying*/);
+                              else
+                                mp3.playAdvertisement(advertTracks::t_321_bt_off, false/*olnyIfIsPlaying*/);
+                              digitalWrite(btModuleOnPin, getLevel(btModuleOnPinType, btModuleOn ? level::active : level::inactive));
+                              break;
+#endif // BT_MODULE
 
   default:                    return false;
   }

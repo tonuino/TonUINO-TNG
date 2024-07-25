@@ -67,6 +67,11 @@ public:
 
   uint16_t getNumTracksInFolder() const {return numTracksInFolder; }
 
+#ifdef BT_MODULE
+  bool isBtModuleOn() { return btModuleOn; }
+  void btModulePairing();
+#endif
+
 private:
 
   void checkStandby();
@@ -128,6 +133,11 @@ private:
   folderSettings       myFolder            {};
   bool                 myFolderIsCard      {};
   uint16_t             numTracksInFolder   {};
+
+#ifdef BT_MODULE
+  bool                 btModuleOn          {};
+  Timer                btModulePairingTimer{};
+#endif
 };
 
 #endif /* SRC_TONUINO_HPP_ */
