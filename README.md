@@ -90,6 +90,9 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.9 geän
 
 # Change Log
 
+## Version 3.1.11 (04.07.2024)
+- [Issue 212](https://github.com/tonuino/TonUINO-TNG/issues/212): Sleep Timer Modification card doesn't work properly with NeoPixel Ring
+
 ## Version 3.1.10 (27.06.2024)
 - [Issue 210](https://github.com/tonuino/TonUINO-TNG/issues/210): Make text in the admin menu for switching volume button more clearer
 
