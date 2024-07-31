@@ -24,6 +24,7 @@ void SleepTimer::loop() {
       LOG(modifier_log, s_info, str_SleepTimer(), F(" -> SLEEP!"));
       if (SM_tonuino::is_in_state<Play>())
         SM_tonuino::dispatch(command_e(commandRaw::pause));
+      fired = true;
       //tonuino.resetActiveModifier();
     }
     else {
@@ -38,6 +39,7 @@ bool SleepTimer::handleNext() {
     mp3.clearFolderQueue();
     stopAfterTrackFinished_active = false;
     sleepTimer.stop();
+    fired = true;
     //tonuino.resetActiveModifier();
   }
   return false;
@@ -45,6 +47,7 @@ bool SleepTimer::handleNext() {
 
 void SleepTimer::init(pmode_t, uint8_t special /* is minutes*/) {
   LOG(modifier_log, s_info, str_SleepTimer(), F(" minutes: "), special);
+  fired = false;
   stopAfterTrackFinished_active = false;
   if (special > 0x80) {
     stopAfterTrackFinished = true;
@@ -54,6 +57,23 @@ void SleepTimer::init(pmode_t, uint8_t special /* is minutes*/) {
   }
   sleepTimer.start(special * 60000);
 }
+
+bool SleepTimer::handleButton(command cmd) {
+  if (cmd == command::pause && fired) {
+    LOG(modifier_log, s_debug, F("SleepTimer::PauseButton -> LOCKED!"));
+    return true;
+  }
+  return false;
+}
+
+bool SleepTimer::handleRFID(const folderSettings &/*newCard*/) {
+  if (fired) {
+    LOG(modifier_log, s_debug, F("SleepTimer::handleRFID -> LOCKED!"));
+    return true;
+  }
+  return false;
+}
+
 
 void DanceGame::init(pmode_t a_mode, uint8_t a_t) {
   LOG(modifier_log, s_info, str_danceGame(), F("t : "), a_t);
