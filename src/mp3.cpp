@@ -25,12 +25,12 @@ void Mp3Notify::PrintlnSourceAction(DfMp3_PlaySources source, const __FlashStrin
 }
 
 void Mp3Notify::OnPlayFinished(DfMp3&, DfMp3_PlaySources /*source*/, uint16_t track) {
-  LOG(mp3_log, s_debug, F("Track beendet: "), track);
+  LOG(mp3_log, s_info, F("Track beendet: "), track);
   if (track == lastTrackFinished)
     return;
   else
     lastTrackFinished = track;
-#ifdef DFMiniMp3_T_CHIP_LISP3  
+#ifdef DFMiniMp3_IGNORE_ONPLAYFINISHED_FOR_ADV
   if (Tonuino::getTonuino().getMp3().resetPlayingAdv())
     return;
 #endif
@@ -88,7 +88,7 @@ void Mp3::waitForTrackToStart() {
 
 void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
   LOG(mp3_log, s_info, F("play adv: "), track);
-#ifdef DFMiniMp3_T_CHIP_LISP3
+#ifdef DFMiniMp3_IGNORE_ONPLAYFINISHED_FOR_ADV
   advPlaying = true;
 #endif
   if (isPlaying()) {
@@ -101,6 +101,7 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
     }
     else {
       Base::playFolderTrack(1, 1);
+      delay(dfPlayer_timeUntilStarts);
     }
     waitForTrackToStart();
     LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
