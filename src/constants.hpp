@@ -111,13 +111,18 @@
  * um einen speziellen Chip auf dem DfMiniMp3 Player zu ünterstützen bitte in eine der nächste Zeilen den Kommentar entfernen
  *
  * GD3200B:     bad behavior of getFolderTrackCount() - ignores the parameter folder
+ *              bad behavior of callback OnPlayFinished - it is also called on advertise tracks
  * MH2024K16SS: no checksums
- * LISP3:       bad behavior of callback OnPlayFinished - it is also called on advertise tracks (also on some MH2024K24SS)
+ * LISP3:       bad behavior of callback OnPlayFinished - it is also called on advertise tracks
+ * MP3-TF-16P V3.0 with MH2024K24SS:
+ *              very slow
+ *              bad behavior of callback OnPlayFinished - it is also called on advertise tracks
  * LKP Player:  no ACK for requests (use Mp3ChipIncongruousNoAck for them)
  */
 //#define DFMiniMp3_T_CHIP_GD3200B
 //#define DFMiniMp3_T_CHIP_MH2024K16SS
 //#define DFMiniMp3_T_CHIP_LISP3
+//#define DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
 #define DFMiniMp3_T_CHIP_Mp3ChipIncongruousNoAck
 
 // ######################################################################
@@ -377,7 +382,13 @@ inline constexpr uint8_t       dfPlayer_transmitPin     = 3;
 inline constexpr uint8_t       maxTracksInFolder        = 255;
 inline constexpr uint8_t       dfPlayer_busyPin         = 4;
 inline constexpr levelType     dfPlayer_busyPinType     = levelType::activeHigh;
+#if defined(DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0)
+inline constexpr unsigned long dfPlayer_timeUntilStarts = 2500;
+#elif defined(DFMiniMp3_T_CHIP_GD3200B)
+inline constexpr unsigned long dfPlayer_timeUntilStarts = 1500;
+#else
 inline constexpr unsigned long dfPlayer_timeUntilStarts = 1000;
+#endif
 
 // ####### tonuino #####################################
 

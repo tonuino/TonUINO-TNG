@@ -27,6 +27,10 @@ class Mp3Notify;
 #define DFMiniMp3_T_CHIP_VARIANT Mp3ChipIncongruousNoAck
 #endif
 
+#if defined(DFMiniMp3_T_CHIP_GD3200B) or defined(DFMiniMp3_T_CHIP_LISP3) or defined(DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0)
+#define DFMiniMp3_IGNORE_ONPLAYFINISHED_FOR_ADV
+#endif
+
 // define a handy type using serial and our notify class
 #ifdef DFMiniMp3_T_CHIP_VARIANT
 using DfMp3 = DFMiniMp3<SerialType, Mp3Notify, DFMiniMp3_T_CHIP_VARIANT, 4000>;
@@ -209,7 +213,7 @@ public:
   void clearAllQueue() { clearFolderQueue(); clearMp3Queue(); }
   bool isPlayingFolder() { return playing == play_folder; }
   bool isPlayingMp3   () { return playing == play_mp3   ; }
-#ifdef DFMiniMp3_T_CHIP_LISP3
+#ifdef DFMiniMp3_IGNORE_ONPLAYFINISHED_FOR_ADV
   bool resetPlayingAdv() { bool ret = advPlaying; advPlaying = false; return ret; }
 #endif
   // firstTrack and lastTrack -> index in folder starting with 1
@@ -293,7 +297,7 @@ private:
   Timer                startTrackTimer{};
   Timer                missingOnPlayFinishedTimer{};
   bool                 isPause{};
-#ifdef DFMiniMp3_T_CHIP_LISP3
+#ifdef DFMiniMp3_IGNORE_ONPLAYFINISHED_FOR_ADV
   bool                 advPlaying{false};
 #endif
 
