@@ -86,12 +86,13 @@ Eine Anleitung dafür findet man [hier](https://discourse.voss.earth/t/tonuino-s
 
 # Installation
 
-Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.9 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
+Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.10 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
 
 # Change Log
 
-## Version 3.1.11 (04.07.2024)
+## Version 3.1.11 (30.07.2024)
 - [Issue 212](https://github.com/tonuino/TonUINO-TNG/issues/212): Sleep Timer Modification card doesn't work properly with NeoPixel Ring
+- [Issue 215](https://github.com/tonuino/TonUINO-TNG/issues/215): New optional Feature: Support BT Modul
 
 ## Version 3.1.10 (27.06.2024)
 - [Issue 210](https://github.com/tonuino/TonUINO-TNG/issues/210): Make text in the admin menu for switching volume button more clearer

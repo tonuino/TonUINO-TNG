@@ -269,6 +269,18 @@ inline constexpr uint8_t   specialStartShortcutTrack   = 1;
 
 // ######################################################################
 
+/* uncomment the below line to enable support for BT module
+ * um die Unterstützung des BT Modules zu aktivieren, in der nächste Zeile den Kommentar entfernen
+ */
+//#define BT_MODULE
+inline constexpr uint8_t   btModuleOnPin               =  2; // D2
+inline constexpr levelType btModuleOnPinType           = levelType::activeHigh;
+inline constexpr uint8_t   btModulePairingPin          =  3; // D3
+inline constexpr levelType btModulePairingPinType      = levelType::activeHigh;
+inline constexpr unsigned long btModulePairingPulse    = 500;
+
+// ######################################################################
+
 /* uncomment the below line to enable battery voltage measurement (not for ALLinONE, not recommended for TonUINO_Classic)
  * um die Batterie Spannungsmessung zu aktivieren, in der nächste Zeile den Kommentar entfernen
  * (nicht für ALLinONE, nicht empfohlen für TonUINO_Classic)
