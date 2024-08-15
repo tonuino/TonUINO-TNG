@@ -57,6 +57,7 @@ enum class mp3Tracks: uint16_t {
   t_321_mode_repeat_last_card  = 321,
   t_322_mode_quiz_game         = 322,
   t_323_mode_memory_game       = 323,
+  t_324_mode_switch_bt         = 324,
   t_327_select_file            = 327,
   t_328_select_first_file      = 328,
   t_329_select_last_file       = 329,

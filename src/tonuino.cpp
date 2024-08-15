@@ -354,6 +354,15 @@ void Tonuino::shutdown() {
 }
 
 #ifdef BT_MODULE
+void Tonuino::switchBtModuleOnOff() {
+  btModuleOn = not btModuleOn;
+  if (btModuleOn)
+    mp3.playAdvertisement(advertTracks::t_320_bt_on , false/*olnyIfIsPlaying*/);
+  else
+    mp3.playAdvertisement(advertTracks::t_321_bt_off, false/*olnyIfIsPlaying*/);
+  digitalWrite(btModuleOnPin, getLevel(btModuleOnPinType, btModuleOn ? level::active : level::inactive));
+}
+
 void Tonuino::btModulePairing() {
   if (not btModulePairingTimer.isActive()) {
     mp3.playAdvertisement(advertTracks::t_322_bt_pairing, false/*olnyIfIsPlaying*/);
@@ -405,12 +414,7 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
 
 #ifdef BT_MODULE
   case pmode_t::bt_module:    LOG(card_log, s_info, F("toggle bt module from "), btModuleOn);
-                              btModuleOn = not btModuleOn;
-                              if (btModuleOn)
-                                mp3.playAdvertisement(advertTracks::t_320_bt_on , false/*olnyIfIsPlaying*/);
-                              else
-                                mp3.playAdvertisement(advertTracks::t_321_bt_off, false/*olnyIfIsPlaying*/);
-                              digitalWrite(btModuleOnPin, getLevel(btModuleOnPinType, btModuleOn ? level::active : level::inactive));
+                              switchBtModuleOnOff();
                               break;
 #endif // BT_MODULE
 
