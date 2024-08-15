@@ -381,6 +381,16 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
     return true;
   }
 
+#ifdef QUIZ_GAME
+  if (SM_tonuino::is_in_state<Quiz>() && nfcTag.mode != pmode_t::bt_module)
+    return false;
+#endif // QUIZ_GAME
+#ifdef MEMORY_GAME
+  if (SM_tonuino::is_in_state<Memory>() && nfcTag.mode != pmode_t::bt_module)
+    return false;
+#endif // MEMORY_GAME
+
+
   switch (nfcTag.mode) {
   case pmode_t::sleep_timer:  LOG(card_log, s_info, F("act. sleepTimer"));
                               mp3.playAdvertisement(advertTracks::t_302_sleep            , false/*olnyIfIsPlaying*/);
