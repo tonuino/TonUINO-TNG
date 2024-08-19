@@ -480,6 +480,12 @@ bool Base::readCard() {
   case Chip_card::readCardEvent::none : return false;
 
   case Chip_card::readCardEvent::known:
+#ifdef BT_MODULE
+    if (lastCardRead.mode == pmode_t::switch_bt) {
+      tonuino.switchBtModuleOnOff();
+      return false;
+    }
+#endif
     if (lastCardRead.folder == 0) {
       if (lastCardRead.mode == pmode_t::admin_card) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Admin_Entry());
