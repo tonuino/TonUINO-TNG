@@ -898,6 +898,7 @@ void StartPlay::react(command_e const &/*cmd_e*/) {
 void Quiz::entry() {
   LOG(state_log, s_info, str_enter(), str_Quiz());
   tonuino.disableStandbyTimer();
+  tonuino.resetActiveModifier();
   tonuino.playFolder();
   numAnswer   = tonuino.getMyFolder().special;
   numSolution = tonuino.getMyFolder().special2;
@@ -1139,6 +1140,7 @@ void Quiz::finish() {
 void Memory::entry() {
   LOG(state_log, s_info, str_enter(), str_Memory());
   tonuino.disableStandbyTimer();
+  tonuino.resetActiveModifier();
   tonuino.playFolder();
   first  = 0;
   second = 0;
