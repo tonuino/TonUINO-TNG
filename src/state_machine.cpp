@@ -140,7 +140,7 @@ void ChMode::entry() {
 
   folder = folderSettings{};
 
-  numberOfOptions   = 13;
+  numberOfOptions   = 14;
   startMessage      = mp3Tracks::t_310_select_mode;
   messageOffset     = mp3Tracks::t_310_select_mode;
   preview           = false;
@@ -169,7 +169,7 @@ void ChMode::react(command_e const &cmd_e) {
       transit<finished>();
       return;
     }
-    if (folder.mode == pmode_t::repeat_last) {
+    if (folder.mode == pmode_t::repeat_last || folder.mode == pmode_t::switch_bt) {
       folder.folder = 0xff; // dummy value > 0 to make readCard() returning true
       transit<finished>();
       return;
@@ -480,6 +480,12 @@ bool Base::readCard() {
   case Chip_card::readCardEvent::none : return false;
 
   case Chip_card::readCardEvent::known:
+#ifdef BT_MODULE
+    if (lastCardRead.mode == pmode_t::switch_bt) {
+      tonuino.switchBtModuleOnOff();
+      return false;
+    }
+#endif
     if (lastCardRead.folder == 0) {
       if (lastCardRead.mode == pmode_t::admin_card) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Admin_Entry());
@@ -515,6 +521,12 @@ bool Base::readCard() {
 bool Base::handleShortcut(uint8_t shortCut) {
   folderSettings sc_folderSettings = settings.getShortCut(shortCut);
   if (sc_folderSettings.folder != 0) {
+#ifdef BT_MODULE
+    if (sc_folderSettings.mode == pmode_t::switch_bt) {
+      tonuino.switchBtModuleOnOff();
+      return false; // do not end the current play
+    }
+#endif // BT_MODULE
     if (sc_folderSettings.mode != pmode_t::repeat_last)
       tonuino.setMyFolder(sc_folderSettings, false /*myFolderIsCard*/);
     if (tonuino.getFolder() != 0) {

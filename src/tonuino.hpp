@@ -69,6 +69,7 @@ public:
 
 #ifdef BT_MODULE
   bool isBtModuleOn() { return btModuleOn; }
+  void switchBtModuleOnOff();
   void btModulePairing();
 #endif
 
