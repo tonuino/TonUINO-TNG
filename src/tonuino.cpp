@@ -425,7 +425,7 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
 #ifdef BT_MODULE
   case pmode_t::bt_module:    LOG(card_log, s_info, F("toggle bt module from "), btModuleOn);
                               switchBtModuleOnOff();
-                              break;
+                              return true;
 #endif // BT_MODULE
 
   default:                    return false;
