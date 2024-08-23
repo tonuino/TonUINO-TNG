@@ -90,6 +90,9 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.11 geä
 
 # Change Log
 
+## Version 3.2.0 (23.08.2024)
+- [Issue 225](https://github.com/tonuino/TonUINO-TNG/issues/225): Support Nano Every with Atmega4808
+
 ## Version 3.1.12 (22.08.2024)
 - [Issue 222](https://github.com/tonuino/TonUINO-TNG/issues/222): Fix bug: TB modification card ends active game modification card
 - [Issue 220](https://github.com/tonuino/TonUINO-TNG/issues/220): New shortcut for switching BT on/off
