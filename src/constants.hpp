@@ -391,7 +391,7 @@ inline constexpr unsigned long dfPlayer_timeUntilStarts = 2500;
 #elif defined(DFMiniMp3_T_CHIP_GD3200B)
 inline constexpr unsigned long dfPlayer_timeUntilStarts = 1500;
 #else
-inline constexpr unsigned long dfPlayer_timeUntilStarts = 1000;
+inline constexpr unsigned long dfPlayer_timeUntilStarts = 1200;
 #endif
 
 // ####### tonuino #####################################
