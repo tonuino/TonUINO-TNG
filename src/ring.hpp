@@ -53,7 +53,7 @@ public:
   void call_on_sleep    () { setAll   (black); }
   void call_on_volume(uint8_t v)
                            { level    (v    ); }
-  void call_on_sleep_timer() { static uint8_t c = 0; if (++c%4==0) setAll   (orange*random(100,255)); }
+  void call_on_sleep_timer() { if (++fire_sim%4==0) setAll   (orange*random(100,255)); }
   void call_before_sleep(uint8_t r) { setAll   (orange*r); }
 
   void brightness_up    () { if (brightness < brightness_max) ++brightness; strip.setBrightness(brightness); }
@@ -79,6 +79,9 @@ private:
 
   // for rainbow()
   uint8_t pixelCycle { 0 };  // Pattern Pixel Cycle
+
+  // for sleep timer
+  uint8_t fire_sim = 0;
 
   direction dir;
 
