@@ -10,7 +10,7 @@
 #include "commands.hpp"
 #include "timer.hpp"
 
-#if not defined(ALLinONE_Plus) and not defined(TonUINO_Every)
+#if not defined(ALLinONE_Plus) and not defined(TonUINO_Every) and not defined(TonUINO_Every_4808)
 #define USE_TIMER1
 #define ROTARY_ENCODER_USES_TIMER1
 #endif

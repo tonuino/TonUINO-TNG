@@ -41,7 +41,7 @@ void Tonuino::setup() {
 #endif
 
 #if defined(BUTTONS3X3) or defined(BAT_VOLTAGE_MEASUREMENT)
-#if defined(ALLinONE_Plus) or defined(TonUINO_Every)
+#if defined(ALLinONE_Plus) or defined(TonUINO_Every) or defined(TonUINO_Every_4808)
   analogReference(INTERNAL2V5);
 #endif
 #ifdef ALLinONE

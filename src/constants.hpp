@@ -73,6 +73,7 @@
  */
 //#define TonUINO_Classic
 //#define TonUINO_Every
+//#define TonUINO_Every_4808
 //#define ALLinONE
 //#define ALLinONE_Plus
 
@@ -304,6 +305,9 @@ inline constexpr float   voltageMeasurementCorrection  = 1.960; // Spannungsteil
 #ifdef TonUINO_Every
 inline constexpr float   voltageMeasurementCorrection  = 2.007; // Spannungsteiler 100k/100k
 #endif
+#ifdef TonUINO_Every_4808
+inline constexpr float   voltageMeasurementCorrection  = 2.007; // Spannungsteiler 100k/100k
+#endif
 
 inline constexpr float   batVoltageLow                 = 2.95;
 inline constexpr float   batVoltageEmpty               = 2.90;
@@ -339,7 +343,7 @@ inline constexpr uint32_t  buttonLongPressRepeat =  200; // timeout for long pre
  ** Classic ****************************************************************
  ***************************************************************************/
 
-#if defined(TonUINO_Classic) or defined(TonUINO_Every)
+#if defined(TonUINO_Classic) or defined(TonUINO_Every) or defined(TonUINO_Every_4808)
 // ####### buttons #####################################
 
 inline constexpr uint8_t   buttonPausePin  = A0;
@@ -400,7 +404,7 @@ inline constexpr levelType     shutdownPinType  = levelType::activeLow;
 #endif
 inline constexpr uint8_t       openAnalogPin    = A7;
 inline constexpr unsigned long cycleTime        = 50;
-#endif /* TonUINO_Classic or TonUINO_Every */
+#endif /* TonUINO_Classic or TonUINO_Every or TonUINO_Every_4808 */
 
 /***************************************************************************
  ** AiO plus ***************************************************************
