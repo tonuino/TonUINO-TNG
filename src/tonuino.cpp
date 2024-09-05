@@ -139,6 +139,14 @@ void Tonuino::loop() {
   unsigned long  start_cycle = millis();
   checkStandby();
 
+  static bool is_playing = false;
+  LOG_CODE(play_log, s_info, {
+    if (is_playing != mp3.isPlaying()) {
+      is_playing = !is_playing;
+      LOG(play_log, s_info, F("isPlaying: "), is_playing);
+    }
+  } );
+
 #ifdef BAT_VOLTAGE_MEASUREMENT
   if (batVoltage.check())
     shutdown();
