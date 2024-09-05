@@ -1,5 +1,5 @@
 #include "constants.hpp"
-#ifdef TonUINO_Every
+#if defined(TonUINO_Every) and defined(ARDUINO_AVR_NANO_EVERY)
 
 #include <stdlib.h>
 
