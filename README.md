@@ -90,7 +90,8 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.11 geä
 
 # Change Log
 
-## Version 3.2.0 (28.08.2024)
+## Version 3.2.0 (05.09.2024)
+- [Issue 231](https://github.com/tonuino/TonUINO-TNG/issues/231): Fix logging of card data (bad order)
 - [Issue 229](https://github.com/tonuino/TonUINO-TNG/issues/229): playAdvertisement does not work for some DF Player
 - [Issue 228](https://github.com/tonuino/TonUINO-TNG/issues/228): NeoPixel for two Rings with Sleep modification card: no update on one ring
 - [Issue 226](https://github.com/tonuino/TonUINO-TNG/issues/226): Use MegaCoreX as Board package for Nano Every instead of Arduino megaAVR Boards
