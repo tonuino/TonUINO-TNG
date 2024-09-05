@@ -24,26 +24,25 @@ const __FlashStringHelper *str_MIFARE_Write() { return F("MIFARE_Write "); }
 /**
   Helper routine to dump a byte array as hex values to Serial.
 */
+constexpr size_t maxBuffferLogSize  = 10;
+char n16_hex(uint8_t number) {
+  if (number >=16)
+    return '?';
+  return (number > 9) ? (number - 10) + 'a' : number + '0';
+}
 void u8toa_hex(uint8_t number, char *arr) {
-  int pos = 0;
-  if (number < 16)
-    arr[pos++] = '0';
-  do {
-    const int r = number % 16;
-    arr[pos++] = (r > 9) ? (r - 10) + 'a' : r + '0';
-    number /= 16;
-  } while (number != 0);
+  arr[0] = n16_hex(number/16);
+  arr[1] = n16_hex(number%16);
 }
 const char* dump_byte_array(byte * buffer, uint8_t bufferSize) {
-  static char ret[3*10+1];
-  ret[0] = '\0';
-  if (bufferSize > 10)
-    return ret;
+  static char ret[3*maxBuffferLogSize+1];
+  if (bufferSize > maxBuffferLogSize)
+    bufferSize = maxBuffferLogSize;
   uint8_t pos = 0;
   for (uint8_t i = 0; i < bufferSize; ++i) {
-    ret[pos++] = ' ';
     u8toa_hex(buffer[i], &ret[pos]);
     pos +=2;
+    ret[pos++] = ' ';
   }
   ret[pos] = '\0';
   return ret;
