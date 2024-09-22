@@ -78,7 +78,7 @@ command Commands::getCommand(commandRaw b, state_for_command s) {
   }
 
   if (ret != command::none) {
-    LOG(button_log, s_info, F("Command: "), static_cast<uint8_t>(ret));
+    LOG(button_log, s_info, F("Command: "), static_cast<uint8_t>(b), F(" -> "), static_cast<uint8_t>(ret));
   }
   return ret;
 }

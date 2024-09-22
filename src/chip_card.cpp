@@ -235,10 +235,11 @@ void Chip_card::sleepCard() {
   mfrc522.PCD_SoftPowerDown();
 }
 
-void Chip_card::initCard() {
+uint8_t Chip_card::initCard() {
   SPI.begin();                                                    // Init SPI bus
   mfrc522.PCD_Init();                                             // Init MFRC522
-  LOG(card_log, s_info, F("MFRC522:"), mfrc522.PCD_ReadRegister(MFRC522::VersionReg));
+  byte ver = mfrc522.PCD_ReadRegister(MFRC522::VersionReg);
+  LOG(card_log, s_info, F("MFRC522:"), ver);
   // Show MFRC522 Card Reader version
   // 0 or 255: communication  error)
   //      136: (clone)
@@ -247,6 +248,7 @@ void Chip_card::initCard() {
   //      146: v2.0
   //       18: counterfeit chip
   //     else: unknown
+  return (ver == 0) || (ver == 255);
 }
 
 void Chip_card::stopCard() {

@@ -279,20 +279,25 @@ void Mp3::decreaseVolume() {
   logVolume();
 }
 
-void Mp3::setVolume() {
+uint8_t Mp3::setVolume() {
   spkVolume = settings.spkInitVolume;
 #ifdef HPJACKDETECT
   hpVolume  = settings.hpInitVolume;
 #endif
   LOG(mp3_log, s_debug, F("setVolume: "), volume);
-  uint8_t max_loop = 20; // 4 seconds
-  while((--max_loop>0) && (Base::getVolume() != *volume)) {
+  startTrackTimer.start(6000); // 6 seconds
+  while(!startTrackTimer.isExpired() && (Base::getVolume() != *volume)) {
     delay(100);
     Base::setVolume(*volume);
     delay(100);
   }
-  LOG(mp3_log, s_debug, F("setVolume loops: "), 20-max_loop);
+  if (!startTrackTimer.isActive())
+    return 1;
+  else
+    startTrackTimer.stop();
+
   logVolume();
+  return 0;
 }
 
 void Mp3::setVolume(uint8_t v) {

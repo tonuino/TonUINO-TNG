@@ -93,7 +93,9 @@ void Tonuino::setup() {
   delay(2000);
 
   // NFC Leser initialisieren
-  chip_card.initCard();
+  if (chip_card.initCard()) {
+    LOG(init_log, s_error, F("com to mfrc522 broken"));
+  }
 
   // RESET --- ALLE DREI KNÖPFE BEIM STARTEN GEDRÜCKT HALTEN -> alle EINSTELLUNGEN werden gelöscht
   if (buttons.isReset()) {
@@ -105,7 +107,9 @@ void Tonuino::setup() {
 #if defined SPKONOFF
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
 #endif
-  mp3.setVolume();
+  if (mp3.setVolume()) {
+    LOG(init_log, s_error, F("com to dfplayer broken"));
+  }
   mp3.setEq(static_cast<DfMp3_Eq>(settings.eq - 1));
   mp3.loop();
 
