@@ -62,6 +62,23 @@ Mp3::Mp3(Settings &settings)
 #endif
 }
 
+void Mp3::init() {
+  spkVolume = settings.spkInitVolume;
+#ifdef HPJACKDETECT
+  hpVolume  = settings.hpInitVolume;
+#endif
+
+  begin();
+  loop();
+
+  if (not setVolume())
+    LOG(init_log, s_error, F("Com to DFPlayer broken"));
+
+  setEq(static_cast<DfMp3_Eq>(settings.eq - 1));
+
+  loop();
+}
+
 bool Mp3::isPlaying() const {
   return !digitalRead(dfPlayer_busyPin);
 }
@@ -94,6 +111,9 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
   if (isPlaying()) {
     LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
+    delay(500);
+    waitForTrackToFinish(); // finish adv
+    waitForTrackToStart();  // start folder track
   }
   else if (not olnyIfIsPlaying) {
     if (isPause) {
@@ -279,25 +299,22 @@ void Mp3::decreaseVolume() {
   logVolume();
 }
 
-uint8_t Mp3::setVolume() {
-  spkVolume = settings.spkInitVolume;
-#ifdef HPJACKDETECT
-  hpVolume  = settings.hpInitVolume;
-#endif
+bool Mp3::setVolume() {
   LOG(mp3_log, s_debug, F("setVolume: "), volume);
   startTrackTimer.start(6000); // 6 seconds
-  while(!startTrackTimer.isExpired() && (Base::getVolume() != *volume)) {
+  while(not startTrackTimer.isExpired() && (Base::getVolume() != *volume)) {
+    loop();
     delay(100);
     Base::setVolume(*volume);
     delay(100);
   }
-  if (!startTrackTimer.isActive())
-    return 1;
-  else
+  if (not startTrackTimer.isActive()) {
+    return false;
+  } else {
     startTrackTimer.stop();
-
+  }
   logVolume();
-  return 0;
+  return true;
 }
 
 void Mp3::setVolume(uint8_t v) {

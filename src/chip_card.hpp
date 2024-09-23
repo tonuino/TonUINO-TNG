@@ -91,7 +91,7 @@ public:
   readCardEvent readCard (      folderSettings &nfcTag);
   bool writeCard         (const folderSettings &nfcTag);
   void sleepCard         ();
-  uint8_t initCard       ();
+  void initCard          ();
   cardEvent getCardEvent ();
   bool isCardRemoved     () { return cardRemoved; }
 

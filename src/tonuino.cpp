@@ -88,14 +88,8 @@ void Tonuino::setup() {
   LOG(init_log, s_debug, F("get last, folder: "), myFolder.folder, F(", mode: "), static_cast<uint8_t>(myFolder.mode));
 #endif
 
-  // DFPlayer Mini initialisieren
-  mp3.begin();
-  delay(2000);
-
   // NFC Leser initialisieren
-  if (chip_card.initCard()) {
-    LOG(init_log, s_error, F("com to mfrc522 broken"));
-  }
+  chip_card.initCard();
 
   // RESET --- ALLE DREI KNÖPFE BEIM STARTEN GEDRÜCKT HALTEN -> alle EINSTELLUNGEN werden gelöscht
   if (buttons.isReset()) {
@@ -103,20 +97,17 @@ void Tonuino::setup() {
     settings.loadSettingsFromFlash();
   }
 
-  // DFPlayer Mini initialisieren (2)
-#if defined SPKONOFF
-  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
-#endif
-  if (mp3.setVolume()) {
-    LOG(init_log, s_error, F("com to dfplayer broken"));
-  }
-  mp3.setEq(static_cast<DfMp3_Eq>(settings.eq - 1));
-  mp3.loop();
+  // DFPlayer Mini initialisieren
+  mp3.init();
 
   SM_tonuino::start();
 
   // ignore commands, if buttons already pressed during startup
   commands.getCommandRaw();
+
+#if defined SPKONOFF
+  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
+#endif
 
   // Start Shortcut "at Startup" - e.g. Welcome Sound
 #ifdef SPECIAL_START_SHORTCUT
