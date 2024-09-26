@@ -109,11 +109,8 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
   advPlaying = true;
 #endif
   if (isPlaying()) {
-    LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
+    LOG(mp3_log, s_debug, F("playAdvertisement()"));
     Base::playAdvertisement(track);
-    delay(500);
-    waitForTrackToFinish(); // finish adv
-    waitForTrackToStart();  // start folder track
   }
   else if (not olnyIfIsPlaying) {
     if (isPause) {
@@ -127,8 +124,11 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
     LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
     delay(dfPlayer_timeUntilStarts);
+    LOG(mp3_log, s_debug, F("before waitForTrackToFinish()"));
     waitForTrackToFinish(); // finish adv
+    LOG(mp3_log, s_debug, F("before waitForTrackToStart()"));
     waitForTrackToStart();  // start folder track
+    LOG(mp3_log, s_debug, F("after waitForTrackToStart()"));
     delay(10);
     pause();
     loop();
@@ -372,4 +372,10 @@ void Mp3::loop() {
     playCurrent();
   }
   Base::loop();
+
+  static bool old_playing = false;
+  if (old_playing != isPlaying()) {
+    old_playing = !old_playing;
+    LOG(mp3_log, s_info, F("playing changed to: "), old_playing);
+  }
 }
