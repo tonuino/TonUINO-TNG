@@ -252,8 +252,9 @@ public:
   uint8_t& getInitVolume() { return *initVolume; }
 
 #ifdef HPJACKDETECT
+  void hpjackdetect         ();
   bool isHeadphoneJackDetect() { return noHeadphoneJackDetect == level::inactive; }
-  void setTempSpkOn()          { tempSpkOn = 2; }
+  void setTempSpkOn         () { tempSpkOn = 2; }
 #endif
 
 private:

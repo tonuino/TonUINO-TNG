@@ -13,7 +13,7 @@ uint16_t Mp3Notify::lastTrackFinished = 0;
 
 void Mp3Notify::OnError(DfMp3&, uint16_t errorCode) {
   // see DfMp3_Error for code meaning
-  LOG(mp3_log, s_error, F("DfPlayer Error: "), errorCode);
+  LOG(mp3_log, s_error, F("DfPl Err: "), errorCode);
 }
 void Mp3Notify::OnPlaySourceOnline  (DfMp3&, DfMp3_PlaySources source) { PrintlnSourceAction(source, F("online"  )); }
 void Mp3Notify::OnPlaySourceInserted(DfMp3&, DfMp3_PlaySources source) { PrintlnSourceAction(source, F("bereit"  )); }
@@ -25,7 +25,7 @@ void Mp3Notify::PrintlnSourceAction(DfMp3_PlaySources source, const __FlashStrin
 }
 
 void Mp3Notify::OnPlayFinished(DfMp3&, DfMp3_PlaySources /*source*/, uint16_t track) {
-  LOG(mp3_log, s_info, F("Track beendet: "), track);
+  LOG(mp3_log, s_info, F("Track end: "), track);
   if (track == lastTrackFinished)
     return;
   else
@@ -328,9 +328,9 @@ void Mp3::logVolume() {
   LOG(mp3_log, s_info, F("Volume: "), *volume);
 }
 
-void Mp3::loop() {
-
 #ifdef HPJACKDETECT
+void Mp3::hpjackdetect() {
+
   level noHeadphoneJackDetect_now = getLevel(dfPlayer_noHeadphoneJackDetectType, digitalRead(dfPlayer_noHeadphoneJackDetect));
   if (tempSpkOn)
     noHeadphoneJackDetect_now = level::active;
@@ -353,8 +353,10 @@ void Mp3::loop() {
     Base::setVolume(*volume);
     logVolume();
   }
+}
 #endif
 
+void Mp3::loop() {
 
   if (not isPause && playing != play_none && startTrackTimer.isExpired() && not isPlaying()) {
     if (not missingOnPlayFinishedTimer.isActive())
@@ -372,10 +374,4 @@ void Mp3::loop() {
     playCurrent();
   }
   Base::loop();
-
-  static bool old_playing = false;
-  if (old_playing != isPlaying()) {
-    old_playing = !old_playing;
-    LOG(mp3_log, s_info, F("playing changed to: "), old_playing);
-  }
 }

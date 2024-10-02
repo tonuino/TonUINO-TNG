@@ -78,10 +78,66 @@ command Commands::getCommand(commandRaw b, state_for_command s) {
   }
 
   if (ret != command::none) {
-    LOG(button_log, s_info, F("Command: "), static_cast<uint8_t>(b), F(" -> "), static_cast<uint8_t>(ret));
+#ifdef ALLinONE
+    LOG(button_log, s_debug, F("btn/cmd: "), static_cast<uint8_t>(b), F("/"), static_cast<uint8_t>(ret));
+#else
+    LOG(button_log, s_info , F("btn/cmd: "), getCommandRawStr(b), F("/"), getCommandStr(ret));
+#endif
   }
   return ret;
 }
+
+const __FlashStringHelper* Commands::getCommandRawStr(commandRaw cmd) {
+  switch(cmd) {
+  case commandRaw::none          : return(F("none"          )); break;
+  case commandRaw::start         : return(F("start"         )); break;
+  case commandRaw::allLong       : return(F("allLong"       )); break;
+  case commandRaw::pause         : return(F("pause"         )); break;
+  case commandRaw::pauseLong     : return(F("pauseLong"     )); break;
+  case commandRaw::up            : return(F("up"            )); break;
+  case commandRaw::upLong        : return(F("upLong"        )); break;
+  case commandRaw::upLongRepeat  : return(F("upLongRepeat"  )); break;
+  case commandRaw::down          : return(F("down"          )); break;
+  case commandRaw::downLong      : return(F("downLong"      )); break;
+  case commandRaw::downLongRepeat: return(F("downLongRepeat")); break;
+  case commandRaw::updownLong    : return(F("updownLong"    )); break;
+#ifdef FIVEBUTTONS
+  case commandRaw::four          : return(F("four"          )); break;
+  case commandRaw::fourLong      : return(F("fourLong"      )); break;
+  case commandRaw::fourLongRepeat: return(F("fourLongRepeat")); break;
+  case commandRaw::five          : return(F("five"          )); break;
+  case commandRaw::fiveLong      : return(F("fiveLong"      )); break;
+  case commandRaw::fiveLongRepeat: return(F("fiveLongRepeat")); break;
+#endif
+  default                        : return(F(""              )); break;
+  }
+}
+
+const __FlashStringHelper* Commands::getCommandStr   (command    cmd) {
+  switch(cmd) {
+  case command::none       : return(F("none"       )); break;
+  case command::admin      : return(F("admin"      )); break;
+  case command::shutdown   : return(F("shutdown"   )); break;
+  case command::shortcut1  : return(F("shortcut1"  )); break;
+  case command::shortcut2  : return(F("shortcut2"  )); break;
+  case command::shortcut3  : return(F("shortcut3"  )); break;
+  case command::start      : return(F("start"      )); break;
+  case command::pause      : return(F("pause"      )); break;
+  case command::track      : return(F("track"      )); break;
+  case command::volume_up  : return(F("volume_up"  )); break;
+  case command::volume_down: return(F("volume_down")); break;
+  case command::bright_up  : return(F("bright_up"  )); break;
+  case command::bright_down: return(F("bright_down")); break;
+  case command::to_first   : return(F("to_first"   )); break;
+  case command::next       : return(F("next"       )); break;
+  case command::next10     : return(F("next10"     )); break;
+  case command::previous   : return(F("previous"   )); break;
+  case command::previous10 : return(F("previous10" )); break;
+  case command::select     : return(F("select"     )); break;
+  default                  : return(F(""           )); break;
+  }
+}
+
 
 uint8_t Commands::getButtonCode(commandRaw b) {
   switch (b) {

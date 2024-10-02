@@ -131,6 +131,9 @@ public:
   commandRaw getCommandRaw();
   command    getCommand   (commandRaw b, state_for_command s);
 
+  const __FlashStringHelper* getCommandRawStr(commandRaw cmd);
+  const __FlashStringHelper* getCommandStr   (command    cmd);
+
   static bool isSelect(command cmd) {
     return cmd == command::select
 #ifdef SerialInputAsCommand

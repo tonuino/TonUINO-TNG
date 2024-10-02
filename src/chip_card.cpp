@@ -253,7 +253,7 @@ void Chip_card::initCard() {
   //       18: counterfeit chip
   //     else: unknown
   if ((ver == 0) || (ver == 255))
-    LOG(card_log, s_error, F("com to mfrc522 broken"));
+    LOG(card_log, s_error, F("com to mfrc broken"));
 }
 
 void Chip_card::stopCard() {
@@ -278,7 +278,7 @@ cardEvent Chip_card::getCardEvent() {
 
   if (cardRemovedSwitch.on()) {
     if (not cardRemoved) {
-      LOG(card_log, s_info, F("Card Removed"));
+      LOG(card_log, s_info, F("Card Rem"));
       cardRemoved = true;
       stopCard();
       return cardEvent::removed;
@@ -286,7 +286,7 @@ cardEvent Chip_card::getCardEvent() {
   }
   else {
     if (cardRemoved) {
-      LOG(card_log, s_info, F("Card Inserted"));
+      LOG(card_log, s_info, F("Card Ins"));
       cardRemoved = false;
       return cardEvent::inserted;
     }

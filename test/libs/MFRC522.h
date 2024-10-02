@@ -186,6 +186,7 @@ public:
 	void PCD_Init() { called_Init = true; }
   bool called_AntennaOff = false;
 	void PCD_AntennaOff() { called_AntennaOff = true; }
+  bool PCD_PerformSelfTest() { return true; }
 	
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Power control functions
