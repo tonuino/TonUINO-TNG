@@ -216,7 +216,7 @@ TEST_F(tonuino_test_fixture, ToddlerMode_in_idle) {
   EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
 
   card_in({ 3, pmode_t::einzel, 4, 0 });
-  EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
+  EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay<Play>>());
   leave_start_play();
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   EXPECT_TRUE(getMp3().is_playing_folder());
@@ -291,7 +291,7 @@ TEST_F(tonuino_test_fixture, ToddlerMode_in_play) {
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
 
   card_in({ 3, pmode_t::einzel, 4, 0 });
-  EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
+  EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay<Play>>());
   leave_start_play();
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   EXPECT_TRUE(getMp3().is_playing_folder());
