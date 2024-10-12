@@ -91,7 +91,7 @@ public:
   void react(card_e    const &) override;
 };
 
-class StartPlay: public Base
+template<class P> class StartPlay: public Base
 {
 public:
   void entry() override;

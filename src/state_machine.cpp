@@ -533,19 +533,19 @@ bool Base::handleShortcut(uint8_t shortCut) {
 #ifdef QUIZ_GAME
       if (tonuino.getMyFolder().mode == pmode_t::quiz_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
-        transit<Quiz>();
+        transit<StartPlay<Quiz>>();
         return true;
       }
 #endif // QUIZ_GAME
 #ifdef MEMORY_GAME
       if (tonuino.getMyFolder().mode == pmode_t::memory_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Memory());
-        transit<Memory>();
+        transit<StartPlay<Memory>>();
         return true;
       }
 #endif // MEMORY_GAME
       LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
-      transit<StartPlay>();
+      transit<StartPlay<Play>>();
       return true;
     }
   }
@@ -560,19 +560,19 @@ void Base::handleReadCard() {
 #ifdef QUIZ_GAME
     if (tonuino.getMyFolder().mode == pmode_t::quiz_game) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
-      transit<Quiz>();
+      transit<StartPlay<Quiz>>();
       return;
     }
 #endif // QUIZ_GAME
 #ifdef MEMORY_GAME
       if (tonuino.getMyFolder().mode == pmode_t::memory_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Memory());
-        transit<Memory>();
+        transit<StartPlay<Memory>>();
         return;
       }
 #endif // MEMORY_GAME
     LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
-    transit<StartPlay>();
+    transit<StartPlay<Play>>();
   }
 }
 
@@ -655,19 +655,19 @@ void Idle::react(command_e const &cmd_e) {
 #ifdef QUIZ_GAME
       if (tonuino.getMyFolder().mode == pmode_t::quiz_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
-        transit<Quiz>();
+        transit<StartPlay<Quiz>>();
         return;
       }
 #endif // QUIZ_GAME
 #ifdef MEMORY_GAME
       if (tonuino.getMyFolder().mode == pmode_t::memory_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Memory());
-        transit<Memory>();
+        transit<StartPlay<Memory>>();
         return;
       }
 #endif // MEMORY_GAME
       LOG(state_log, s_debug, str_Idle(), str_to(), str_StartPlay());
-      transit<StartPlay>();
+      transit<StartPlay<Play>>();
       return;
     }
     break;
@@ -676,7 +676,7 @@ void Idle::react(command_e const &cmd_e) {
     case command::specialStart:
       tonuino.setMyFolder({specialStartShortcutFolder, pmode_t::einzel, specialStartShortcutTrack, 0}, true /*myFolderIsCard*/);
       LOG(state_log, s_debug, str_Idle(), str_to(), str_StartPlay());
-      transit<StartPlay>();
+      transit<StartPlay<Play>>();
       break;
 #endif
   default:
@@ -870,20 +870,20 @@ void Pause::react(card_e const &c_e) {
 
 // #######################################################
 
-void StartPlay::entry() {
+template<class P> void StartPlay<P>::entry() {
   LOG(state_log, s_info, str_enter(), str_StartPlay());
   mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
   timer.stop();
 }
 
-void StartPlay::react(command_e const &/*cmd_e*/) {
+template<class P> void StartPlay<P>::react(command_e const &/*cmd_e*/) {
   if (timer.isActive()) {
     if (timer.isExpired()) {
       LOG(state_log, s_debug, str_StartPlay(), str_to(), str_Play());
       if ((settings.pauseWhenCardRemoved==1) && chip_card.isCardRemoved() && tonuino.playingCard())
         transit<Pause>();
       else
-        transit<Play>();
+        transit<P>();
       return;
     }
   }
@@ -899,7 +899,6 @@ void Quiz::entry() {
   LOG(state_log, s_info, str_enter(), str_Quiz());
   tonuino.disableStandbyTimer();
   tonuino.resetActiveModifier();
-  tonuino.playFolder();
   numAnswer   = tonuino.getMyFolder().special;
   numSolution = tonuino.getMyFolder().special2;
   if (numAnswer != 0 and numAnswer != 2 and numAnswer != 4) {
@@ -1141,7 +1140,6 @@ void Memory::entry() {
   LOG(state_log, s_info, str_enter(), str_Memory());
   tonuino.disableStandbyTimer();
   tonuino.resetActiveModifier();
-  tonuino.playFolder();
   first  = 0;
   second = 0;
 
