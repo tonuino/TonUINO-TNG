@@ -123,6 +123,7 @@ void Tonuino::setup() {
     SM_tonuino::dispatch(command_e(commandRaw::start));
 }
 
+#ifdef USE_TIMER
 void Tonuino::setup_timer() {
   // enable timer with 200 Hz (5 ms)
 #if defined(ALLinONE_Plus) or defined(TonUINO_Every) or defined(TonUINO_Every_4808)
@@ -151,6 +152,7 @@ void Tonuino::setup_timer() {
   sei();//allow interrupts
 #endif
 }
+#endif // USE_TIMER
 
 void Tonuino::setup_adc() {
 #if defined(ALLinONE_Plus) or defined(TonUINO_Every) or defined(TonUINO_Every_4808)
