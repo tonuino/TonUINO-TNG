@@ -16,38 +16,28 @@ const __FlashStringHelper* str_bis      () { return F(" bis "); }
 
 } // anonymous namespace
 
-#ifdef USE_TIMER1
+#ifdef USE_TIMER
+#if defined(ALLinONE_Plus) or defined(TonUINO_Every) or defined(TonUINO_Every_4808)
+ISR(TCA0_OVF_vect) {
+  TCA0.SINGLE.INTFLAGS = TCA_SINGLE_OVF_bm;
+#else // classic with nano, AiO
 ISR(TIMER1_COMPA_vect){
   TCNT1  = 0;
-#ifdef ROTARY_ENCODER_USES_TIMER1
+#endif
+
+#ifdef ROTARY_ENCODER_USES_TIMER
   RotaryEncoder::timer_loop();
 #endif
 }
 #endif
 
 void Tonuino::setup() {
-#ifdef USE_TIMER1
-  cli();//stop interrupts
-
-  TCCR1A = 0;              // set entire TCCR1A register to 0
-  TCCR1B = 0;              // same for TCCR1B
-  TCNT1  = 0;              // initialize counter value to 0;
-  OCR1A  = 10000U;         // set timer count for frequency = (16*10^6) / (F*8) - 1, F=200Hz
-  TCCR1B |= (1 << WGM12);  // turn on CTC mode
-  TCCR1B |= (1 << CS11);   // Set CS11 bit for 8 prescaler
-  TIMSK1 |= (1 << OCIE1A); // enable timer compare interrupt
-
-  sei();//allow interrupts
+#ifdef USE_TIMER
+  setup_timer();
 #endif
 
 #if defined(BUTTONS3X3) or defined(BAT_VOLTAGE_MEASUREMENT)
-#if defined(ALLinONE_Plus) or defined(TonUINO_Every) or defined(TonUINO_Every_4808)
-  analogReference(INTERNAL2V5);
-#endif
-#ifdef ALLinONE
-  analogReference(INTERNAL2V048);
-  analogReadResolution(12);
-#endif
+  setup_adc();
 #endif
 
   pinMode(shutdownPin  , OUTPUT);
@@ -55,6 +45,7 @@ void Tonuino::setup() {
 
   randomSeed(generateRamdomSeed());
 
+  // speaker switch off
 #if defined SPKONOFF
   pinMode(ampEnablePin, OUTPUT);
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
@@ -88,23 +79,25 @@ void Tonuino::setup() {
   LOG(init_log, s_debug, F("get last, folder: "), myFolder.folder, F(", mode: "), static_cast<uint8_t>(myFolder.mode));
 #endif
 
-  // NFC Leser initialisieren
+  // init NFC reader
   chip_card.initCard();
 
-  // RESET --- ALLE DREI KNÖPFE BEIM STARTEN GEDRÜCKT HALTEN -> alle EINSTELLUNGEN werden gelöscht
+  // RESET flash if all buttons pressed
   if (buttons.isReset()) {
     settings.clearEEPROM();
     settings.loadSettingsFromFlash();
   }
 
-  // DFPlayer Mini initialisieren
+  // init DFPlayer Mini
   mp3.init();
 
+  // init state machine
   SM_tonuino::start();
 
   // ignore commands, if buttons already pressed during startup
   commands.getCommandRaw();
 
+  // speaker switch on
 #if defined SPKONOFF
   digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
 #endif
@@ -126,7 +119,49 @@ void Tonuino::setup() {
 
 #endif // SPECIAL_START_SHORTCUT
 
+    // play start track
     SM_tonuino::dispatch(command_e(commandRaw::start));
+}
+
+#ifdef USE_TIMER
+void Tonuino::setup_timer() {
+  // enable timer with 200 Hz (5 ms)
+#if defined(ALLinONE_Plus) or defined(TonUINO_Every) or defined(TonUINO_Every_4808)
+  //ATMega4809 runs at 16MHz without Main Clock Prescaller and default is TCA_SINGLE_CLKSEL_DIV64_gc
+  //4us per tick
+
+  TCA0.SINGLE.INTCTRL = TCA_SINGLE_OVF_bm; //enable overflow interrupt
+  TCA0.SINGLE.CTRLB = TCA_SINGLE_WGMODE_NORMAL_gc;//timer mode may break pwm
+
+  //5ms = 1250 x .000004  set H and L period registers
+  TCA0.SINGLE.PERL = lowByte(1250);
+  TCA0.SINGLE.PERH = highByte(1250);
+
+  TCA0.SINGLE.CTRLA  |= TCA_SINGLE_ENABLE_bm;
+#else // classic with nano, AiO
+  cli();//stop interrupts
+
+  TCCR1A = 0;              // set entire TCCR1A register to 0
+  TCCR1B = 0;              // same for TCCR1B
+  TCNT1  = 0;              // initialize counter value to 0;
+  OCR1A  = 10000U;         // set timer count for frequency = (16*10^6) / (F*8) - 1, F=200Hz
+  TCCR1B |= (1 << WGM12);  // turn on CTC mode
+  TCCR1B |= (1 << CS11);   // Set CS11 bit for 8 prescaler
+  TIMSK1 |= (1 << OCIE1A); // enable timer compare interrupt
+
+  sei();//allow interrupts
+#endif
+}
+#endif // USE_TIMER
+
+void Tonuino::setup_adc() {
+#if defined(ALLinONE_Plus) or defined(TonUINO_Every) or defined(TonUINO_Every_4808)
+  analogReference(INTERNAL2V5);
+#endif
+#ifdef ALLinONE
+  analogReference(INTERNAL2V048);
+  analogReadResolution(12);
+#endif
 }
 
 void Tonuino::loop() {
@@ -274,6 +309,11 @@ void Tonuino::playFolder() {
   }
     break;
 
+  case pmode_t::quiz_game:
+  case pmode_t::memory_game:
+    // Nothing to enqueue here
+    break;
+
   default:
     break;
   }
@@ -317,7 +357,7 @@ void Tonuino::previousTrack(uint8_t tracks) {
   }
 }
 
-// Funktionen für den Standby Timer (z.B. über Pololu-Switch oder Mosfet)
+// functions for the standby timer (e.g.. with Pololu-Switch or Mosfet)
 void Tonuino::setStandbyTimer() {
   LOG(standby_log, s_debug, F("setStandbyTimer"));
   if (settings.standbyTimer != 0 && not standbyTimer.isActive()) {

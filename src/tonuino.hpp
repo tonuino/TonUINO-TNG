@@ -75,6 +75,9 @@ public:
 
 private:
 
+  void setup_timer();
+  void setup_adc();
+
   void checkStandby();
 
   bool specialCard(const folderSettings &nfcTag);
