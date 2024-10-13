@@ -169,7 +169,14 @@ void Tonuino::loop() {
 #endif // NEO_RING_EXT
   if (SM_tonuino::is_in_state<Idle>())
     ring.call_on_idle();
-  else if (SM_tonuino::is_in_state<StartPlay>())
+  else if (SM_tonuino::is_in_state<StartPlay<Play>>()
+#ifdef QUIZ_GAME
+        || SM_tonuino::is_in_state<StartPlay<Quiz>>()
+#endif
+#ifdef MEMORY_GAME
+        || SM_tonuino::is_in_state<StartPlay<Memory>>()
+#endif
+          )
     ring.call_on_startPlay();
   else if (SM_tonuino::is_in_state<Play>())
     ring.call_on_play();

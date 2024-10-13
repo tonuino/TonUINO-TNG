@@ -332,11 +332,11 @@ public:
   void goto_play(const folderSettings& card, uint16_t track_count = 99) {
     goto_idle();
     card_in(card, track_count);
-    EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
+    EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay<Play>>());
 
     // play t_262_pling
     execute_cycle();
-    EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
+    EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay<Play>>());
     EXPECT_TRUE(getMp3().is_playing_mp3());
     EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_262_pling));
 
@@ -422,7 +422,7 @@ public:
   void leave_start_play() {
     // play t_262_pling
     execute_cycle();
-    EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay>());
+    EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay<Play>>());
     EXPECT_TRUE(getMp3().is_playing_mp3());
     EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_262_pling));
 
