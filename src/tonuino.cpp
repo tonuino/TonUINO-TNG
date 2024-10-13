@@ -396,6 +396,10 @@ void Tonuino::shutdown() {
   digitalWrite(shutdownPin, getLevel(shutdownPinType, level::active));
   delay(500);
 
+#ifdef USE_POLOLU_SHUTDOWN
+  return;
+#endif
+
   // http://discourse.voss.earth/t/intenso-s10000-powerbank-automatische-abschaltung-software-only/805
   // powerdown to 27mA (powerbank switches off after 30-60s)
   chip_card.sleepCard();

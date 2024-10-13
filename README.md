@@ -90,7 +90,8 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.11 geä
 
 # Change Log
 
-## Version 3.2.1 (12.10.2024)
+## Version 3.2.1 (13.10.2024)
+- [Issue 238](https://github.com/tonuino/TonUINO-TNG/issues/238): Pololu sometimes does not switch off in sleep mode
 - [Issue 240](https://github.com/tonuino/TonUINO-TNG/issues/240): Some code restructuring
 - [Issue 239](https://github.com/tonuino/TonUINO-TNG/issues/239): Starting Quiz or Memory game the "pling" is missing
 - [Issue 236](https://github.com/tonuino/TonUINO-TNG/issues/236): Improve hardware diagnostic on startup
