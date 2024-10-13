@@ -389,7 +389,7 @@ inline constexpr levelType     dfPlayer_busyPinType     = levelType::activeHigh;
 #if defined(DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0)
 inline constexpr unsigned long dfPlayer_timeUntilStarts = 2500;
 #elif defined(DFMiniMp3_T_CHIP_GD3200B)
-inline constexpr unsigned long dfPlayer_timeUntilStarts = 1500;
+inline constexpr unsigned long dfPlayer_timeUntilStarts = 2500;
 #else
 inline constexpr unsigned long dfPlayer_timeUntilStarts = 1200;
 #endif

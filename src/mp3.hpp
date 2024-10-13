@@ -203,6 +203,7 @@ public:
 
   Mp3(Settings& settings);
 
+  void init();
   bool isPlaying() const;
   void waitForTrackToFinish();
   void waitForTrackToStart();
@@ -237,7 +238,7 @@ public:
 
   void increaseVolume();
   void decreaseVolume();
-  void setVolume     ();
+  bool setVolume     ();
   void setVolume     (uint8_t);
 #ifdef NEO_RING_EXT
   uint8_t getVolumeRel() const { return static_cast<uint16_t>(*volume-*minVolume)*0xff/(*maxVolume-*minVolume); }
@@ -251,8 +252,9 @@ public:
   uint8_t& getInitVolume() { return *initVolume; }
 
 #ifdef HPJACKDETECT
+  void hpjackdetect         ();
   bool isHeadphoneJackDetect() { return noHeadphoneJackDetect == level::inactive; }
-  void setTempSpkOn()          { tempSpkOn = 2; }
+  void setTempSpkOn         () { tempSpkOn = 2; }
 #endif
 
 private:

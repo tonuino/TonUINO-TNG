@@ -17,13 +17,13 @@ Settings       &settings  = tonuino.getSettings();
 Chip_card      &chip_card = tonuino.getChipCard();
 
 const __FlashStringHelper* str_ChMode                  () { return F("ChMode") ; }
-const __FlashStringHelper* str_ChFolder                () { return F("ChFolder") ; }
-const __FlashStringHelper* str_ChTrack                 () { return F("ChTrack") ; }
-const __FlashStringHelper* str_ChFirstTrack            () { return F("ChFirstTrack") ; }
-const __FlashStringHelper* str_ChLastTrack             () { return F("ChLastTrack") ; }
-const __FlashStringHelper* str_ChNumAnswer             () { return F("ChNumAnswer") ; }
-const __FlashStringHelper* str_ChNumTracks             () { return F("ChNumTracks") ; }
-const __FlashStringHelper* str_WriteCard               () { return F("WriteCard") ; }
+const __FlashStringHelper* str_ChFolder                () { return F("ChFold") ; }
+const __FlashStringHelper* str_ChTrack                 () { return F("ChTr") ; }
+const __FlashStringHelper* str_ChFirstTrack            () { return F("ChFTr") ; }
+const __FlashStringHelper* str_ChLastTrack             () { return F("ChLTr") ; }
+const __FlashStringHelper* str_ChNumAnswer             () { return F("ChNumAnsw") ; }
+const __FlashStringHelper* str_ChNumTracks             () { return F("ChNumTr") ; }
+const __FlashStringHelper* str_WriteCard               () { return F("WriteC") ; }
 const __FlashStringHelper* str_Base                    () { return F("Base") ; }
 const __FlashStringHelper* str_Idle                    () { return F("Idle") ; }
 const __FlashStringHelper* str_StartPlay               () { return F("StartPlay") ; }
@@ -31,24 +31,24 @@ const __FlashStringHelper* str_Play                    () { return F("Play") ; }
 const __FlashStringHelper* str_Pause                   () { return F("Pause") ; }
 const __FlashStringHelper* str_Quiz                    () { return F("Quiz") ; }
 const __FlashStringHelper* str_Memory                  () { return F("Memory") ; }
-const __FlashStringHelper* str_Admin_BaseSetting       () { return F("AdmBaseSetting") ; }
-const __FlashStringHelper* str_Admin_BaseWriteCard     () { return F("AdmBaseWriteCard") ; }
+const __FlashStringHelper* str_Admin_BaseSetting       () { return F("AdmBaseSet") ; }
+const __FlashStringHelper* str_Admin_BaseWriteCard     () { return F("AdmBaseWC") ; }
 const __FlashStringHelper* str_Admin_Allow             () { return F("AdmAllow") ; }
 const __FlashStringHelper* str_Admin_Entry             () { return F("AdmEntry") ; }
-const __FlashStringHelper* str_Admin_NewCard           () { return F("AdmNewCard") ; }
-const __FlashStringHelper* str_Admin_SimpleSetting     () { return F("AdmSimpleSetting") ; }
-const __FlashStringHelper* str_Admin_ModCard           () { return F("AdmModCard") ; }
+const __FlashStringHelper* str_Admin_NewCard           () { return F("AdmNCard") ; }
+const __FlashStringHelper* str_Admin_SimpleSetting     () { return F("AdmSimpleSet") ; }
+const __FlashStringHelper* str_Admin_ModCard           () { return F("AdmModC") ; }
 const __FlashStringHelper* str_Admin_ShortCut          () { return F("AdmShortCut") ; }
-const __FlashStringHelper* str_Admin_StandbyTimer      () { return F("AdmStandbyTimer") ; }
-const __FlashStringHelper* str_Admin_CardsForFolder    () { return F("AdmCardsForFolder") ; }
-const __FlashStringHelper* str_Admin_InvButtons        () { return F("AdmInvButtons") ; }
-const __FlashStringHelper* str_Admin_ResetEeprom       () { return F("AdmResetEeprom") ; }
-const __FlashStringHelper* str_Admin_LockAdmin         () { return F("AdmLockAdmin") ; }
-const __FlashStringHelper* str_Admin_PauseIfCardRemoved() { return F("AdmPauseIfCardRem") ; }
+const __FlashStringHelper* str_Admin_StandbyTimer      () { return F("AdmStbT") ; }
+const __FlashStringHelper* str_Admin_CardsForFolder    () { return F("AdmCardsFFold") ; }
+const __FlashStringHelper* str_Admin_InvButtons        () { return F("AdmInvBut") ; }
+const __FlashStringHelper* str_Admin_ResetEeprom       () { return F("AdmREeprom") ; }
+const __FlashStringHelper* str_Admin_LockAdmin         () { return F("AdmLAdm") ; }
+const __FlashStringHelper* str_Admin_PauseIfCardRemoved() { return F("AdmPIfCRem") ; }
 #ifdef MEMORY_GAME
-const __FlashStringHelper* str_Admin_MemoryGameCards   () { return F("Admin_MemoryGameCards") ; }
+const __FlashStringHelper* str_Admin_MemoryGameCards   () { return F("AdmMemoryGameCards") ; }
 #endif
-const __FlashStringHelper* str_VoiceMenu               () { return F("VoiceMenu") ; }
+const __FlashStringHelper* str_VoiceMenu               () { return F("VMenu") ; }
 const __FlashStringHelper* str_to                      () { return F(" -> ") ; }
 const __FlashStringHelper* str_enter                   () { return F("enter ") ; }
 const __FlashStringHelper* str_abort                   () { return F(" abort") ; }
@@ -162,7 +162,7 @@ void ChMode::react(command_e const &cmd_e) {
 
   if (Commands::isSelect(cmd) && (currentValue != 0)) {
     folder.mode = static_cast<pmode_t>(currentValue);
-    LOG(state_log, s_info, str_ChMode(), F(": "), currentValue);
+    LOG(state_log, s_debug, str_ChMode(), F(": "), currentValue);
     if (folder.mode == pmode_t::admin) {
       folder.folder = 0;
       folder.mode = pmode_t::admin_card;
@@ -218,7 +218,7 @@ void ChFolder::react(command_e const &cmd_e) {
 
   if (Commands::isSelect(cmd) && (currentValue != 0)) {
     folder.folder = currentValue;
-    LOG(state_log, s_info, str_ChFolder(), F(": "), currentValue);
+    LOG(state_log, s_debug, str_ChFolder(), F(": "), currentValue);
 #ifdef QUIZ_GAME
     if (folder.mode == pmode_t::quiz_game) {
       transit<ChNumAnswer>();
@@ -271,7 +271,7 @@ void ChTrack::react(command_e const &cmd_e) {
 
   if (Commands::isSelect(cmd) && (currentValue != 0)) {
     folder.special = currentValue;
-    LOG(state_log, s_info, str_ChTrack(), F(": "), currentValue);
+    LOG(state_log, s_debug, str_ChTrack(), F(": "), currentValue);
     transit<finished>();
     return;
   }
@@ -304,7 +304,7 @@ void ChFirstTrack::react(command_e const &cmd_e) {
 
   if (Commands::isSelect(cmd) && (currentValue != 0)) {
     folder.special = currentValue;
-    LOG(state_log, s_info, str_ChFirstTrack(), F(": "), currentValue);
+    LOG(state_log, s_debug, str_ChFirstTrack(), F(": "), currentValue);
     transit<ChLastTrack>();
     return;
   }
@@ -339,7 +339,7 @@ void ChLastTrack::react(command_e const &cmd_e) {
 
   if (Commands::isSelect(cmd) && (currentValue != 0)) {
     folder.special2 = currentValue;
-    LOG(state_log, s_info, str_ChLastTrack(), F(": "), currentValue);
+    LOG(state_log, s_debug, str_ChLastTrack(), F(": "), currentValue);
     transit<finished>();
     return;
   }
@@ -381,7 +381,7 @@ void ChNumAnswer::react(command_e const &cmd_e) {
       folder.special  = ((currentValue-1)%2+1)*2;
       folder.special2 = (currentValue-1) / 2;
     }
-    LOG(state_log, s_info, str_ChNumAnswer(), F(": "), currentValue);
+    LOG(state_log, s_debug, str_ChNumAnswer(), F(": "), currentValue);
     transit<finished>();
     return;
   }
@@ -416,7 +416,7 @@ void ChNumTracks::react(command_e const &cmd_e) {
 
   if (Commands::isSelect(cmd) && (currentValue != 0)) {
     folder.special  = currentValue-1;
-    LOG(state_log, s_info, str_ChNumTracks(), F(": "), currentValue);
+    LOG(state_log, s_debug, str_ChNumTracks(), F(": "), currentValue);
     transit<finished>();
     return;
   }

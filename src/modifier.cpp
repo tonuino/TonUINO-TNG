@@ -19,9 +19,9 @@ const __FlashStringHelper* str_RepeatSingleModifier() { return F("RepeatSingle")
 
 void SleepTimer::loop() {
   if (sleepTimer.isActive() && sleepTimer.isExpired()) {
-    LOG(modifier_log, s_info, str_SleepTimer(), F(" -> expired"));
+    LOG(modifier_log, s_debug, str_SleepTimer(), F(" -> expired"));
     if (not stopAfterTrackFinished || stopAfterTrackFinished_active) {
-      LOG(modifier_log, s_info, str_SleepTimer(), F(" -> SLEEP!"));
+      LOG(modifier_log, s_debug, str_SleepTimer(), F(" -> SLEEP!"));
       if (SM_tonuino::is_in_state<Play>())
         SM_tonuino::dispatch(command_e(commandRaw::pause));
       fired = true;
@@ -35,7 +35,7 @@ void SleepTimer::loop() {
 }
 bool SleepTimer::handleNext() {
   if (stopAfterTrackFinished_active) {
-    LOG(modifier_log, s_info, str_SleepTimer(), F(" -> SLEEP!"));
+    LOG(modifier_log, s_debug, str_SleepTimer(), F(" -> SLEEP!"));
     mp3.clearFolderQueue();
     stopAfterTrackFinished_active = false;
     sleepTimer.stop();
@@ -46,7 +46,7 @@ bool SleepTimer::handleNext() {
 }
 
 void SleepTimer::init(pmode_t, uint8_t special /* is minutes*/) {
-  LOG(modifier_log, s_info, str_SleepTimer(), F(" minutes: "), special);
+  LOG(modifier_log, s_debug, str_SleepTimer(), F(" minutes: "), special);
   fired = false;
   stopAfterTrackFinished_active = false;
   if (special > 0x80) {
@@ -76,7 +76,7 @@ bool SleepTimer::handleRFID(const folderSettings &/*newCard*/) {
 
 
 void DanceGame::init(pmode_t a_mode, uint8_t a_t) {
-  LOG(modifier_log, s_info, str_danceGame(), F("t : "), a_t);
+  LOG(modifier_log, s_debug, str_danceGame(), F("t : "), a_t);
   mode = a_mode;
   if (mode == pmode_t::fi_wa_ai) lastFiWaAi = random(0, 3);
   setNextStop(true /*addAdvTime*/);
@@ -92,12 +92,12 @@ void DanceGame::loop() {
     if (stopTimer.isExpired()) {
       switch (mode) {
       case pmode_t::freeze_dance:
-        LOG(modifier_log, s_info, str_danceGame(), F(" -> FREEZE!"));
+        LOG(modifier_log, s_debug, str_danceGame(), F(" -> FREEZE!"));
         mp3.playAdvertisement(advertTracks::t_301_freeze_freeze);
         setNextStop(true /*addAdvTime*/);
         break;
       case pmode_t::fi_wa_ai:
-        LOG(modifier_log, s_info, str_danceGame(), F(" -> Action! "));
+        LOG(modifier_log, s_debug, str_danceGame(), F(" -> Action! "));
         lastFiWaAi = (lastFiWaAi+random(1, 3))%3;
         mp3.playAdvertisement(static_cast<uint16_t>(advertTracks::t_306_fire)+lastFiWaAi);
         setNextStop(true /*addAdvTime*/);
@@ -121,13 +121,13 @@ void DanceGame::setNextStop(bool addAdvTime) {
       default:                                                              break;
     }
   }
-  LOG(modifier_log, s_info, str_danceGame(), F(" next stop in "), seconds);
+  LOG(modifier_log, s_debug, str_danceGame(), F(" next stop in "), seconds);
   stopTimer.start(seconds * 1000);
 }
 
 bool KindergardenMode::handleNext() {
   if (cardQueued) {
-    LOG(modifier_log, s_info, str_KindergardenMode(), F(" -> NEXT"));
+    LOG(modifier_log, s_debug, str_KindergardenMode(), F(" -> NEXT"));
     cardQueued = false;
 
     tonuino.setMyFolder(nextCard, true /*myFolderIsCard*/);
@@ -143,7 +143,7 @@ bool KindergardenMode::handleRFID(const folderSettings &newCard) {
     return false;
 
   if (!cardQueued) {
-    LOG(modifier_log, s_info, str_KindergardenMode(), F(" -> queued!"));
+    LOG(modifier_log, s_debug, str_KindergardenMode(), F(" -> queued!"));
     nextCard = newCard;
     cardQueued = true;
   }
@@ -160,7 +160,7 @@ bool KindergardenMode::handleButton(command cmd) {
 
 
 bool RepeatSingleModifier::handleNext() {
-  LOG(modifier_log, s_info, str_RepeatSingleModifier(), F(" -> REPEAT"));
+  LOG(modifier_log, s_debug, str_RepeatSingleModifier(), F(" -> REPEAT"));
   mp3.loop(); // WA: this will call again Mp3Notify::OnPlayFinished() (error in DFMiniMp3 lib)
               //     but will be blocked by lastTrackFinished
   Mp3Notify::ResetLastTrackFinished(); // unblock this track so that it can be repeated

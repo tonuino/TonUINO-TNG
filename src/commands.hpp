@@ -41,33 +41,33 @@ fiveLong   prev 10                             vol-- cont.
 */
 
 enum class commandRaw: uint8_t {
-  none,
-  start,
-  allLong,
-  pause,
-  pauseLong,
-  up,
-  upLong,
-  upLongRepeat,
-  down,
-  downLong,
-  downLongRepeat,
-  updownLong,
+  none           =  0,
+  start          =  1,
+  allLong        =  2,
+  pause          =  3,
+  pauseLong      =  4,
+  up             =  5,
+  upLong         =  6,
+  upLongRepeat   =  7,
+  down           =  8,
+  downLong       =  9,
+  downLongRepeat = 10,
+  updownLong     = 11,
 #ifdef FIVEBUTTONS
-  four,
-  fourLong,
-  fourLongRepeat,
-  five,
-  fiveLong,
-  fiveLongRepeat,
+  four           = 12,
+  fourLong       = 13,
+  fourLongRepeat = 14,
+  five           = 15,
+  fiveLong       = 16,
+  fiveLongRepeat = 17,
 #endif
 #ifdef SPECIAL_START_SHORTCUT
-  specialStart,
+  specialStart   = 18,
 #endif
 #ifdef SerialInputAsCommand
-  menu_jump,
+  menu_jump      = 19,
 #endif
-  cmd_end,
+  cmd_end        = 20,
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
   ext_end   = ext_begin +  buttonExtSC_buttons,
@@ -75,32 +75,32 @@ enum class commandRaw: uint8_t {
 };
 
 enum class command: uint8_t {
-  none,
+  none        =  0,
   // play/pause/idle
-  admin,
-  shutdown,
-  shortcut1,
-  shortcut2,
-  shortcut3,
-  start,
-  pause,
-  track,
-  volume_up,
-  volume_down,
-  bright_up,
-  bright_down,
-  to_first,
+  admin       =  1,
+  shutdown    =  2,
+  shortcut1   =  3,
+  shortcut2   =  4,
+  shortcut3   =  5,
+  start       =  6,
+  pause       =  7,
+  track       =  8,
+  volume_up   =  9,
+  volume_down = 10,
+  bright_up   = 11,
+  bright_down = 12,
+  to_first    = 13,
   // play/pause/idle/adm
-  next,
-  next10,
-  previous,
-  previous10,
+  next        = 14,
+  next10      = 15,
+  previous    = 16,
+  previous10  = 17,
   // adm
-  select,
+  select      = 18,
 #ifdef SerialInputAsCommand
-  menu_jump,
+  menu_jump   = 19,
 #endif
-  adm_end,
+  adm_end     = 20,
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
   ext_end   = ext_begin +  buttonExtSC_buttons,
@@ -130,6 +130,9 @@ public:
 
   commandRaw getCommandRaw();
   command    getCommand   (commandRaw b, state_for_command s);
+
+  const __FlashStringHelper* getCommandRawStr(commandRaw cmd);
+  const __FlashStringHelper* getCommandStr   (command    cmd);
 
   static bool isSelect(command cmd) {
     return cmd == command::select

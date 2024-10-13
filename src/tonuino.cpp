@@ -88,10 +88,6 @@ void Tonuino::setup() {
   LOG(init_log, s_debug, F("get last, folder: "), myFolder.folder, F(", mode: "), static_cast<uint8_t>(myFolder.mode));
 #endif
 
-  // DFPlayer Mini initialisieren
-  mp3.begin();
-  delay(2000);
-
   // NFC Leser initialisieren
   chip_card.initCard();
 
@@ -101,18 +97,17 @@ void Tonuino::setup() {
     settings.loadSettingsFromFlash();
   }
 
-  // DFPlayer Mini initialisieren (2)
-#if defined SPKONOFF
-  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
-#endif
-  mp3.setVolume();
-  mp3.setEq(static_cast<DfMp3_Eq>(settings.eq - 1));
-  mp3.loop();
+  // DFPlayer Mini initialisieren
+  mp3.init();
 
   SM_tonuino::start();
 
   // ignore commands, if buttons already pressed during startup
   commands.getCommandRaw();
+
+#if defined SPKONOFF
+  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
+#endif
 
   // Start Shortcut "at Startup" - e.g. Welcome Sound
 #ifdef SPECIAL_START_SHORTCUT
@@ -152,6 +147,9 @@ void Tonuino::loop() {
     shutdown();
 #endif
 
+#ifdef HPJACKDETECT
+  mp3.hpjackdetect();
+#endif
   mp3.loop();
 
   activeModifier->loop();
@@ -218,8 +216,8 @@ void Tonuino::playFolder() {
     /* no break */
   case pmode_t::hoerspiel_vb:
     // Spezialmodus Von-Bin: Hörspiel: eine zufällige Datei aus dem Ordner
-    LOG(play_log, s_info, F("Hörspiel"));
-    LOG(play_log, s_info, myFolder.special, str_bis(), myFolder.special2);
+    LOG(play_log, s_debug, F("Hörspiel"));
+    LOG(play_log, s_debug, myFolder.special, str_bis(), myFolder.special2);
     mp3.enqueueTrack(myFolder.folder, random(myFolder.special, myFolder.special2 + 1));
     break;
 
@@ -231,8 +229,8 @@ void Tonuino::playFolder() {
     /* no break */
   case pmode_t::album_vb:
     // Spezialmodus Von-Bis: Album: alle Dateien zwischen Start und Ende spielen
-    LOG(play_log, s_info, F("Album"));
-    LOG(play_log, s_info, myFolder.special, str_bis() , myFolder.special2);
+    LOG(play_log, s_debug, F("Album"));
+    LOG(play_log, s_debug, myFolder.special, str_bis() , myFolder.special2);
     mp3.enqueueTrack(myFolder.folder, myFolder.special, myFolder.special2);
     break;
 
@@ -244,8 +242,8 @@ void Tonuino::playFolder() {
     /* no break */
   case pmode_t::party_vb:
     // Spezialmodus Von-Bis: Party Ordner in zufälliger Reihenfolge
-    LOG(play_log, s_info, F("Party"));
-    LOG(play_log, s_info, myFolder.special, str_bis(), myFolder.special2);
+    LOG(play_log, s_debug, F("Party"));
+    LOG(play_log, s_debug, myFolder.special, str_bis(), myFolder.special2);
     mp3.enqueueTrack(myFolder.folder, myFolder.special, myFolder.special2);
     mp3.shuffleQueue();
     mp3.setEndless();
@@ -253,7 +251,7 @@ void Tonuino::playFolder() {
 
   case pmode_t::einzel:
     // Einzel Modus: eine Datei aus dem Ordner abspielen
-    LOG(play_log, s_info, F("Einzel"));
+    LOG(play_log, s_debug, F("Einzel"));
     mp3.enqueueTrack(myFolder.folder, myFolder.special);
     break;
 
@@ -261,7 +259,7 @@ void Tonuino::playFolder() {
   case pmode_t::hoerbuch_1:
   {
     // Hörbuch Modus: kompletten Ordner spielen und Fortschritt merken (oder nur eine Datei)
-    LOG(play_log, s_info, F("Hörbuch"));
+    LOG(play_log, s_debug, F("Hörbuch"));
     uint16_t startTrack = settings.readFolderSettingFromFlash(myFolder.folder);
     if ((startTrack == 0) || (startTrack > numTracksInFolder))
       startTrack = 1;
@@ -283,7 +281,7 @@ void Tonuino::playTrackNumber () {
 
 // Leider kann das Modul selbst keine Queue abspielen, daher müssen wir selbst die Queue verwalten
 void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
-  LOG(play_log, s_info, F("nextTrack"));
+  LOG(play_log, s_debug, F("nextTrack"));
   if (fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1)) {
     const uint8_t trackToSave = (mp3.getCurrentTrack() < numTracksInFolder) ? mp3.getCurrentTrack()+1 : 1;
     settings.writeFolderSettingToFlash(myFolder.folder, trackToSave);
@@ -303,7 +301,7 @@ void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
 }
 
 void Tonuino::previousTrack(uint8_t tracks) {
-  LOG(play_log, s_info, F("previousTrack"));
+  LOG(play_log, s_debug, F("previousTrack"));
   if (activeModifier->handlePrevious())
     return;
   mp3.playPrevious(tracks);
@@ -314,7 +312,7 @@ void Tonuino::previousTrack(uint8_t tracks) {
 
 // Funktionen für den Standby Timer (z.B. über Pololu-Switch oder Mosfet)
 void Tonuino::setStandbyTimer() {
-  LOG(standby_log, s_info, F("setStandbyTimer"));
+  LOG(standby_log, s_debug, F("setStandbyTimer"));
   if (settings.standbyTimer != 0 && not standbyTimer.isActive()) {
     standbyTimer.start(settings.standbyTimer * 60 * 1000);
     LOG(standby_log, s_info, F("timer started"));
@@ -322,7 +320,7 @@ void Tonuino::setStandbyTimer() {
 }
 
 void Tonuino::disableStandbyTimer() {
-  LOG(standby_log, s_info, F("disableStandbyTimer"));
+  LOG(standby_log, s_debug, F("disableStandbyTimer"));
   if (settings.standbyTimer != 0) {
     standbyTimer.stop();
     LOG(standby_log, s_info, F("timer stopped"));

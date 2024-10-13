@@ -238,7 +238,12 @@ void Chip_card::sleepCard() {
 void Chip_card::initCard() {
   SPI.begin();                                                    // Init SPI bus
   mfrc522.PCD_Init();                                             // Init MFRC522
-  LOG(card_log, s_info, F("MFRC522:"), mfrc522.PCD_ReadRegister(MFRC522::VersionReg));
+  LOG_CODE(card_log, s_debug, {
+      if (not mfrc522.PCD_PerformSelfTest())
+        LOG(card_log, s_debug, F("mfrc522 self test not successful"));
+  });
+  byte ver = mfrc522.PCD_ReadRegister(MFRC522::VersionReg);
+  LOG(card_log, s_info, F("MFRC522:"), ver);
   // Show MFRC522 Card Reader version
   // 0 or 255: communication  error)
   //      136: (clone)
@@ -247,6 +252,8 @@ void Chip_card::initCard() {
   //      146: v2.0
   //       18: counterfeit chip
   //     else: unknown
+  if ((ver == 0) || (ver == 255))
+    LOG(card_log, s_error, F("com to mfrc broken"));
 }
 
 void Chip_card::stopCard() {
@@ -271,7 +278,7 @@ cardEvent Chip_card::getCardEvent() {
 
   if (cardRemovedSwitch.on()) {
     if (not cardRemoved) {
-      LOG(card_log, s_info, F("Card Removed"));
+      LOG(card_log, s_info, F("Card Rem"));
       cardRemoved = true;
       stopCard();
       return cardEvent::removed;
@@ -279,7 +286,7 @@ cardEvent Chip_card::getCardEvent() {
   }
   else {
     if (cardRemoved) {
-      LOG(card_log, s_info, F("Card Inserted"));
+      LOG(card_log, s_info, F("Card Ins"));
       cardRemoved = false;
       return cardEvent::inserted;
     }
