@@ -10,7 +10,7 @@
 // select whether StatusCode and PiccType are printed as names
 // that uses about 690 bytes or 2.2% of flash
 constexpr bool verbosePrintStatusCode = false;
-constexpr bool verbosePrintPiccType   = false;
+constexpr bool verbosePrintPiccType   = true;
 
 namespace {
 
@@ -104,7 +104,7 @@ Chip_card::readCardEvent Chip_card::readCard(folderSettings &nfcTag) {
   // Show some details of the PICC (that is: the tag/card)
   LOG(card_log, s_debug, F("Card UID: "), dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size));
   const MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
-  LOG(card_log, s_debug, F("PICC type: "), printPiccType(mfrc522, piccType));
+  LOG(card_log, s_info, F("PICC type: "), printPiccType(mfrc522, piccType));
 
   byte buffer[buffferSizeRead];
   MFRC522::StatusCode status = MFRC522::STATUS_ERROR;
