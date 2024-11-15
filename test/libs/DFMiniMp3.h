@@ -236,6 +236,11 @@ public:
       called_stop = true;
     }
 
+    uint16_t getTotalTrackCount()
+    {
+      return 1;
+    }
+
     uint16_t getFolderTrackCount(uint16_t folder)
     {
         return df_folder_track_count[static_cast<uint8_t>(folder)];
