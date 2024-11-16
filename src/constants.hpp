@@ -319,6 +319,21 @@ inline constexpr float   batVoltageEmpty               = 2.90;
  */
 //#define USE_POLOLU_SHUTDOWN
 
+// ######################################################################
+
+/* uncomment one of the below lines if you want to change the antenna gain of the MFRC522 module
+ * wenn die Antennenverstärkung des MFRC522 Modules verändert werden soll, in der nächsten Zeilen einen Kommentar entfernen
+ */
+//#define MRFC522_RX_GAIN RxGain_18dB
+//#define MRFC522_RX_GAIN RxGain_23dB
+//#define MRFC522_RX_GAIN RxGain_33dB // default
+//#define MRFC522_RX_GAIN RxGain_38dB
+//#define MRFC522_RX_GAIN RxGain_43dB
+//#define MRFC522_RX_GAIN RxGain_48dB
+//#define MRFC522_RX_GAIN RxGain_min  // 18dB
+//#define MRFC522_RX_GAIN RxGain_avg  // 33dB
+//#define MRFC522_RX_GAIN RxGain_max  // 48dB
+
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
  * ##### mormalerweise müssen die folgende Zeilen nicht editiert werden ############################
