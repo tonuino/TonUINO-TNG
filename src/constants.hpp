@@ -314,10 +314,11 @@ inline constexpr float   batVoltageEmpty               = 2.90;
 
 // ######################################################################
 
-/* uncomment the below line if you use Pololu Powerswitch for shutdown
- * wenn der Pololu Powerswitch für das Shutdown verwendet wird, in der nächste Zeile den Kommentar entfernen
+/* uncomment the below lines if you use Pololu Powerswitch or Traeger Platine for shutdown
+ * wenn der Pololu Powerswitch oder die Traeger Platine für das Shutdown verwendet wird, in den nächsten Zeile den Kommentar entfernen
  */
 //#define USE_POLOLU_SHUTDOWN
+//#define USE_TRAEGER_PLATINE_SHUTDOWN
 
 // ######################################################################
 
