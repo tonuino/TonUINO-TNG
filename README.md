@@ -91,7 +91,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.11 geä
 # Change Log
 
 ## Version 3.2.1 (23.11.2024)
-- [Issue 251](https://github.com/tonuino/TonUINO-TNG/issues/251): Update the non-German texts for advert and mp3 tracks
+- [Issue 251](https://github.com/tonuino/TonUINO-TNG/issues/251): Changes to enable configuration of showdown behavior
 - [Issue 250](https://github.com/tonuino/TonUINO-TNG/issues/250): Update the non-German texts for advert and mp3 tracks
 - [Issue 248](https://github.com/tonuino/TonUINO-TNG/issues/248): Add the possibility to change the antenna gain of the RFRC522 module
 
