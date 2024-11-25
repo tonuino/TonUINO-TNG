@@ -90,6 +90,9 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.11 geä
 
 # Change Log
 
+## Version 3.2.1 (16.11.2024)
+- [Issue 248](https://github.com/tonuino/TonUINO-TNG/issues/248): Add the possibility to change the antenna gain of the RFRC522 module
+
 ## Version 3.2.1 (14.11.2024)
 - [Issue 246](https://github.com/tonuino/TonUINO-TNG/issues/246): With LKP Player there is no pling on startup
 

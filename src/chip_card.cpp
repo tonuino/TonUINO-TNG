@@ -252,8 +252,13 @@ void Chip_card::initCard() {
   //      146: v2.0
   //       18: counterfeit chip
   //     else: unknown
-  if ((ver == 0) || (ver == 255))
+  if ((ver == 0) || (ver == 255)) {
     LOG(card_log, s_error, F("com to mfrc broken"));
+    return;
+  }
+#ifdef MRFC522_RX_GAIN
+  mfrc522.PCD_SetAntennaGain(mfrc522.MRFC522_RX_GAIN);
+#endif
 }
 
 void Chip_card::stopCard() {
