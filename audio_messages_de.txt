@@ -10,8 +10,8 @@ advert/0306_fire.mp3|Feuer....10s....und weiter geht's
 advert/0307_water.mp3|Wasser....10s....und weiter geht's
 advert/0308_air.mp3|Luft....10s....und weiter geht's
 advert/0320_bt_on.mp3|Bluetooth wird eingeschaltet
-advert/0320_bt_off.mp3|Bluetooth wird ausgeschaltet
-advert/0320_bt_pairing.mp3|Bluetooth wird verbunden
+advert/0321_bt_off.mp3|Bluetooth wird ausgeschaltet
+advert/0322_bt_pairing.mp3|Bluetooth wird verbunden
 mp3/0300_new_tag.mp3|Oh, eine neue Karte!
 mp3/0301_select_folder.mp3|Ok, verwende nun die Lautstärketasten um einen Ordner für die Karte auszuwählen.
 mp3/0310.mp3|Wähle mit den Lautstärketasten den Wiedergabemodus aus. Drücke die Pausetaste um fortzufahren.
