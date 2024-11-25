@@ -396,7 +396,7 @@ void Tonuino::shutdown() {
   digitalWrite(shutdownPin, getLevel(shutdownPinType, level::active));
   delay(500);
 
-#ifdef USE_POLOLU_SHUTDOWN
+#if defined(USE_POLOLU_SHUTDOWN) or defined(USE_TRAEGER_PLATINE_SHUTDOWN)
   return;
 #endif
 
