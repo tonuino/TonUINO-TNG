@@ -90,6 +90,9 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.11 geä
 
 # Change Log
 
+## Version 3.2.1 (01.12.2024)
+- [Issue 254](https://github.com/tonuino/TonUINO-TNG/issues/254): Enhance configuration in constants.hpp
+
 ## Version 3.2.1 (23.11.2024)
 - [Issue 251](https://github.com/tonuino/TonUINO-TNG/issues/251): Changes to enable configuration of showdown behavior
 - [Issue 250](https://github.com/tonuino/TonUINO-TNG/issues/250): Update the non-German texts for advert and mp3 tracks

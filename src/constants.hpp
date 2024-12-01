@@ -24,6 +24,8 @@
  * headphone jack detection|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |
  * special start shortcut  |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |
  * bat voltage measurement |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |
+ * Bluetooth ON/OFF        |   |   |   |   |   |   |   |   |   |   | x*|   |   | x |   |   |
+ * Bluetooth Pairing       |   |   |   |   |   |   |   |   |   |   |   | x*|   |   |   | x |
  * #########################################################################################
  *
  * (*) Hardware Serial on Every
@@ -279,9 +281,14 @@ inline constexpr uint8_t   specialStartShortcutTrack   = 1;
  * um die Unterstützung des BT Modules zu aktivieren, in der nächste Zeile den Kommentar entfernen
  */
 //#define BT_MODULE
+#ifdef DFPlayerUsesHardwareSerial
 inline constexpr uint8_t   btModuleOnPin               =  2; // D2
-inline constexpr levelType btModuleOnPinType           = levelType::activeHigh;
 inline constexpr uint8_t   btModulePairingPin          =  3; // D3
+#else
+inline constexpr uint8_t   btModuleOnPin               =  6; // D6
+inline constexpr uint8_t   btModulePairingPin          =  8; // D8
+#endif
+inline constexpr levelType btModuleOnPinType           = levelType::activeHigh;
 inline constexpr levelType btModulePairingPinType      = levelType::activeHigh;
 inline constexpr unsigned long btModulePairingPulse    = 500;
 
