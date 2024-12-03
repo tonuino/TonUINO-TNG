@@ -3,9 +3,15 @@ advert/0301_freeze_freeze1.mp3|and stop!
 advert/0301_freeze_freeze2.mp3|Don't move!
 advert/0301_freeze_freeze3.mp3|on we go!
 advert/0302_sleep.mp3|Snooze function activated.
-advert/0303_locked.mp3|TonUINO is now locked.
+advert/0303_fi_wa_ai.mp3|We will now play fire, water and wind. On fire you have to run into a corner, on water climb up somewere and on wind lie down somewere. 
 advert/0304_buttonslocked.mp3|Keys are now locked.
 advert/0305_kindergarden.mp3|Kindergarten mode enabled.
+advert/0306_fire.mp3|Fire....10s....and on we go!
+advert/0307_water.mp3|Water....10s....and on we go!
+advert/0308_air.mp3|Wind....10s....and on we go!
+advert/0320_bt_on.mp3|Bluetooth switched on
+advert/0321_bt_off.mp3|Bluetooth switched off
+advert/0322_bt_pairing.mp3|Bluetooth will be reconnected
 mp3/0300_new_tag.mp3|Oh, a new card!
 mp3/0301_select_folder.mp3|Ok, now use the volume keys to select a folder for the card.
 mp3/0310.mp3|Use the volume keys to select the playback mode. Press the pause button to continue.
@@ -20,15 +26,40 @@ mp3/0318_special_album.mp3|Special mode From-To, Album mode: Play all files betw
 mp3/0319_special_party.mp3|Special mode From-To, Party mode: Play all files between the start and end file randomly.
 mp3/0320_mode_audio_book_single.mp3|Audiobook mode single: Play the next track in the folder and save the progress.
 mp3/0321_mode_repeat_last_card.mp3|Repeat card mode: the last card or shortcut is repeated.
+mp3/0322_mode_quiz_game.mp3|Quiz play mode: play a quiz.
+mp3/0323_mode_memory_game.mp3|Memory play mode: play a memory memory game.
+mp3/0324_mode_switch_bt.mp3|Switch Bluetooth: Switch on or off Bluetooth.
 mp3/0327_select_file.mp3|OK, now please select the file with the volume keys.
 mp3/0328_select_first_file.mp3|OK, now please select the start file with the volume keys.
 mp3/0329_select_last_file.mp3|Now please select the final file with the volume keys.
 mp3/0330.mp3|Should I say the number before each file? You can ask for the current number at any time by a long press on the pause button.
 mp3/0331.mp3|No, do not say the number.
 mp3/0332.mp3|Yes, say the number.
+mp3/0333_num_answer.mp3|How many different answers does the quiz have for one question?
+mp3/0334_num_answer_2.mp3|2 answers.
+mp3/0335_num_answer_4.mp3|4 answers.
+mp3/0336_num_answer_2_1.mp3|2 answers and one solution.
+mp3/0337_num_answer_4_1.mp3|4 answers and one solution.
+mp3/0338_num_answer_0_1.mp3|only one solution with buzzer.
 mp3/0400_ok.mp3|OK. I have configured the card.
 mp3/0401_error.mp3|Oh dear! Unfortunately, that did not work!
 mp3/0402_ok_settings.mp3|Ok, I have saved the settings
+mp3/0500_quiz_game_intro.mp3|You are now playing a quiz. Press the pause button to get a new question. Then press the forward, back or volume buttons to hear the different answers. When you think you have heard the correct answer, you can press the pause button to find out if this is the correct answer. Repeat the whole thing as often as you like. You can end the quiz with a long press on the back and forward button.
+mp3/0501_quiz_game_ok.mp3|Yes, that's the right answer. Well done. Continue with the pause button. 
+mp3/0502_quiz_game_bad.mp3|Oh no, that's not the right answer. Try the next question. Continue with the pause button. 
+mp3/0503_quiz_game_ok_with_solution.mp3|Yes, that's the right answer. Well done. Here is the explanation for the solution. 
+mp3/0504_quiz_game_bad_with_solution.mp3|Oh no, that's not the right answer. Here is the solution. 
+mp3/0505_quiz_game_buzzer_down.mp3|Player back was the first! What is the solution? Then play the solution with the pause button. 
+mp3/0506_quiz_game_buzzer_up.mp3|Player forward was the first! What is the solution? Then play the solution with the pause button. 
+mp3/0507_quiz_game_buzzer_vol-.mp3|Player volume down was the first! What is the solution? Then play the solution with the pause button. 
+mp3/0508_quiz_game_buzzer_vol+.mp3|Player volume up was the first! What is the solution? Then play the solution with the pause button. 
+mp3/0509_quiz_game_buzzer_intro.mp3|You are now playing a quiz with a buzzer. Press the Pause button to get a new question. Then press the Back, Forward, Volume Down and Volume Up buttons as a buzzer. When the fastest player has said the answer, you can press the pause button to find out if this is the correct answer. Repeat the whole thing as often as you like. You can end the quiz with a long press on the back and forward button.
+mp3/0510_quiz_game_continue.mp3|Continue with the pause button. 
+mp3/0520_memory_game_intro.mp3|You are now playing a memory game. Play a first and then a second memory card. After the second card, press the pause button to find out whether the two cards belong together. If they do, you can keep them both, otherwise put them back into the game. The game continues with the next player. You can end the memory game by pressing and holding the back and forward buttons.
+mp3/0521_memory_game_ok.mp3|Yes, the two cards belong together. 
+mp3/0522_memory_game_bad.mp3|Oh no, the cards don't fit. 
+mp3/0523_memory_game_1.mp3|Please turn over the first memory card. 
+mp3/0524_memory_game_2.mp3|Please turn over the second memory card. 
 mp3/0800_waiting_for_card.mp3|Please put the card on now!
 mp3/0801_remove_card.mp3|Please remove the card from the reader!
 mp3/0802_reset_aborted.mp3|OK, I have canceled the process.
@@ -46,7 +77,8 @@ mp3/0910_switch_volume.mp3|Invert the function of the volume keys.
 mp3/0911_reset.mp3|Delete all settings.
 mp3/0912_admin_lock.mp3|Secure the admin menu.
 mp3/0913_pause_on_card_removed.mp3|Pause when card is removed.
-mp3/0919_continue_admin.mp3|and continuing in the admin menu. By a long press on the pause button you can cancel the admin menu.
+mp3/0914_memory_cards.mp3|Create the cards for the memory game.
+mp3/0919_continue_admin.mp3|And continue in the Admin menu. You can cancel the Admin menu by pressing and holding the pause button.
 mp3/0920_eq_intro.mp3|Please select a setting for the EQ with the volume keys and confirm it with the pause key.
 mp3/0921_normal.mp3|Normal
 mp3/0922_pop.mp3|Pop
@@ -57,10 +89,11 @@ mp3/0926_bass.mp3|Bass
 mp3/0930_max_volume_intro.mp3|Select maximum volume and confirm with the pause key.
 mp3/0931_min_volume_into.mp3|Select minimum volume and confirm with the pause key.
 mp3/0932_init_volume_into.mp3|Select volume at startup and confirm with the pause key.
-mp3/0933_switch_volume_intro.mp3|Do you want to reverse the function of the volume buttons? You have to press the keys for a long time to go forward or backward one song.
+mp3/0933_switch_volume_intro.mp3|Would you like to reverse the function of the volume buttons on the 3-button version? Then you can change the volume with a short press of the button, but then you have to press and hold the buttons to go forward or back one song.
 mp3/0934_no.mp3|No.
 mp3/0935_yes.mp3|Yes.
 mp3/0936_batch_cards_intro.mp3|OK, now please place the cards on the box one after the other. I will announce the respective number before, so that you don't get confused. To cancel, just press the pause button long!
+mp3/0937_memory_game_cards_intro.mp3|OK, now please place the cards for the memory game on the box one after the other. I will announce the respective number beforehand so that you don't get confused. To cancel, simply press the pause button briefly!
 mp3/0940_shortcut_into.mp3|Please select the shortcut you want to configure. If you have the 3 by 3 button board, you can press a button there as well.
 mp3/0941_pause.mp3|Up and down key
 mp3/0942_up.mp3|Up key
@@ -72,13 +105,18 @@ mp3/0962_timer_15.mp3|15 minutes.
 mp3/0963_timer_30.mp3|30 minutes.
 mp3/0964_timer_60.mp3|60 minutes.
 mp3/0965_timer_disabled.mp3|do not switch off automatically
+mp3/0966_dance_pause_intro.mp3|How long should the music play between the breaks?
+mp3/0967_dance_pause_15_30.mp3|15 to 30 seconds
+mp3/0968_dance_pause_25_40.mp3|25 to 40 seconds
+mp3/0969_dance_pause_35_50.mp3|35 to 50 seconds
 mp3/0970_modifier_Intro.mp3|Now please select your modification card with the volume keys.
 mp3/0971_modifier_SleepTimer.mp3|Snooze mode
 mp3/0972_modifier_FreezeDance.mp3|Stop Dance - TonUINO plays stop dance with you and randomly stops playback briefly for you.
-mp3/0973_modifier_Locked.mp3|Lock TonUINO
+mp3/0973_modifier_FiWaAi.mp3|Fire, water and wind game.
 mp3/0974_modifier_Toddler.mp3|Toddler mode - All keys of the TonUINO are locked for the very small ones. Cards still work.
 mp3/0975_modifier_KinderGarden.mp3|Kindergarten mode - In order to avoid conflicts, new cards are not played immediately, but only after the current song is over. The forward and back buttons are locked.
 mp3/0976_modifier_repeat1.mp3|Repeat title - repeat the current title endlessly.
+mp3/0977_modifier_bluetooth.mp3|Bluetooth card - You can use the Bluetooth card to switch Bluetooth on or off.
 mp3/0980_admin_lock_intro.mp3|Please select if and how the admin menu should be protected.
 mp3/0981_admin_lock_disabled.mp3|No protection - the admin menu can be activated at any time by pressing all three buttons.
 mp3/0982_admin_lock_card.mp3|Admin card only - the admin menu can only be opened with an admin card. A new admin card can be learned at any time.

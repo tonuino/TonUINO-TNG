@@ -9,7 +9,11 @@ const command cmd_table[][4] PROGMEM = {
 /*  start,          */ ,{ command::none      , command::start      , command::none       , command::none        }
 /*  allLong,        */ ,{ command::none      , command::admin      , command::admin      , command::admin       }
 /*  pause,          */ ,{ command::select    , command::pause      , command::pause      , command::pause       }
+#ifndef DISABLE_SHUTDOWN_VIA_BUTTON
 /*  pauseLong,      */ ,{ command::adm_end   , command::shutdown   , command::track      , command::track       }
+#else
+/*  pauseLong,      */ ,{ command::adm_end   , command::shortcut1   , command::track      , command::track       }
+#endif
 #ifdef FIVEBUTTONS
 /*  up,             */ ,{ command::next      , command::bright_up  , command::next       , command::none        }
 /*  upLong,         */ ,{ command::next10    , command::shortcut2  , command::next10     , command::none        }
