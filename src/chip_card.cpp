@@ -220,12 +220,11 @@ bool Chip_card::writeCard(const folderSettings &nfcTag) {
       LOG(card_log, s_debug, str_MIFARE_Write(), F("4"), str_failed(), printStatusCode(mfrc522, status));
   }
   else if (mifareType == MFRC522::PICC_TYPE_MIFARE_UL ) {
-    byte buffer2[buffferSizeWrite];
-    memset(buffer2, 0, sizeof(buffer2));
+    byte buffer2[4];
 
     for (byte block = 8, bufpos = 0; block <= 11; ++block, bufpos += 4) {
       memcpy(buffer2, buffer+bufpos, 4);
-      status = static_cast<MFRC522::StatusCode>(mfrc522.MIFARE_Write(block, buffer2, sizeof(buffer2)));
+      status = static_cast<MFRC522::StatusCode>(mfrc522.MIFARE_Ultralight_Write(block, buffer2, sizeof(buffer2)));
       if (status != MFRC522::STATUS_OK) {
         LOG(card_log, s_debug, str_MIFARE_Write(), block, str_failed(), printStatusCode(mfrc522, status));
         break;
