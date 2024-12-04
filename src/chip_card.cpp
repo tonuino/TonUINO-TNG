@@ -85,11 +85,27 @@ bool Chip_card::auth(MFRC522::PICC_Type piccType) {
     status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key, &(mfrc522.uid));
   }
   else if (piccType == MFRC522::PICC_TYPE_MIFARE_UL ) {
-    byte pACK[] = {0, 0}; //16 bit PassWord ACK returned by the tempCard
+    byte buffer[buffferSizeRead];
 
-    // Authenticate using key A
-    LOG(card_log, s_debug, F("Auth UL"));
-    status = mfrc522.PCD_NTAG216_AUTH(key.keyByte, pACK);
+    byte size = sizeof(buffer);
+    status = static_cast<MFRC522::StatusCode>(mfrc522.MIFARE_Read(3, buffer, &size));
+    if (status != MFRC522::STATUS_OK) {
+      LOG(card_log, s_info, str_MIFARE_Read(), F("3"), str_failed(), printStatusCode(mfrc522, status));
+    }
+    else {
+      switch (buffer[2]) {
+      case 0x12: LOG(card_log, s_info, F("NTAG213")); break;
+      case 0x3e: LOG(card_log, s_info, F("NTAG215")); break;
+      case 0x6d: LOG(card_log, s_info, F("NTAG216")); break;
+      default  : LOG(card_log, s_info, F("NTAG?-"), buffer[2]); break;
+      }
+    }
+
+//    byte pACK[] = {0, 0}; //16 bit PassWord ACK returned by the tempCard
+//
+//    // Authenticate using key A
+//    LOG(card_log, s_debug, F("Auth UL"));
+//    status = mfrc522.PCD_NTAG216_AUTH(key.keyByte, pACK);
   }
 
   if (status != MFRC522::STATUS_OK) {
@@ -104,18 +120,13 @@ Chip_card::readCardEvent Chip_card::readCard(folderSettings &nfcTag) {
   // Show some details of the PICC (that is: the tag/card)
   LOG(card_log, s_debug, F("Card UID: "), dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size));
   const MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
-  LOG(card_log, s_info, F("PICC type: "), printPiccType(mfrc522, piccType));
+  LOG(card_log, s_debug, F("PICC type: "), printPiccType(mfrc522, piccType));
 
   byte buffer[buffferSizeRead];
   MFRC522::StatusCode status = MFRC522::STATUS_ERROR;
 
   if (not auth(piccType))
     return readCardEvent::none;
-
-  // Show the whole sector as it currently is
-  // LOG(card_log, s_info, F("Current data in sector:"));
-  // mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key, sector);
-  // Serial.println();
 
   // Read data from the block
   if ((piccType == MFRC522::PICC_TYPE_MIFARE_MINI) ||
