@@ -32,7 +32,7 @@ void setup()
   LOG(init_log, s_error, F("|_   _|___ ___|  |  |     |   | |     |"));
   LOG(init_log, s_error, F("  | | | . |   |  |  |-   -| | | |  |  |"));
   LOG(init_log, s_error, F("  |_| |___|_|_|_____|_____|_|___|_____|"));
-  LOG(init_log, s_error, F("TonUINO Version 3.1 - refactored by Boerge1\n"));
+  LOG(init_log, s_error, F("TonUINO Version 3.x - refactored by Boerge1\n"));
   LOG(init_log, s_error, F("created by Thorsten Voß and licensed under GNU/GPL."));
   LOG(init_log, s_error, F("Information and contribution at https://tonuino.de.\n"));
   LOG(init_log, s_error, F("V3.2.1 13.01.25\n"));
