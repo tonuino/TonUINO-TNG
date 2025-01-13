@@ -90,7 +90,8 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.11 geä
 
 # Change Log
 
-## Version 3.2.1 (05.12.2024)
+## Version 3.2.1 (13.01.2025)
+- [Issue 135](https://github.com/tonuino/TonUINO-TNG/issues/135): Make new variants available for online uploads II
 - [Issue 254](https://github.com/tonuino/TonUINO-TNG/issues/254): Enhance configuration in constants.hpp
 - [Issue 245](https://github.com/tonuino/TonUINO-TNG/issues/245): Support NFC 215 Tags
 
