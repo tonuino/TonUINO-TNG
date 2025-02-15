@@ -1,7 +1,9 @@
 #include "tonuino.hpp"
 
 #include <Arduino.h>
+#ifndef TonUINO_Esp32
 #include <avr/sleep.h>
+#endif
 
 #include "array.hpp"
 #include "chip_card.hpp"
@@ -245,7 +247,7 @@ void Tonuino::playFolder() {
   LOG(play_log, s_debug, F("playFolder"));
   numTracksInFolder = mp3.getFolderTrackCount(myFolder.folder);
   LOG(play_log, s_warning, numTracksInFolder, F(" tr in folder "), myFolder.folder);
-  numTracksInFolder = min(numTracksInFolder, 0xffu);
+  numTracksInFolder = min(numTracksInFolder, static_cast<uint16_t>(0xffu));
   mp3.clearAllQueue();
 
   switch (myFolder.mode) {
@@ -405,9 +407,11 @@ void Tonuino::shutdown() {
   chip_card.sleepCard();
   mp3.sleep();
 
+#ifndef TonUINO_Esp32
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   cli();  // Disable interrupts
   sleep_mode();
+#endif
 }
 
 #ifdef BT_MODULE

@@ -102,12 +102,12 @@ void VoiceMenu<SMT>::react(command cmd) {
 
   switch(cmd) {
   case command::next10:
-    currentValue = min(currentValue + 10, numberOfOptions);
+    currentValue = min(currentValue + 10, static_cast<int>(numberOfOptions));
     playCurrentValue();
     break;
 
   case command::next:
-    currentValue = min(currentValue + 1, numberOfOptions);
+    currentValue = min(currentValue + 1, static_cast<int>(numberOfOptions));
     playCurrentValue();
     break;
 
@@ -123,7 +123,7 @@ void VoiceMenu<SMT>::react(command cmd) {
 
 #ifdef SerialInputAsCommand
   case command::menu_jump:
-    currentValue = min(max(tonuino.getMenuJump(), 1),numberOfOptions);
+    currentValue = min(max(tonuino.getMenuJump(), static_cast<uint8_t>(1)),numberOfOptions);
     playCurrentValue();
     break;
 #endif
