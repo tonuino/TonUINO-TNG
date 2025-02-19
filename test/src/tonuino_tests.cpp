@@ -334,7 +334,7 @@ TEST_F(tonuino_test_fixture, shortcut3x3_in_idle) {
     Print::clear_output();
 
     const int address = startAddressExtraShortcuts + index * sizeof(folderSettings);
-    EEPROM_put(address, fs);
+    Settings::EEPROM_put(address, fs);
 
     set_value_for_3x3(index);
     execute_cycle();
@@ -363,7 +363,7 @@ TEST_F(tonuino_test_fixture, shortcut3x3_in_idle) {
     Print::clear_output();
 
     const int address = startAddressExtraShortcuts + (Buttons3x3::numLevels+index) * sizeof(folderSettings);
-    EEPROM_put(address, fs);
+    Settings::EEPROM_put(address, fs);
 
     set_value_for_3x3(index);
     execute_cycle();
@@ -399,7 +399,7 @@ TEST_F(tonuino_test_fixture, shortcut3x3_in_pause) {
     Print::clear_output();
 
     const int address = startAddressExtraShortcuts + index * sizeof(folderSettings);
-    EEPROM_put(address, fs);
+    Settings::EEPROM_put(address, fs);
 
     set_value_for_3x3(index);
     execute_cycle();
@@ -428,7 +428,7 @@ TEST_F(tonuino_test_fixture, shortcut3x3_in_pause) {
     Print::clear_output();
 
     const int address = startAddressExtraShortcuts + (Buttons3x3::numLevels+index) * sizeof(folderSettings);
-    EEPROM_put(address, fs);
+    Settings::EEPROM_put(address, fs);
 
     set_value_for_3x3(index);
     execute_cycle();
@@ -464,7 +464,7 @@ TEST_F(tonuino_test_fixture, shortcut3x3_in_play) {
     Print::clear_output();
 
     const int address = startAddressExtraShortcuts + index * sizeof(folderSettings);
-    EEPROM_put(address, fs);
+    Settings::EEPROM_put(address, fs);
 
     set_value_for_3x3(index);
     execute_cycle();
@@ -493,7 +493,7 @@ TEST_F(tonuino_test_fixture, shortcut3x3_in_play) {
     Print::clear_output();
 
     const int address = startAddressExtraShortcuts + (Buttons3x3::numLevels+index) * sizeof(folderSettings);
-    EEPROM_put(address, fs);
+    Settings::EEPROM_put(address, fs);
 
     set_value_for_3x3(index);
     execute_cycle();

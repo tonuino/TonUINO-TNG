@@ -16,6 +16,7 @@ namespace {
 // Nano Every: 256 byte
 // AiO:        512 byte (with framework-lgt8fx@1.0.6 emulated)
 // AiOplus:    256 byte
+// Esp32 Nano  256 byte (configured in EEPROM.begin())
 
 constexpr uint16_t startAddressFolderSettings =   0;
 constexpr uint16_t startAddressAdminSettings  = 100;
@@ -28,11 +29,26 @@ static_assert(buttonExtSC_buttons < maxExtraShortcuts, "Too many ExtraShortCuts"
 #endif
 }
 
+void Settings::init() {
+#ifdef TonUINO_Esp32
+  bool res = EEPROM.begin(endAddress);
+  LOG(settings_log, s_info, F("EEPROM begin: "), res);
+#endif
+}
+
+void Settings::commit() {
+#ifdef TonUINO_Esp32
+  bool res = EEPROM.commit();
+  LOG(settings_log, s_info, F("EEPROM commit: "), res);
+#endif
+}
+
 void Settings::clearEEPROM() {
   LOG(settings_log, s_info, F("clEEPROM"));
   for (uint16_t i = startAddressFolderSettings; i < endAddress; ++i) {
-    EEPROM.write(i, '\0');
+    EEPROM_put(i, '\0');
   }
+  commit();
 }
 
 void Settings::writeSettingsToFlash() {
@@ -99,11 +115,14 @@ void Settings::loadSettingsFromFlash() {
 
 void Settings::writeFolderSettingToFlash(uint8_t folder, uint8_t track) {
   if (folder < 100)
-    EEPROM.write(folder, track);
+    EEPROM_put(folder, track);
 }
 
 uint8_t Settings::readFolderSettingFromFlash(uint8_t folder) {
-  return (folder < 100)? EEPROM.read(folder) : 0;
+  uint8_t ret = 0;
+  if (folder < 100)
+    EEPROM_get(folder, ret);
+  return ret;
 }
 
 void Settings::writeExtShortCutToFlash (uint8_t shortCut, const folderSettings& value) {

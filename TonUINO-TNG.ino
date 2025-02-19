@@ -26,6 +26,9 @@ Bitte wählt eure TonUINO-Platine (Classic, AiO oder AiO+) in der Datei constant
 void setup()
 {
   Serial.begin(115200);
+#ifdef TonUINO_Esp32
+  delay(5000);
+#endif
 
   // Dieser Hinweis darf nicht entfernt werden
   LOG(init_log, s_error, F("\n _____         _____ _____ _____ _____"));
@@ -51,6 +54,9 @@ void setup()
 #endif
 #ifdef ALLinONE_Plus
   LOG(init_log, s_error, F("A+ "), lf_no);
+#endif
+#ifdef TonUINO_Esp32
+  LOG(init_log, s_error, F("ESP32 "), lf_no);
 #endif
 
 #ifdef FIVEBUTTONS

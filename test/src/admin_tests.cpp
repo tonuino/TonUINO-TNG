@@ -898,7 +898,7 @@ TEST_F(admin_test_fixture, Admin_ShortCut_extButtons) {
 
       folderSettings fs;
       const int address = startAddressExtraShortcuts + index * sizeof(folderSettings);
-      EEPROM_get(address, fs);
+      Settings::EEPROM_get(address, fs);
 
       EXPECT_EQ(fs, card_expected);
 
@@ -957,7 +957,7 @@ TEST_F(admin_test_fixture, Admin_ShortCut_extButtons_longPress) {
 
       folderSettings fs;
       const int address = startAddressExtraShortcuts + (Buttons3x3::numLevels+index) * sizeof(folderSettings);
-      EEPROM_get(address, fs);
+      Settings::EEPROM_get(address, fs);
 
       EXPECT_EQ(fs, card_expected);
 

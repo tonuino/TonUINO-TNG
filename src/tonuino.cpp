@@ -69,12 +69,17 @@ void Tonuino::setup() {
   digitalWrite(btModulePairingPin, getLevel(btModulePairingPinType, level::inactive));
 #endif // BT_MODULE
 
+#ifdef ROTARY_ENCODER
+  rotaryEncoder.init();
+#endif
+
 #ifdef NEO_RING
   ring.init();
   ring.call_on_startup();
 #endif
 
   // load Settings from EEPROM
+  settings.init();
   settings.loadSettingsFromFlash();
 #ifdef STORE_LAST_CARD
   settings.readExtShortCutFromFlash(lastSortCut, myFolder);
