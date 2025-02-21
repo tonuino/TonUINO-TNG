@@ -520,7 +520,8 @@ bool Base::readCard() {
 
 bool Base::handleShortcut(uint8_t shortCut) {
   folderSettings sc_folderSettings = settings.getShortCut(shortCut);
-  if (sc_folderSettings.folder != 0) {
+  if (sc_folderSettings.folder != 0 && sc_folderSettings.special != 0xff) {
+    LOG(state_log, s_debug, F("shortcut, folder: "), sc_folderSettings.folder, F(", mode: "), static_cast<uint8_t>(sc_folderSettings.mode));
 #ifdef BT_MODULE
     if (sc_folderSettings.mode == pmode_t::switch_bt) {
       tonuino.switchBtModuleOnOff();

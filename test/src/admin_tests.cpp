@@ -871,8 +871,14 @@ TEST_F(admin_test_fixture, Admin_ShortCut_extButtons) {
 
   Print::clear_output();
 
+  // reset linearAnalogKeypad from longpress
+  reset_value_for_3x3();
+  execute_cycle();
+
   for (const folderSettings& card: cards) {
+//    EXPECT_TRUE(false) << "card: " << static_cast<uint8_t>(card.mode);
     for (uint8_t index = 0; index < Buttons3x3::numLevels; ++index) {
+//      EXPECT_TRUE(false) << "index: " << index;
 
       getMp3().set_folder_track_count(card.folder, 10);
 
@@ -927,6 +933,10 @@ TEST_F(admin_test_fixture, Admin_ShortCut_extButtons_longPress) {
   };
 
   Print::clear_output();
+
+  // reset linearAnalogKeypad from longpress
+  reset_value_for_3x3();
+  execute_cycle();
 
   for (const folderSettings& card: cards) {
     for (uint8_t index = 0; index < Buttons3x3::numLevels; ++index) {

@@ -323,6 +323,10 @@ TEST_F(tonuino_test_fixture, shortcutx_in_pause) {
 
 TEST_F(tonuino_test_fixture, shortcut3x3_in_idle) {
 
+  // reset linearAnalogKeypad from longpress
+  reset_value_for_3x3();
+  execute_cycle();
+
   uint8_t folder = 3;
   uint16_t track_count = 99;
   getMp3().set_folder_track_count(folder, track_count);
@@ -388,6 +392,11 @@ TEST_F(tonuino_test_fixture, shortcut3x3_in_idle) {
 }
 
 TEST_F(tonuino_test_fixture, shortcut3x3_in_pause) {
+
+  // reset linearAnalogKeypad from longpress
+  reset_value_for_3x3();
+  execute_cycle();
+
   uint8_t folder = 3;
   uint16_t track_count = 99;
   getMp3().set_folder_track_count(folder, track_count);
@@ -453,6 +462,11 @@ TEST_F(tonuino_test_fixture, shortcut3x3_in_pause) {
 }
 
 TEST_F(tonuino_test_fixture, shortcut3x3_in_play) {
+
+  // reset linearAnalogKeypad from longpress
+  reset_value_for_3x3();
+  execute_cycle();
+
   uint8_t folder = 3;
   uint16_t track_count = 99;
   getMp3().set_folder_track_count(folder, track_count);

@@ -1,5 +1,7 @@
 #include "linearAnalogKeypad.h"
 
+#include "logger.hpp"
+
 linearAnalogKeypad::linearAnalogKeypad(uint8_t pin, uint16_t keyNum, int16_t maxLevel, unsigned long longPressTime)
 : keypadPin(pin)
 , keyNum(keyNum)
@@ -13,6 +15,12 @@ unsigned char linearAnalogKeypad::getKey() {
 
 	uint16_t keyId = static_cast<int32_t>(analogValue+maxLevel/keyNum/2)*keyNum/maxLevel;
 	keyId = min(keyId, keyNum);
+
+  static uint16_t t = 0;
+	LOG_CODE(button_log, s_debug,
+  if (t++ % 10 == 0)
+    LOG(button_log, s_debug, F("Button3x3 analog value: "), analogValue, F("key: "), keyId);
+	)
 
 	unsigned char ret = 0;
 

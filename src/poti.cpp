@@ -6,7 +6,7 @@
 #include "logger.hpp"
 #include "mp3.hpp"
 
-#ifdef ALLinONE
+#if defined(ALLinONE) or defined(TonUINO_Esp32)
   static constexpr int16_t maxLevel = 4064;
 #else
   static constexpr int16_t maxLevel = 1023;

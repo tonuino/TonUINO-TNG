@@ -81,14 +81,19 @@ command Commands::getCommand(commandRaw b, state_for_command s) {
     PROGMEM_read(&cmd_table[static_cast<int>(b)][static_cast<int>(s)], ret);
   }
 
-  if (ret != command::none) {
+  if (ret != command::none && ret < command::last)
 #ifdef ALLinONE
     LOG(button_log, s_debug, F("btn/cmd: "), static_cast<uint8_t>(b), F("/"), static_cast<uint8_t>(ret));
 #else
     LOG(button_log, s_info , F("btn/cmd: "), getCommandRawStr(b), F("/"), getCommandStr(ret));
 #endif
-  }
-  return ret;
+
+#ifdef BUTTONS3X3
+    if (ret != command::none && ret >= command::ext_begin)
+      LOG(button_log, s_info , F("btn3x3: "), static_cast<uint8_t>(ret)-buttonExtSC_begin+1);
+#endif
+
+    return ret;
 }
 
 const __FlashStringHelper* Commands::getCommandRawStr(commandRaw cmd) {

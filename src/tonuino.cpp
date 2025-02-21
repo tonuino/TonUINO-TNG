@@ -38,8 +38,13 @@ void Tonuino::setup() {
   setup_timer();
 #endif
 
-#if defined(BUTTONS3X3) or defined(BAT_VOLTAGE_MEASUREMENT)
+#if defined(BUTTONS3X3) or defined(BAT_VOLTAGE_MEASUREMENT) or defined(POTI)
   setup_adc();
+#endif
+
+  buttons.begin();
+#ifdef BUTTONS3X3
+  buttons3x3.begin();
 #endif
 
   pinMode(shutdownPin  , OUTPUT);

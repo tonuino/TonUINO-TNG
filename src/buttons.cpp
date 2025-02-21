@@ -18,6 +18,9 @@ Buttons::Buttons()
 , buttonFive (buttonFivePin , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
 #endif
 {
+}
+
+void Buttons::begin() {
   buttonPause.begin();
   buttonUp   .begin();
   buttonDown .begin();

@@ -101,6 +101,7 @@ enum class command: uint8_t {
   menu_jump   = 19,
 #endif
   adm_end     = 20,
+  last        = 21,
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
   ext_end   = ext_begin +  buttonExtSC_buttons,

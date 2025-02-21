@@ -11,7 +11,9 @@ public:
   , settings{}
   , buttons{}
   , commands{settings, &buttons}
-  {}
+  {
+    buttons.begin();
+  }
 
   struct Initializer {
     Initializer() {

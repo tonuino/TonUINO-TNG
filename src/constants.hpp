@@ -317,6 +317,9 @@ inline constexpr float   voltageMeasurementCorrection  = 2.007; // Spannungsteil
 #ifdef TonUINO_Every_4808
 inline constexpr float   voltageMeasurementCorrection  = 2.007; // Spannungsteiler 100k/100k
 #endif
+#ifdef TonUINO_Esp32
+inline constexpr float   voltageMeasurementCorrection  = 1.000; // Spannungsteiler 100k/200k tbd
+#endif
 
 inline constexpr float   batVoltageLow                 = 2.95;
 inline constexpr float   batVoltageEmpty               = 2.90;
