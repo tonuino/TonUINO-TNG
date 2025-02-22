@@ -82,6 +82,10 @@
 
 #include "gpioHelper.hpp"
 
+#if not defined(TonUINO_Classic) and not defined(TonUINO_Every) and not defined(TonUINO_Every_4808) and not defined(ALLinONE) and not defined(ALLinONE_Plus)
+#error Please uncomment one of the PCB lines (TonUINO_Classic, TonUINO_Every, etc.). Bitte eine der Zeilen zur Definition einer Platine einkommentieren (TonUINO_Classic, TonUINO_Every, etc.).
+#endif
+
 // ######################################################################
 
 /* uncomment one of the below lines to enable special button support
@@ -92,6 +96,10 @@
 //#define THREEBUTTONS
 //#define FIVEBUTTONS
 //#define BUTTONS3X3
+
+#if not defined(THREEBUTTONS) and not defined(FIVEBUTTONS) and not defined(BUTTONS3X3)
+#error Please uncomment one of the button-support lines (THREEBUTTONS, FIVEBUTTONS, BUTTONS3X3). Bitte eine der Zeilen zur Auswahl einer Tastenkonfiguraiton einkommentieren (THREEBUTTONS, FIVEBUTTONS, BUTTONS3X3).
+#endif
 
 // ######################################################################
 
