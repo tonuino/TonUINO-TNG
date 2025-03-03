@@ -491,21 +491,21 @@ commandRaw Webservice::getCommandRaw() {
 }
 
 void Webservice::page_notfound(AsyncWebServerRequest *request) {
-  request->send_P(200, "text/html", notfound_html);
+  request->send(200, "text/html", notfound_html);
 }
 
 void Webservice::page_main(AsyncWebServerRequest *request)
 {
-  request->send_P(200, "text/html", main_html, [this](const String& var) { return process_page(var);});
+  request->send(200, "text/html", main_html, [this](const String& var) { return process_page(var);});
 }
 
 void Webservice::page_style_css(AsyncWebServerRequest *request)
 {
-  request->send_P(200, "text/css", style_css);
+  request->send(200, "text/css", style_css);
 }
 
 void Webservice::page_settings(AsyncWebServerRequest *request) {
-  request->send_P(200, "text/html", settings_html, [this](const String& var) { return process_page(var);});
+  request->send(200, "text/html", settings_html, [this](const String& var) { return process_page(var);});
 }
 
 void Webservice::update_settings(AsyncWebServerRequest *request) {
@@ -513,7 +513,7 @@ void Webservice::update_settings(AsyncWebServerRequest *request) {
 
   int params = request->params();
   for (int i = 0; i < params; i++) {
-    AsyncWebParameter *p = request->getParam(i);
+    const AsyncWebParameter *p = request->getParam(i);
     LOG(webserv_log, s_info, "parameter name[", p->name(), "]: ", p->value());
   }
   if (request->hasArg("spkMaxVolume"        )) settings.spkMaxVolume         = request->arg("spkMaxVolume"        ).toInt();
@@ -670,7 +670,7 @@ void Webservice::service(AsyncWebServerRequest *request) {
 
   int params = request->params();
   for (int i = 0; i < params; i++) {
-    AsyncWebParameter *p = request->getParam(i);
+    const AsyncWebParameter *p = request->getParam(i);
     LOG(webserv_log, s_info, "parameter name[", p->name(), "]: ", p->value());
   }
 
@@ -713,7 +713,7 @@ void Webservice::modifier(AsyncWebServerRequest *request) {
 
   int params = request->params();
   for (int i = 0; i < params; i++) {
-    AsyncWebParameter *p = request->getParam(i);
+    const AsyncWebParameter *p = request->getParam(i);
     LOG(webserv_log, s_info, "parameter name[", p->name(), "]: ", p->value());
   }
 
@@ -745,7 +745,7 @@ void Webservice::card(AsyncWebServerRequest *request) {
 
   int params = request->params();
   for (int i = 0; i < params; i++) {
-    AsyncWebParameter *p = request->getParam(i);
+    const AsyncWebParameter *p = request->getParam(i);
     LOG(webserv_log, s_info, "parameter name[", p->name(), "]: ", p->value());
   }
 
