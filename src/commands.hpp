@@ -61,13 +61,10 @@ enum class commandRaw: uint8_t {
   fiveLong       = 16,
   fiveLongRepeat = 17,
 #endif
-#ifdef SPECIAL_START_SHORTCUT
   specialStart   = 18,
-#endif
-#ifdef SerialInputAsCommand
   menu_jump      = 19,
-#endif
-  cmd_end        = 20,
+  card_from_web  = 20,
+  cmd_end        = 21,
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
   ext_end   = ext_begin +  buttonExtSC_buttons,
@@ -101,7 +98,10 @@ enum class command: uint8_t {
   menu_jump   = 19,
 #endif
   adm_end     = 20,
-  last        = 21,
+#ifdef TonUINO_Esp32
+  card_from_web=21,
+#endif
+  last        = 22,
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
   ext_end   = ext_begin +  buttonExtSC_buttons,
@@ -127,7 +127,7 @@ public:
 
 class Commands {
 public:
-  Commands(const Settings& settings, CommandSource* source1, CommandSource* source2 = nullptr, CommandSource* source3 = nullptr);
+  Commands(const Settings& settings, CommandSource* source1, CommandSource* source2 = nullptr, CommandSource* source3 = nullptr, CommandSource* source4 = nullptr);
 
   commandRaw getCommandRaw();
   command    getCommand   (commandRaw b, state_for_command s);
@@ -150,7 +150,7 @@ public:
 
 private:
   const Settings&           settings;
-  array<CommandSource*, 3>  sources;
+  array<CommandSource*, 4>  sources;
 };
 
 #endif /* SRC_COMMANDS_HPP_ */

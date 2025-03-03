@@ -27,7 +27,8 @@ void setup()
 {
   Serial.begin(115200);
 #ifdef TonUINO_Esp32
-  delay(5000);
+  if (digitalRead(buttonDownPin) == getLevel(buttonPinType, level::active))
+    delay(5000);
 #endif
 
   // Dieser Hinweis darf nicht entfernt werden

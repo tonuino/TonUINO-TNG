@@ -72,6 +72,9 @@ struct Settings {
   uint8_t     hpMaxVolume         {};
   uint8_t     hpMinVolume         {};
   uint8_t     hpInitVolume        {};
+#ifdef TonUINO_Esp32
+  folderSettings cardFromWeb      {};
+#endif
 };
 
 #endif /* SRC_SETTINGS_HPP_ */

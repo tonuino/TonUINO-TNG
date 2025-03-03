@@ -137,6 +137,10 @@ void Settings::readExtShortCutFromFlash(uint8_t shortCut,       folderSettings& 
 
 
 folderSettings Settings::getShortCut(uint8_t shortCut) {
+#ifdef TonUINO_Esp32
+  if (shortCut == 0)
+    return cardFromWeb;
+#endif
   if (shortCut > 0 && shortCut <= 4)
     return shortCuts[shortCut-1];
 #ifdef BUTTONS3X3
@@ -151,6 +155,10 @@ folderSettings Settings::getShortCut(uint8_t shortCut) {
 }
 
 void Settings::setShortCut(uint8_t shortCut, const folderSettings& value) {
+#ifdef TonUINO_Esp32
+  if (shortCut == 0)
+    cardFromWeb = value;
+#endif
   if (shortCut > 0 && shortCut <= 4) {
     shortCuts[shortCut-1] = value;
     // writeSettingsToFlash(); -- will be done in state machine

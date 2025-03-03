@@ -231,6 +231,7 @@ public:
   void playPrevious(uint8_t tracks = 1);
   uint8_t getCurrentTrack() { return playing ? q.get(current_track) : 0; }
   uint16_t getFolderTrackCount(uint16_t folder);
+  uint8_t getCurrentFolder() { return current_folder; }
 
   void start() { if (isPause) { isPause = false; Base::start();} }
   void stop () { isPause = false; Base::stop (); }

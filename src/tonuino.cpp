@@ -91,6 +91,11 @@ void Tonuino::setup() {
   LOG(init_log, s_debug, F("get last, folder: "), myFolder.folder, F(", mode: "), static_cast<uint8_t>(myFolder.mode));
 #endif
 
+#ifdef TonUINO_Esp32
+  // init webservice
+  webservice.init();
+#endif
+
   // init NFC reader
   chip_card.initCard();
 
@@ -246,6 +251,9 @@ void Tonuino::loop() {
     digitalWrite(btModulePairingPin, getLevel(btModulePairingPinType, level::inactive));
 #endif // BT_MODULE
 
+#ifdef TonUINO_Esp32
+  webservice.loop();
+#endif
 
   unsigned long  stop_cycle = millis();
 
