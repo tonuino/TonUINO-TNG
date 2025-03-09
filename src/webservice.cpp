@@ -95,8 +95,13 @@ label {
   display: inline-block;
 }
 
-.service button {
-  width: 6ch;
+.service_button_5 button {
+  width: 7ch;
+  height: 5ch;
+}
+
+.service_button_3 button {
+  width: 7ch;
   height: 5ch;
 }
 
@@ -113,17 +118,25 @@ button + button {
   width: auto;
   height: auto;
   border-style: solid;
-  border-width: 2px;
+  border-width: 1px;
   margin: 1ch;
   text-align: left;
   padding: 5px;
   white-space: pre-line;
+  background-color: #cccccc
 }
 
-.service {
+.service_button_5 {
   display: block;
   border: none;
-  padding: 14px 5px;
+  padding: 14px 1ch;
+  text-align: left;
+}
+
+.service_button_3 {
+  display: block;
+  border: none;
+  padding: 14px 8ch;
   text-align: left;
 }
 
@@ -133,6 +146,40 @@ button + button {
   width: 95%;
   border: none;
   text-align: left;
+}
+
+.tooltip {
+    display: inline-block; 
+    position: relative;
+}
+.tooltip .tooltiptext {
+    visibility: hidden;
+    background-color: #292929;
+    color: #fff;
+    text-align: left;
+    border-radius:6px;
+    padding: .5rem;
+    position: absolute;
+    z-index: 1;
+    bottom: 130%;
+    right: -5ch;
+    left: -18ch;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 75%;  
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #292929 transparent transparent transparent;
+}
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
 }
 
 )rawliteral";
@@ -165,7 +212,7 @@ const char topnav_html[] PROGMEM = R"rawliteral(
   <a href="/" class="active">TonUINO</a>
   <div id="nav_links">
     <a href="/">Home</a>
-    <a href="/settings">Settings</a>
+    <a href="/settings">Einstellungen</a>
   </div>
   <a href="javascript:void(0);" class="icon" onclick="show_hide_nav()">
     <i class="fa fa-bars"></i>
@@ -181,6 +228,67 @@ function show_hide_nav() {
   }
 }
 </script>
+
+)rawliteral";
+
+const char service_button_5_html[] PROGMEM = R"rawliteral(
+
+<form class="service_button_5" id="service">
+    normal:
+    <br>
+    <button name="five"     value="five"    onclick="return submit_form('service', 'button'  , 'five') ;">Vol-</button>
+    <button name="down"     value="down"    onclick="return submit_form('service', 'button'  , 'down') ;">Prev</button>
+    <button name="pause"    value="pause"   onclick="return submit_form('service', 'button'  , 'pause');">Pause</button>
+    <button name="up"       value="up"      onclick="return submit_form('service', 'button'  , 'up')   ;">Next</button>
+    <button name="four"     value="four"    onclick="return submit_form('service', 'button'  , 'four') ;">Vol+</button>
+    <br>
+    lang:
+    <br>
+    <button name="five_long"     value="five_long"    onclick="return submit_form('service', 'button'  , 'five_long') ;">Vol-</button>
+    <button name="down_long"     value="down_long"    onclick="return submit_form('service', 'button'  , 'down_long') ;">Prev</button>
+    <button name="pause_long"    value="pause_long"   onclick="return submit_form('service', 'button'  , 'pause_long');">Pause</button>
+    <button name="up_long"       value="up_long"      onclick="return submit_form('service', 'button'  , 'up_long')   ;">Next</button>
+    <button name="four_long"     value="four_long"    onclick="return submit_form('service', 'button'  , 'four_long') ;">Vol+</button>
+</form>
+<br>
+
+)rawliteral";
+
+const char service_button_3_html[] PROGMEM = R"rawliteral(
+
+<form class="service_button_3" id="service">
+    normal:
+    <br>
+    <button onclick="return submit_form('service', 'button'  , 'down') ;">Prev</button>
+    <button onclick="return submit_form('service', 'button'  , 'pause');">Pause</button>
+    <button onclick="return submit_form('service', 'button'  , 'up')   ;">Next</button>
+    <br>
+    lang:
+    <br>
+    <button onclick="return submit_form('service', 'button'  , 'down_long') ;">Vol-</button>
+    <button onclick="return submit_form('service', 'button'  , 'pause_long');">Track</button>
+    <button onclick="return submit_form('service', 'button'  , 'up_long')   ;">Vol+</button>
+</form>
+<br>
+
+)rawliteral";
+
+const char service_button_3_inv_html[] PROGMEM = R"rawliteral(
+
+<form class="service_button_3" id="service">
+    normal:
+    <br>
+    <button onclick="return submit_form('service', 'button'  , 'down') ;">Vol-</button>
+    <button onclick="return submit_form('service', 'button'  , 'pause');">Pause</button>
+    <button onclick="return submit_form('service', 'button'  , 'up')   ;">Vol+</button>
+    <br>
+    lang:
+    <br>
+    <button onclick="return submit_form('service', 'button'  , 'down_long') ;">Prev</button>
+    <button onclick="return submit_form('service', 'button'  , 'pause_long');">Track</button>
+    <button onclick="return submit_form('service', 'button'  , 'up_long')   ;">Next</button>
+</form>
+<br>
 
 )rawliteral";
 
@@ -218,25 +326,22 @@ const char main_html[] PROGMEM = R"rawliteral(
 <div class="status" id="tonuino_status">%STATE%</div>
 <br>
 
-<form class="service" id="service">
-    <button name="vol_down" value="vol_down"onclick="return submit_form('service', 'vol_down', 'vol_down');">Vol-</button>
-    <button name="down"     value="down"    onclick="return submit_form('service', 'down'    , 'down')    ;">Prev</button>
-    <button name="play"     value="play"    onclick="return submit_form('service', 'play'    , 'play')    ;">Play</button>
-    <button name="up"       value="up"      onclick="return submit_form('service', 'up'      , 'up')      ;">Next</button>
-    <button name="vol_up"   value="vol_up"  onclick="return submit_form('service', 'vol_up'  , 'vol_up')  ;">Vol+</button>
-</form>
-<br>
+%SERVICE%
 
 <form class="service1" id="modifier">
 <br><label for="mod_mode"    >Modifier:  </label><select size=1 name="mod_mode" id="mod_mode">
                                                    <option>Sleep-Timer      </option>
-                                                   <option>Stoptanz         </option>
+                                                   <option>Stopptanz        </option>
                                                    <option>Feuer-Wasser-Luft</option>
                                                    <option>Gesperrt         </option>
                                                    <option>Kita Modus       </option>
                                                    <option>Wiederhole Track </option>
                                                  </select>
-<br><label for="mod_special" >Parameter  </label><input type="number" name="mod_special" id="mod_special">
+<br><label for="mod_special" >Parameter  </label><div class="tooltip"><input type="number" name="mod_special" id="mod_special">
+                                                   <span class="tooltiptext">Sleep-Timer: Timeout in min
+                                                                         <br>Feuer-Wasser-Luft/
+                                                                         <br>Stopptanz: Pausezeit (min/max)
+                                                                         <br>0: 15/30, 1: 25/40, 2: 35/50</span></div>
 <br>
 <button name="mod_action" value="activate" onclick="return submit_form('modifier', 'mod_action', 'activate');">Activate</button>
 <button name="mod_action" value="delete"   onclick="return submit_form('modifier', 'mod_action', 'delete'  );">Delete</button>
@@ -258,9 +363,16 @@ const char main_html[] PROGMEM = R"rawliteral(
                                                                   <option>Quiz Spiel</option>                                  
                                                                   <option>Memory Spiel</option>                                
                                                                 </select>                                                      
-<br><label for="folder"         >Folder / Sp1 / Sp2     </label><input type="number" name="folder"             id="folder">  
-                                                              / <input type="number" name="special1"           id="special1">
-                                                              / <input type="number" name="special2"           id="special2">
+<br><label for="folder"         >Folder / Sp1 / Sp2     </label><div class="tooltip"><input type="number" name="folder"             id="folder">  
+                                                                  <span class="tooltiptext">Folder</span></div>
+                                                              / <div class="tooltip"><input type="number" name="special1"           id="special1">
+                                                                  <span class="tooltiptext">Einzel: Track
+                                                                                        <br>* von bis: erster Track
+                                                                                        <br>Hörbuch einzel: Anzahl der Tracks
+                                                                                        <br>Quiz: Anzahl der Antworten (0, 2 oder 4)</span></div>
+                                                              / <div class="tooltip"><input type="number" name="special2"           id="special2">
+                                                                  <span class="tooltiptext">* von bis: letzter Track
+                                                                                        <br>Quiz: Anzahl der Lösungen (0 oder 1)</span></div>
 <br><button name="start" value="start" onclick="return submit_form('card', 'start', 'start'  );">Start</button>
 </form>
 <br>
@@ -298,7 +410,7 @@ const char settings_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML>
 <html>
 <head>
-  <title>TonUINO Settings</title>
+  <title>TonUINO Einstellungen</title>
   <meta charset=utf-8>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -308,7 +420,7 @@ const char settings_html[] PROGMEM = R"rawliteral(
 
 %TOPNAV%
 
-<h2>Settings</h2>
+<h2>Einstellungen</h2>
 
   <br>  <label for="version">Version:                     </label><input type="number" name="version"             id="version" readonly>
 
@@ -317,16 +429,30 @@ const char settings_html[] PROGMEM = R"rawliteral(
     <br><label for="max"             >Lautstärke          </label><div class='as_input_number' id='max' >max </div>
                                                                   <div class='as_input_number' id='min' >min </div>
                                                                   <div class='as_input_number' id='init'>init</div>
-    <br><label for="spkMaxVolume"    >Lautsprecher:       </label><input type="number" name="spkMaxVolume"        id="spkMaxVolume">
-                                                                  <input type="number" name="spkMinVolume"        id="spkMinVolume">
-                                                                  <input type="number" name="spkInitVolume"       id="spkInitVolume">
-    <br><label for="hpMaxVolume"     >Kopfhörer:          </label><input type="number" name="hpMaxVolume"         id="hpMaxVolume">
-                                                                  <input type="number" name="hpMinVolume"         id="hpMinVolume">
-                                                                  <input type="number" name="hpInitVolume"        id="hpInitVolume">
+    <br><label for="spkMaxVolume"    >Lautsprecher:       </label><div class="tooltip"><input type="number" name="spkMaxVolume"        id="spkMaxVolume">
+                                                                    <span class="tooltiptext">Maximale Lautstärke (Lautsprecher) [0...25]</span></div>
+                                                                  <div class="tooltip"><input type="number" name="spkMinVolume"        id="spkMinVolume">
+                                                                    <span class="tooltiptext">Minimale Lautstärke (Lautsprecher) [0...max]</span></div>
+                                                                  <div class="tooltip"><input type="number" name="spkInitVolume"       id="spkInitVolume">
+                                                                    <span class="tooltiptext">Initiale Lautstärke (Lautsprecher) [min...max]</span></div>
+    <br><label for="hpMaxVolume"     >Kopfhörer:          </label><div class="tooltip"><input type="number" name="hpMaxVolume"         id="hpMaxVolume">
+                                                                    <span class="tooltiptext">Maximale Lautstärke (Kopfhörer) [0...25]</span></div>
+                                                                  <div class="tooltip"><input type="number" name="hpMinVolume"         id="hpMinVolume">
+                                                                    <span class="tooltiptext">Minimale Lautstärke (Kopfhörer) [0...max]</span></div>
+                                                                  <div class="tooltip"><input type="number" name="hpInitVolume"        id="hpInitVolume">
+                                                                    <span class="tooltiptext">Initiale Lautstärke (Kopfhörer) [min...max]</span></div>
     <br>
-    <br><label for="eq"              >Equalizer:          </label><input type="number" name="eq"                  id="eq">
+    <br><label for="eq"              >Equalizer:          </label><select size=1       name="eq"                  id="eq">
+                                                                    <option>Normal</option>
+                                                                    <option>Pop</option>
+                                                                    <option>Rock</option>
+                                                                    <option>Jazz</option>
+                                                                    <option>Classic</option>
+                                                                    <option>Bass</option>
+                                                                  </select>
     <br>
-    <br><label for="standbyTimer"    >Standby Timer:      </label><input type="number" name="standbyTimer"        id="standbyTimer">
+    <br><label for="standbyTimer"    >Standby Timer:      </label><div class="tooltip"><input type="number" name="standbyTimer"        id="standbyTimer">
+                                                                    <span class="tooltiptext">Timeout für Ausschalten in min [0...60] (0: deaktiviert)</span></div>
     <br>
     <br><label for="invertVolButtons">Inv. Volume Buttons:</label><input type="checkbox" name="invertVolumeButtons" id="invertVolumeButtons">
     <br>
@@ -336,10 +462,14 @@ const char settings_html[] PROGMEM = R"rawliteral(
                                                                     <option>Pin</option>
                                                                   </select>
     <br>
-    <br><label for="adminMenuPin1"   >Admin-Menü Pin:     </label><input type="number" name="adminMenuPin1"       id="adminMenuPin1">
-                                                                  <input type="number" name="adminMenuPin2"       id="adminMenuPin2">
-                                                                  <input type="number" name="adminMenuPin3"       id="adminMenuPin3">
-                                                                  <input type="number" name="adminMenuPin4"       id="adminMenuPin4">
+    <br><label for="adminMenuPin1"   >Admin-Menü Pin:     </label><div class="tooltip"><input type="number" name="adminMenuPin1"       id="adminMenuPin1">
+                                                                    <span class="tooltiptext">1: Pause, 2: Next, 3: Prev</span></div>
+                                                                  <div class="tooltip"><input type="number" name="adminMenuPin2"       id="adminMenuPin2">
+                                                                    <span class="tooltiptext">1: Pause, 2: Next, 3: Prev</span></div>
+                                                                  <div class="tooltip"><input type="number" name="adminMenuPin3"       id="adminMenuPin3">
+                                                                    <span class="tooltiptext">1: Pause, 2: Next, 3: Prev</span></div>
+                                                                  <div class="tooltip"><input type="number" name="adminMenuPin4"       id="adminMenuPin4">
+                                                                    <span class="tooltiptext">1: Pause, 2: Next, 3: Prev</span></div>
     <br>
     <br><label for="pauseWhenCardRemoved">Pause w. Kart. entf.:</label><input type="checkbox" name="pauseWhenCardRemoved" id="pauseWhenCardRemoved">
     <br>
@@ -367,9 +497,16 @@ const char settings_html[] PROGMEM = R"rawliteral(
  +'                                                                  <option>Quiz Spiel</option>                                     '
  +'                                                                  <option>Memory Spiel</option>                                   '
  +'                                                                </select>                                                         '
- +'<br><label for="sc_folder_n_"   >Folder / Sp1 / Sp2     </label><input type="number" name="sc_folder_n_"      id="sc_folder_n_">  '
- +'                                                              / <input type="number" name="sc_special1_n_"    id="sc_special1_n_">'
- +'                                                              / <input type="number" name="sc_special2_n_"    id="sc_special2_n_">'
+ +'<br><label for="sc_folder_n_"   >Folder / Sp1 / Sp2     </label><div class="tooltip"><input type="number" name="sc_folder_n_"      id="sc_folder_n_">  '  
+ +'                                                                 <span class="tooltiptext">Folder</span></div>                                         '
+ +'                                                              / <div class="tooltip"><input type="number" name="sc_special1_n_"    id="sc_special1_n_">'
+ +'                                                                 <span class="tooltiptext">Einzel: Track                                               '
+ +'                                                                                       <br>* von bis: erster Track                                     '
+ +'                                                                                       <br>Hörbuch einzel: Anzahl der Tracks                           '
+ +'                                                                                       <br>Quiz: Anzahl der Antworten (0, 2 oder 4)</span></div>       '
+ +'                                                              / <div class="tooltip"><input type="number" name="sc_special2_n_"    id="sc_special2_n_">'
+ +'                                                                 <span class="tooltiptext">* von bis: letzter Track                                    '
+ +'                                                                                       <br>Quiz: Anzahl der Lösungen (0 oder 1)</span></div>           '
  +'<br>';
 
   function pageLoad() {
@@ -522,12 +659,17 @@ void Webservice::update_settings(AsyncWebServerRequest *request) {
   if (request->hasArg("hpMaxVolume"         )) settings.hpMaxVolume          = request->arg("hpMaxVolume"         ).toInt();
   if (request->hasArg("hpMinVolume"         )) settings.hpMinVolume          = request->arg("hpMinVolume"         ).toInt();
   if (request->hasArg("hpInitVolume"        )) settings.hpInitVolume         = request->arg("hpInitVolume"        ).toInt();
-  if (request->hasArg("eq"                  )) settings.eq                   = request->arg("eq"                  ).toInt();
+  if (request->hasArg("eq"                  )) settings.eq                   = request->arg("eq"                  ) == "Normal"  ? 1 :
+                                                                               request->arg("eq"                  ) == "Pop"     ? 2 :
+                                                                               request->arg("eq"                  ) == "Rock"    ? 3 :
+                                                                               request->arg("eq"                  ) == "Jazz"    ? 4 :
+                                                                               request->arg("eq"                  ) == "Classic" ? 5 :
+                                                                               request->arg("eq"                  ) == "Bass"    ? 6 : 1;
   if (request->hasArg("standbyTimer"        )) settings.standbyTimer         = request->arg("standbyTimer"        ).toInt();
   if (request->hasArg("invertVolumeButtons" )) settings.invertVolumeButtons  = 1; else settings.invertVolumeButtons = 0;
   if (request->hasArg("adminMenuLocked"     )) settings.adminMenuLocked      = request->arg("adminMenuLocked"     ) == "kein Lock"? 0 :
                                                                                request->arg("adminMenuLocked"     ) == "nur Karte"? 1 :
-                                                                               request->arg("adminMenuLocked"     ) == "Pin"? 2 : 0;
+                                                                               request->arg("adminMenuLocked"     ) == "Pin"      ? 2 : 0;
   if (request->hasArg("adminMenuPin1"       )) settings.adminMenuPin[0]      = request->arg("adminMenuPin1"       ).toInt();
   if (request->hasArg("adminMenuPin2"       )) settings.adminMenuPin[1]      = request->arg("adminMenuPin2"       ).toInt();
   if (request->hasArg("adminMenuPin3"       )) settings.adminMenuPin[2]      = request->arg("adminMenuPin3"       ).toInt();
@@ -606,6 +748,29 @@ void Webservice::update_settings(AsyncWebServerRequest *request) {
   if (request->hasArg("sc_special14"        )) settings.shortCuts[3].special = request->arg("sc_special14"        ).toInt();
   if (request->hasArg("sc_Special24"        )) settings.shortCuts[3].special2= request->arg("sc_special24"        ).toInt();
 
+  // check values
+  if (settings.spkMaxVolume  > 25                   ) settings.spkMaxVolume  = 25;
+  if (settings.spkMinVolume  > settings.spkMaxVolume) settings.spkMinVolume  = settings.spkMaxVolume;
+  if (settings.spkInitVolume > settings.spkMaxVolume) settings.spkInitVolume = settings.spkMaxVolume;
+  if (settings.spkInitVolume < settings.spkMinVolume) settings.spkInitVolume = settings.spkMinVolume;
+
+  if (settings.standbyTimer > 60) settings.standbyTimer = 60;
+
+  for (uint8_t i = 0; i <= 3; ++i) {
+    if (settings.adminMenuPin[i] > 3) settings.adminMenuPin[i] = 3;
+    if (settings.adminMenuPin[i] < 1) settings.adminMenuPin[i] = 1;
+  }
+
+  if (settings.hpMaxVolume  > 25                   ) settings.hpMaxVolume  = 25;
+  if (settings.hpMinVolume  > settings.hpMaxVolume) settings.hpMinVolume  = settings.hpMaxVolume;
+  if (settings.hpInitVolume > settings.hpMaxVolume) settings.hpInitVolume = settings.hpMaxVolume;
+  if (settings.hpInitVolume < settings.hpMinVolume) settings.hpInitVolume = settings.hpMinVolume;
+
+  // update real values
+  if (mp3.getVolume() > mp3.getMaxVolume()) mp3.setVolume(mp3.getMaxVolume());
+  if (mp3.getVolume() < mp3.getMinVolume()) mp3.setVolume(mp3.getMinVolume());
+  mp3.setEq(static_cast<DfMp3_Eq>(settings.eq - 1));
+
   settings.writeSettingsToFlash();
 
   AsyncWebServerResponse *response = request->beginResponse(302, "text/plain", "Moved");
@@ -627,12 +792,17 @@ void Webservice::get_settings(AsyncWebServerRequest *request) {
   doc["hpMaxVolume"         ] = String(settings.hpMaxVolume         );
   doc["hpMinVolume"         ] = String(settings.hpMinVolume         );
   doc["hpInitVolume"        ] = String(settings.hpInitVolume        );
-  doc["eq"                  ] = String(settings.eq                  );
+  doc["eq"                  ] = settings.eq==1 ? "Normal":
+                                settings.eq==2 ? "Pop"    :
+                                settings.eq==3 ? "Rock"   :
+                                settings.eq==4 ? "Jazz"   :
+                                settings.eq==5 ? "Classic":
+                                settings.eq==6 ? "Bass"   : "?";
   doc["standbyTimer"        ] = String(settings.standbyTimer        );
   doc["invertVolumeButtons" ] = String(settings.invertVolumeButtons );
   doc["adminMenuLocked"     ] = settings.adminMenuLocked==0 ? "kein Lock":
                                 settings.adminMenuLocked==1 ? "nur Karte":
-                                settings.adminMenuLocked==2 ? "Pin": "?";
+                                settings.adminMenuLocked==2 ? "Pin"      : "?";
   doc["adminMenuPin1"       ] = String(settings.adminMenuPin[0]     );
   doc["adminMenuPin2"       ] = String(settings.adminMenuPin[1]     );
   doc["adminMenuPin3"       ] = String(settings.adminMenuPin[2]     );
@@ -674,37 +844,20 @@ void Webservice::service(AsyncWebServerRequest *request) {
     LOG(webserv_log, s_info, "parameter name[", p->name(), "]: ", p->value());
   }
 
-  if (request->hasArg("vol_down"))
+  if (request->hasArg("button")) {
+    if      (request->arg("button") == "down"      ) cmd = commandRaw::down;
+    else if (request->arg("button") == "pause"     ) cmd = commandRaw::pause;
+    else if (request->arg("button") == "up"        ) cmd = commandRaw::up;
+    else if (request->arg("button") == "down_long" ) cmd = commandRaw::downLong;
+    else if (request->arg("button") == "pause_long") cmd = commandRaw::pauseLong;
+    else if (request->arg("button") == "up_long"   ) cmd = commandRaw::upLong;
 #ifdef FIVEBUTTONS
-    cmd = commandRaw::five;
-#else
-    cmd = settings.invertVolumeButtons? commandRaw::down : commandRaw::downLong;
+    else if (request->arg("button") == "five"      ) cmd = commandRaw::five;
+    else if (request->arg("button") == "four"      ) cmd = commandRaw::four;
+    else if (request->arg("button") == "five_long" ) cmd = commandRaw::fiveLong;
+    else if (request->arg("button") == "four_long" ) cmd = commandRaw::fourLong;
 #endif
-
-  else if (request->hasArg("down"))
-#ifdef FIVEBUTTONS
-    cmd = commandRaw::down;
-#else
-  cmd = settings.invertVolumeButtons? commandRaw::downLong : commandRaw::down;
-#endif
-
-  else if (request->hasArg("play"))
-    cmd = commandRaw::pause;
-
-  else if (request->hasArg("up"))
-#ifdef FIVEBUTTONS
-    cmd = commandRaw::up;
-#else
-  cmd = settings.invertVolumeButtons? commandRaw::upLong : commandRaw::up;
-#endif
-
-  else if (request->hasArg("vol_up"))
-#ifdef FIVEBUTTONS
-    cmd = commandRaw::four;
-#else
-  cmd = settings.invertVolumeButtons? commandRaw::up : commandRaw::upLong;
-#endif
-
+  }
   request->send(200);
 }
 
@@ -798,6 +951,7 @@ void Webservice::onWebSocketEvent(AsyncWebSocket *server, AsyncWebSocketClient *
       break;
     case WS_EVT_PONG:
     case WS_EVT_ERROR:
+    case WS_EVT_PING:
       break;
   }
 }
@@ -845,10 +999,20 @@ void Webservice::push_status() {
 
 String Webservice::process_page(const String& var) {
 
-  if(var == "STATE")
+  if (var == "STATE")
     return get_status();
-  if(var == "TOPNAV")
+  if (var == "TOPNAV")
     return topnav_html;
+  if (var == "SERVICE") {
+#ifdef FIVEBUTTONS
+    return service_button_5_html;
+#else
+    if (settings.invertVolumeButtons)
+      return service_button_3_inv_html;
+    else
+      return service_button_3_html;
+#endif
+  }
 
   return "";
 
