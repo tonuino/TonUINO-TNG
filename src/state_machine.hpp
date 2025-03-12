@@ -78,6 +78,10 @@ protected:
   bool handleShortcut(uint8_t shortCut);
   void handleReadCard();
   bool checkForShortcutAndShutdown(command cmd);
+#ifdef TonUINO_Esp32
+  bool checkForWritingCard(command cmd, command_e const &cmd_e);
+  bool writingCard{};
+#endif
 #ifdef NEO_RING
   void handleBrightness(command cmd);
 #endif

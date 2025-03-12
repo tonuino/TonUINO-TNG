@@ -366,6 +366,29 @@ void Mp3::hpjackdetect() {
 }
 #endif
 
+#ifdef TonUINO_Esp32
+  String Mp3::getQueue() {
+    String res;
+    constexpr uint8_t additional = 4;
+
+    if (isPlayingFolder()) {
+      uint8_t first = (current_track < additional) ? 0 : current_track-additional;
+      uint8_t last  = (current_track > q.size()-1-additional) ? q.size()-1 : current_track+additional;
+      for (uint8_t t = first; t <= last; ++t) {
+        if (t == current_track)
+          res += "<b>";
+        res += String(q.get(t));
+        if (t == current_track)
+          res += "</b>";
+        res += " ";
+      }
+    }
+
+    return res;
+  }
+#endif
+
+
 void Mp3::loop() {
 
   if (not isPause && playing != play_none && startTrackTimer.isExpired() && not isPlaying()) {

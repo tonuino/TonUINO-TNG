@@ -613,6 +613,28 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
   return false;
 }
 
+#ifdef TonUINO_Esp32
+bool Base::checkForWritingCard(command cmd, command_e const &cmd_e) {
+
+  if (cmd == command::write_card_from_web) {
+    if (chip_card.isCardRemoved()) {
+      SM_writeCard::folder = settings.getShortCut(0);
+      SM_writeCard::start();
+      writingCard = true;
+      return true;
+    }
+  }
+  if (writingCard) {
+    SM_writeCard::dispatch(cmd_e);
+    if (SM_writeCard::is_in_state<finished_writeCard>() or SM_writeCard::is_in_state<finished_abort_writeCard>()) {
+      writingCard = false;
+    }
+    return true;
+  }
+  return false;
+}
+#endif
+
 #ifdef NEO_RING
 void Base::handleBrightness(command cmd) {
   switch (cmd) {
@@ -644,6 +666,11 @@ void Idle::react(command_e const &cmd_e) {
 
   if (checkForShortcutAndShutdown(cmd))
     return;
+
+#ifdef TonUINO_Esp32
+  if (checkForWritingCard(cmd, cmd_e))
+    return;
+#endif
 
 #ifdef NEO_RING
   handleBrightness(cmd);
@@ -693,6 +720,10 @@ void Idle::react(card_e const &c_e) {
   if (c_e.card_ev != cardEvent::none) {
     LOG(state_log, s_debug, str_Idle(), F("::react(c) "), static_cast<int>(c_e.card_ev));
   }
+#ifdef TonUINO_Esp32
+  if (writingCard)
+    return;
+#endif
   switch (c_e.card_ev) {
   case cardEvent::inserted:
     if (readCard())
@@ -824,6 +855,11 @@ void Pause::react(command_e const &cmd_e) {
   if (checkForShortcutAndShutdown(cmd))
     return;
 
+#ifdef TonUINO_Esp32
+  if (checkForWritingCard(cmd, cmd_e))
+    return;
+#endif
+
 #ifdef NEO_RING
   handleBrightness(cmd);
 #endif
@@ -852,6 +888,10 @@ void Pause::react(card_e const &c_e) {
   if (c_e.card_ev != cardEvent::none) {
     LOG(state_log, s_debug, str_Pause(), F("::react(c) "), static_cast<int>(c_e.card_ev));
   }
+#ifdef TonUINO_Esp32
+  if (writingCard)
+    return;
+#endif
   switch (c_e.card_ev) {
   case cardEvent::inserted:
     if (readCard()) {

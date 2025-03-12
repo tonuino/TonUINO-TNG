@@ -12,7 +12,7 @@ const command cmd_table[][4] PROGMEM = {
 #ifndef DISABLE_SHUTDOWN_VIA_BUTTON
 /*  4 pauseLong,      */ ,{ command::adm_end   , command::shutdown   , command::track      , command::track       }
 #else
-/*  4 pauseLong,      */ ,{ command::adm_end   , command::shortcut1   , command::track      , command::track       }
+/*  4 pauseLong,      */ ,{ command::adm_end   , command::shortcut1  , command::track      , command::track       }
 #endif
 #ifdef FIVEBUTTONS
 /*  5 up,             */ ,{ command::next      , command::bright_up  , command::next       , command::none        }
@@ -46,7 +46,7 @@ const command cmd_table[][4] PROGMEM = {
 #ifdef SPECIAL_START_SHORTCUT
 /* 18 specialStart,   */ ,{ command::none      , command::specialStart,command::none       , command::none        }
 #else
-/* 18 specialStart,   */ ,{ command::none      , command::none       ,command::none       , command::none        }
+/* 18 specialStart,   */ ,{ command::none      , command::none       ,command::none        , command::none        }
 #endif
 #ifdef SerialInputAsCommand
 /* 19 menu_jump ,     */ ,{ command::menu_jump , command::none       , command::none       , command::none        }
@@ -54,9 +54,11 @@ const command cmd_table[][4] PROGMEM = {
 /* 19 menu_jump ,     */ ,{ command::none      , command::none       , command::none       , command::none        }
 #endif
 #ifdef TonUINO_Esp32
-/* 20 card_from_web,  */ ,{ command::none , command::card_from_web, command::card_from_web, command::card_from_web}
+/* 20 card_from_web,  */ ,{ command::none , command::card_from_web, command::card_from_web , command::card_from_web}
+/* 21 w_card_from_web,*/ ,{ command::none , command::write_card_from_web, command::none    , command::none}
 #else
 /* 20 card_from_web,  */ ,{ command::none      , command::none       , command::none       , command::none        }
+/* 21 w_card_from_web,*/ ,{ command::none      , command::none       , command::none       , command::none        }
 #endif
 };
 Commands::Commands(const Settings& settings, CommandSource* source1, CommandSource* source2, CommandSource* source3, CommandSource* source4)

@@ -258,6 +258,10 @@ public:
   void setTempSpkOn         () { tempSpkOn = 2; }
 #endif
 
+#ifdef TonUINO_Esp32
+  String getQueue();
+#endif
+
 private:
   friend class tonuino_fixture;
 

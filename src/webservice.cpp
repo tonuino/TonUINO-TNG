@@ -18,9 +18,19 @@ Static HTML Definition
 
 const char style_css[] PROGMEM = R"rawliteral(
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #99ccff
+@media (min-width: 768px) {
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #99ccff;
+        font-size: 14px;
+    }
+}
+@media (max-width: 767px) {
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #99ccff;
+        font-size: 16px;
+    }
 }
 
 .topnav {
@@ -95,6 +105,11 @@ label {
   display: inline-block;
 }
 
+select {
+  height: 4ch;
+  margin: .3em;
+}
+
 .service_button_5 button {
   width: 7ch;
   height: 5ch;
@@ -106,6 +121,7 @@ label {
 }
 
 .service1 button {
+  margin-top: 2em;
   width: 9ch;
   height: 5ch;
 }
@@ -119,24 +135,23 @@ button + button {
   height: auto;
   border-style: solid;
   border-width: 1px;
-  margin: 1ch;
+  margin: .3em;
   text-align: left;
-  padding: 5px;
-  white-space: pre-line;
+  padding: .3em;
   background-color: #cccccc
 }
 
 .service_button_5 {
   display: block;
   border: none;
-  padding: 14px 1ch;
+  padding: .3em 1ch;
   text-align: left;
 }
 
 .service_button_3 {
   display: block;
   border: none;
-  padding: 14px 8ch;
+  padding: .3em 8ch;
   text-align: left;
 }
 
@@ -236,19 +251,19 @@ const char service_button_5_html[] PROGMEM = R"rawliteral(
 <form class="service_button_5" id="service">
     normal:
     <br>
-    <button name="five"     value="five"    onclick="return submit_form('service', 'button'  , 'five') ;">Vol-</button>
-    <button name="down"     value="down"    onclick="return submit_form('service', 'button'  , 'down') ;">Prev</button>
-    <button name="pause"    value="pause"   onclick="return submit_form('service', 'button'  , 'pause');">Pause</button>
-    <button name="up"       value="up"      onclick="return submit_form('service', 'button'  , 'up')   ;">Next</button>
-    <button name="four"     value="four"    onclick="return submit_form('service', 'button'  , 'four') ;">Vol+</button>
+    <button onclick="return submit_form('service', 'button'  , 'five') ;">Vol-</button>
+    <button onclick="return submit_form('service', 'button'  , 'down') ;">Prev</button>
+    <button onclick="return submit_form('service', 'button'  , 'pause');">Pause</button>
+    <button onclick="return submit_form('service', 'button'  , 'up')   ;">Next</button>
+    <button onclick="return submit_form('service', 'button'  , 'four') ;">Vol+</button>
     <br>
     lang:
     <br>
-    <button name="five_long"     value="five_long"    onclick="return submit_form('service', 'button'  , 'five_long') ;">Vol-</button>
-    <button name="down_long"     value="down_long"    onclick="return submit_form('service', 'button'  , 'down_long') ;">Prev</button>
-    <button name="pause_long"    value="pause_long"   onclick="return submit_form('service', 'button'  , 'pause_long');">Pause</button>
-    <button name="up_long"       value="up_long"      onclick="return submit_form('service', 'button'  , 'up_long')   ;">Next</button>
-    <button name="four_long"     value="four_long"    onclick="return submit_form('service', 'button'  , 'four_long') ;">Vol+</button>
+    <button onclick="return submit_form('service', 'button'  , 'five_long') ;">Vol-</button>
+    <button onclick="return submit_form('service', 'button'  , 'down_long') ;">Prev</button>
+    <button onclick="return submit_form('service', 'button'  , 'pause_long');">Pause</button>
+    <button onclick="return submit_form('service', 'button'  , 'up_long')   ;">Next</button>
+    <button onclick="return submit_form('service', 'button'  , 'four_long') ;">Vol+</button>
 </form>
 <br>
 
@@ -328,26 +343,6 @@ const char main_html[] PROGMEM = R"rawliteral(
 
 %SERVICE%
 
-<form class="service1" id="modifier">
-<br><label for="mod_mode"    >Modifier:  </label><select size=1 name="mod_mode" id="mod_mode">
-                                                   <option>Sleep-Timer      </option>
-                                                   <option>Stopptanz        </option>
-                                                   <option>Feuer-Wasser-Luft</option>
-                                                   <option>Gesperrt         </option>
-                                                   <option>Kita Modus       </option>
-                                                   <option>Wiederhole Track </option>
-                                                 </select>
-<br><label for="mod_special" >Parameter  </label><div class="tooltip"><input type="number" name="mod_special" id="mod_special">
-                                                   <span class="tooltiptext">Sleep-Timer: Timeout in min
-                                                                         <br>Feuer-Wasser-Luft/
-                                                                         <br>Stopptanz: Pausezeit (min/max)
-                                                                         <br>0: 15/30, 1: 25/40, 2: 35/50</span></div>
-<br>
-<button name="mod_action" value="activate" onclick="return submit_form('modifier', 'mod_action', 'activate');">Activate</button>
-<button name="mod_action" value="delete"   onclick="return submit_form('modifier', 'mod_action', 'delete'  );">Delete</button>
-</form>
-<br>
-
 <form class="service1" id="card">
 <br><label for="mode"              >Karte:              </label><select size=1       name="mode"             id="mode">      
                                                                   <option>Hörspiel</option>                                    
@@ -373,7 +368,30 @@ const char main_html[] PROGMEM = R"rawliteral(
                                                               / <div class="tooltip"><input type="number" name="special2"           id="special2">
                                                                   <span class="tooltiptext">* von bis: letzter Track
                                                                                         <br>Quiz: Anzahl der Lösungen (0 oder 1)</span></div>
-<br><button name="start" value="start" onclick="return submit_form('card', 'start', 'start'  );">Start</button>
+<br>
+<button onclick="return submit_form('card', 'card_action', 'start');">Start</button>
+<button onclick="return submit_form('card', 'card_action', 'write' );">Schreibe</button>
+</form>
+<br>
+
+<form class="service1" id="modifier">
+<br><label for="mod_mode"    >Modifier:  </label><select size=1 name="mod_mode" id="mod_mode">
+                                                   <option>Sleep-Timer      </option>
+                                                   <option>Stopptanz        </option>
+                                                   <option>Feuer-Wasser-Luft</option>
+                                                   <option>Gesperrt         </option>
+                                                   <option>Kita Modus       </option>
+                                                   <option>Wiederhole Track </option>
+                                                 </select>
+<br><label for="mod_special" >Parameter  </label><div class="tooltip"><input type="number" name="mod_special" id="mod_special">
+                                                   <span class="tooltiptext">Sleep-Timer: Timeout in min
+                                                                         <br>Feuer-Wasser-Luft/
+                                                                         <br>Stopptanz: Pausezeit (min/max)
+                                                                         <br>0: 15/30, 1: 25/40, 2: 35/50</span></div>
+<br>
+<button onclick="return submit_form('modifier', 'mod_action', 'activate');">Activate</button>
+<button onclick="return submit_form('modifier', 'mod_action', 'delete'  );">Delete</button>
+<button onclick="return submit_form('modifier', 'mod_action', 'write'   );">Schreibe</button>
 </form>
 <br>
 
@@ -383,7 +401,7 @@ const char main_html[] PROGMEM = R"rawliteral(
     console.log('create new websocket');
     ws = new WebSocket('ws://' + window.location.hostname + '/ws');
     ws.onmessage = function(event) {
-      document.getElementById("tonuino_status").innerText = event.data;
+      document.getElementById("tonuino_status").innerHTML = event.data;
     };
     ws.onclose = function (e) {
       console.log('websocket closed, reason: ', e.reason);
@@ -870,25 +888,32 @@ void Webservice::modifier(AsyncWebServerRequest *request) {
     LOG(webserv_log, s_info, "parameter name[", p->name(), "]: ", p->value());
   }
 
+  folderSettings mod;
+  mod.folder   = 0;
+  mod.special2 = 0;
+  mod.special  = request->arg("mod_special").toInt();
+  mod.mode     = request->arg("mod_mode") == "Sleep-Timer"       ? pmode_t::sleep_timer   :
+                 request->arg("mod_mode") == "Stopptanz"         ? pmode_t::freeze_dance  :
+                 request->arg("mod_mode") == "Feuer-Wasser-Luft" ? pmode_t::fi_wa_ai      :
+                 request->arg("mod_mode") == "Gesperrt"          ? pmode_t::toddler       :
+                 request->arg("mod_mode") == "Kita Modus"        ? pmode_t::kindergarden  :
+                 request->arg("mod_mode") == "Wiederhole Track"  ? pmode_t::repeat_single :
+                                                                   pmode_t::none          ;
+
   if (request->arg("mod_action") == "delete") {
     LOG(webserv_log, s_info, "delete modifier");
     tonuino.resetActiveModifier();
   }
-  if (request->arg("mod_action") == "activate") {
-    folderSettings mod;
-    mod.folder   = 0;
-    mod.special2 = 0;
-    mod.special  = request->arg("mod_special").toInt();
-    mod.mode     = request->arg("mod_mode") == "Sleep-Timer"       ? pmode_t::sleep_timer   :
-                   request->arg("mod_mode") == "Stoptanz"          ? pmode_t::freeze_dance  :
-                   request->arg("mod_mode") == "Feuer-Wasser-Luft" ? pmode_t::fi_wa_ai      :
-                   request->arg("mod_mode") == "Gesperrt"          ? pmode_t::toddler       :
-                   request->arg("mod_mode") == "Kita Modus"        ? pmode_t::kindergarden  :
-                   request->arg("mod_mode") == "Wiederhole Track"  ? pmode_t::repeat_single :
-                                                                     pmode_t::none          ;
+  else if (request->arg("mod_action") == "activate") {
     LOG(webserv_log, s_info, "activate modifier mode: ", static_cast<uint8_t>(mod.mode), " special: ", mod.special);
     tonuino.specialCard(mod);
   }
+  else if (request->arg("mod_action") == "write") {
+    LOG(webserv_log, s_info, "write modifier mode: ", static_cast<uint8_t>(mod.mode), " special: ", mod.special);
+    settings.setShortCut(0, mod);
+    cmd = commandRaw::write_card_from_web;
+  }
+
 
   request->send(200);
 }
@@ -902,27 +927,33 @@ void Webservice::card(AsyncWebServerRequest *request) {
     LOG(webserv_log, s_info, "parameter name[", p->name(), "]: ", p->value());
   }
 
-  if (request->arg("start") == "start") {
-    folderSettings card;
-    card.folder   = request->arg("folder").toInt();;
-    card.special  = request->arg("special1").toInt();
-    card.special2 = request->arg("special2").toInt();
-    card.mode     = request->arg("mode") == "Hörspiel"         ? pmode_t::hoerspiel    :
-                    request->arg("mode") == "Album"            ? pmode_t::album        :
-                    request->arg("mode") == "Party"            ? pmode_t::party        :
-                    request->arg("mode") == "Einzel"           ? pmode_t::einzel       :
-                    request->arg("mode") == "Hörbuch"          ? pmode_t::hoerbuch     :
-                    request->arg("mode") == "Hörspiel von bis" ? pmode_t::hoerspiel_vb :
-                    request->arg("mode") == "Album von bis"    ? pmode_t::album_vb     :
-                    request->arg("mode") == "Party von bis"    ? pmode_t::party_vb     :
-                    request->arg("mode") == "Hörbuch einzel"   ? pmode_t::hoerbuch_1   :
-                    request->arg("mode") == "Wiederhole"       ? pmode_t::repeat_last  :
-                    request->arg("mode") == "Quiz Spiel"       ? pmode_t::quiz_game    :
-                    request->arg("mode") == "Memory Spiel"     ? pmode_t::memory_game  :
-                                                                 pmode_t::none         ;
+  folderSettings card;
+  card.folder   = request->arg("folder").toInt();;
+  card.special  = request->arg("special1").toInt();
+  card.special2 = request->arg("special2").toInt();
+  card.mode     = request->arg("mode") == "Hörspiel"         ? pmode_t::hoerspiel    :
+                  request->arg("mode") == "Album"            ? pmode_t::album        :
+                  request->arg("mode") == "Party"            ? pmode_t::party        :
+                  request->arg("mode") == "Einzel"           ? pmode_t::einzel       :
+                  request->arg("mode") == "Hörbuch"          ? pmode_t::hoerbuch     :
+                  request->arg("mode") == "Hörspiel von bis" ? pmode_t::hoerspiel_vb :
+                  request->arg("mode") == "Album von bis"    ? pmode_t::album_vb     :
+                  request->arg("mode") == "Party von bis"    ? pmode_t::party_vb     :
+                  request->arg("mode") == "Hörbuch einzel"   ? pmode_t::hoerbuch_1   :
+                  request->arg("mode") == "Wiederhole"       ? pmode_t::repeat_last  :
+                  request->arg("mode") == "Quiz Spiel"       ? pmode_t::quiz_game    :
+                  request->arg("mode") == "Memory Spiel"     ? pmode_t::memory_game  :
+                                                               pmode_t::none         ;
+
+  if (request->arg("card_action") == "start") {
     LOG(webserv_log, s_info, "start card mode: ", static_cast<uint8_t>(card.mode), " folder: ", card.folder, " special: ", card.special, " special2: ", card.special2);
     settings.setShortCut(0, card);
     cmd = commandRaw::card_from_web;
+  }
+  else if (request->arg("card_action") == "write") {
+    LOG(webserv_log, s_info, "write card mode: ", static_cast<uint8_t>(card.mode), " folder: ", card.folder, " special: ", card.special, " special2: ", card.special2);
+    settings.setShortCut(0, card);
+    cmd = commandRaw::write_card_from_web;
   }
 
   request->send(200);
@@ -961,24 +992,40 @@ String Webservice::get_status() {
 
   status += String("State: ") + SM_tonuino::state_str;
   if (mp3.isPlayingFolder()) {
-    status += String(" (Folder: ") + String(mp3.getCurrentFolder()) + String(" Track: ") + String(mp3.getCurrentTrack()) + String(")");
+    String mode = (tonuino.getMyFolder().mode == pmode_t::hoerspiel   ) ? String("Hörspiel"        ) :
+                  (tonuino.getMyFolder().mode == pmode_t::album       ) ? String("Album"           ) :
+                  (tonuino.getMyFolder().mode == pmode_t::party       ) ? String("Party"           ) :
+                  (tonuino.getMyFolder().mode == pmode_t::einzel      ) ? String("Einzel"          ) :
+                  (tonuino.getMyFolder().mode == pmode_t::hoerbuch    ) ? String("Hörbuch"         ) :
+                  (tonuino.getMyFolder().mode == pmode_t::hoerspiel_vb) ? String("Hörspiel von bis") :
+                  (tonuino.getMyFolder().mode == pmode_t::album_vb    ) ? String("Album von bis"   ) :
+                  (tonuino.getMyFolder().mode == pmode_t::party_vb    ) ? String("Party von bis"   ) :
+                  (tonuino.getMyFolder().mode == pmode_t::hoerbuch_1  ) ? String("Hörbuch einzel"  ) :
+                  (tonuino.getMyFolder().mode == pmode_t::repeat_last ) ? String("Wiederhole"      ) :
+                  (tonuino.getMyFolder().mode == pmode_t::quiz_game   ) ? String("Quiz Spiel"      ) :
+                  (tonuino.getMyFolder().mode == pmode_t::memory_game ) ? String("Memory Spiel"    ) :String("?");
+    status += String(" (Mode: ") + mode + String(", Folder: ") + String(mp3.getCurrentFolder()) + String(")");
   }
-  status += String("\nValume: ") + String(mp3.getVolume());
+
+  status += String("<br>Queue: ") + mp3.getQueue();
+
+  status += String("<br>Volume: ") + String(mp3.getVolume());
 #ifdef HPJACKDETECT
-  status += String(" (") += mp3.isHeadphoneJackDetect() ? String("Kopfhörer") : String("Lautsprecher)");
+  status += mp3.isHeadphoneJackDetect() ? String("(Kopfhörer)") : String("(Lautsprecher)");
 #endif
   String active_modifier;
   switch (tonuino.getActiveModifier().getActive()) {
   case pmode_t::none:          active_modifier = "kein"             ; break;
   case pmode_t::sleep_timer  : active_modifier = "Sleep-Timer"      ; break;
-  case pmode_t::freeze_dance : active_modifier = "Stoptanz"         ; break;
+  case pmode_t::freeze_dance : active_modifier = "Stopptanz"        ; break;
   case pmode_t::fi_wa_ai     : active_modifier = "Feuer-Wasser-Luft"; break;
   case pmode_t::toddler      : active_modifier = "Gesperrt"         ; break;
   case pmode_t::kindergarden : active_modifier = "Kita Modus"       ; break;
   case pmode_t::repeat_single: active_modifier = "Wiederhole Track" ; break;
   default                    : active_modifier = "kein"             ; break;
   }
-  status += String("\nModifier: ") + active_modifier;
+
+  status += String("<br>Modifier: ") + active_modifier;
 
   return status;
 }
