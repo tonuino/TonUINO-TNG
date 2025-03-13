@@ -1,3 +1,4 @@
+#include "constants.hpp"
 #ifdef TonUINO_Esp32
 
 #include "webservice.hpp"
