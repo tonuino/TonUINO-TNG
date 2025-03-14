@@ -3,6 +3,10 @@
 #include <Arduino.h>
 #ifndef TonUINO_Esp32
 #include <avr/sleep.h>
+#else
+#include <esp_bt.h>
+#include <esp_sleep.h>
+#include <esp_bt_main.h>
 #endif
 
 #include "array.hpp"
@@ -429,6 +433,13 @@ void Tonuino::shutdown() {
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   cli();  // Disable interrupts
   sleep_mode();
+#else
+  esp_bluedroid_disable();
+  esp_bluedroid_deinit();
+  esp_bt_controller_disable();
+  esp_bt_controller_deinit();
+  esp_wifi_stop();
+  esp_deep_sleep_start();
 #endif
 }
 
