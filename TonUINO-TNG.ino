@@ -39,7 +39,7 @@ void setup()
   LOG(init_log, s_error, F("TonUINO Version 3.x - refactored by Boerge1\n"));
   LOG(init_log, s_error, F("created by Thorsten Voß and licensed under GNU/GPL."));
   LOG(init_log, s_error, F("Information and contribution at https://tonuino.de.\n"));
-  LOG(init_log, s_error, F("V3.2.1 13.01.25\n"));
+  LOG(init_log, s_error, F("V3.3.0 14.03.25\n"));
 
 #ifdef TonUINO_Classic
   LOG(init_log, s_error, F("C "), lf_no);
@@ -56,8 +56,8 @@ void setup()
 #ifdef ALLinONE_Plus
   LOG(init_log, s_error, F("A+ "), lf_no);
 #endif
-#ifdef TonUINO_Esp32
-  LOG(init_log, s_error, F("ESP32 "), lf_no);
+#if TonUINO_Esp32 == 100
+  LOG(init_log, s_error, F("ESP32 Nano"), lf_no);
 #endif
 
 #ifdef FIVEBUTTONS

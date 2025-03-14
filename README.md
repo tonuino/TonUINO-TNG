@@ -10,32 +10,35 @@ Falls du Interesse daran hast, zur Weiterentwicklung des TonUINO-Projekts beizut
 ## Arduino IDE
 Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TNG](https://www.tonuino.de/TNG) und hier [www.leiterkartenpiraten.de](https://www.leiterkartenpiraten.de)
 
-- Es ist unbedingt darauf zu achten, das das Verzeichnis in das das Repository gecloned oder heruntergeladen wird (also das Verzeichnis, in dem schließlich auch die TonUINO-TNG.ino zu finden ist, genau so heißt, wie die ino Datei, also in diesem Fall "TonUINO-TNG"!
+- Es ist unbedingt darauf zu achten, dass das Verzeichnis in das das Repository gecloned oder heruntergeladen wird (also das Verzeichnis, in dem schließlich auch die TonUINO-TNG.ino zu finden ist, genau so heißt, wie die ino Datei, also in diesem Fall "TonUINO-TNG"!
 
-- Bei der classic (Nano und Every) und AiO HW Variante muss die Datei 'platform.local.txt' in den avr HW Ordner kopiert werden. Dieser Ordner ist gewöhnlich folgender:  
+- Bei der classic (Nano, Every, Every4808 und Esp32) sowie AiO HW Variante muss die Datei 'platform.local.txt' in den avr HW Ordner kopiert werden. Dieser Ordner ist gewöhnlich folgender:  
 
 ```
     Windows:  
       Classic:  C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6
       Every:    C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\arduino\hardware\megaavr\1.8.8
       AiO:      C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\LGT8fx Boards\hardware\avr\1.0.7
+      Esp32:    C:\Users\<Benutzer>\AppData\Local\Arduino15\packages\arduino\hardware\esp32\2.0.18-arduino.5
 
     Linux:  
       Classic:  ~/.arduino15/packages/arduino/hardware/avr/1.8.6
       Every:    ~/.arduino15/packages/arduino/hardware/megaavr/1.8.8
       Aio:      ~/.arduino15/packages/LGT8fx Boards/hardware/avr/1.0.7
+      Esp32:    ~/.arduino15/packages/arduino/hardware/esp32/2.0.18-arduino.5/
 
     MacOS 13.x:  
       Classic:  ~/Library/Arduino15/packages/arduino/hardware/avr/1.8.6
       Every:    ~/Library/Arduino15/packages/arduino/hardware/megaavr/1.8.8
       AiO:      ~/Library/Arduino15/packages/LGT8fx Boards/hardware/avr/1.0.7
+      Esp32:    ~/Library/Arduino15/packages/arduino/hardware/esp32/2.0.18-arduino.5/
 ```
 
 - Man findet den Ordner auch, wenn man die Datei platform.txt sucht.  
 
 - Für die AiOplus HW Variante sind keine Änderungen notwendig  
 
-- Die HW Variante (TonUINO_Classic, ALLinONE oder ALLinONE_Plus) sowie die Button Konfiguration (THREEBUTTONS, FIVEBUTTONS oder BUTTONS3X3) muss in der Datei constants.hpp durch Entfernen des entsprechenden Kommentars angegeben werden. 
+- Die HW Variante (TonUINO_*, ALLinONE oder ALLinONE_Plus) sowie die Button Konfiguration (THREEBUTTONS, FIVEBUTTONS oder BUTTONS3X3) muss in der Datei constants.hpp durch Entfernen des entsprechenden Kommentars angegeben werden. (nur wenn die Arduino IDE verwendet wird) 
 
 **Libraries**
 - Es müssen folgende Versionen der Libraries verwendet werden:  
@@ -44,15 +47,23 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
     - makuna/DFPlayer Mini Mp3 by Makuna: 1.2.3
     - adafruit/Adafruit NeoPixel: 1.11.0 (optional, nur bei Feature NEO_RING notwendig)
 
+- Für die Esp32 HW Variante zusätzlich:
+    - plerup/espsoftwareserial: 8.1.0
+    - esp32async/AsyncTCP: 3.3.6
+    - esp32async/ESPAsyncWebServer: 3.7.2
+    - tzapu/WiFiManager: 2.0.17
+    - bblanchon/ArduinoJson: 7.3.0
+
 ## platform.io
 
 - Es werden die gleichen HW Varianten angeboten wie beim Online Upload ohne die Datei constants.hpp editieren zu müssen
 
 ```
-  Classic, Every, AiO und AiOplus
+  Classic, Every, Every4808, AiO, AiOplus und Esp32
     3 Buttons
     5 Buttons
     3x3 Button Board
+    5 Buttons mit vollem Feature-Umfang (nur Every, Esp32 und AiOplus)
 ```
 
 **Verwendung zusammen mit Visual Code**
@@ -89,6 +100,9 @@ Eine Anleitung dafür findet man [hier](https://discourse.voss.earth/t/tonuino-s
 Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.11 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
 
 # Change Log
+
+## Version 3.3.0 (14.03.2025)
+- [Issue 159](https://github.com/tonuino/TonUINO-TNG/issues/159): New Hardware Type ESP32 Nano
 
 ## Version 3.2.1 (13.01.2025)
 - [Issue 135](https://github.com/tonuino/TonUINO-TNG/issues/135): Make new variants available for online uploads II

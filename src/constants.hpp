@@ -77,7 +77,7 @@
 //#define TonUINO_Every_4808
 //#define ALLinONE
 //#define ALLinONE_Plus
-//#define TonUINO_Esp32
+//#define TonUINO_Esp32 100 // Esp32 Nano
 
 #include "gpioHelper.hpp"
 
@@ -569,6 +569,7 @@ inline constexpr unsigned long cycleTime        = 50;
  ***************************************************************************/
 
 #if defined(TonUINO_Esp32)
+#if TonUINO_Esp32 == 100
 // ####### buttons #####################################
 
 inline constexpr uint8_t   buttonPausePin  = A0;
@@ -629,7 +630,13 @@ inline constexpr levelType     shutdownPinType  = levelType::activeLow;
 #endif
 inline constexpr uint8_t       openAnalogPin    = A7;
 inline constexpr unsigned long cycleTime        = 50;
+
+#else //  TonUINO_Esp32 == *
+static_assert(false, "Not supported Esp32 HW type");
+#endif  //  TonUINO_Esp32 == *
+
 #endif /* TonUINO_Esp32 */
+
 
 // ####### some helper fuctions #####################################
 

@@ -145,33 +145,34 @@ const __FlashStringHelper* Commands::getCommandRawStr(commandRaw cmd) {
 
 const __FlashStringHelper* Commands::getCommandStr   (command    cmd) {
   switch(cmd) {
-  case command::none         : return(F("none"         )); break;
-  case command::admin        : return(F("admin"        )); break;
-  case command::shutdown     : return(F("shutdown"     )); break;
-  case command::shortcut1    : return(F("shortcut1"    )); break;
-  case command::shortcut2    : return(F("shortcut2"    )); break;
-  case command::shortcut3    : return(F("shortcut3"    )); break;
-  case command::start        : return(F("start"        )); break;
-  case command::pause        : return(F("pause"        )); break;
-  case command::track        : return(F("track"        )); break;
-  case command::volume_up    : return(F("volume_up"    )); break;
-  case command::volume_down  : return(F("volume_down"  )); break;
-  case command::bright_up    : return(F("bright_up"    )); break;
-  case command::bright_down  : return(F("bright_down"  )); break;
-  case command::to_first     : return(F("to_first"     )); break;
-  case command::next         : return(F("next"         )); break;
-  case command::next10       : return(F("next10"       )); break;
-  case command::previous     : return(F("previous"     )); break;
-  case command::previous10   : return(F("previous10"   )); break;
-  case command::select       : return(F("select"       )); break;
+  case command::none               : return(F("none"               )); break;
+  case command::admin              : return(F("admin"              )); break;
+  case command::shutdown           : return(F("shutdown"           )); break;
+  case command::shortcut1          : return(F("shortcut1"          )); break;
+  case command::shortcut2          : return(F("shortcut2"          )); break;
+  case command::shortcut3          : return(F("shortcut3"          )); break;
+  case command::start              : return(F("start"              )); break;
+  case command::pause              : return(F("pause"              )); break;
+  case command::track              : return(F("track"              )); break;
+  case command::volume_up          : return(F("volume_up"          )); break;
+  case command::volume_down        : return(F("volume_down"        )); break;
+  case command::bright_up          : return(F("bright_up"          )); break;
+  case command::bright_down        : return(F("bright_down"        )); break;
+  case command::to_first           : return(F("to_first"           )); break;
+  case command::next               : return(F("next"               )); break;
+  case command::next10             : return(F("next10"             )); break;
+  case command::previous           : return(F("previous"           )); break;
+  case command::previous10         : return(F("previous10"         )); break;
+  case command::select             : return(F("select"             )); break;
 #ifdef SerialInputAsCommand
-  case command::menu_jump    : return(F("menu_jump"    )); break;
+  case command::menu_jump          : return(F("menu_jump"          )); break;
 #endif
-  case command::adm_end      : return(F("adm_end"      )); break;
+  case command::adm_end            : return(F("adm_end"            )); break;
 #ifdef TonUINO_Esp32
-  case command::card_from_web: return(F("card_from_web")); break;
+  case command::card_from_web      : return(F("card_from_web"      )); break;
+  case command::write_card_from_web: return(F("write_card_from_web")); break;
 #endif
-  default                    : return(F(""             )); break;
+  default                          : return(F(""                   )); break;
   }
 }
 
