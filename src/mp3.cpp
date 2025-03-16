@@ -313,10 +313,11 @@ bool Mp3::setVolume() {
   LOG(mp3_log, s_debug, F("setVolume: "), volume);
   startTrackTimer.start(6000); // 6 seconds
   while(not startTrackTimer.isExpired() && (Base::getVolume() != *volume)) {
+    delay(200);
     loop();
-    delay(100);
     Base::setVolume(*volume);
-    delay(100);
+    delay(200);
+    loop();
   }
   if (not startTrackTimer.isActive()) {
     return false;
