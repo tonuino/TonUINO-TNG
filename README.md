@@ -101,8 +101,12 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.11 geä
 
 # Change Log
 
-## Version 3.3.0 (14.03.2025)
+## Version 3.3.0 (17.03.2025)
 - [Issue 159](https://github.com/tonuino/TonUINO-TNG/issues/159): New Hardware Type ESP32 Nano
+
+## Version 3.2.1 (16.01.2025)
+- [Issue 261](https://github.com/tonuino/TonUINO-TNG/issues/261): Increase the number of addidional Tracks for Mode "Hoerbuch einzeln" to 30
+- [Issue 263](https://github.com/tonuino/TonUINO-TNG/issues/263): Initialization: increase delay between the tries of setting volume
 
 ## Version 3.2.1 (13.01.2025)
 - [Issue 135](https://github.com/tonuino/TonUINO-TNG/issues/135): Make new variants available for online uploads II

@@ -392,7 +392,7 @@ void ChNumAnswer::react(command_e const &cmd_e) {
 void ChNumTracks::entry() {
   LOG(state_log, s_info, str_enter(), str_ChNumTracks());
 
-  numberOfOptions   = 5;
+  numberOfOptions   = 30;
   startMessage      = mp3Tracks::t_340_num_tracks;
   messageOffset     = mp3Tracks::t_0;
   preview           = false;
