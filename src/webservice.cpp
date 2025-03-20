@@ -1012,7 +1012,7 @@ String Webservice::get_status() {
 
   status += String("<br>Volume: ") + String(mp3.getVolume());
 #ifdef HPJACKDETECT
-  status += mp3.isHeadphoneJackDetect() ? String("(Kopfhörer)") : String("(Lautsprecher)");
+  status += mp3.isHeadphoneJackDetect() ? String(" (Kopfhörer)") : String(" (Lautsprecher)");
 #endif
   String active_modifier;
   switch (tonuino.getActiveModifier().getActive()) {
