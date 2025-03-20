@@ -19,7 +19,7 @@ void RotaryEncoder::timer_loop() {
 }
 #endif
 
-void RotaryEncoder::changed() {
+void IRAM_ATTR RotaryEncoder::changed() {
   const uint8_t dt = digitalRead(rotaryEncoderDtPin);
   if (dt == 0)
     --pos;
@@ -35,6 +35,9 @@ RotaryEncoder::RotaryEncoder(const Settings& settings)
 , vol_timer()
 , long_timer()
 #endif
+{}
+
+void RotaryEncoder::init()
 {
   pinMode(rotaryEncoderClkPin, INPUT_PULLUP);
   pinMode(rotaryEncoderDtPin , INPUT_PULLUP);

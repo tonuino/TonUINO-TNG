@@ -81,6 +81,7 @@ void DanceGame::init(pmode_t a_mode, uint8_t a_t) {
   if (mode == pmode_t::fi_wa_ai) lastFiWaAi = random(0, 3);
   setNextStop(true /*addAdvTime*/);
   t = a_t;
+  if (t > 2) t = 2;
 }
 
 

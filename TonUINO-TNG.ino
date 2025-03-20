@@ -26,6 +26,10 @@ Bitte wählt eure TonUINO-Platine (Classic, AiO oder AiO+) in der Datei constant
 void setup()
 {
   Serial.begin(115200);
+#ifdef TonUINO_Esp32
+  if (digitalRead(buttonDownPin) == getLevel(buttonPinType, level::active))
+    delay(5000);
+#endif
 
   // Dieser Hinweis darf nicht entfernt werden
   LOG(init_log, s_error, F("\n _____         _____ _____ _____ _____"));
@@ -35,7 +39,7 @@ void setup()
   LOG(init_log, s_error, F("TonUINO Version 3.x - refactored by Boerge1\n"));
   LOG(init_log, s_error, F("created by Thorsten Voß and licensed under GNU/GPL."));
   LOG(init_log, s_error, F("Information and contribution at https://tonuino.de.\n"));
-  LOG(init_log, s_error, F("V3.2.1 16.01.25\n"));
+  LOG(init_log, s_error, F("V3.3.0 17.03.25\n"));
 
 #ifdef TonUINO_Classic
   LOG(init_log, s_error, F("C "), lf_no);
@@ -51,6 +55,9 @@ void setup()
 #endif
 #ifdef ALLinONE_Plus
   LOG(init_log, s_error, F("A+ "), lf_no);
+#endif
+#if TonUINO_Esp32 == 100
+  LOG(init_log, s_error, F("ESP32 Nano"), lf_no);
 #endif
 
 #ifdef FIVEBUTTONS

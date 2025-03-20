@@ -1,7 +1,13 @@
 #include "tonuino.hpp"
 
 #include <Arduino.h>
+#ifndef TonUINO_Esp32
 #include <avr/sleep.h>
+#else
+#include <esp_bt.h>
+#include <esp_sleep.h>
+#include <esp_bt_main.h>
+#endif
 
 #include "array.hpp"
 #include "chip_card.hpp"
@@ -36,8 +42,13 @@ void Tonuino::setup() {
   setup_timer();
 #endif
 
-#if defined(BUTTONS3X3) or defined(BAT_VOLTAGE_MEASUREMENT)
+#if defined(BUTTONS3X3) or defined(BAT_VOLTAGE_MEASUREMENT) or defined(POTI)
   setup_adc();
+#endif
+
+  buttons.begin();
+#ifdef BUTTONS3X3
+  buttons3x3.begin();
 #endif
 
   pinMode(shutdownPin  , OUTPUT);
@@ -67,16 +78,26 @@ void Tonuino::setup() {
   digitalWrite(btModulePairingPin, getLevel(btModulePairingPinType, level::inactive));
 #endif // BT_MODULE
 
+#ifdef ROTARY_ENCODER
+  rotaryEncoder.init();
+#endif
+
 #ifdef NEO_RING
   ring.init();
   ring.call_on_startup();
 #endif
 
   // load Settings from EEPROM
+  settings.init();
   settings.loadSettingsFromFlash();
 #ifdef STORE_LAST_CARD
   settings.readExtShortCutFromFlash(lastSortCut, myFolder);
   LOG(init_log, s_debug, F("get last, folder: "), myFolder.folder, F(", mode: "), static_cast<uint8_t>(myFolder.mode));
+#endif
+
+#ifdef TonUINO_Esp32
+  // init webservice
+  webservice.init();
 #endif
 
   // init NFC reader
@@ -234,6 +255,9 @@ void Tonuino::loop() {
     digitalWrite(btModulePairingPin, getLevel(btModulePairingPinType, level::inactive));
 #endif // BT_MODULE
 
+#ifdef TonUINO_Esp32
+  webservice.loop();
+#endif
 
   unsigned long  stop_cycle = millis();
 
@@ -245,7 +269,7 @@ void Tonuino::playFolder() {
   LOG(play_log, s_debug, F("playFolder"));
   numTracksInFolder = mp3.getFolderTrackCount(myFolder.folder);
   LOG(play_log, s_warning, numTracksInFolder, F(" tr in folder "), myFolder.folder);
-  numTracksInFolder = min(numTracksInFolder, 0xffu);
+  numTracksInFolder = min(numTracksInFolder, static_cast<uint16_t>(0xffu));
   mp3.clearAllQueue();
 
   switch (myFolder.mode) {
@@ -405,9 +429,18 @@ void Tonuino::shutdown() {
   chip_card.sleepCard();
   mp3.sleep();
 
+#ifndef TonUINO_Esp32
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   cli();  // Disable interrupts
   sleep_mode();
+#else
+  esp_bluedroid_disable();
+  esp_bluedroid_deinit();
+  esp_bt_controller_disable();
+  esp_bt_controller_deinit();
+  esp_wifi_stop();
+  esp_deep_sleep_start();
+#endif
 }
 
 #ifdef BT_MODULE
