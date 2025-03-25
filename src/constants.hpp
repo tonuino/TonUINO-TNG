@@ -342,6 +342,14 @@ inline constexpr float   batVoltageEmpty               = 2.90;
 //#define MRFC522_RX_GAIN RxGain_avg  // 33dB
 //#define MRFC522_RX_GAIN RxGain_max  // 48dB
 
+// ######################################################################
+
+/* uncomment the below lines if you want to have the Jukebox modification card
+ * wenn du die Jukebox haben willst, in den nächsten Zeile den Kommentar entfernen
+ */
+//#define MODIFICATION_CARD_JUKEBOX
+inline constexpr uint8_t jukebox_max_cards  = 10;
+
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
  * ##### mormalerweise müssen die folgende Zeilen nicht editiert werden ############################

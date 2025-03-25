@@ -7,6 +7,9 @@
 #include "logger.hpp"
 #include "timer.hpp"
 #include "commands.hpp"
+#ifdef MODIFICATION_CARD_JUKEBOX
+#include "queue.hpp"
+#endif
 
 class Tonuino;
 class Mp3;
@@ -98,5 +101,22 @@ public:
   bool   handlePrevious() final;
   pmode_t getActive    () final { return pmode_t::repeat_single; }
 };
+
+#ifdef MODIFICATION_CARD_JUKEBOX
+class JukeboxModifier: public Modifier {
+public:
+  JukeboxModifier() {}
+  bool handleNext  (                           ) final;
+  bool handleRFID  (const folderSettings &newCard) final;
+
+  pmode_t getActive (                          ) final { return pmode_t::jukebox; }
+  void   init       (pmode_t, uint8_t          ) final { cards.clear(); }
+
+private:
+  typedef queue<folderSettings, jukebox_max_cards> card_queue;
+
+  card_queue cards{};
+};
+#endif
 
 #endif /* SRC_MODIFIER_HPP_ */
