@@ -193,6 +193,11 @@ bool JukeboxModifier::handleRFID(const folderSettings &newCard) {
   if (SM_tonuino::is_in_state<Idle>())
     return false;
 
+  if (cards.size() == jukebox_max_cards) {
+    mp3.playAdvertisement(advertTracks::t_262_pling);
+    return true;
+  }
+
   cards.push(newCard);
   LOG(modifier_log, s_debug, str_JukeboxModifier(), F(" -> queued!"));
   mp3.playAdvertisement(cards.size());
