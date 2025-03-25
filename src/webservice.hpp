@@ -24,14 +24,21 @@ public:
 
 private:
   void page_notfound  (AsyncWebServerRequest *request);
-  void page_main      (AsyncWebServerRequest *request);
   void page_style_css (AsyncWebServerRequest *request);
-  void page_settings  (AsyncWebServerRequest *request);
-  void update_settings(AsyncWebServerRequest *request);
-  void get_settings   (AsyncWebServerRequest *request);
+
+  void page_main      (AsyncWebServerRequest *request);
   void service        (AsyncWebServerRequest *request);
   void modifier       (AsyncWebServerRequest *request);
   void card           (AsyncWebServerRequest *request);
+
+  void page_settings  (AsyncWebServerRequest *request);
+  void update_settings(AsyncWebServerRequest *request);
+  void get_settings   (AsyncWebServerRequest *request);
+
+  void page_system    (AsyncWebServerRequest *request);
+  void page_wifi      (AsyncWebServerRequest *request);
+  void scan_networks  (AsyncWebServerRequest *request);
+
 
   void onWebSocketMessage(void *arg, uint8_t *data, size_t len);
   void onWebSocketEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type,

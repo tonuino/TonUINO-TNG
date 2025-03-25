@@ -127,6 +127,11 @@ select {
   height: 5ch;
 }
 
+.system button {
+  width: 100%;
+  height: 5ch;
+}
+
 button + button {
   margin-left: 1ch;
 }
@@ -198,6 +203,56 @@ button + button {
     opacity: 1;
 }
 
+a{
+  color:#000;
+  font-weight:700;
+  text-decoration:none
+}
+a:hover{
+  color:#1fa3ec;
+  text-decoration:underline
+}
+.q{
+  height:14px;
+  margin:0;
+  padding:0 5px;
+  text-align:right;
+  min-width:38px;
+  float:right
+}
+.q.q-0:after{
+  background-position-x:0
+}
+.q.q-1:after{
+  background-position-x:-16px
+}
+.q.q-2:after{
+  background-position-x:-32px
+}
+.q.q-3:after{
+  background-position-x:-48px
+}
+.q.q-4:after{
+  background-position-x:-64px
+}
+.q.l:before{
+  background-position-x:-80px;
+  padding-right:5px
+}
+.ql .q{
+  float:left
+}
+.q:after,.q:before{
+  content:'';
+  width:16px;
+  height:16px;
+  display:inline-block;
+  background-repeat:no-repeat;
+  background-position: 16px 0;
+  background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAAAQCAMAAADeZIrLAAAAJFBMVEX///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADHJj5lAAAAC3RSTlMAIjN3iJmqu8zd7vF8pzcAAABsSURBVHja7Y1BCsAwCASNSVo3/v+/BUEiXnIoXkoX5jAQMxTHzK9cVSnvDxwD8bFx8PhZ9q8FmghXBhqA1faxk92PsxvRc2CCCFdhQCbRkLoAQ3q/wWUBqG35ZxtVzW4Ed6LngPyBU2CobdIDQ5oPWI5nCUwAAAAASUVORK5CYII=');
+}
+
+
 )rawliteral";
 
 const char notfound_html[] PROGMEM = R"rawliteral(
@@ -229,6 +284,7 @@ const char topnav_html[] PROGMEM = R"rawliteral(
   <div id="nav_links">
     <a href="/">Home</a>
     <a href="/settings">Einstellungen</a>
+    <a href="/system">System</a>
   </div>
   <a href="javascript:void(0);" class="icon" onclick="show_hide_nav()">
     <i class="fa fa-bars"></i>
@@ -591,6 +647,118 @@ const char settings_html[] PROGMEM = R"rawliteral(
 
 )rawliteral";
 
+const char system_html[] PROGMEM = R"rawliteral(
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TonUINO</title>
+  <meta charset=utf-8>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+%TOPNAV%
+
+<h2>TonUINO System</h2>
+
+<form class="system" action='/wifi'    method='get'><button>Configure WiFi</button></form><br/>
+<form class="system" action='/0wifi'   method='get'><button>Configure WiFi (No scan)</button></form><br/>
+<form class="system" action='/info'    method='get'><button>Info</button></form><br/>
+<form class="system" action='/param'   method='get'><button>Setup</button></form><br/>
+<form class="system" action='/close'   method='get'><button>Close</button></form><br/>
+<form class="system" action='/restart' method='get'><button>Restart</button></form><br/>
+<form class="system" action='/exit'    method='get'><button>Exit</button></form><br/>
+<form class="system" action='/erase'   method='get'><button class='D'>Erase</button></form><br/>
+<form class="system" action='/update'  method='get'><button>Update</button></form><br/>
+
+</body>
+</html>
+
+)rawliteral";
+
+const char wifi_html[] PROGMEM = R"rawliteral(
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TonUINO</title>
+  <meta charset=utf-8>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body onload="refresh()">
+
+%TOPNAV%
+
+<h2>TonUINO WiFi Konfiguration</h2>
+
+<form method='POST' action='wifisave'>
+  
+  <div id='networks'></div>
+  <br>
+  <label for='s'>SSID</label><input id='s' name='s' maxlength='32' autocorrect='off' autocapitalize='none' placeholder='{v}'>
+  <br>
+  <label for='p'>Password</label><input id='p' name='p' maxlength='64' type='password' placeholder='{p}'/>
+  <br>
+  <label for='showpass'>Show Password</label><input type='checkbox' id='showpass' onclick='f()'/>
+  <br>
+
+  <br><br>
+  <button type='submit'>Save</button>
+</form>
+
+<script>
+  function c(l){
+    document.getElementById('s').value = l.getAttribute('data-ssid')||l.innerText||l.textContent;
+    p = l.nextElementSibling.classList.contains('l');
+    document.getElementById('p').disabled = !p;
+    if(p)
+      document.getElementById('p').focus();
+  };
+
+  function f() {
+    var x = document.getElementById('p');
+    x.type==='password'?x.type='text':x.type='password';
+  }
+
+  function refresh() {
+
+    // Request JSON from sever. comment out block for offline testing
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        // Action to be performed when the document is ready:
+        var jsox = xhttp.responseText;
+        var json = JSON.parse( jsox );
+        var networks = json.networks;
+        console.log(networks);
+        for (var i in networks) {
+          var network = networks[i];
+          network_str = "<div><a href='#p' onclick='c(this)' data-ssid='" + network.ssid + "'>" + network.ssid + "</a>"
+                      + "<div role='img' aria-label='" + network.rssi + "%' title='" + network.rssi + "%' class='q q-" + network.q + " " + network.auth + "'></div>"
+                      + "</div>";
+          console.log(network_str);
+          document.getElementById("networks").innerHTML += network_str;
+        }
+      }
+    };
+    xhttp.open("GET", "/scan_networks", true);  // true => async, false => synchronous
+    xhttp.send();
+    // end of Request JSON from sever
+  }
+
+</script>
+
+</body>
+</html>
+
+)rawliteral";
+
+
 } // namespace
 
 void Webservice::init() {
@@ -622,14 +790,20 @@ void Webservice::init() {
   webserver.onNotFound(                       [this](AsyncWebServerRequest *request){ page_notfound  (request); });
 
   webserver.on("/style.css"      , HTTP_GET,  [this](AsyncWebServerRequest *request){ page_style_css (request); });
+
   webserver.on("/"               , HTTP_GET,  [this](AsyncWebServerRequest *request){ page_main      (request); });
+  webserver.on("/service"        , HTTP_POST, [this](AsyncWebServerRequest *request){ service        (request); });
+  webserver.on("/modifier"       , HTTP_POST, [this](AsyncWebServerRequest *request){ modifier       (request); });
+  webserver.on("/card"           , HTTP_POST, [this](AsyncWebServerRequest *request){ card           (request); });
 
   webserver.on("/settings"       , HTTP_GET,  [this](AsyncWebServerRequest *request){ page_settings  (request); });
   webserver.on("/get_settings"   , HTTP_GET,  [this](AsyncWebServerRequest *request){ get_settings   (request); });
   webserver.on("/update_settings", HTTP_POST, [this](AsyncWebServerRequest *request){ update_settings(request); });
-  webserver.on("/service"        , HTTP_POST, [this](AsyncWebServerRequest *request){ service        (request); });
-  webserver.on("/modifier"       , HTTP_POST, [this](AsyncWebServerRequest *request){ modifier       (request); });
-  webserver.on("/card"           , HTTP_POST, [this](AsyncWebServerRequest *request){ card           (request); });
+
+  webserver.on("/system"         , HTTP_GET,  [this](AsyncWebServerRequest *request){ page_system    (request); });
+  webserver.on("/wifi"           , HTTP_GET,  [this](AsyncWebServerRequest *request){ page_wifi      (request); });
+  webserver.on("/scan_networks"  , HTTP_GET,  [this](AsyncWebServerRequest *request){ scan_networks  (request); });
+
 }
 
 void Webservice::loop() {
@@ -650,18 +824,26 @@ void Webservice::page_notfound(AsyncWebServerRequest *request) {
   request->send(200, "text/html", notfound_html);
 }
 
-void Webservice::page_main(AsyncWebServerRequest *request)
-{
-  request->send(200, "text/html", main_html, [this](const String& var) { return process_page(var);});
-}
-
 void Webservice::page_style_css(AsyncWebServerRequest *request)
 {
   request->send(200, "text/css", style_css);
 }
 
+void Webservice::page_main(AsyncWebServerRequest *request)
+{
+  request->send(200, "text/html", main_html, [this](const String& var) { return process_page(var);});
+}
+
 void Webservice::page_settings(AsyncWebServerRequest *request) {
   request->send(200, "text/html", settings_html, [this](const String& var) { return process_page(var);});
+}
+
+void Webservice::page_system(AsyncWebServerRequest *request) {
+  request->send(200, "text/html", system_html, [this](const String& var) { return process_page(var);});
+}
+
+void Webservice::page_wifi(AsyncWebServerRequest *request) {
+  request->send(200, "text/html", wifi_html, [this](const String& var) { return process_page(var);});
 }
 
 void Webservice::update_settings(AsyncWebServerRequest *request) {
@@ -1044,6 +1226,37 @@ void Webservice::push_status() {
     ws.textAll(status);
   }
 }
+
+void Webservice::scan_networks(AsyncWebServerRequest *request) {
+
+  LOG(webserv_log, s_info, "Webservice::scan_networks");
+
+  String jsonStr;
+
+  JsonDocument doc;
+
+  // { "networks": [ {"ssid": "wlan1", "rssi": "40", "q": "2"}, {"ssid": "wlan2", "rssi": "90", "q": "4"} ] }
+
+  JsonArray networks = doc["networks"].to<JsonArray>();
+
+  JsonObject network;
+  networks[0]["ssid"] = "wlan1";
+  networks[0]["rssi"] = "40";
+  networks[0]["q"   ] = "2";
+  networks[0]["auth"] = "l";
+
+  networks[1]["ssid"] = "wlan2";
+  networks[1]["rssi"] = "90";
+  networks[1]["q"   ] = "4";
+  networks[1]["auth"] = "";
+
+  serializeJson(doc, jsonStr);
+
+  LOG(webserv_log, s_info, "jsonStr (", jsonStr, ")");
+  request->send(200, "text/html", jsonStr);
+}
+
+
 
 String Webservice::process_page(const String& var) {
 
