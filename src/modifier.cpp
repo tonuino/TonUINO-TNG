@@ -11,9 +11,12 @@ Tonuino        &tonuino   = Tonuino::getTonuino();
 Mp3            &mp3       = tonuino.getMp3();
 
 const __FlashStringHelper* str_SleepTimer          () { return F("SleepTimer")  ; }
-const __FlashStringHelper* str_danceGame           () { return F("DanceGame") ; }
+const __FlashStringHelper* str_danceGame           () { return F("DanceGame")   ; }
 const __FlashStringHelper* str_KindergardenMode    () { return F("Kita")        ; }
 const __FlashStringHelper* str_RepeatSingleModifier() { return F("RepeatSingle"); }
+#ifdef MODIFICATION_CARD_JUKEBOX
+const __FlashStringHelper* str_JukeboxModifier    () { return F("Jukebox")      ; }
+#endif
 
 } // anonymous namespace
 
@@ -170,3 +173,32 @@ bool RepeatSingleModifier::handleNext() {
 bool RepeatSingleModifier::handlePrevious() {
   return handleNext();
 }
+
+#ifdef MODIFICATION_CARD_JUKEBOX
+bool JukeboxModifier::handleNext() {
+  if (mp3.isLastTrack() && cards.size() > 0) {
+    LOG(modifier_log, s_debug, str_JukeboxModifier(), F(" -> NEXT"));
+    folderSettings nextCard = cards.pop();
+
+    tonuino.setMyFolder(nextCard, true /*myFolderIsCard*/);
+    LOG(modifier_log, s_debug, F("Folder: "), nextCard.folder, F(" Mode: "), static_cast<uint8_t>(nextCard.mode));
+    tonuino.playFolder();
+    mp3.setEndless(false);
+    mp3.loop(); // to start the new queue now and not going to Idle
+    return true;
+  }
+  return false;
+}
+bool JukeboxModifier::handleRFID(const folderSettings &newCard) {
+  if (SM_tonuino::is_in_state<Idle>())
+    return false;
+
+  cards.push(newCard);
+  LOG(modifier_log, s_debug, str_JukeboxModifier(), F(" -> queued!"));
+  mp3.playAdvertisement(cards.size());
+  mp3.setEndless(false);
+  return true;
+}
+#endif
+
+
