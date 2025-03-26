@@ -9,6 +9,10 @@
 #include "state_machine.hpp"
 #include "tonuino.hpp"
 #include "timer.hpp"
+#include "version.hpp"
+
+#define W_STRING2(x) #x
+#define W_STRING(x) W_STRING2(x)
 
 namespace {
 
@@ -676,14 +680,7 @@ const char system_html[] PROGMEM = R"rawliteral(
 <h2>TonUINO System</h2>
 
 <form class="system" action='/wifi'    method='get'><button>Configure WiFi</button></form><br/>
-<form class="system" action='/0wifi'   method='get'><button>Configure WiFi (No scan)</button></form><br/>
 <form class="system" action='/info'    method='get'><button>Info</button></form><br/>
-<form class="system" action='/param'   method='get'><button>Setup</button></form><br/>
-<form class="system" action='/close'   method='get'><button>Close</button></form><br/>
-<form class="system" action='/restart' method='get'><button>Restart</button></form><br/>
-<form class="system" action='/exit'    method='get'><button>Exit</button></form><br/>
-<form class="system" action='/erase'   method='get'><button class='D'>Erase</button></form><br/>
-<form class="system" action='/update'  method='get'><button>Update</button></form><br/>
 
 </body>
 </html>
@@ -768,6 +765,63 @@ const char wifi_html[] PROGMEM = R"rawliteral(
   }
 
 </script>
+
+</body>
+</html>
+
+)rawliteral";
+
+const char info_html[] PROGMEM = R"rawliteral(
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TonUINO</title>
+  <meta charset=utf-8>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+%TOPNAV%
+
+<h2>TonUINO Info</h2>
+
+<h3>esp32</h3><hr><dl>%esphead%
+<dt>Uptime</dt><dd>%uptime1%1 mins %uptime2% secs</dd>%uptime%
+<dt>Chip ID</dt><dd>%chipid%</dd>
+<dt>Chip rev</dt><dd>%chiprev%</dd>
+<dt>Flash size</dt><dd>%idesize% bytes</dd> 
+<dt>PSRAM Size</dt><dd>%flashsize% bytes</dd>      
+<dt>CPU frequency</dt><dd>%cpufreq%MHz</dd>
+<dt>Memory - Free heap</dt><dd>%freeheap% bytes available</dd>
+<dt>Memory - Sketch size</dt><dd>Used / Total bytes<br/>%memsketch1% / %memsketch2%
+<br/><progress value='%memsmeter1%' max='%memsmeter2%'></progress></dd>      
+<dt>Temperature</dt><dd>%temp1% C&deg; / %temp2% F&deg;</dd>
+<br/><h3>WiFi</h3><hr>%wifihead%
+<dt>Connected</dt><dd>%conx%</dd>
+<dt>Station SSID</dt><dd>%stassid%</dd>
+<dt>Station IP</dt><dd>%staip%</dd>
+<dt>Station gateway</dt><dd>%stagw%</dd>
+<dt>Station subnet</dt><dd>%stasub%</dd>
+<dt>DNS Server</dt><dd>%dnss%</dd>
+<dt>Hostname</dt><dd>%host%</dd>
+<dt>Station MAC</dt><dd>%stamac%</dd>
+<dt>Access point SSID</dt><dd>%apssid%</dd>
+<br/><h3>WiFi AP</h3><hr>
+<dt>Access point IP</dt><dd>%apip%</dd>
+<dt>Access point MAC</dt><dd>%apmac%</dd>
+<dt>Access point hostname</dt><dd>%aphost%</dd>
+<dt>BSSID</dt><dd>%apbssid%</dd>
+
+</dl>
+
+<h3>About</h3><hr><dl>
+<dt>TonUINO TNG Version</dt><dd>%aboutver%</dd>
+<dt>Arduino</dt><dd>%aboutarduinover%</dd>
+<dt>Build date</dt><dd>%aboutdate%</dd>
+</dl>
 
 </body>
 </html>
@@ -860,11 +914,13 @@ void Webservice::init() {
   webserver.on("/wifi"           , HTTP_GET,  [this](AsyncWebServerRequest *request){ page_wifi      (request); });
   webserver.on("/scan_networks"  , HTTP_GET,  [this](AsyncWebServerRequest *request){ scan_networks  (request); });
   webserver.on("/wifisave"       , HTTP_POST, [this](AsyncWebServerRequest *request){ wifi_save      (request); });
+  webserver.on("/info"           , HTTP_GET,  [this](AsyncWebServerRequest *request){ page_info      (request); });
 
 }
 
 void Webservice::loop() {
-  dns_server.processNextRequest();
+  if (not connected)
+    dns_server.processNextRequest();
   ws.cleanupClients();
   push_status();
 }
@@ -899,6 +955,10 @@ void Webservice::page_system(AsyncWebServerRequest *request) {
 
 void Webservice::page_wifi(AsyncWebServerRequest *request) {
   request->send(200, "text/html", wifi_html, [this](const String& var) { return process_page(var);});
+}
+
+void Webservice::page_info(AsyncWebServerRequest *request) {
+  request->send(200, "text/html", info_html, [this](const String& var) { return process_page(var);});
 }
 
 void Webservice::update_settings(AsyncWebServerRequest *request) {
@@ -1380,10 +1440,112 @@ String Webservice::process_page(const String& var) {
   else if (var == "PASSWORD")
     return "";
 
-  return "";
+  return getInfoData(var);
 
 }
 
+String Webservice::getInfoData(const String& id){
+
+  String p;
+  if(id==F("esphead")){
+    p = ESP.getChipModel();
+  }
+  else if(id==F("wifihead")){
+    const char* const WIFI_MODES[] PROGMEM = { "NULL", "STA", "AP", "STA+AP" };
+    p = WiFi.getMode()<=3? WIFI_MODES[WiFi.getMode()] : "n/a";
+  }
+  else if(id==F("uptime1")){
+    p = (String)(millis() / 1000 / 60);
+  }
+  else if(id==F("uptime2")){
+    p = (String)((millis() / 1000) % 60);
+  }
+  else if(id==F("chipid")){
+    p = String(ESP.getEfuseMac(),HEX);
+  }
+  else if(id==F("chiprev")){
+      p = ESP.getChipRevision();
+  }
+  else if(id==F("idesize")){
+    p = ESP.getFlashChipSize();
+  }
+  else if(id==F("flashsize")){
+      p = ESP.getPsramSize();
+  }
+  else if(id==F("cpufreq")){
+    p = ESP.getCpuFreqMHz();
+  }
+  else if(id==F("freeheap")){
+    p = ESP.getFreeHeap();
+  }
+  else if(id==F("memsketch1")){
+    p = ESP.getSketchSize();
+  }
+  else if(id==F("memsketch2")){
+    p = ESP.getSketchSize()+ESP.getFreeSketchSpace();
+  }
+  else if(id==F("memsmeter1")){
+    p = ESP.getSketchSize();
+  }
+  else if(id==F("memsmeter2")){
+    p = ESP.getSketchSize()+ESP.getFreeSketchSpace();
+  }
+  else if(id==F("apip")){
+    p = WiFi.softAPIP().toString();
+  }
+  else if(id==F("apmac")){
+    p = WiFi.softAPmacAddress();
+  }
+  else if(id==F("aphost")){
+      p = WiFi.softAPgetHostname();
+  }
+  else if(id==F("apbssid")){
+    p = WiFi.BSSIDstr();
+  }
+  else if(id==F("stassid")){
+    p = wifi_settings.get_ssid();
+  }
+  else if(id==F("staip")){
+    p = WiFi.localIP().toString();
+  }
+  else if(id==F("stagw")){
+    p = WiFi.gatewayIP().toString();
+  }
+  else if(id==F("stasub")){
+    p = WiFi.subnetMask().toString();
+  }
+  else if(id==F("dnss")){
+    p = WiFi.dnsIP().toString();
+  }
+  else if(id==F("host")){
+    p = WiFi.getHostname();
+  }
+  else if(id==F("stamac")){
+    p = WiFi.macAddress();
+  }
+  else if(id==F("conx")){
+    p = WiFi.isConnected() ? "yes" : "no";
+  }
+  else if(id==F("temp1")){
+    p = temperatureRead();
+  }
+  else if(id==F("temp2")){
+    p = (temperatureRead()+32)*1.8f;
+  }
+  else if(id==F("aboutver")){
+    p = FPSTR(TONUINO_TNG_VERSION);
+  }
+  else if(id==F("aboutarduinover")){
+    p = String(W_STRING(ESP_ARDUINO_VERSION_MAJOR)  "."  W_STRING(ESP_ARDUINO_VERSION_MINOR)  "."  W_STRING(ESP_ARDUINO_VERSION_PATCH));
+  }
+  else if(id==F("aboutsdkver")){
+    p = esp_get_idf_version();
+  }
+  else if(id==F("aboutdate")){
+    p = String(__DATE__ " " __TIME__);
+  }
+  return p;
+}
 
 
 

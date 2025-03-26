@@ -55,6 +55,7 @@ private:
   void page_wifi      (AsyncWebServerRequest *request);
   void scan_networks  (AsyncWebServerRequest *request);
   void wifi_save      (AsyncWebServerRequest *request);
+  void page_info      (AsyncWebServerRequest *request);
 
 
   void onWebSocketMessage(void *arg, uint8_t *data, size_t len);
@@ -63,6 +64,7 @@ private:
   String get_status   ();
   void push_status    ();
   String process_page (const String& var);
+  String getInfoData  (const String& id);
 
   bool connected = false;
 
