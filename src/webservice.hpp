@@ -1,13 +1,29 @@
 #ifndef SRC_WEBSERVICE_HPP_
 #define SRC_WEBSERVICE_HPP_
 
-#include <WiFiManager.h>
+#include <Arduino.h>
+#include <WiFi.h>
+#include <DNSServer.h>
 #include <ESPAsyncWebServer.h>
+#include <Preferences.h>
 
 #include "settings.hpp"
 #include "commands.hpp"
 
 class Mp3;
+
+class WifiSettings {
+public:
+  WifiSettings() { ssid[0] = 0; password[0] = 0; }
+  void init();
+  void set(const String& ssid, const String& password);
+  String get_ssid    () { return ssid    ; }
+  String get_password() { return password; }
+private:
+  Preferences     prefs;
+  String ssid;
+  String password;
+};
 
 class Webservice: public CommandSource {
 
@@ -38,6 +54,7 @@ private:
   void page_system    (AsyncWebServerRequest *request);
   void page_wifi      (AsyncWebServerRequest *request);
   void scan_networks  (AsyncWebServerRequest *request);
+  void wifi_save      (AsyncWebServerRequest *request);
 
 
   void onWebSocketMessage(void *arg, uint8_t *data, size_t len);
@@ -51,7 +68,8 @@ private:
 
   Settings&       settings;
   Mp3&            mp3;
-  WiFiManager     wm        {};
+  WifiSettings    wifi_settings{};
+  DNSServer       dns_server{};
   AsyncWebServer  webserver {80};
   AsyncWebSocket  ws        {"/ws"};
   String          old_status{};

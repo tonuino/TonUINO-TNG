@@ -8,6 +8,7 @@
 #include "logger.hpp"
 #include "state_machine.hpp"
 #include "tonuino.hpp"
+#include "timer.hpp"
 
 namespace {
 
@@ -23,14 +24,18 @@ const char style_css[] PROGMEM = R"rawliteral(
     body {
         font-family: Arial, Helvetica, sans-serif;
         background-color: #99ccff;
-        font-size: 14px;
-    }
+        font-size: 16px;
+        text-align:left;
+        max-width:30em
+   }
 }
 @media (max-width: 767px) {
     body {
         font-family: Arial, Helvetica, sans-serif;
         background-color: #99ccff;
         font-size: 16px;
+        text-align:left;
+        max-width:30em
     }
 }
 
@@ -90,7 +95,7 @@ input[type=number]::-webkit-inner-spin-button,
   padding: 2px;
 }
 
-input[type=text] {
+input[type=text], input[type=password]{
   width: 20ch;
   display: inline-block
   padding: 2px;
@@ -130,6 +135,12 @@ select {
 .system button {
   width: 100%;
   height: 5ch;
+}
+
+.wifi button {
+  margin-top: 0.5em;
+  width: 10ch;
+  height: 4ch;
 }
 
 button + button {
@@ -696,23 +707,26 @@ const char wifi_html[] PROGMEM = R"rawliteral(
 
 <h2>TonUINO WiFi Konfiguration</h2>
 
-<form method='POST' action='wifisave'>
+<div class='wifi'>
+  <button onclick='refresh()'>Refresh</button>
+  <br><br>
+</div>
+<form class='wifi' method='POST' action='wifisave'>
   
   <div id='networks'></div>
+  <br><br>
+  <label for='s'>SSID</label><input id='s' name='ssid' type='text' maxlength='32' autocorrect='off' autocapitalize='none' placeholder='%SSID%'>
+  <br><br>
+  <label for='p'>Password</label><input id='p' name='password' type='password' maxlength='64' placeholder='%PASSWORD%'/>
   <br>
-  <label for='s'>SSID</label><input id='s' name='s' maxlength='32' autocorrect='off' autocapitalize='none' placeholder='{v}'>
-  <br>
-  <label for='p'>Password</label><input id='p' name='p' maxlength='64' type='password' placeholder='{p}'/>
-  <br>
-  <label for='showpass'>Show Password</label><input type='checkbox' id='showpass' onclick='f()'/>
-  <br>
+  <label for='showpass'>Show Password</label><input type='checkbox' id='showpass' onclick='toggle_pass()'/>
 
   <br><br>
   <button type='submit'>Save</button>
 </form>
 
 <script>
-  function c(l){
+  function select_network(l){
     document.getElementById('s').value = l.getAttribute('data-ssid')||l.innerText||l.textContent;
     p = l.nextElementSibling.classList.contains('l');
     document.getElementById('p').disabled = !p;
@@ -720,13 +734,14 @@ const char wifi_html[] PROGMEM = R"rawliteral(
       document.getElementById('p').focus();
   };
 
-  function f() {
+  function toggle_pass() {
     var x = document.getElementById('p');
     x.type==='password'?x.type='text':x.type='password';
   }
 
   function refresh() {
 
+    document.getElementById("networks").innerHTML = "Scanning...";
     // Request JSON from sever. comment out block for offline testing
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -736,9 +751,10 @@ const char wifi_html[] PROGMEM = R"rawliteral(
         var json = JSON.parse( jsox );
         var networks = json.networks;
         console.log(networks);
+        document.getElementById("networks").innerHTML = "";
         for (var i in networks) {
           var network = networks[i];
-          network_str = "<div><a href='#p' onclick='c(this)' data-ssid='" + network.ssid + "'>" + network.ssid + "</a>"
+          network_str = "<div><a href='#p' onclick='select_network(this)' data-ssid='" + network.ssid + "'>" + network.ssid + "</a>"
                       + "<div role='img' aria-label='" + network.rssi + "%' title='" + network.rssi + "%' class='q q-" + network.q + " " + network.auth + "'></div>"
                       + "</div>";
           console.log(network_str);
@@ -758,29 +774,69 @@ const char wifi_html[] PROGMEM = R"rawliteral(
 
 )rawliteral";
 
+int getRSSIasQuality(int RSSI) {
+  int quality = 0;
+
+  if (RSSI <= -100) {
+    quality = 0;
+  } else if (RSSI >= -50) {
+    quality = 100;
+  } else {
+    quality = 2 * (RSSI + 100);
+  }
+  return quality;
+}
+
 
 } // namespace
 
+void WifiSettings::init() {
+  prefs.begin("wifi");
+  if (not prefs.isKey("WiFi_ssid") or not prefs.isKey("WiFi_password" )) {
+    LOG(webserv_log, s_info, "no wifi settings");
+    set("", "");
+  }
+  ssid     = prefs.getString("WiFi_ssid"    );
+  password = prefs.getString("WiFi_password");
+  LOG(webserv_log, s_info, "wifi settings - ssid: ", ssid);
+}
+
+void WifiSettings::set(const String& n_ssid, const String& n_password) {
+  ssid     = n_ssid;
+  password = n_password;
+  prefs.putString("WiFi_ssid"    , ssid    );
+  prefs.putString("WiFi_password", password);
+}
+
 void Webservice::init() {
 
-//  wm.resetSettings();
+  wifi_settings.init();
 
   WiFi.mode(WIFI_STA);
-  wm.setConfigPortalBlocking(false);
-  wm.setConfigPortalTimeout(300);
-  wm.setConnectTimeout(20);
-  wm.setHostname("TonUINO");
-  wm.setDebugOutput(true, "WiFi ");
+  WiFi.setHostname("tonuino");
 
-  if (digitalRead(buttonUpPin) == getLevel(buttonPinType, level::active)) {
-    bool res = wm.startConfigPortal("TonUINO_IpConfig");
-    LOG(webserv_log, s_info, "WiFi startConfigPortal: ", res);
+  if ((digitalRead(buttonUpPin) != getLevel(buttonPinType, level::active)) && (wifi_settings.get_ssid() != "")) {
+    WiFi.begin(wifi_settings.get_ssid(), wifi_settings.get_password());
+    LOG(webserv_log, s_info, "Connecting to WiFi ", wifi_settings.get_ssid(), " ...");
+    Timer timer;
+    timer.start(10*1000);
+    while ((WiFi.status() != WL_CONNECTED) && not timer.isExpired()) {
+      delay(500);
+    }
   }
-  else if(wm.autoConnect("TonUINO_IpConfig")){
-    LOG(webserv_log, s_info, "WiFi connected");
+  if (WiFi.status() == WL_CONNECTED) {
+    connected = true;
+    LOG(webserv_log, s_info, "Connected to WiFi ", wifi_settings.get_ssid(), " with IP: ", WiFi.localIP());
   }
   else {
-    LOG(webserv_log, s_info, "WiFi not connected, Configportal running");
+    connected = false;
+    LOG(webserv_log, s_info, "Not connected to WiFi ", wifi_settings.get_ssid(), ", starting AP TonUINO");
+    WiFi.mode(WIFI_AP);
+    WiFi.softAP("TonUINO");
+    delay(500); // slight delay to make sure we get an AP IP
+    LOG(webserv_log, s_info, "AP IP address: ",WiFi.softAPIP());
+    WiFi.softAPsetHostname("tonuino");
+    dns_server.start(53, "*", WiFi.softAPIP());
   }
 
   ws.onEvent([this](AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) { onWebSocketEvent(server, client, type, arg, data, len); });
@@ -803,15 +859,14 @@ void Webservice::init() {
   webserver.on("/system"         , HTTP_GET,  [this](AsyncWebServerRequest *request){ page_system    (request); });
   webserver.on("/wifi"           , HTTP_GET,  [this](AsyncWebServerRequest *request){ page_wifi      (request); });
   webserver.on("/scan_networks"  , HTTP_GET,  [this](AsyncWebServerRequest *request){ scan_networks  (request); });
+  webserver.on("/wifisave"       , HTTP_POST, [this](AsyncWebServerRequest *request){ wifi_save      (request); });
 
 }
 
 void Webservice::loop() {
-  connected = wm.process();
-
+  dns_server.processNextRequest();
   ws.cleanupClients();
   push_status();
-
 }
 
 commandRaw Webservice::getCommandRaw() {
@@ -1235,20 +1290,51 @@ void Webservice::scan_networks(AsyncWebServerRequest *request) {
 
   JsonDocument doc;
 
-  // { "networks": [ {"ssid": "wlan1", "rssi": "40", "q": "2"}, {"ssid": "wlan2", "rssi": "90", "q": "4"} ] }
-
   JsonArray networks = doc["networks"].to<JsonArray>();
 
-  JsonObject network;
-  networks[0]["ssid"] = "wlan1";
-  networks[0]["rssi"] = "40";
-  networks[0]["q"   ] = "2";
-  networks[0]["auth"] = "l";
+  int16_t num_networks = WiFi.scanNetworks();
+  LOG(webserv_log, s_info, "networks found: ", num_networks);
 
-  networks[1]["ssid"] = "wlan2";
-  networks[1]["rssi"] = "90";
-  networks[1]["q"   ] = "4";
-  networks[1]["auth"] = "";
+  int indices[num_networks];
+  for (int i = 0; i < num_networks; i++) {
+    indices[i] = i;
+  }
+
+  // RSSI SORT
+  for (int i = 0; i < num_networks; i++) {
+    for (int j = i + 1; j < num_networks; j++) {
+      if (WiFi.RSSI(indices[j]) > WiFi.RSSI(indices[i])) {
+        std::swap(indices[i], indices[j]);
+      }
+    }
+  }
+
+  // remove duplicates
+  String cssid;
+  for (int i = 0; i < num_networks; i++) {
+    if (indices[i] == -1) continue;
+    cssid = WiFi.SSID(indices[i]);
+    for (int j = i + 1; j < num_networks; j++) {
+      if (cssid == WiFi.SSID(indices[j])) {
+        LOG(webserv_log, s_debug, "DUP AP: ",WiFi.SSID(indices[j]));
+        indices[j] = -1;
+      }
+    }
+  }
+
+  int n = 0;
+  for (int i = 0; i < num_networks; i++) {
+    if (indices[i] == -1) continue; // skip dups
+
+    int rssiperc = getRSSIasQuality(WiFi.RSSI(indices[i]));
+
+    networks[n]["ssid"] = WiFi.SSID(indices[i]);
+    networks[n]["rssi"] = (String)rssiperc;
+    networks[n]["q"   ] = (String)int(round(map(rssiperc,0,100,1,4)));
+    networks[n]["auth"] = WiFi.encryptionType(indices[i]) == WIFI_AUTH_OPEN ? "" : "l";
+
+    ++n;
+  }
 
   serializeJson(doc, jsonStr);
 
@@ -1256,15 +1342,30 @@ void Webservice::scan_networks(AsyncWebServerRequest *request) {
   request->send(200, "text/html", jsonStr);
 }
 
+void Webservice::wifi_save(AsyncWebServerRequest *request) {
+  LOG(webserv_log, s_info, "Webservice::wifi_save");
+
+  int params = request->params();
+  for (int i = 0; i < params; i++) {
+    const AsyncWebParameter *p = request->getParam(i);
+    LOG(webserv_log, s_info, "parameter name[", p->name(), "]: ", p->value());
+  }
+  if (request->hasArg("ssid" ) && request->hasArg("password"))
+    wifi_settings.set(request->arg("ssid"), request->arg("password"));
+
+  AsyncWebServerResponse *response = request->beginResponse(302, "text/plain", "Moved");
+  response->addHeader("Location", "/wifi");
+  request->send(response);
+}
 
 
 String Webservice::process_page(const String& var) {
 
   if (var == "STATE")
     return get_status();
-  if (var == "TOPNAV")
+  else if (var == "TOPNAV")
     return topnav_html;
-  if (var == "SERVICE") {
+  else if (var == "SERVICE") {
 #ifdef FIVEBUTTONS
     return service_button_5_html;
 #else
@@ -1274,6 +1375,10 @@ String Webservice::process_page(const String& var) {
       return service_button_3_html;
 #endif
   }
+  else if (var == "SSID")
+    return wifi_settings.get_ssid();
+  else if (var == "PASSWORD")
+    return "";
 
   return "";
 
