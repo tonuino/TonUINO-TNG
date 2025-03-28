@@ -31,10 +31,11 @@ const char style_css[] PROGMEM = R"rawliteral(
 }
 
 .topnav a {
+  height: 18px;
+  font-size: 17px;
   color: white;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
   display: block;
 }
 
@@ -47,8 +48,25 @@ const char style_css[] PROGMEM = R"rawliteral(
 }
 
 .topnav a:hover {
-  background-color: #ddd;
-  color: black;
+  text-decoration: none;
+}
+
+.bar1, .bar2, .bar3 {
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  margin: 3px 0;
+  transition: 0.4s;
+}
+
+.change .bar1 {
+  transform: translate(0, 6px) rotate(-45deg);
+}
+
+.change .bar2 {opacity: 0;}
+
+.change .bar3 {
+  transform: translate(0, -6px) rotate(45deg);
 }
 
 .active {

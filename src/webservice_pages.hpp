@@ -30,12 +30,15 @@ const char topnav_html[] PROGMEM = R"rawliteral(
     <a href="/settings">Einstellungen</a>
     <a href="/system">System</a>
   </div>
-  <a href="javascript:void(0);" class="icon" onclick="show_hide_nav()">
-    <i class="fa fa-bars"></i>
+  <a class="icon" onclick="show_hide_nav(this)">
+    <div class="bar1"></div>
+    <div class="bar2"></div>
+    <div class="bar3"></div>
   </a>
 </div>
 <script>
-function show_hide_nav() {
+function show_hide_nav(i) {
+  i.classList.toggle("change");
   var x = document.getElementById("nav_links");
   if (x.style.display === "block") {
     x.style.display = "none";
@@ -116,7 +119,6 @@ const char main_html[] PROGMEM = R"rawliteral(
   <title>TonUINO</title>
   <meta charset=utf-8>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -232,7 +234,6 @@ const char settings_html[] PROGMEM = R"rawliteral(
   <title>TonUINO Einstellungen</title>
   <meta charset=utf-8>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body onload="pageLoad()">
@@ -399,7 +400,6 @@ const char system_html[] PROGMEM = R"rawliteral(
   <title>TonUINO</title>
   <meta charset=utf-8>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -424,7 +424,6 @@ const char wifi_html[] PROGMEM = R"rawliteral(
   <title>TonUINO</title>
   <meta charset=utf-8>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body onload="refresh()">
@@ -508,7 +507,6 @@ const char info_html[] PROGMEM = R"rawliteral(
   <title>TonUINO</title>
   <meta charset=utf-8>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -530,19 +528,18 @@ const char info_html[] PROGMEM = R"rawliteral(
 <dt>Temperature</dt><dd>%temp1% C&deg;</dd>
 <br/><h3>WiFi</h3><hr>%wifihead%<br><br>
 <dt>Connected</dt><dd>%conx%</dd>
-<dt>Station SSID</dt><dd>%stassid%</dd>
+<dt>SSID</dt><dd>%stassid%</dd>
+<dt>BSSID</dt><dd>%apbssid%</dd>
 <dt>Station IP</dt><dd>%staip%</dd>
 <dt>Station gateway</dt><dd>%stagw%</dd>
 <dt>Station subnet</dt><dd>%stasub%</dd>
 <dt>DNS Server</dt><dd>%dnss%</dd>
 <dt>Hostname</dt><dd>%host%</dd>
 <dt>Station MAC</dt><dd>%stamac%</dd>
-<dt>Access point SSID</dt><dd>%apssid%</dd>
 <br/><h3>WiFi AP</h3><hr>
 <dt>Access point IP</dt><dd>%apip%</dd>
 <dt>Access point MAC</dt><dd>%apmac%</dd>
 <dt>Access point hostname</dt><dd>%aphost%</dd>
-<dt>BSSID</dt><dd>%apbssid%</dd>
 
 </dl>
 

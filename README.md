@@ -51,7 +51,6 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
     - plerup/espsoftwareserial: 8.1.0
     - esp32async/AsyncTCP: 3.3.6
     - esp32async/ESPAsyncWebServer: 3.7.2
-    - tzapu/WiFiManager: 2.0.17
     - bblanchon/ArduinoJson: 7.3.0
 
 ## platform.io
@@ -101,7 +100,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.11 geä
 
 # Change Log
 
-## Version 3.3.0 (17.03.2025)
+## Version 3.3.0 (28.03.2025)
 - [Issue 159](https://github.com/tonuino/TonUINO-TNG/issues/159): New Hardware Type ESP32 Nano
 
 ## Version 3.2.1 (16.01.2025)
@@ -300,3 +299,16 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.11 geä
 - Durch einen langen Druck auf Play/Pause kann **eine Karte neu konfiguriert** werden
 - In den Auswahldialogen kann durch langen Druck auf die Lautstärketasten jeweils um 10 Ordner oder Dateien vor und zurück gesprungen werden
 - Reset des MP3 Moduls beim Start entfernt - war nicht nötig und hat "Krach" gemacht
+
+# Open Source 
+
+- jchristensen/JC_Button - GPL 2007
+- boerge1/MFRC522_fix - free PD
+- makuna/DFPlayer Mini Mp3 by Makuna - LGPL 2007
+- adafruit/Adafruit NeoPixel - LGPL 2007
+- plerup/espsoftwareserial - LGPL 1999
+- esp32async/AsyncTCP - LGPL 2007 
+- esp32async/ESPAsyncWebServer - LGPL 2007
+- bblanchon/ArduinoJson - MIT
+- digint.ch/tinyfsm - free PD
+

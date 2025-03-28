@@ -63,7 +63,7 @@ void Webservice::init() {
 
   wifi_settings.init();
 
-  WiFi.mode(WIFI_STA);
+  WiFi.mode(WIFI_MODE_APSTA);
   WiFi.setHostname("tonuino");
   WiFi.softAPsetHostname("tonuino");
 
@@ -83,7 +83,6 @@ void Webservice::init() {
   else {
     connected = false;
     LOG(webserv_log, s_info, "Not connected to WiFi ", wifi_settings.get_ssid(), ", starting AP TonUINO");
-    WiFi.mode(WIFI_AP);
     WiFi.softAP("TonUINO");
     delay(500); // slight delay to make sure we get an AP IP
     LOG(webserv_log, s_info, "AP IP address: ",WiFi.softAPIP());
