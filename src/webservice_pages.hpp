@@ -410,6 +410,7 @@ const char system_html[] PROGMEM = R"rawliteral(
 
 <form class="system" action='/wifi'    method='get'><button>Configure WiFi</button></form><br/>
 <form class="system" action='/info'    method='get'><button>Info</button></form><br/>
+<form class="system" action='/update'  method='get'><button>Firmware Update OTA</button></form><br/>
 
 </body>
 </html>
