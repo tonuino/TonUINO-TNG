@@ -12,12 +12,16 @@ Buttons3x3::Buttons3x3()
 {
 }
 
+void Buttons3x3::begin() {
+  pinMode(button3x3Pin, INPUT);
+}
+
 commandRaw Buttons3x3::getCommandRaw() {
   commandRaw ret = commandRaw::none;
 
 #ifdef CALIBRATE3X3
-  static uint8_t t = 0;
-  if (t % 50 == 0)
+  static uint16_t t = 0;
+  if (t++ % 10 == 0)
     LOG(button_log, s_info, F("Button3x3 analog value: "), static_cast<int>(analogRead(button3x3Pin)));
 #else
   const uint8_t button = buttons.getKey();
@@ -27,7 +31,7 @@ commandRaw Buttons3x3::getCommandRaw() {
   }
 
   if (ret != commandRaw::none) {
-    LOG(button_log, s_debug, F("Button3x3 raw: "), static_cast<uint8_t>(ret));
+    LOG(button_log, s_debug, F("btn3x3: "), static_cast<uint8_t>(ret)-buttonExtSC_begin+1);
   }
 #endif
   return ret;

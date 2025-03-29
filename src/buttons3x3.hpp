@@ -25,8 +25,12 @@ public:
 #ifdef ALLinONE_Plus
   static constexpr int16_t maxLevel =  900; // 1023;
 #endif
+#ifdef TonUINO_Esp32
+  static constexpr int16_t maxLevel = 2900; // 4095;
+#endif
 
   Buttons3x3();
+  void begin();
   commandRaw getCommandRaw() override;
 
 private:
