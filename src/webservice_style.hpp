@@ -43,7 +43,7 @@ const char style_css[] PROGMEM = R"rawliteral(
   background: black;
   display: block;
   position: absolute;
-  right: 0;
+  left: 0;
   top: 0;
 }
 
@@ -72,6 +72,7 @@ const char style_css[] PROGMEM = R"rawliteral(
 .active {
   background-color: #ff9900;
   color: white;
+  text-align: center;
 }
 
 input[type=number] {
