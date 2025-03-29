@@ -375,6 +375,8 @@ void Mp3::hpjackdetect() {
     if (isPlayingFolder()) {
       uint8_t first = (current_track < additional) ? 0 : current_track-additional;
       uint8_t last  = (current_track > q.size()-1-additional) ? q.size()-1 : current_track+additional;
+      if (first > 0)
+        res += "... ";
       for (uint8_t t = first; t <= last; ++t) {
         if (t == current_track)
           res += "<b>";
@@ -383,6 +385,8 @@ void Mp3::hpjackdetect() {
           res += "</b>";
         res += " ";
       }
+      if (last < q.size()-1)
+        res += "...";
     }
 
     return res;
