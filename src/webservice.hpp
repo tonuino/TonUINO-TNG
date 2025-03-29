@@ -57,6 +57,9 @@ private:
   void wifi_save      (AsyncWebServerRequest *request);
   void page_info      (AsyncWebServerRequest *request);
 
+  void onOTAStart     ();
+  void onOTAProgress  (size_t current, size_t s);
+  void onOTAEnd       (bool success);
 
   void onWebSocketMessage(void *arg, uint8_t *data, size_t len);
   void onWebSocketEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type,
@@ -75,6 +78,8 @@ private:
   AsyncWebServer  webserver {80};
   AsyncWebSocket  ws        {"/ws"};
   String          old_status{};
+
+  unsigned long   ota_progress_millis = 0;
 
   commandRaw      cmd{commandRaw::none};
 };

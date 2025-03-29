@@ -4,6 +4,7 @@
 #include "webservice.hpp"
 
 #include <ArduinoJson.h>
+#include <ElegantOTA.h>
 
 #include "logger.hpp"
 #include "state_machine.hpp"
@@ -92,6 +93,13 @@ void Webservice::init() {
   ws.onEvent([this](AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) { onWebSocketEvent(server, client, type, arg, data, len); });
   webserver.addHandler(&ws);
 
+  ElegantOTA.begin(&webserver);
+  ElegantOTA.setAuth("admin", "admin");
+
+  ElegantOTA.onStart   ([this](                        ) { onOTAStart();              });
+  ElegantOTA.onProgress([this](size_t current, size_t s) { onOTAProgress(current, s); });
+  ElegantOTA.onEnd     ([this](bool b                  ) { onOTAEnd(b);               });
+
   webserver.begin();
   webserver.onNotFound(                       [this](AsyncWebServerRequest *request){ page_notfound  (request); });
 
@@ -118,6 +126,7 @@ void Webservice::loop() {
   if (not connected)
     dns_server.processNextRequest();
   ws.cleanupClients();
+  ElegantOTA.loop();
   push_status();
 }
 
@@ -736,6 +745,25 @@ String Webservice::getInfoData(const String& id){
     p = String(__DATE__ " " __TIME__);
   }
   return p;
+}
+
+void Webservice::onOTAStart() {
+  LOG(webserv_log, s_info, "OTA update started!");
+}
+
+void Webservice::onOTAProgress(size_t current, size_t s) {
+  if (millis() - ota_progress_millis > 1000) {
+    ota_progress_millis = millis();
+    LOG(webserv_log, s_info, "OTA Progress Current: ", current, " bytes, Final: ", s, " bytes");
+  }
+}
+
+void Webservice::onOTAEnd(bool success) {
+  if (success) {
+    LOG(webserv_log, s_info, "OTA update finished successfully!");
+  } else {
+    LOG(webserv_log, s_info, "There was an error during OTA update!");
+  }
 }
 
 
