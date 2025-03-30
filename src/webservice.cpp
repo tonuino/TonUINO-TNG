@@ -4,7 +4,7 @@
 #include "webservice.hpp"
 
 #include <ArduinoJson.h>
-#include <ElegantOTA.h>
+#include <Update.h>
 
 #include "logger.hpp"
 #include "state_machine.hpp"
@@ -16,6 +16,9 @@
 #define W_STRING(x) W_STRING2(x)
 
 namespace {
+
+const char ota_user  [] = "admin";
+const char ota_passwd[] = "admin";
 
 Tonuino        &tonuino   = Tonuino::getTonuino();
 
@@ -93,13 +96,6 @@ void Webservice::init() {
   ws.onEvent([this](AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) { onWebSocketEvent(server, client, type, arg, data, len); });
   webserver.addHandler(&ws);
 
-  ElegantOTA.begin(&webserver);
-  ElegantOTA.setAuth("admin", "admin");
-
-  ElegantOTA.onStart   ([this](                        ) { onOTAStart();              });
-  ElegantOTA.onProgress([this](size_t current, size_t s) { onOTAProgress(current, s); });
-  ElegantOTA.onEnd     ([this](bool b                  ) { onOTAEnd(b);               });
-
   webserver.begin();
   webserver.onNotFound(                       [this](AsyncWebServerRequest *request){ page_notfound  (request); });
 
@@ -115,18 +111,27 @@ void Webservice::init() {
   webserver.on("/update_settings", HTTP_POST, [this](AsyncWebServerRequest *request){ update_settings(request); });
 
   webserver.on("/system"         , HTTP_GET,  [this](AsyncWebServerRequest *request){ page_system    (request); });
+
   webserver.on("/wifi"           , HTTP_GET,  [this](AsyncWebServerRequest *request){ page_wifi      (request); });
   webserver.on("/scan_networks"  , HTTP_GET,  [this](AsyncWebServerRequest *request){ scan_networks  (request); });
   webserver.on("/wifisave"       , HTTP_POST, [this](AsyncWebServerRequest *request){ wifi_save      (request); });
+
   webserver.on("/info"           , HTTP_GET,  [this](AsyncWebServerRequest *request){ page_info      (request); });
 
+  webserver.on("/upgrade"        , HTTP_GET,  [this](AsyncWebServerRequest *request){ page_upgrade   (request); });
+  webserver.onFileUpload([this](AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool f)
+                                                                                    { onOtaUpload(request, filename, index, data, len, f); });
 }
 
 void Webservice::loop() {
+  if (ota_reboot) {
+    LOG(webserv_log, s_info, "OTA finished, Rebooting ESP32...");
+    delay(2000);
+    ESP.restart();
+  }
   if (not connected)
     dns_server.processNextRequest();
   ws.cleanupClients();
-  ElegantOTA.loop();
   push_status();
 }
 
@@ -164,6 +169,15 @@ void Webservice::page_wifi(AsyncWebServerRequest *request) {
 
 void Webservice::page_info(AsyncWebServerRequest *request) {
   request->send(200, "text/html", info_html, [this](const String& var) { return process_page(var);});
+}
+
+void Webservice::page_upgrade(AsyncWebServerRequest *request) {
+  if (!request->authenticate(ota_user, ota_passwd)) {
+    request->requestAuthentication();
+    return;
+  }
+
+  request->send(200, "text/html", upgrade_html, [this](const String& var) { return process_page(var);});
 }
 
 void Webservice::update_settings(AsyncWebServerRequest *request) {
@@ -623,6 +637,50 @@ void Webservice::wifi_save(AsyncWebServerRequest *request) {
   request->send(response);
 }
 
+void Webservice::onOtaUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool f) {
+  LOG(webserv_log, s_debug, "Webservice::onOtaUpload");
+
+  if (!request->authenticate(ota_user, ota_passwd)) {
+    request->requestAuthentication();
+    return;
+  }
+
+  if (!index) {
+    ota_progress_size = 0;
+    if (!Update.begin(UPDATE_SIZE_UNKNOWN, U_FLASH)) {
+      // Save error to string
+      StreamString str;
+      Update.printError(str);
+      LOG(webserv_log, s_error, "Failed to start update process: ", str.c_str());
+      request->send(400, "text/plain", "Failed to start update process");
+      return;
+    }
+  }
+
+  if(len){
+    if (Update.write(data, len) != len) {
+        LOG(webserv_log, s_error, "Failed to write chunked data to free space");
+        request->send(400, "text/plain", "Failed to write chunked data to free space");
+        return;
+    }
+    ota_progress_size += len;
+    if (millis() - ota_progress_millis > 1000) {
+      ota_progress_millis = millis();
+      LOG(webserv_log, s_info, "OTA Progress Current: ", ota_progress_size, " bytes, Final: ", request->contentLength(), " bytes");
+    }
+  }
+
+  if (f) {
+    if (!Update.end(true)) {
+        StreamString str;
+        Update.printError(str);
+        LOG(webserv_log, s_error, "Failed to end update process: ", str.c_str());
+        request->send(400, "text/plain", "Failed to end update process");
+    }
+    ota_reboot = true;
+  }
+}
+
 
 String Webservice::process_page(const String& var) {
 
@@ -746,26 +804,6 @@ String Webservice::getInfoData(const String& id){
   }
   return p;
 }
-
-void Webservice::onOTAStart() {
-  LOG(webserv_log, s_info, "OTA update started!");
-}
-
-void Webservice::onOTAProgress(size_t current, size_t s) {
-  if (millis() - ota_progress_millis > 1000) {
-    ota_progress_millis = millis();
-    LOG(webserv_log, s_info, "OTA Progress Current: ", current, " bytes, Final: ", s, " bytes");
-  }
-}
-
-void Webservice::onOTAEnd(bool success) {
-  if (success) {
-    LOG(webserv_log, s_info, "OTA update finished successfully!");
-  } else {
-    LOG(webserv_log, s_info, "There was an error during OTA update!");
-  }
-}
-
 
 
 #endif

@@ -410,7 +410,7 @@ const char system_html[] PROGMEM = R"rawliteral(
 
 <form class="system" action='/wifi'    method='get'><button>Configure WiFi</button></form><br/>
 <form class="system" action='/info'    method='get'><button>Info</button></form><br/>
-<form class="system" action='/update'  method='get'><button>Firmware Update OTA</button></form><br/>
+<form class="system" action='/upgrade' method='get'><button>Firmware Update OTA</button></form><br/>
 
 </body>
 </html>
@@ -555,3 +555,104 @@ const char info_html[] PROGMEM = R"rawliteral(
 
 )rawliteral";
 
+const char upgrade_html[] PROGMEM = R"rawliteral(
+
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>TonUINO</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+
+<!-- Top Navigation Menu -->
+<div class="topnav">
+  <a href="TonUINO.html" class="active">TonUINO</a>
+  <div id="nav_links">
+    <a href="TonUINO.html">Home</a>
+    <a href="Einstellungen.html">Einstellungen</a>
+    <a href="System.html">System</a>
+  </div>
+  <a class="icon" onclick="show_hide_nav(this)">
+    <div class="bar1"></div>
+    <div class="bar2"></div>
+    <div class="bar3"></div>
+  </a>
+</div>
+<script>
+function show_hide_nav(i) {
+  i.classList.toggle("change");
+  var x = document.getElementById("nav_links");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+</script>
+
+
+
+<h2>TonUINO OTA FW Upgrade</h2>
+
+  <p id="status"></p>
+  <p id="detailsheader"></p>
+  <p id="details"></p>
+
+<script>
+function showUploadButtonFancy() {
+  document.getElementById("detailsheader").innerHTML = "<h3>Select File:<h3>"
+  document.getElementById("status").innerHTML = "";
+  var uploadform =
+  "<form id=\"upload_form\" enctype=\"multipart/form-data\" method=\"post\">" +
+  "<input type=\"file\" name=\"file1\" id=\"file1\" accept=\".bin\" onchange=\"uploadFile()\"><br><br>" +
+  "<progress id=\"progressBar\" value=\"0\" max=\"100\" style=\"width:300px;\"></progress>" +
+  "<h3 id=\"status\"></h3>" +
+  "<p id=\"loaded_n_total\"></p>" +
+  "</form>";
+  document.getElementById("details").innerHTML = uploadform;
+}
+function _(el) {
+  return document.getElementById(el);
+}
+function uploadFile() {
+  var file = _("file1").files[0];
+  var formdata = new FormData();
+  formdata.append("file1", file);
+  var ajax = new XMLHttpRequest();
+  ajax.upload.addEventListener("progress", progressHandler, false);
+  ajax.addEventListener("load", completeHandler, false);
+  ajax.addEventListener("error", errorHandler, false);
+  ajax.addEventListener("abort", abortHandler, false);
+  ajax.open("POST", "/upgrade");
+  ajax.send(formdata);
+}
+function progressHandler(event) {
+  _("loaded_n_total").innerHTML = "Uploaded " + event.loaded + " bytes";
+  var percent = (event.loaded / event.total) * 100;
+  _("progressBar").value = Math.round(percent);
+  _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
+  if (percent >= 100) {
+    _("status").innerHTML = "Please wait, finishing upgrade";
+  }
+}
+function completeHandler(event) {
+  _("status").innerHTML = "Upload Complete";
+  _("progressBar").value = 0;
+}
+function errorHandler(event) {
+  _("status").innerHTML = "Upload Failed";
+}
+function abortHandler(event) {
+  _("status").innerHTML = "Upload Aborted";
+}
+showUploadButtonFancy();
+</script>
+
+</body></html>
+
+)rawliteral";
