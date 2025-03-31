@@ -67,11 +67,12 @@ void Webservice::init() {
 
   wifi_settings.init();
 
-  WiFi.mode(WIFI_MODE_APSTA);
   WiFi.setHostname("tonuino");
   WiFi.softAPsetHostname("tonuino");
+  WiFi.mode(WIFI_MODE_APSTA);
 
   if ((digitalRead(buttonUpPin) != getLevel(buttonPinType, level::active)) && (wifi_settings.get_ssid() != "")) {
+    WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
     WiFi.begin(wifi_settings.get_ssid(), wifi_settings.get_password());
     LOG(webserv_log, s_info, "Connecting to WiFi ", wifi_settings.get_ssid(), " ...");
     Timer timer;
@@ -119,7 +120,8 @@ void Webservice::init() {
   webserver.on("/info"           , HTTP_GET,  [this](AsyncWebServerRequest *request){ page_info      (request); });
 
   webserver.on("/upgrade"        , HTTP_GET,  [this](AsyncWebServerRequest *request){ page_upgrade   (request); });
-  webserver.onFileUpload([this](AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool f)
+  webserver.on("/upgrade"        , HTTP_POST, [this](AsyncWebServerRequest *request){ upgrade_start  (request); },
+                                              [this](AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool f)
                                                                                     { onOtaUpload(request, filename, index, data, len, f); });
 }
 
@@ -635,6 +637,18 @@ void Webservice::wifi_save(AsyncWebServerRequest *request) {
   AsyncWebServerResponse *response = request->beginResponse(302, "text/plain", "Moved");
   response->addHeader("Location", "/wifi");
   request->send(response);
+}
+
+void Webservice::upgrade_start(AsyncWebServerRequest *request) {
+  LOG(webserv_log, s_info, "Webservice::upgrade_start");
+
+  int params = request->params();
+  for (int i = 0; i < params; i++) {
+    const AsyncWebParameter *p = request->getParam(i);
+    LOG(webserv_log, s_info, "parameter name[", p->name(), "]: ", p->value());
+  }
+
+  request->send(200);
 }
 
 void Webservice::onOtaUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool f) {

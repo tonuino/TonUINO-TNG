@@ -567,37 +567,12 @@ const char upgrade_html[] PROGMEM = R"rawliteral(
 </head>
 <body>
 
-
-
-<!-- Top Navigation Menu -->
-<div class="topnav">
-  <a href="TonUINO.html" class="active">TonUINO</a>
-  <div id="nav_links">
-    <a href="TonUINO.html">Home</a>
-    <a href="Einstellungen.html">Einstellungen</a>
-    <a href="System.html">System</a>
-  </div>
-  <a class="icon" onclick="show_hide_nav(this)">
-    <div class="bar1"></div>
-    <div class="bar2"></div>
-    <div class="bar3"></div>
-  </a>
-</div>
-<script>
-function show_hide_nav(i) {
-  i.classList.toggle("change");
-  var x = document.getElementById("nav_links");
-  if (x.style.display === "block") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "block";
-  }
-}
-</script>
-
-
+%TOPNAV%
 
 <h2>TonUINO OTA FW Upgrade</h2>
+
+Installed firmware: %aboutver%<br>
+Build date: %aboutdate%
 
   <p id="status"></p>
   <p id="detailsheader"></p>
@@ -640,9 +615,13 @@ function progressHandler(event) {
     _("status").innerHTML = "Please wait, finishing upgrade";
   }
 }
+function refresh() {
+  window.location.reload(true);
+}
 function completeHandler(event) {
   _("status").innerHTML = "Upload Complete";
   _("progressBar").value = 0;
+  setTimeout(refresh, 5000);
 }
 function errorHandler(event) {
   _("status").innerHTML = "Upload Failed";

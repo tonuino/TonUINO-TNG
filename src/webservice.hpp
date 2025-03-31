@@ -60,6 +60,7 @@ private:
   void page_info      (AsyncWebServerRequest *request);
 
   void page_upgrade   (AsyncWebServerRequest *request);
+  void upgrade_start  (AsyncWebServerRequest *request);
   void onOtaUpload    (AsyncWebServerRequest *request, String filename, size_t index,
                        uint8_t *data, size_t len, bool f);
 
