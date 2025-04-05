@@ -100,7 +100,7 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.11 geä
 
 # Change Log
 
-## Version 3.3.0 (30.03.2025)
+## Version 3.3.0 (05.04.2025)
 - [Issue 159](https://github.com/tonuino/TonUINO-TNG/issues/159): New Hardware Type ESP32 Nano
 
 ## Version 3.2.1 (16.01.2025)
@@ -310,5 +310,9 @@ Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.11 geä
 - esp32async/AsyncTCP - LGPL 2007 
 - esp32async/ESPAsyncWebServer - LGPL 2007
 - bblanchon/ArduinoJson - MIT
-- digint.ch/tinyfsm - free PD
+- digint.ch/tinyfsm - free PD (code geändert)
+- circuitcode/AsyncWebSerial - MIT (code geändert)
+- tuniii/LogRingBuffer - GPL V3+ (code geändert)
+
+
 

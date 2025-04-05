@@ -12,6 +12,9 @@
 #include "timer.hpp"
 #include "version.hpp"
 
+#include "webservice_style.hpp"
+#include "webservice_pages.hpp"
+
 #define W_STRING2(x) #x
 #define W_STRING(x) W_STRING2(x)
 
@@ -25,10 +28,6 @@ Tonuino        &tonuino   = Tonuino::getTonuino();
 /**************
 Static HTML Definition
 **************/
-#include "webservice_style.hpp"
-#include "webservice_pages.hpp"
-
-
 int getRSSIasQuality(int RSSI) {
   int quality = 0;
 
@@ -67,12 +66,9 @@ void Webservice::init() {
 
   wifi_settings.init();
 
-  WiFi.setHostname("tonuino");
-  WiFi.softAPsetHostname("tonuino");
-  WiFi.mode(WIFI_MODE_APSTA);
-
   if ((digitalRead(buttonUpPin) != getLevel(buttonPinType, level::active)) && (wifi_settings.get_ssid() != "")) {
-    WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
+    WiFi.setHostname("tonuino");
+    WiFi.mode(WIFI_MODE_STA);
     WiFi.begin(wifi_settings.get_ssid(), wifi_settings.get_password());
     LOG(webserv_log, s_info, "Connecting to WiFi ", wifi_settings.get_ssid(), " ...");
     Timer timer;
@@ -88,11 +84,15 @@ void Webservice::init() {
   else {
     connected = false;
     LOG(webserv_log, s_info, "Not connected to WiFi ", wifi_settings.get_ssid(), ", starting AP TonUINO");
+    WiFi.softAPsetHostname("tonuino");
+    WiFi.mode(WIFI_MODE_AP);
     WiFi.softAP("TonUINO");
     delay(500); // slight delay to make sure we get an AP IP
     LOG(webserv_log, s_info, "AP IP address: ",WiFi.softAPIP());
     dns_server.start(53, "*", WiFi.softAPIP());
   }
+
+  webserial.begin(&webserver);
 
   ws.onEvent([this](AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) { onWebSocketEvent(server, client, type, arg, data, len); });
   webserver.addHandler(&ws);
@@ -128,12 +128,15 @@ void Webservice::init() {
 void Webservice::loop() {
   if (ota_reboot) {
     LOG(webserv_log, s_info, "OTA finished, Rebooting ESP32...");
+    if (SM_tonuino::is_in_state<Play>())
+      cmd = commandRaw::pause;
     delay(2000);
     ESP.restart();
   }
   if (not connected)
     dns_server.processNextRequest();
   ws.cleanupClients();
+  webserial.loop();
   push_status();
 }
 
@@ -368,7 +371,7 @@ void Webservice::get_settings(AsyncWebServerRequest *request) {
 
   serializeJson(doc, jsonStr);
 
-  LOG(webserv_log, s_info, "jsonStr (", jsonStr, ")");
+  LOG(webserv_log, s_debug, "jsonStr (", jsonStr, ")");
   request->send(200, "text/html", jsonStr);
 }
 
@@ -394,6 +397,14 @@ void Webservice::service(AsyncWebServerRequest *request) {
     else if (request->arg("button") == "five_long" ) cmd = commandRaw::fiveLong;
     else if (request->arg("button") == "four_long" ) cmd = commandRaw::fourLong;
 #endif
+  }
+  if (request->hasArg("command")) {
+    if      (request->arg("command") == "shutdown" ) {
+      if (SM_tonuino::is_in_state<Play>())
+        cmd = commandRaw::pause;
+      delay(1000);
+      tonuino.shutdown();
+    }
   }
   request->send(200);
 }
@@ -551,6 +562,9 @@ String Webservice::get_status() {
 
 void Webservice::push_status() {
 
+  if (ws.count() == 0)
+    return;
+
   String status = get_status();;
 
   if (old_status != status) {
@@ -619,7 +633,7 @@ void Webservice::scan_networks(AsyncWebServerRequest *request) {
 
   serializeJson(doc, jsonStr);
 
-  LOG(webserv_log, s_info, "jsonStr (", jsonStr, ")");
+  LOG(webserv_log, s_debug, "jsonStr (", jsonStr, ")");
   request->send(200, "text/html", jsonStr);
 }
 
@@ -633,6 +647,9 @@ void Webservice::wifi_save(AsyncWebServerRequest *request) {
   }
   if (request->hasArg("ssid" ) && request->hasArg("password"))
     wifi_settings.set(request->arg("ssid"), request->arg("password"));
+
+  if (request->hasArg("reboot" ) && request->arg("reboot") == "on")
+    ota_reboot = true;
 
   AsyncWebServerResponse *response = request->beginResponse(302, "text/plain", "Moved");
   response->addHeader("Location", "/wifi");

@@ -33,14 +33,17 @@ void setup()
 #endif
 
   // Dieser Hinweis darf nicht entfernt werden
-  LOG(init_log, s_error, F("\n _____         _____ _____ _____ _____"));
+  LOG(init_log, s_error, F(""));
+  LOG(init_log, s_error, F(" _____         _____ _____ _____ _____ "));
   LOG(init_log, s_error, F("|_   _|___ ___|  |  |     |   | |     |"));
   LOG(init_log, s_error, F("  | | | . |   |  |  |-   -| | | |  |  |"));
   LOG(init_log, s_error, F("  |_| |___|_|_|_____|_____|_|___|_____|"));
-  LOG(init_log, s_error, F("TonUINO Version 3.x - refactored by Boerge1\n"));
+  LOG(init_log, s_error, F("TonUINO Version 3.x - refactored by Boerge1"));
+  LOG(init_log, s_error, F(""));
   LOG(init_log, s_error, F("created by Thorsten Voß and licensed under GNU/GPL."));
-  LOG(init_log, s_error, F("Information and contribution at https://tonuino.de.\n"));
-  LOG(init_log, s_error, TONUINO_TNG_VERSION, "\n");
+  LOG(init_log, s_error, F("Information and contribution at https://tonuino.de."));
+  LOG(init_log, s_error, F(""));
+  LOG(init_log, s_error, TONUINO_TNG_VERSION);
 
 #ifdef TonUINO_Classic
   LOG(init_log, s_error, F("C "), lf_no);
@@ -58,7 +61,7 @@ void setup()
   LOG(init_log, s_error, F("A+ "), lf_no);
 #endif
 #if TonUINO_Esp32 == 100
-  LOG(init_log, s_error, F("ESP32 Nano"), lf_no);
+  LOG(init_log, s_error, F("ESP32 Nano "), lf_no);
 #endif
 
 #ifdef FIVEBUTTONS
