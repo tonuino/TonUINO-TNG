@@ -225,6 +225,15 @@ dd{
   color: red;
 }
 
+dialog[open] {
+  position: fixed;
+  width: 20em;
+  background: #fffbf0;
+  border: thin solid #ff1a1a;
+  margin: 5em auto;
+}
+
+
 )rawliteral";
 
 #endif

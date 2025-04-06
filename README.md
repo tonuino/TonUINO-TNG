@@ -98,9 +98,15 @@ Eine Anleitung dafür findet man [hier](https://discourse.voss.earth/t/tonuino-s
 
 Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.1.11 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
 
+# Hinweise zur WLAN Konfigurattion des ESP32
+
+Wenn man ausschließlich mit dem TonUINO AP mit der SSID "TonUINO" verbunden ist, erreicht man die Webseite mit 
+jeder beliebigen Adresse (mit mindestens einem Punkt), also z.B. "http://tonuino.t". 
+Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adresse nehmen: "http://192.168.4.1". 
+
 # Change Log
 
-## Version 3.3.0 (05.04.2025)
+## Version 3.3.0 (06.04.2025)
 - [Issue 159](https://github.com/tonuino/TonUINO-TNG/issues/159): New Hardware Type ESP32 Nano
 
 ## Version 3.2.1 (16.01.2025)

@@ -384,7 +384,7 @@ const char settings_html[] PROGMEM = R"rawliteral(
 
 <script>
   var form_shortcut =
-  '<br><label for="sc_mode_n_"      >Shortcut_n_:         </label><select size=1       name="sc_mode_n_"         id="sc_mode_n_">    '
+  '<br><label for="sc_mode_n_"      >Shortcut_t_:         </label><select size=1       name="sc_mode_n_"         id="sc_mode_n_">    '
  +'                                                                  <option>--------</option>                                       '
  +'                                                                  <option>Hörspiel</option>                                       '
  +'                                                                  <option>Album</option>                                          '
@@ -413,8 +413,10 @@ const char settings_html[] PROGMEM = R"rawliteral(
 
   function pageLoad() {
 
-    for (i = 1; i <= 4; ++i)
-      document.getElementById("form").innerHTML += form_shortcut.replaceAll('_n_', i.toString());
+    document.getElementById("form").innerHTML += form_shortcut.replaceAll('_n_', "1").replaceAll('_t_', " Next+Prev");
+    document.getElementById("form").innerHTML += form_shortcut.replaceAll('_n_', "2").replaceAll('_t_', " Next");
+    document.getElementById("form").innerHTML += form_shortcut.replaceAll('_n_', "3").replaceAll('_t_', " Prev");
+    document.getElementById("form").innerHTML += form_shortcut.replaceAll('_n_', "4").replaceAll('_t_', " Start");
 
     // load json into field
     // Request JSON from sever. comment out block for offline testing
@@ -535,18 +537,28 @@ const char wifi_html[] PROGMEM = R"rawliteral(
   <br><br>
   <button onclick='return save()'>Save</button>
 </form>
+<dialog id="dialog">
+    <p>Die WLAN Daten wurden gespeichert. Falls Reboot nicht ausgewählt, 
+       starte den TonUINO neu. Verbinde dich mit dem jetzt gespeicherten WLAN 
+       und drücke dann Ok. Du wirst nach 5 Sekunden auf die TonUINO 
+       Seite umgeleitet</p>
+    <p><button id="ok">Ok</button></p>
+</dialog>
 
 <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById("ok")
+      .addEventListener("click", () => {
+        document.getElementById("dialog").close();
+        setTimeout(function () {
+          document.location="http://tonuino";
+        }, 5000);
+    });
+  });
   function save() {
     submit_form("wifisave", "wifi", "save");
-    if (document.getElementById("reboot").checked) {
-      alert("Rebooting");
-      setTimeout(function () {
-        window.location.reload(true);
-      }, 5000);
-      return false;
-    }
-    return true;
+    document.getElementById("dialog").showModal();
+    return false;
   }
   function submit_form(address, key, button) {
     console.log(address, key, button);
