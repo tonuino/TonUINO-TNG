@@ -77,7 +77,7 @@
 //#define TonUINO_Every_4808
 //#define ALLinONE
 //#define ALLinONE_Plus
-//#define TonUINO_Esp32 100 // Esp32 Nano
+#define TonUINO_Esp32 100 // Esp32 Nano
 
 #include "gpioHelper.hpp"
 
@@ -97,7 +97,7 @@
 /* If using Nano Every with connected DfPlayer Rx/Tx to D0/D1 uncomment the following lines
  * Wenn der Nano Every verwendet wird und Rx/Tx vom DfPlayer mit D0/D1 verbunden ist, den Kommentare der folgenden Zeile entfernen
  */
-//#define DFPlayerUsesHardwareSerial
+#define DFPlayerUsesHardwareSerial
 
 // ######################################################################
 

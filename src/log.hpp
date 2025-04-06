@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 
+#include "constants.hpp"
 #include "type_traits.hpp"
 
 #ifdef TonUINO_Esp32
