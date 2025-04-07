@@ -46,20 +46,64 @@ int getRSSIasQuality(int RSSI) {
 
 void WifiSettings::init() {
   prefs.begin("wifi");
-  if (not prefs.isKey("WiFi_ssid") or not prefs.isKey("WiFi_password" )) {
-    LOG(webserv_log, s_info, "no wifi settings");
-    set("", "");
-  }
-  ssid     = prefs.getString("WiFi_ssid"    );
-  password = prefs.getString("WiFi_password");
-  LOG(webserv_log, s_info, "wifi settings - ssid: ", ssid);
+  if (not prefs.isKey("WiFi_ssid"      )) LOG(webserv_log, s_info, "no wifi settings");
+
+  ssid              = prefs.getString("WiFi_ssid"      );
+  password          = prefs.getString("WiFi_password"  );
+  hostname          = prefs.getString("WiFi_hostname"  , "tonuino");
+  static_ip         = prefs.getBool  ("WiFi_st_ip"     , false);
+  static_ip_address = prefs.getString("WiFi_st_ip_addr", "0.0.0.0");
+  static_ip_gw      = prefs.getString("WiFi_st_ip_gw"  , "0.0.0.0");
+  static_ip_subnet  = prefs.getString("WiFi_st_ip_subn", "0.0.0.0");
+  static_ip_dns1    = prefs.getString("WiFi_st_ip_dns1", "0.0.0.0");
+  static_ip_dns2    = prefs.getString("WiFi_st_ip_dns2", "0.0.0.0");
+  LOG(webserv_log, s_info, "wifi settings - ssid: ", ssid,
+                           ", hostname: "     , hostname,
+                           ", st_ip: "        , static_ip,
+                           ", st_ip_address: ", static_ip_address,
+                           ", st_ip_gw: "     , static_ip_gw ,
+                           ", st_ip_subnet: " , static_ip_subnet ,
+                           ", st_ip_dns1: "   , static_ip_dns1   ,
+                           ", st_ip_dns2: "   , static_ip_dns2
+                           );
 }
 
-void WifiSettings::set(const String& n_ssid, const String& n_password) {
-  ssid     = n_ssid;
-  password = n_password;
-  prefs.putString("WiFi_ssid"    , ssid    );
-  prefs.putString("WiFi_password", password);
+void WifiSettings::set(const String& n_ssid,
+                       const String& n_password,
+                       const String& n_hostname,
+                       bool n_static_ip,
+                       const String& n_static_ip_address,
+                       const String& n_static_ip_gw,
+                       const String& n_static_ip_subnet,
+                       const String& n_static_ip_dns1,
+                       const String& n_static_ip_dns2   ) {
+  ssid              = n_ssid             ;
+  password          = n_password         ;
+  hostname          = n_hostname         ;
+  static_ip         = n_static_ip        ;
+  static_ip_address = n_static_ip_address;
+  static_ip_gw      = n_static_ip_gw     ;
+  static_ip_subnet  = n_static_ip_subnet ;
+  static_ip_dns1    = n_static_ip_dns1   ;
+  static_ip_dns2    = n_static_ip_dns2   ;
+  prefs.putString("WiFi_ssid"      , ssid             );
+  prefs.putString("WiFi_password"  , password         );
+  prefs.putString("WiFi_hostname"  , hostname         );
+  prefs.putBool  ("WiFi_st_ip"     , static_ip        );
+  prefs.putString("WiFi_st_ip_addr", static_ip_address);
+  prefs.putString("WiFi_st_ip_gw"  , static_ip_gw     );
+  prefs.putString("WiFi_st_ip_subn", static_ip_subnet );
+  prefs.putString("WiFi_st_ip_dns1", static_ip_dns1   );
+  prefs.putString("WiFi_st_ip_dns2", static_ip_dns2   );
+  LOG(webserv_log, s_info, "wifi settings saved - ssid: ", ssid,
+                           ", hostname: "     , hostname,
+                           ", st_ip: "        , static_ip,
+                           ", st_ip_address: ", static_ip_address,
+                           ", st_ip_gw: "     , static_ip_gw ,
+                           ", st_ip_subnet: " , static_ip_subnet ,
+                           ", st_ip_dns1: "   , static_ip_dns1   ,
+                           ", st_ip_dns2: "   , static_ip_dns2
+                           );
 }
 
 void Webservice::init() {
@@ -67,8 +111,20 @@ void Webservice::init() {
   wifi_settings.init();
 
   if ((digitalRead(buttonUpPin) != getLevel(buttonPinType, level::active)) && (wifi_settings.get_ssid() != "")) {
-    WiFi.setHostname("tonuino");
+    WiFi.setHostname(wifi_settings.get_hostname().c_str());
     WiFi.mode(WIFI_MODE_STA);
+
+    if (wifi_settings.get_static_ip()) {
+      IPAddress local_ip; local_ip.fromString(wifi_settings.get_static_ip_address());
+      IPAddress gateway ; gateway .fromString(wifi_settings.get_static_ip_gw     ());
+      IPAddress subnet  ; subnet  .fromString(wifi_settings.get_static_ip_subnet ());
+      IPAddress dns1    ; dns1    .fromString(wifi_settings.get_static_ip_dns1   ());
+      IPAddress dns2    ; dns2    .fromString(wifi_settings.get_static_ip_dns2   ());
+      if (!WiFi.config(local_ip, gateway, subnet, dns1, dns2)) {
+        LOG(webserv_log, s_error, "static ip failed to configure");
+      }
+    }
+
     WiFi.begin(wifi_settings.get_ssid(), wifi_settings.get_password());
     LOG(webserv_log, s_info, "Connecting to WiFi ", wifi_settings.get_ssid(), " ...");
     Timer timer;
@@ -686,9 +742,27 @@ void Webservice::wifi_save(AsyncWebServerRequest *request) {
     const AsyncWebParameter *p = request->getParam(i);
     LOG(webserv_log, s_info, "parameter name[", p->name(), "]: ", p->value());
   }
-  if (request->hasArg("ssid" ) && request->hasArg("password"))
-    wifi_settings.set(request->arg("ssid"), request->arg("password"));
-
+  if (request->hasArg("ssid"            ) &&
+      request->hasArg("password"        ) &&
+      request->hasArg("hostname"        ) &&
+      request->hasArg("static_ip_addr"  ) &&
+      request->hasArg("static_ip_gw"    ) &&
+      request->hasArg("static_ip_subnet") &&
+      request->hasArg("static_ip_dns1"  ) &&
+      request->hasArg("static_ip_dns2"  )
+      ) {
+    wifi_settings.set(request->arg("ssid"            ),
+                      request->arg("password"        ),
+                      request->arg("hostname"        ),
+                      request->hasArg("static_ip"    ),
+                      request->arg("static_ip_addr"  ),
+                      request->arg("static_ip_gw"    ),
+                      request->arg("static_ip_subnet"),
+                      request->arg("static_ip_dns1"  ),
+                      request->arg("static_ip_dns2"  )
+                      );
+    LOG(webserv_log, s_info, "wifi settings saved");
+  }
   if (request->hasArg("reboot" ) && request->arg("reboot") == "on")
     ota_reboot = true;
 
@@ -774,6 +848,22 @@ String Webservice::process_page(const String& var) {
     return wifi_settings.get_ssid();
   else if (var == "PASSWORD")
     return "";
+  else if (var == "HOSTNAME")
+    return wifi_settings.get_hostname();
+  else if (var == "STIP")
+    return wifi_settings.get_static_ip()? "yes" : "no";
+  else if (var == "CHECKED_STIP")
+    return wifi_settings.get_static_ip()? "checked=checked" : "";
+  else if (var == "STIPADDRESS")
+    return wifi_settings.get_static_ip_address();
+  else if (var == "GW")
+    return wifi_settings.get_static_ip_gw();
+  else if (var == "SUBNET")
+    return wifi_settings.get_static_ip_subnet();
+  else if (var == "DNS1")
+    return wifi_settings.get_static_ip_dns1();
+  else if (var == "DNS2")
+    return wifi_settings.get_static_ip_dns2();
 
   return getInfoData(var);
 

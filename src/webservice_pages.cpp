@@ -528,11 +528,25 @@ const char wifi_html[] PROGMEM = R"rawliteral(
   
   <div id='networks'></div>
   <br><br>
-  <label for='s'>SSID</label><input id='s' name='ssid' type='text' maxlength='32' autocorrect='off' autocapitalize='none' placeholder='%SSID%'>
+  <label for='ssid'>SSID</label><input id='ssid' name='ssid' type='text' maxlength='32' autocorrect='off' autocapitalize='none' value='%SSID%'>
   <br><br>
-  <label for='p'>Password</label><input id='p' name='password' type='password' maxlength='64' placeholder='%PASSWORD%'/>
+  <label for='password'>Password</label><input id='password' name='password' type='password' maxlength='64' value='%PASSWORD%'/>
   <br>
   <label for='showpass'>Show Password</label><input type='checkbox' id='showpass' onclick='toggle_pass()'/>
+  <br><br>
+  <label for='hostname'>Hostname</label><input id='hostname' name='hostname' type='text' maxlength='32' autocorrect='off' autocapitalize='none' value='%HOSTNAME%'>
+  <br><br>
+  <label for='static_ip'>Static IP</label><input type='checkbox' id='static_ip' name='static_ip' %CHECKED_STIP%/>
+  <br><br>
+  <label for='static_ip_addr'>Static IP address</label><input id='static_ip_addr' name='static_ip_addr' type='text' minlength="7" maxlength="15" size="15" pattern="^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)(\.(?!$)|$)){4}$" value='%STIPADDRESS%'>
+  <br><br>
+  <label for='static_ip_gw'>Gateway</label><input id='static_ip_gw' name='static_ip_gw' type='text' minlength="7" maxlength="15" size="15" pattern="^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)(\.(?!$)|$)){4}$" value='%GW%'>
+  <br><br>
+  <label for='static_ip_subnet'>Subnet</label><input id='static_ip_subnet' name='static_ip_subnet' type='text' minlength="7" maxlength="15" size="15" pattern="^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)(\.(?!$)|$)){4}$" value='%SUBNET%'>
+  <br><br>
+  <label for='static_ip_dns1'>Primary DNS</label><input id='static_ip_dns1' name='static_ip_dns1' type='text' minlength="7" maxlength="15" size="15" pattern="^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)(\.(?!$)|$)){4}$" value='%DNS1%'>
+  <br><br>
+  <label for='static_ip_dns2'>Secondary DNS</label><input id='static_ip_dns2' name='static_ip_dns2' type='text' minlength="7" maxlength="15" size="15" pattern="^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)(\.(?!$)|$)){4}$" value='%DNS2%'>
 
   <br><br>
   <label for='reboot'>Reboot on Save</label><input type='checkbox' id='reboot' name='reboot'/>
@@ -549,16 +563,24 @@ const char wifi_html[] PROGMEM = R"rawliteral(
 </dialog>
 
 <script>
+  var hostname = "";
   document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("ok")
       .addEventListener("click", () => {
         document.getElementById("dialog").close();
         setTimeout(function () {
-          document.location="http://tonuino";
+          document.location="http://"+hostname;
         }, 5000);
     });
   });
   function save() {
+    var form_wifisave = document.getElementById("wifisave");
+    if (!form_wifisave.checkValidity()) {
+      console.log("not valid");
+      form_wifisave.reportValidity();
+      return false;
+    }
+    hostname =  document.getElementById("hostname").value;
     submit_form("wifisave", "wifi", "save");
     document.getElementById("dialog").showModal();
     return false;
@@ -585,7 +607,7 @@ const char wifi_html[] PROGMEM = R"rawliteral(
   };
 
   function toggle_pass() {
-    var x = document.getElementById('p');
+    var x = document.getElementById('password');
     x.type==='password'?x.type='text':x.type='password';
   }
 
