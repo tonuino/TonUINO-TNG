@@ -148,6 +148,7 @@ enum class mp3Tracks: uint16_t {
   t_975_modifier_KinderGarden  = 975,
   t_976_modifier_repeat1       = 976,
   t_977_modifier_bluetooth     = 977,
+  t_978_modifier_jukebox       = 978,
   t_980_admin_lock_intro       = 980,
   t_981_admin_lock_disabled    = 981,
   t_982_admin_lock_card        = 982,
@@ -175,6 +176,7 @@ enum class advertTracks: uint16_t {
   t_306_fire                   = 306,
   t_307_water                  = 307,
   t_308_air                    = 308,
+  t_309_jukebox                = 309,
   t_320_bt_on                  = 320,
   t_321_bt_off                 = 321,
   t_322_bt_pairing             = 322,
@@ -222,7 +224,7 @@ public:
   // currentTrack             -> index in queue starting with 0
   void enqueueTrack(uint8_t folder, uint8_t firstTrack, uint8_t lastTrack, uint8_t currentTrack = 0);
   void enqueueTrack(uint8_t folder, uint8_t track);
-  void setEndless() { endless = true; }
+  void setEndless(bool v = true) { endless = v; }
   void shuffleQueue();
   void enqueueMp3FolderTrack(uint16_t  track, bool playAfter = false);
   void enqueueMp3FolderTrack(mp3Tracks track, bool playAfter = false);
@@ -232,6 +234,7 @@ public:
   uint8_t getCurrentTrack() { return playing ? q.get(current_track) : 0; }
   uint16_t getFolderTrackCount(uint16_t folder);
   uint8_t getCurrentFolder() { return current_folder; }
+  bool isLastTrack() { return current_track+1 >= q.size(); }
 
   void start() { if (isPause) { isPause = false; Base::start();} }
   void stop () { isPause = false; Base::stop (); }

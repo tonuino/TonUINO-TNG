@@ -33,6 +33,16 @@ public:
     if (s < N)
       c[s++] = t;
   }
+  T pop() {
+    T r{};
+    if (s > 0) {
+      r = c[0];
+      for (uint8_t i = 1; i < s; ++i)
+        c[i-1] = c[i];
+      --s;
+    }
+    return r;
+  }
   T &get (uint8_t pos) {
     return c[pos];
   }

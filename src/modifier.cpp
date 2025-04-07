@@ -11,9 +11,12 @@ Tonuino        &tonuino   = Tonuino::getTonuino();
 Mp3            &mp3       = tonuino.getMp3();
 
 const __FlashStringHelper* str_SleepTimer          () { return F("SleepTimer")  ; }
-const __FlashStringHelper* str_danceGame           () { return F("DanceGame") ; }
+const __FlashStringHelper* str_danceGame           () { return F("DanceGame")   ; }
 const __FlashStringHelper* str_KindergardenMode    () { return F("Kita")        ; }
 const __FlashStringHelper* str_RepeatSingleModifier() { return F("RepeatSingle"); }
+#ifdef MODIFICATION_CARD_JUKEBOX
+const __FlashStringHelper* str_JukeboxModifier    () { return F("Jukebox")      ; }
+#endif
 
 } // anonymous namespace
 
@@ -171,3 +174,68 @@ bool RepeatSingleModifier::handleNext() {
 bool RepeatSingleModifier::handlePrevious() {
   return handleNext();
 }
+
+#ifdef MODIFICATION_CARD_JUKEBOX
+bool JukeboxModifier::handleNext() {
+  if (mp3.isLastTrack() && cards.size() > 0) {
+    LOG(modifier_log, s_debug, str_JukeboxModifier(), F(" -> NEXT"));
+    folderSettings nextCard = cards.pop();
+
+    tonuino.setMyFolder(nextCard, true /*myFolderIsCard*/);
+    LOG(modifier_log, s_debug, F("Folder: "), nextCard.folder, F(" Mode: "), static_cast<uint8_t>(nextCard.mode));
+    tonuino.playFolder();
+    mp3.setEndless(false);
+    mp3.loop(); // to start the new queue now and not going to Idle
+    return true;
+  }
+  return false;
+}
+bool JukeboxModifier::handleRFID(const folderSettings &newCard) {
+  if (SM_tonuino::is_in_state<Idle>())
+    return false;
+
+  if (cards.size() == jukebox_max_cards) {
+    mp3.playAdvertisement(advertTracks::t_262_pling);
+    return true;
+  }
+
+  cards.push(newCard);
+  LOG(modifier_log, s_debug, str_JukeboxModifier(), F(" -> queued!"));
+  mp3.playAdvertisement(cards.size());
+  mp3.setEndless(false);
+  return true;
+}
+bool JukeboxModifier::handleButton(command cmd) {
+  if (SM_tonuino::is_in_state<Idle>())
+    return false;
+
+  uint8_t shortCut = 0;
+  switch(cmd) {
+  case command::shortcut1    : shortCut = 1      ; break;
+  case command::shortcut2    : shortCut = 2      ; break;
+  case command::shortcut3    : shortCut = 3      ; break;
+  case command::start        : shortCut = 4      ; break;
+#ifdef TonUINO_Esp32
+  case command::card_from_web: shortCut = 0      ; break;
+#endif
+  default                    : return false;
+  }
+
+  folderSettings newCard = tonuino.getSettings().getShortCut(shortCut);
+  if (newCard.mode == pmode_t::switch_bt)
+    return false;
+
+  if (cards.size() == jukebox_max_cards) {
+    mp3.playAdvertisement(advertTracks::t_262_pling);
+    return true;
+  }
+
+  cards.push(newCard);
+  LOG(modifier_log, s_debug, str_JukeboxModifier(), F(" -> queued!"));
+  mp3.playAdvertisement(cards.size());
+  mp3.setEndless(false);
+  return true;
+}
+#endif
+
+

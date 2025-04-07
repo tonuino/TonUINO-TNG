@@ -235,6 +235,7 @@ const char main_html[] PROGMEM = R"rawliteral(
                                                                   <option>Wiederhole</option>                                  
                                                                   <option>Quiz Spiel</option>                                  
                                                                   <option>Memory Spiel</option>                                
+                                                                  <option>Bluetooth ein/aus</option>                                
                                                                 </select>                                                      
 <br><label for="folder"         >Folder / Sp1 / Sp2     </label><div class="tooltip"><input type="number" name="folder"             id="folder">  
                                                                   <span class="tooltiptext">Folder</span></div>
@@ -260,6 +261,7 @@ const char main_html[] PROGMEM = R"rawliteral(
                                                    <option>Gesperrt         </option>
                                                    <option>Kita Modus       </option>
                                                    <option>Wiederhole Track </option>
+                                                   <option>Jukebox          </option>
                                                  </select>
 <br><label for="mod_special" >Parameter  </label><div class="tooltip"><input type="number" name="mod_special" id="mod_special">
                                                    <span class="tooltiptext">Sleep-Timer: Timeout in min
@@ -398,6 +400,7 @@ const char settings_html[] PROGMEM = R"rawliteral(
  +'                                                                  <option>Wiederhole</option>                                     '
  +'                                                                  <option>Quiz Spiel</option>                                     '
  +'                                                                  <option>Memory Spiel</option>                                   '
+ +'                                                                  <option>Bluetooth ein/aus</option>                                   '
  +'                                                                </select>                                                         '
  +'<br><label for="sc_folder_n_"   >Folder / Sp1 / Sp2     </label><div class="tooltip"><input type="number" name="sc_folder_n_"      id="sc_folder_n_">  '  
  +'                                                                 <span class="tooltiptext">Folder</span></div>                                         '

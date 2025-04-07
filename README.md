@@ -107,7 +107,10 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 # Change Log
 
 ## Version 3.3.0 (06.04.2025)
-- [Issue 159](https://github.com/tonuino/TonUINO-TNG/issues/159): New Hardware Type ESP32 Nano
+- [Issue 259](https://github.com/tonuino/TonUINO-TNG/issues/259): New Hardware Type ESP32 Nano
+
+## Version 3.2.1 (25.03.2025)
+- [Issue 265](https://github.com/tonuino/TonUINO-TNG/issues/265): Optonal Feature: Jukebox modifier card
 
 ## Version 3.2.1 (16.01.2025)
 - [Issue 261](https://github.com/tonuino/TonUINO-TNG/issues/261): Increase the number of addidional Tracks for Mode "Hoerbuch einzeln" to 30

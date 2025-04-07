@@ -503,15 +503,22 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
                               activeModifier = &toddlerMode;
                               break;
 
-  case pmode_t::kindergarden: LOG(card_log, s_info, F("act. kindergardenMode"));
+  case pmode_t::kindergarden: LOG(card_log, s_info, F("act. kindergarden"));
                               mp3.playAdvertisement(advertTracks::t_305_kindergarden     , false/*olnyIfIsPlaying*/);
                               activeModifier = &kindergardenMode;
                               break;
 
-  case pmode_t::repeat_single:LOG(card_log, s_info, F("act. repeatSingleModifier"));
+  case pmode_t::repeat_single:LOG(card_log, s_info, F("act. repeatSingle"));
                               mp3.playAdvertisement(advertTracks::t_260_activate_mod_card, false/*olnyIfIsPlaying*/);
                               activeModifier = &repeatSingleModifier;
                               break;
+
+#ifdef MODIFICATION_CARD_JUKEBOX
+  case pmode_t::jukebox:      LOG(card_log, s_info, F("act. jukebox"));
+                              mp3.playAdvertisement(advertTracks::t_309_jukebox          , false/*olnyIfIsPlaying*/);
+                              activeModifier = &jukeboxModifier;
+                              break;
+#endif
 
 #ifdef BT_MODULE
   case pmode_t::bt_module:    LOG(card_log, s_info, F("toggle bt module from "), btModuleOn);
