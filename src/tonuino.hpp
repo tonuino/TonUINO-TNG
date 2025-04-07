@@ -129,6 +129,9 @@ private:
   ToddlerMode          toddlerMode         {};
   KindergardenMode     kindergardenMode    {};
   RepeatSingleModifier repeatSingleModifier{};
+#ifdef MODIFICATION_CARD_JUKEBOX
+  JukeboxModifier      jukeboxModifier     {};
+#endif
 
   Modifier*            activeModifier      {&noneModifier};
 

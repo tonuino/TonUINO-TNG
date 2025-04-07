@@ -34,6 +34,7 @@ enum class pmode_t: uint8_t {
   kindergarden  =   5,
   repeat_single =   6,
   bt_module     =   7,
+  jukebox       =   8,
 
   admin_card    = 0xff,
 };
