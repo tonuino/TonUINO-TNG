@@ -148,7 +148,7 @@ void Webservice::init() {
     dns_server.start(53, "*", WiFi.softAPIP());
   }
 
-  webserial.begin(&webserver);
+  webserial.begin(&webserver, wifi_settings.get_hostname());
 
   ws.onEvent([this](AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) { onWebSocketEvent(server, client, type, arg, data, len); });
   webserver.addHandler(&ws);

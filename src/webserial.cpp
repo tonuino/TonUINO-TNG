@@ -10,8 +10,8 @@ Webserial::Webserial() {
   ringBuffer = new RingBuffer;
 }
 
-void Webserial::begin(AsyncWebServer *server)
-{
+void Webserial::begin(AsyncWebServer *server, const String& n_hostname) {
+  hostname  = n_hostname;
   webserver = server;
   websocket = new AsyncWebSocket("/ws_serial");
 
@@ -38,19 +38,16 @@ void Webserial::begin(AsyncWebServer *server)
   webserver->addHandler(websocket);
 }
 
-void Webserial::loop()
-{
+void Webserial::loop() {
   if (websocket)
     websocket->cleanupClients();
 }
 
-size_t Webserial::write(uint8_t m)
-{
+size_t Webserial::write(uint8_t m) {
   return write(&m, 1);
 }
 
-size_t Webserial::write(const uint8_t *buffer, size_t size)
-{
+size_t Webserial::write(const uint8_t *buffer, size_t size) {
   String message((const char *)buffer, size);
   if (not message.endsWith("\n")) {
     messageBuffer += message;
@@ -69,6 +66,8 @@ String Webserial::process_page(const String& var) {
 
 if (var == "TOPNAV")
     return topnav_html;
+else if (var == "HOSTNAME")
+  return hostname;
 
 return "";
 

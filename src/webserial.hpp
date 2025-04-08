@@ -10,7 +10,7 @@ class Webserial: public Print {
 public:
   Webserial();
 
-  void begin(AsyncWebServer *server);
+  void begin(AsyncWebServer *server, const String& hostname);
 
   void loop();
 
@@ -26,6 +26,8 @@ private:
 
   String          messageBuffer;
   RingBuffer     *ringBuffer;
+
+  String          hostname{};
 };
 
 #endif // SRC_WEBSERIAL_HPP_

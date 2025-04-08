@@ -112,6 +112,7 @@ const char webserial_page[] PROGMEM = R"rawliteral(
   </div>
   
   <script>
+    document.getElementById("nav_hostname").innerHTML = '%HOSTNAME%';
     let websocket,
         enableScroll=!0,
         maxLines = 1000,
