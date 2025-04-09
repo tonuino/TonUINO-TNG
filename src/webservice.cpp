@@ -501,7 +501,6 @@ void Webservice::modifier(AsyncWebServerRequest *request) {
   folderSettings mod;
   mod.folder   = 0;
   mod.special2 = 0;
-  mod.special  = request->arg("mod_special").toInt();
   mod.mode     = request->arg("mod_mode") == "Sleep-Timer"       ? pmode_t::sleep_timer   :
                  request->arg("mod_mode") == "Stopptanz"         ? pmode_t::freeze_dance  :
                  request->arg("mod_mode") == "Feuer-Wasser-Luft" ? pmode_t::fi_wa_ai      :
@@ -512,6 +511,16 @@ void Webservice::modifier(AsyncWebServerRequest *request) {
                  request->arg("mod_mode") == "Jukebox"           ? pmode_t::jukebox       :
 #endif
                                                                    pmode_t::none          ;
+  int special  = request->arg("mod_special").toInt();
+  if (mod.mode == pmode_t::sleep_timer) {
+    if (special < 0) {
+      special *= -1;
+      special += 0x80;
+    }
+    if (special > 0xff) special = 0xff;
+    if (special < 0x01) special = 0x01;
+  }
+  mod.special  = special;
 
   if (request->arg("mod_action") == "delete") {
     LOG(webserv_log, s_info, "delete modifier");
@@ -637,22 +646,9 @@ String Webservice::get_status() {
 #ifdef HPJACKDETECT
   status += mp3.isHeadphoneJackDetect() ? String(" (Kopfhörer)") : String(" (Lautsprecher)");
 #endif
-  String active_modifier;
-  switch (tonuino.getActiveModifier().getActive()) {
-  case pmode_t::none:          active_modifier = "kein"             ; break;
-  case pmode_t::sleep_timer  : active_modifier = "Sleep-Timer"      ; break;
-  case pmode_t::freeze_dance : active_modifier = "Stopptanz"        ; break;
-  case pmode_t::fi_wa_ai     : active_modifier = "Feuer-Wasser-Luft"; break;
-  case pmode_t::toddler      : active_modifier = "Gesperrt"         ; break;
-  case pmode_t::kindergarden : active_modifier = "Kita Modus"       ; break;
-  case pmode_t::repeat_single: active_modifier = "Wiederhole Track" ; break;
-#ifdef MODIFICATION_CARD_JUKEBOX
-  case pmode_t::jukebox      : active_modifier = "Jukebox"          ; break;
-#endif
-  default                    : active_modifier = "kein"             ; break;
+  if (tonuino.getActiveModifier().getActive() != pmode_t::none) {
+    status += String("<br>Modifier: ") + tonuino.getActiveModifier().getDescription();
   }
-
-  status += String("<br>Modifier: ") + active_modifier;
 
   return status;
 }

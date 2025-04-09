@@ -264,9 +264,9 @@ const char main_html[] PROGMEM = R"rawliteral(
                                                    <option>Jukebox          </option>
                                                  </select>
 <br><label for="mod_special" >Parameter  </label><div class="tooltip"><input type="number" name="mod_special" id="mod_special">
-                                                   <span class="tooltiptext">Sleep-Timer: Timeout in min
+                                                   <span class="tooltiptext">Sleep-Timer: Timeout in min [1..127] (neg.: Tr. wird beendet)
                                                                          <br>Feuer-Wasser-Luft/
-                                                                         <br>Stopptanz: Pausezeit (min/max)
+                                                                         <br>Stopptanz: Zeit zw. Pausen (min/max)
                                                                          <br>0: 15/30, 1: 25/40, 2: 35/50</span></div>
 <br>
 <button onclick="return submit_form('modifier', 'mod_action', 'activate');">Activate</button>

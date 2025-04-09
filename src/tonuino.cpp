@@ -272,6 +272,8 @@ void Tonuino::playFolder() {
   LOG(play_log, s_warning, numTracksInFolder, F(" tr in folder "), myFolder.folder);
   numTracksInFolder = min(numTracksInFolder, static_cast<uint16_t>(0xffu));
   mp3.clearAllQueue();
+  if (numTracksInFolder == 0)
+    return;
 
   switch (myFolder.mode) {
 

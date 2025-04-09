@@ -77,6 +77,17 @@ bool SleepTimer::handleRFID(const folderSettings &/*newCard*/) {
   return false;
 }
 
+#ifdef TonUINO_Esp32
+String SleepTimer::getDescription() {
+  String descr = "Sleep-Timer";
+  descr += " (";
+  if (stopAfterTrackFinished)
+    descr += "Track wird beendet, ";
+  descr += "übrig: " + String(sleepTimer.remainingTime()/1000) + " Sek.";
+  descr += ")";
+  return descr;
+}
+#endif
 
 void DanceGame::init(pmode_t a_mode, uint8_t a_t) {
   LOG(modifier_log, s_debug, str_danceGame(), F("t : "), a_t);
@@ -128,6 +139,16 @@ void DanceGame::setNextStop(bool addAdvTime) {
   LOG(modifier_log, s_debug, str_danceGame(), F(" next stop in "), seconds);
   stopTimer.start(seconds * 1000);
 }
+
+#ifdef TonUINO_Esp32
+String DanceGame::getDescription() {
+  String descr = mode == pmode_t::freeze_dance ? "Stopptanz"         :
+                 mode == pmode_t::fi_wa_ai     ? "Feuer-Wasser-Luft" :
+                                                 "?"                 ;
+  descr += " (Pausen: " + String(minSecondsBetweenStops[t]) + " - " + String(maxSecondsBetweenStops[t]) + ")";
+  return descr;
+}
+#endif
 
 bool KindergardenMode::handleNext() {
   if (cardQueued) {
@@ -236,6 +257,14 @@ bool JukeboxModifier::handleButton(command cmd) {
   mp3.setEndless(false);
   return true;
 }
+#ifdef TonUINO_Esp32
+String JukeboxModifier::getDescription() {
+  String descr = "Jukebox";
+  descr += " (" + String(cards.size()) + " Karten in der Queue)";
+  return descr;
+}
+#endif
+
 #endif
 
 
