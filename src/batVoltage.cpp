@@ -46,11 +46,11 @@ bool BatVoltage::check() {
 #endif
   const int16_t value = analogRead(voltageMeasurementPin)*static_cast<long>(voltageMeasurementRefVoltage)/1000;
 
-  LOG_CODE(batvol_log, s_debug, {                                                                               \
-  if (logTimer.isExpired()) {                                                                                   \
-    logTimer.start(2000);                                                                                       \
-    LOG(batvol_log, s_debug, F("BatVoltage: "), value*voltageMeasurementCorrection/voltageMeasurementMaxLevel); \
-  }                                                                                                             \
+  LOG_CODE(batvol_log, s_debug, {
+  if (logTimer.isExpired()) {
+    logTimer.start(2000);
+    LOG(batvol_log, s_debug, F("BatVoltage: "), value*voltageMeasurementCorrection/voltageMeasurementMaxLevel);
+  }
                                 } );
 
   if (value < voltageMeasurementEmptyLevel) {

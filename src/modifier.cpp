@@ -77,6 +77,17 @@ bool SleepTimer::handleRFID(const folderSettings &/*newCard*/) {
   return false;
 }
 
+#ifdef TonUINO_Esp32
+String SleepTimer::getDescription() {
+  String descr = "Sleep-Timer";
+  descr += " (";
+  if (stopAfterTrackFinished)
+    descr += "Track wird beendet, ";
+  descr += "übrig: " + String(sleepTimer.remainingTime()/1000) + " Sek.";
+  descr += ")";
+  return descr;
+}
+#endif
 
 void DanceGame::init(pmode_t a_mode, uint8_t a_t) {
   LOG(modifier_log, s_debug, str_danceGame(), F("t : "), a_t);
@@ -84,6 +95,7 @@ void DanceGame::init(pmode_t a_mode, uint8_t a_t) {
   if (mode == pmode_t::fi_wa_ai) lastFiWaAi = random(0, 3);
   setNextStop(true /*addAdvTime*/);
   t = a_t;
+  if (t > 2) t = 2;
 }
 
 
@@ -127,6 +139,16 @@ void DanceGame::setNextStop(bool addAdvTime) {
   LOG(modifier_log, s_debug, str_danceGame(), F(" next stop in "), seconds);
   stopTimer.start(seconds * 1000);
 }
+
+#ifdef TonUINO_Esp32
+String DanceGame::getDescription() {
+  String descr = mode == pmode_t::freeze_dance ? "Stopptanz"         :
+                 mode == pmode_t::fi_wa_ai     ? "Feuer-Wasser-Luft" :
+                                                 "?"                 ;
+  descr += " (Pausen: " + String(minSecondsBetweenStops[t]) + " - " + String(maxSecondsBetweenStops[t]) + ")";
+  return descr;
+}
+#endif
 
 bool KindergardenMode::handleNext() {
   if (cardQueued) {
@@ -204,6 +226,45 @@ bool JukeboxModifier::handleRFID(const folderSettings &newCard) {
   mp3.setEndless(false);
   return true;
 }
+bool JukeboxModifier::handleButton(command cmd) {
+  if (SM_tonuino::is_in_state<Idle>())
+    return false;
+
+  uint8_t shortCut = 0;
+  switch(cmd) {
+  case command::shortcut1    : shortCut = 1      ; break;
+  case command::shortcut2    : shortCut = 2      ; break;
+  case command::shortcut3    : shortCut = 3      ; break;
+  case command::start        : shortCut = 4      ; break;
+#ifdef TonUINO_Esp32
+  case command::card_from_web: shortCut = 0      ; break;
+#endif
+  default                    : return false;
+  }
+
+  folderSettings newCard = tonuino.getSettings().getShortCut(shortCut);
+  if (newCard.mode == pmode_t::switch_bt)
+    return false;
+
+  if (cards.size() == jukebox_max_cards) {
+    mp3.playAdvertisement(advertTracks::t_262_pling);
+    return true;
+  }
+
+  cards.push(newCard);
+  LOG(modifier_log, s_debug, str_JukeboxModifier(), F(" -> queued!"));
+  mp3.playAdvertisement(cards.size());
+  mp3.setEndless(false);
+  return true;
+}
+#ifdef TonUINO_Esp32
+String JukeboxModifier::getDescription() {
+  String descr = "Jukebox";
+  descr += " (" + String(cards.size()) + " Karten in der Queue)";
+  return descr;
+}
+#endif
+
 #endif
 
 

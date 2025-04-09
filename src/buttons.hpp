@@ -10,6 +10,7 @@
 class Buttons: public CommandSource {
 public:
   Buttons();
+  void begin();
 
   commandRaw getCommandRaw() override;
   bool isNoButton();

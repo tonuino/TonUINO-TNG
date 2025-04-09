@@ -15,6 +15,9 @@ struct Settings {
 #endif
   typedef array<uint8_t       , 4                  > pin_t;
 
+  void init();
+  static void commit();
+
   void clearEEPROM();
 
   void writeSettingsToFlash();
@@ -29,6 +32,29 @@ struct Settings {
 
   folderSettings getShortCut(uint8_t shortCut);
   void           setShortCut(uint8_t shortCut, const folderSettings& value);
+
+  // emulates EEPROM.put() .get() and .update() on LGT8F328P platform
+  // partially sourced from: https://playground.arduino.cc/Code/EEPROMWriteAnything/
+  template <class T>
+  static int EEPROM_put(int ee, const T &value) {
+    const byte *p = (const byte *)(const void *)&value;
+    unsigned int i;
+
+    for (i = 0; i < sizeof(value); i++)
+      EEPROM.write(ee++, *p++);
+    commit();
+    return i;
+  }
+
+  template <class T>
+  static int EEPROM_get(int ee, T &value) {
+    byte *p = (byte *)(void *)&value;
+    unsigned int i;
+
+    for (i = 0; i < sizeof(value); i++)
+      *p++ = EEPROM.read(ee++);
+    return i;
+  }
 
   uint32_t    cookie              {};
   byte        version             {};
@@ -46,33 +72,9 @@ struct Settings {
   uint8_t     hpMaxVolume         {};
   uint8_t     hpMinVolume         {};
   uint8_t     hpInitVolume        {};
+#ifdef TonUINO_Esp32
+  folderSettings cardFromWeb      {};
+#endif
 };
-
-// emulates EEPROM.put() .get() and .update() on LGT8F328P platform
-// partially sourced from: https://playground.arduino.cc/Code/EEPROMWriteAnything/
-template <class T>
-int EEPROM_put(int ee, const T &value) {
-  const byte *p = (const byte *)(const void *)&value;
-  unsigned int i;
-
-  for (i = 0; i < sizeof(value); i++)
-    EEPROM.write(ee++, *p++);
-  return i;
-}
-
-template <class T>
-int EEPROM_get(int ee, T &value) {
-  byte *p = (byte *)(void *)&value;
-  unsigned int i;
-
-  for (i = 0; i < sizeof(value); i++)
-    *p++ = EEPROM.read(ee++);
-  return i;
-}
-
-template <class T>
-void EEPROM_update(int ee, const T &value) {
-  EEPROM.read(ee) != value ? EEPROM.write(ee, value) : delay(0);
-}
 
 #endif /* SRC_SETTINGS_HPP_ */

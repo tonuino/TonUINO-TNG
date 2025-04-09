@@ -1,1 +1,1 @@
-compiler.cpp.extra_flags=-std=gnu++17
+compiler.cpp.extra_flags=-std=gnu++17 -fconcepts
