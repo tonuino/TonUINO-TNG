@@ -38,6 +38,7 @@ public:
 
   void setStandbyTimer();
   void disableStandbyTimer();
+  unsigned long getRemainingStandbyTimer() { return standbyTimer.remainingTime(); }
 
   void setMyFolder(const folderSettings &newFolder, bool a_myFolderIsCard) {
 #ifdef STORE_LAST_CARD
@@ -59,6 +60,9 @@ public:
   Chip_card& getChipCard() { return chip_card; }
 #ifdef NEO_RING
   Ring&     getRing     () { return ring     ; }
+#endif
+#ifdef BAT_VOLTAGE_MEASUREMENT
+  BatVoltage& getBatVoltage() { return batVoltage; }
 #endif
   static uint32_t generateRamdomSeed();
 

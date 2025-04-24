@@ -525,7 +525,8 @@ void Webservice::modifier(AsyncWebServerRequest *request) {
   if (request->arg("mod_action") == "delete") {
     LOG(webserv_log, s_info, "delete modifier");
     tonuino.resetActiveModifier();
-  }
+    mp3.playAdvertisement(advertTracks::t_261_deactivate_mod_card, false/*olnyIfIsPlaying*/);
+ }
   else if (request->arg("mod_action") == "activate") {
     LOG(webserv_log, s_info, "activate modifier mode: ", static_cast<uint8_t>(mod.mode), " special: ", mod.special);
     tonuino.specialCard(mod);
@@ -623,6 +624,13 @@ void Webservice::onWebSocketEvent(AsyncWebSocket *server, AsyncWebSocketClient *
 String Webservice::get_status() {
   String status;
 
+#ifdef BAT_VOLTAGE_MEASUREMENT
+  status += String("Batterie Spannung: ") + String(tonuino.getBatVoltage().getVoltage());
+  if (tonuino.getBatVoltage().isLow())
+    status += String(" Low");
+  status += "<br>";
+#endif
+
   status += String("State: ") + SM_tonuino::state_str;
   if (mp3.isPlayingFolder()) {
     String mode = (tonuino.getMyFolder().mode == pmode_t::hoerspiel   ) ? String("Hörspiel"        ) :
@@ -649,6 +657,12 @@ String Webservice::get_status() {
   if (tonuino.getActiveModifier().getActive() != pmode_t::none) {
     status += String("<br>Modifier: ") + tonuino.getActiveModifier().getDescription();
   }
+  if (tonuino.getRemainingStandbyTimer() < 60 * 60 * 1000ul) {
+    unsigned long remaining = tonuino.getRemainingStandbyTimer()/1000;
+    char buffer[20];
+    sprintf(buffer, "%ld:%02ld", remaining/60, remaining%60);
+    status += String("<br>Standby: ") + buffer + " Min. übrig";
+  }
 
   return status;
 }
@@ -661,9 +675,7 @@ void Webservice::push_status() {
   String status = get_status();;
 
   if (old_status != status) {
-    LOG(webserv_log, s_info, "Webservice::push_status");
-
-    LOG(webserv_log, s_debug, "push_status() status: \n", status);
+    LOG(webserv_log, s_debug, "Webservice::push_status() status: \n", status);
 
     old_status = status;
     ws.textAll(status);

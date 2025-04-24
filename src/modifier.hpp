@@ -55,6 +55,7 @@ private:
   bool  stopAfterTrackFinished{};
   bool  stopAfterTrackFinished_active{};
   bool  fired{};
+  static constexpr unsigned long maxWaitForTrackFinished = 10 * 60 *1000; // 10 minutes
 };
 
 class DanceGame: public Modifier {

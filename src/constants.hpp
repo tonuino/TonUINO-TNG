@@ -7,7 +7,7 @@
 // ####### default pins #################################################
 // ######################################################################
 
-/* #### Classic/Every ######################################################################
+/* #### Classic/Every/Esp32-Nano ###########################################################
  *                         | A0| A1| A2| A3| A4| A5| A6| A7| D0| D1| D2| D3| D5| D6| D7| D8|
  * ------------------------+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
  * Com to DF Player        |   |   |   |   |   |   |   |   |RX*|TX*| RX| TX|   |   |   |   |
@@ -27,7 +27,7 @@
  * Bluetooth Pairing       |   |   |   |   |   |   |   |   |   |   |   | x*|   |   |   | x |
  * #########################################################################################
  *
- * (*) Hardware Serial on Every
+ * (*) Hardware Serial on Every/Esp32-Nano
  */
 
 /* ### AiOplus #########################################################################################
@@ -318,7 +318,7 @@ inline constexpr float   voltageMeasurementCorrection  = 2.007; // Spannungsteil
 inline constexpr float   voltageMeasurementCorrection  = 2.007; // Spannungsteiler 100k/100k
 #endif
 #ifdef TonUINO_Esp32
-inline constexpr float   voltageMeasurementCorrection  = 1.000; // Spannungsteiler 100k/200k tbd
+inline constexpr float   voltageMeasurementCorrection  = 0.710; // Spannungsteiler 100k/100k
 #endif
 
 inline constexpr float   batVoltageLow                 = 2.95;

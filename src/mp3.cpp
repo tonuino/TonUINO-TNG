@@ -133,7 +133,7 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
     waitForTrackToStart();
     LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
-    delay(dfPlayer_timeUntilStarts);
+    delay(700);
     LOG(mp3_log, s_debug, F("before waitForTrackToFinish()"));
     waitForTrackToFinish(); // finish adv
     LOG(mp3_log, s_debug, F("before waitForTrackToStart()"));

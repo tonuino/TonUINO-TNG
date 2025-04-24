@@ -99,6 +99,8 @@ button + button {
 }
 
 .status {
+  line-height:1.1em;
+  min-height:4.5em;
   width: auto;
   height: auto;
   border-style: solid;

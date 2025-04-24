@@ -7,7 +7,7 @@
 #include "webservice_pages.hpp"
 
 Webserial::Webserial() {
-  ringBuffer = new RingBuffer;
+  ringBuffer = new WebserialBuffer;
 }
 
 void Webserial::begin(AsyncWebServer *server, const String& n_hostname) {

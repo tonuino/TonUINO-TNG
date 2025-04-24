@@ -8,6 +8,7 @@
 #include <esp_sleep.h>
 #include <esp_bt_main.h>
 #include <esp_wifi.h>
+#include <esp_task_wdt.h>
 #endif
 
 #include "array.hpp"
@@ -97,6 +98,7 @@ void Tonuino::setup() {
 #endif
 
 #ifdef TonUINO_Esp32
+  esp_task_wdt_init(120, true); // increase the default wd timeout
   // init webservice
   webservice.init();
 #endif
@@ -395,8 +397,8 @@ void Tonuino::setStandbyTimer() {
 
 void Tonuino::disableStandbyTimer() {
   LOG(standby_log, s_debug, F("disableStandbyTimer"));
+  standbyTimer.stop();
   if (settings.standbyTimer != 0) {
-    standbyTimer.stop();
     LOG(standby_log, s_info, F("timer stopped"));
   }
 }

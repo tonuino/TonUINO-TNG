@@ -43,7 +43,7 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
 **Libraries**
 - Es müssen folgende Versionen der Libraries verwendet werden:  
     - jchristensen/JC_Button: 2.1.2  
-    - miguelbalboa/MFRC522: 1.4.10  
+    - boerge1/MFRC522_fix: 1.4.12  
     - makuna/DFPlayer Mini Mp3 by Makuna: 1.2.3
     - adafruit/Adafruit NeoPixel: 1.11.0 (optional, nur bei Feature NEO_RING notwendig)
 
@@ -106,7 +106,7 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.0 (09.04.2025)
+## Version 3.3.0 (24.04.2025)
 - [Issue 259](https://github.com/tonuino/TonUINO-TNG/issues/259): New Hardware Type ESP32 Nano
 
 ## Version 3.2.1 (25.03.2025)

@@ -6,6 +6,8 @@
 
 #include "ringbuffer.hpp"
 
+inline constexpr size_t LOG_BUFFER_SIZE = 20*1024u;
+
 class Webserial: public Print {
 public:
   Webserial();
@@ -18,16 +20,18 @@ public:
   virtual size_t write(uint8_t) override;
   virtual size_t write(const uint8_t *buffer, size_t size) override;
 
+  using WebserialBuffer = RingBuffer<LOG_BUFFER_SIZE>;
+
 private:
   String process_page (const String& var);
 
-  AsyncWebServer *webserver{ nullptr };
-  AsyncWebSocket *websocket{ nullptr };
+  AsyncWebServer  *webserver{ nullptr };
+  AsyncWebSocket  *websocket{ nullptr };
 
-  String          messageBuffer;
-  RingBuffer     *ringBuffer;
+  String           messageBuffer;
+  WebserialBuffer *ringBuffer;
 
-  String          hostname{};
+  String           hostname{};
 };
 
 #endif // SRC_WEBSERIAL_HPP_

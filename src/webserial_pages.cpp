@@ -115,7 +115,7 @@ const char webserial_page[] PROGMEM = R"rawliteral(
     document.getElementById("nav_hostname").innerHTML = '%HOSTNAME%';
     let websocket,
         enableScroll=!0,
-        maxLines = 1000,
+        maxLines = 2000,
         url=`ws://${window.location.hostname}:${window.location.port}/ws_serial`,
         contentArea=document.querySelector(".content"),
         connectionStatus=document.querySelector(".connection-status");

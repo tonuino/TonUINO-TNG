@@ -32,7 +32,7 @@ void SleepTimer::loop() {
     }
     else {
       stopAfterTrackFinished_active = true;
-      sleepTimer.start(10 * 60000);
+      sleepTimer.start(maxWaitForTrackFinished);
     }
   }
 }
@@ -79,12 +79,19 @@ bool SleepTimer::handleRFID(const folderSettings &/*newCard*/) {
 
 #ifdef TonUINO_Esp32
 String SleepTimer::getDescription() {
+  long remaining = sleepTimer.remainingTime();
+  if (fired)
+    remaining = 0;
+  else if (stopAfterTrackFinished_active)
+    remaining = remaining - maxWaitForTrackFinished;
+  remaining /= 1000;
   String descr = "Sleep-Timer";
   descr += " (";
   if (stopAfterTrackFinished)
     descr += "Track wird beendet, ";
-  descr += "übrig: " + String(sleepTimer.remainingTime()/1000) + " Sek.";
-  descr += ")";
+  char buffer[20];
+  sprintf(buffer, "%ld:%02ld", remaining/60, remaining%60);
+  descr += String("übrig: ") + buffer + " Min.)";
   return descr;
 }
 #endif
