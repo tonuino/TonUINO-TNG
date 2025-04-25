@@ -900,14 +900,26 @@ String Webservice::getInfoData(const String& id){
   else if(id==F("idesize")){
     p = ESP.getFlashChipSize();
   }
-  else if(id==F("flashsize")){
+  else if(id==F("minfreepsram")){
+      p = ESP.getMinFreePsram();
+  }
+  else if(id==F("usedpsram")){
+      p = ESP.getPsramSize() - ESP.getFreePsram();
+  }
+  else if(id==F("psram")){
       p = ESP.getPsramSize();
   }
   else if(id==F("cpufreq")){
     p = ESP.getCpuFreqMHz();
   }
-  else if(id==F("freeheap")){
-    p = ESP.getFreeHeap();
+  else if(id==F("minfreeheap")){
+    p = ESP.getMinFreeHeap();
+  }
+  else if(id==F("usedheap")){
+    p = ESP.getHeapSize() - ESP.getFreeHeap();
+  }
+  else if(id==F("heap")){
+    p = ESP.getHeapSize();
   }
   else if(id==F("memsketch1")){
     p = ESP.getSketchSize();

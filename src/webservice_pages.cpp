@@ -670,11 +670,13 @@ const char info_html[] PROGMEM = R"rawliteral(
 <dt>Uptime</dt><dd>%uptime%</dd>
 <dt>Chip ID</dt><dd>%chipid%</dd>
 <dt>Chip rev</dt><dd>%chiprev%</dd>
-<dt>Flash size</dt><dd>%idesize% bytes</dd> 
-<dt>PSRAM Size</dt><dd>%flashsize% bytes</dd>      
 <dt>CPU frequency</dt><dd>%cpufreq%MHz</dd>
-<dt>Memory - Free heap</dt><dd>%freeheap% bytes available</dd>
-<dt>Memory - Sketch size</dt><dd>Used / Total bytes<br>%memsketch1% / %memsketch2%
+<dt>Flash size</dt><dd>%idesize% bytes</dd> 
+<dt>Memory - PSRAM</dt><dd>MinFree / Used / Total bytes<br>%minfreepsram% / %usedpsram% / %psram%      
+<br><progress value='%usedpsram%' max='%psram%'></progress></dd>      
+<dt>Memory - Heap</dt><dd>MinFree / Used / Total bytes<br>%minfreeheap% / %usedheap% / %heap%
+<br><progress value='%usedheap%' max='%heap%'></progress></dd>      
+<dt>Memory - Sketch</dt><dd>Used / Total bytes<br>%memsketch1% / %memsketch2%
 <br><progress value='%memsketch1%' max='%memsketch2%'></progress></dd>      
 <dt>Temperature</dt><dd>%temp1% C&deg;</dd>
 <br><h3>WiFi</h3><hr>
