@@ -497,9 +497,9 @@ const char system_html[] PROGMEM = R"rawliteral(
 
 <h2>TonUINO System</h2>
 
-<form class="system" action='/wifi'    method='get'><button>Configure WiFi</button></form><br/>
-<form class="system" action='/info'    method='get'><button>Info</button></form><br/>
-<form class="system" action='/upgrade' method='get'><button>Firmware Update OTA</button></form><br/>
+<form class="system" action='/wifi'    method='get'><button>Configure WiFi</button></form><br>
+<form class="system" action='/info'    method='get'><button>Info</button></form><br>
+<form class="system" action='/upgrade' method='get'><button>Firmware Update OTA</button></form><br>
 
 </body>
 </html>
@@ -674,10 +674,12 @@ const char info_html[] PROGMEM = R"rawliteral(
 <dt>PSRAM Size</dt><dd>%flashsize% bytes</dd>      
 <dt>CPU frequency</dt><dd>%cpufreq%MHz</dd>
 <dt>Memory - Free heap</dt><dd>%freeheap% bytes available</dd>
-<dt>Memory - Sketch size</dt><dd>Used / Total bytes<br/>%memsketch1% / %memsketch2%
-<br/><progress value='%memsmeter1%' max='%memsmeter2%'></progress></dd>      
+<dt>Memory - Sketch size</dt><dd>Used / Total bytes<br>%memsketch1% / %memsketch2%
+<br><progress value='%memsketch1%' max='%memsketch2%'></progress></dd>      
 <dt>Temperature</dt><dd>%temp1% C&deg;</dd>
-<br/><h3>WiFi</h3><hr>%wifihead%<br><br>
+<br><h3>WiFi</h3><hr>
+<dt>Mode</dt><dd>%wifihead%</dd>
+<br><h3>WiFi STA</h3><hr>
 <dt>Connected</dt><dd>%conx%</dd>
 <dt>SSID</dt><dd>%stassid%</dd>
 <dt>BSSID</dt><dd>%apbssid%</dd>
@@ -687,7 +689,7 @@ const char info_html[] PROGMEM = R"rawliteral(
 <dt>DNS Server</dt><dd>%dnss%</dd>
 <dt>Hostname</dt><dd>%host%</dd>
 <dt>Station MAC</dt><dd>%stamac%</dd>
-<br/><h3>WiFi AP</h3><hr>
+<br><h3>WiFi AP</h3><hr>
 <dt>Access point IP</dt><dd>%apip%</dd>
 <dt>Access point MAC</dt><dd>%apmac%</dd>
 <dt>Access point hostname</dt><dd>%aphost%</dd>

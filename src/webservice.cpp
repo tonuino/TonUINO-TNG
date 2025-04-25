@@ -913,14 +913,9 @@ String Webservice::getInfoData(const String& id){
     p = ESP.getSketchSize();
   }
   else if(id==F("memsketch2")){
-    p = ESP.getSketchSize()+ESP.getFreeSketchSpace();
+    p = ESP.getFreeSketchSpace();
   }
-  else if(id==F("memsmeter1")){
-    p = ESP.getSketchSize();
-  }
-  else if(id==F("memsmeter2")){
-    p = ESP.getSketchSize()+ESP.getFreeSketchSpace();
-  }
+
   else if(id==F("apip")){
     p = WiFi.softAPIP().toString();
   }
