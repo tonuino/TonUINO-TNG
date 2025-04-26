@@ -198,14 +198,22 @@ const char main_html[] PROGMEM = R"rawliteral(
 </head>
 <body>
 <script>
-  function submit_form(address, key, button) {
+  function submit_form(address, key, button, no_check=false) {
     console.log(address, key, button);
-    var data = new FormData(document.getElementById(address));
+    var form = document.getElementById(address);
+    if (!no_check && !form.checkValidity()) {
+      console.log("not valid");
+      form.reportValidity();
+      return false;
+    }
+    var data = new FormData(form);
     data.append(key, button);
     var xhr = new XMLHttpRequest();
     xhr.open("POST", '/'+address);
     xhr.onload = () => {
-      console.log(xhr.response);
+      console.log(xhr);
+      if (xhr.status != 200)
+        alert(xhr.response);
     };
     xhr.send(data);
     return false;
@@ -237,14 +245,14 @@ const char main_html[] PROGMEM = R"rawliteral(
                                                                   <option>Memory Spiel</option>                                
                                                                   <option>Bluetooth ein/aus</option>                                
                                                                 </select>                                                      
-<br><label for="folder"         >Folder / Sp1 / Sp2     </label><div class="tooltip"><input type="number" name="folder"             id="folder">  
+<br><label for="folder"         >Folder / Sp1 / Sp2     </label><div class="tooltip"><input type="number" name="folder"             id="folder" value="1" min="1" max="99">  
                                                                   <span class="tooltiptext">Folder</span></div>
-                                                              / <div class="tooltip"><input type="number" name="special1"           id="special1">
+                                                              / <div class="tooltip"><input type="number" name="special1"           id="special1" value="0" min="0" max="255">
                                                                   <span class="tooltiptext">Einzel: Track
                                                                                         <br>* von bis: erster Track
-                                                                                        <br>Hörbuch einzel: Anzahl der Tracks
+                                                                                        <br>Hörbuch einzel: Anzahl der Tracks - 1
                                                                                         <br>Quiz: Anzahl der Antworten (0, 2 oder 4)</span></div>
-                                                              / <div class="tooltip"><input type="number" name="special2"           id="special2">
+                                                              / <div class="tooltip"><input type="number" name="special2"           id="special2" value="0" min="0" max="255">
                                                                   <span class="tooltiptext">* von bis: letzter Track
                                                                                         <br>Quiz: Anzahl der Lösungen (0 oder 1)</span></div>
 <br>
@@ -254,7 +262,7 @@ const char main_html[] PROGMEM = R"rawliteral(
 <br>
 
 <form class="service1" id="modifier">
-<br><label for="mod_mode"    >Modifier:  </label><select size=1 name="mod_mode" id="mod_mode">
+<br><label for="mod_mode"    >Modifier:  </label><select size=1 name="mod_mode" id="mod_mode" onchange="mod_mode_changed(this)">
                                                    <option>Sleep-Timer      </option>
                                                    <option>Stopptanz        </option>
                                                    <option>Feuer-Wasser-Luft</option>
@@ -263,19 +271,35 @@ const char main_html[] PROGMEM = R"rawliteral(
                                                    <option>Wiederhole Track </option>
                                                    <option>Jukebox          </option>
                                                  </select>
-<br><label for="mod_special" >Parameter  </label><div class="tooltip"><input type="number" name="mod_special" id="mod_special">
+<br><label for="mod_special" >Parameter  </label><div class="tooltip"><input type="number" name="mod_special" id="mod_special" value="1" min="-127" max="127">
                                                    <span class="tooltiptext">Sleep-Timer: Timeout in min [1..127] (neg.: Tr. wird beendet)
                                                                          <br>Feuer-Wasser-Luft/
                                                                          <br>Stopptanz: Zeit zw. Pausen (min/max)
                                                                          <br>0: 15/30, 1: 25/40, 2: 35/50</span></div>
 <br>
-<button onclick="return submit_form('modifier', 'mod_action', 'activate');">Activate</button>
-<button onclick="return submit_form('modifier', 'mod_action', 'delete'  );">Delete</button>
-<button onclick="return submit_form('modifier', 'mod_action', 'write'   );">Schreibe</button>
+<button onclick="return submit_form('modifier', 'mod_action', 'activate'    );">Activate</button>
+<button onclick="return submit_form('modifier', 'mod_action', 'delete', true);">Delete</button>
+<button onclick="return submit_form('modifier', 'mod_action', 'write'       );">Schreibe</button>
 </form>
 <br>
 
 <script>
+  function mod_mode_changed(el) {
+    var mod_special = document.getElementById("mod_special");
+    if (el.value == "Sleep-Timer") {
+      mod_special.min = -127;
+      mod_special.max =  127;
+    }
+    else if (el.value == "Feuer-Wasser-Luft" || el.value == "Stopptanz") {
+      mod_special.min = 0;
+      mod_special.max = 2;
+    }
+    else {
+      mod_special.min = 0;
+      mod_special.max = 0;
+      mod_special.value = 0;
+    }
+  }
   document.getElementById("nav_hostname").innerHTML = '%HOSTNAME%';
   var f_right1_html = 
    '<svg fill="#FFF" width="24px" height="24px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" transform="matrix(-1, 0, 0, 1, 0, 0)" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M400 54.1c63 45 104 118.6 104 201.9 0 136.8-110.8 247.7-247.5 248C120 504.3 8.2 393 8 256.4 7.9 173.1 48.9 99.3 111.8 54.2c11.7-8.3 28-4.8 35 7.7L162.6 90c5.9 10.5 3.1 23.8-6.6 31-41.5 30.8-68 79.6-68 134.9-.1 92.3 74.5 168.1 168 168.1 91.6 0 168.6-74.2 168-169.1-.3-51.8-24.7-101.8-68.1-134-9.7-7.2-12.4-20.5-6.5-30.9l15.8-28.1c7-12.4 23.2-16.1 34.8-7.8zM296 264V24c0-13.3-10.7-24-24-24h-32c-13.3 0-24 10.7-24 24v240c0 13.3 10.7 24 24 24h32c13.3 0 24-10.7 24-24z"></path></g></svg>';
@@ -598,7 +622,7 @@ const char wifi_html[] PROGMEM = R"rawliteral(
     var xhr = new XMLHttpRequest();
     xhr.open("POST", '/'+address);
     xhr.onload = () => {
-      console.log(xhr.response);
+      console.log(xhr);
     };
     xhr.send(data);
     return false;

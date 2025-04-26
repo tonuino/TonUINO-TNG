@@ -575,8 +575,61 @@ void Webservice::card(AsyncWebServerRequest *request) {
 #endif
 
   if (card.mode == pmode_t::none) {
-    request->send(400);
+    request->send(400, "text/html", "unbekannter Mode");
     return;
+  }
+
+  if (card.mode == pmode_t::repeat_last || card.mode == pmode_t::switch_bt) {
+    card.folder   = 0xff; // dummy value > 0 to make readCard() returning true
+    card.special  = 0;
+    card.special2 = 0;
+  }
+  else {
+
+    if (SM_tonuino::is_in_state<Play>())
+      cmd = commandRaw::pause;
+    delay(2*cycleTime);
+
+    uint16_t track_count = mp3.getFolderTrackCount(card.folder);
+    if (track_count == 0) {
+      request->send(400, "text/html", "Der Folder existiert nicht");
+      return;
+    }
+    String message;
+    switch (card.mode) {
+    case pmode_t::einzel       :
+      if (card.special < 1)
+        message += "\nDer Parameter Special1 muss mindestens 1 sein";
+      if (card.special > track_count)
+        message += "\nDer Parameter Special1 muss kleiner oder gleich der Anzahl der Tracks im Folder sein";
+      break;
+    case pmode_t::hoerspiel_vb :
+    case pmode_t::album_vb     :
+    case pmode_t::party_vb     :
+      if (card.special < 1)
+        message += "\nDer Parameter Special1 muss mindestens 1 sein";
+      if (card.special > card.special2)
+        message += "\nDer Parameter Special1 muss kleiner oder gleich Special2 sein";
+      if (card.special2 > track_count)
+        message += "\nDer Parameter Special2 muss kleiner oder gleich der Anzahl der Tracks im Folder sein";
+      break;
+    case pmode_t::hoerbuch_1   :
+      if (card.special >= 30)
+        message += "\nDer Parameter Special1 muss kleiner als 30 sein";
+      break;
+    case pmode_t::quiz_game    :
+      if (card.special != 0 && card.special != 2 && card.special != 4)
+        message += "\nDer Parameter Special1 muss 0, 2 oder 4 sein";
+      if (card.special2 != 0 && card.special2 != 1)
+        message += "\nDer Parameter Special2 muss 0 oder 1 sein";
+      break;
+    default                    :
+      break;
+    }
+    if (message != "") {
+      request->send(400, "text/html", message);
+      return;
+    }
   }
 
   if (request->arg("card_action") == "start") {
