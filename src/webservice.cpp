@@ -591,6 +591,7 @@ void Webservice::card(AsyncWebServerRequest *request) {
     delay(2*cycleTime);
 
     uint16_t track_count = mp3.getFolderTrackCount(card.folder);
+    LOG(webserv_log, s_info, "track count: ", track_count);
     if (track_count == 0) {
       request->send(400, "text/html", "Der Folder existiert nicht");
       return;
@@ -601,7 +602,7 @@ void Webservice::card(AsyncWebServerRequest *request) {
       if (card.special < 1)
         message += "\nDer Parameter Special1 muss mindestens 1 sein";
       if (card.special > track_count)
-        message += "\nDer Parameter Special1 muss kleiner oder gleich der Anzahl der Tracks im Folder sein";
+        message += String("\nDer Parameter Special1 muss kleiner oder gleich der Anzahl der Tracks im Folder sein (") + String(track_count) + ")";
       break;
     case pmode_t::hoerspiel_vb :
     case pmode_t::album_vb     :
@@ -611,7 +612,7 @@ void Webservice::card(AsyncWebServerRequest *request) {
       if (card.special > card.special2)
         message += "\nDer Parameter Special1 muss kleiner oder gleich Special2 sein";
       if (card.special2 > track_count)
-        message += "\nDer Parameter Special2 muss kleiner oder gleich der Anzahl der Tracks im Folder sein";
+        message += String("\nDer Parameter Special2 muss kleiner oder gleich der Anzahl der Tracks im Folder sein (") + String(track_count) + ")";
       break;
     case pmode_t::hoerbuch_1   :
       if (card.special >= 30)

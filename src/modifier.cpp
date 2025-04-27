@@ -21,6 +21,8 @@ const __FlashStringHelper* str_JukeboxModifier    () { return F("Jukebox")      
 } // anonymous namespace
 
 void SleepTimer::loop() {
+  if (fired)
+    tonuino.shutdown();
   if (sleepTimer.isActive() && sleepTimer.isExpired()) {
     LOG(modifier_log, s_debug, str_SleepTimer(), F(" -> expired"));
     if (not stopAfterTrackFinished || stopAfterTrackFinished_active) {

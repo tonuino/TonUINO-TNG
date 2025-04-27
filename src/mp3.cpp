@@ -281,6 +281,7 @@ uint16_t Mp3::getFolderTrackCount(uint16_t folder)
     LOG(mp3_log, s_debug, F("getFolderTrackCount return: "), ret);
 
 #ifdef DFMiniMp3_T_CHIP_GD3200B
+    Base::stop();
     Base::setVolume(*volume);
 #endif
 
