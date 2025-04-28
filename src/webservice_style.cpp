@@ -94,6 +94,13 @@ select {
   height: 4ch;
 }
 
+body.waiting,
+body.waiting a:hover,
+body.waiting *
+{
+    cursor: wait !important;
+}
+
 button + button {
   margin-left: 1ch;
 }

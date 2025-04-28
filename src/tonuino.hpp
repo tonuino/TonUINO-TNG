@@ -76,6 +76,8 @@ public:
 
   bool specialCard(const folderSettings &nfcTag);
 
+  void set_shutdown() { request_shutdown = true; }
+
 #ifdef BT_MODULE
   bool isBtModuleOn() { return btModuleOn; }
   void switchBtModuleOnOff();
@@ -153,6 +155,8 @@ private:
   folderSettings       myFolder            {};
   bool                 myFolderIsCard      {};
   uint16_t             numTracksInFolder   {};
+
+  bool                 request_shutdown    {};
 
 #ifdef BT_MODULE
   bool                 btModuleOn          {};

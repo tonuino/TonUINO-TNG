@@ -59,6 +59,8 @@ public:
   void init();
   void loop();
 
+  void push_shutdown  ();
+
   commandRaw getCommandRaw() override;
 
 private:

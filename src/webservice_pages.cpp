@@ -130,19 +130,19 @@ const char service_button_5_html[] PROGMEM = R"rawliteral(
 <form class="service_button_5" id="service">
     normal:
     <br>
-    <button onclick="return submit_form('service', 'button'  , 'five') ;">Vol-</button>
-    <button onclick="return submit_form('service', 'button'  , 'down') ;">Prev</button>
-    <button onclick="return submit_form('service', 'button'  , 'pause');">Pause</button>
-    <button onclick="return submit_form('service', 'button'  , 'up')   ;">Next</button>
-    <button onclick="return submit_form('service', 'button'  , 'four') ;">Vol+</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'five') ;">Vol-</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'down') ;">Prev</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'pause');">Pause</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'up')   ;">Next</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'four') ;">Vol+</button>
     <br>
     lang:
     <br>
-    <button onclick="return submit_form('service', 'button'  , 'five_long') ;">Vol-</button>
-    <button onclick="return submit_form('service', 'button'  , 'down_long') ;">Prev</button>
-    <button onclick="return submit_form('service', 'button'  , 'pause_long');">Pause</button>
-    <button onclick="return submit_form('service', 'button'  , 'up_long')   ;">Next</button>
-    <button onclick="return submit_form('service', 'button'  , 'four_long') ;">Vol+</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'five_long') ;">Vol-</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'down_long') ;">Prev</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'pause_long');">Pause</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'up_long')   ;">Next</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'four_long') ;">Vol+</button>
 </form>
 <br>
 
@@ -153,15 +153,15 @@ const char service_button_3_html[] PROGMEM = R"rawliteral(
 <form class="service_button_3" id="service">
     normal:
     <br>
-    <button onclick="return submit_form('service', 'button'  , 'down') ;">Prev</button>
-    <button onclick="return submit_form('service', 'button'  , 'pause');">Pause</button>
-    <button onclick="return submit_form('service', 'button'  , 'up')   ;">Next</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'down') ;">Prev</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'pause');">Pause</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'up')   ;">Next</button>
     <br>
     lang:
     <br>
-    <button onclick="return submit_form('service', 'button'  , 'down_long') ;">Vol-</button>
-    <button onclick="return submit_form('service', 'button'  , 'pause_long');">Track</button>
-    <button onclick="return submit_form('service', 'button'  , 'up_long')   ;">Vol+</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'down_long') ;">Vol-</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'pause_long');">Track</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'up_long')   ;">Vol+</button>
 </form>
 <br>
 
@@ -172,15 +172,15 @@ const char service_button_3_inv_html[] PROGMEM = R"rawliteral(
 <form class="service_button_3" id="service">
     normal:
     <br>
-    <button onclick="return submit_form('service', 'button'  , 'down') ;">Vol-</button>
-    <button onclick="return submit_form('service', 'button'  , 'pause');">Pause</button>
-    <button onclick="return submit_form('service', 'button'  , 'up')   ;">Vol+</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'down') ;">Vol-</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'pause');">Pause</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'up')   ;">Vol+</button>
     <br>
     lang:
     <br>
-    <button onclick="return submit_form('service', 'button'  , 'down_long') ;">Prev</button>
-    <button onclick="return submit_form('service', 'button'  , 'pause_long');">Track</button>
-    <button onclick="return submit_form('service', 'button'  , 'up_long')   ;">Next</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'down_long') ;">Prev</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'pause_long');">Track</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'up_long')   ;">Next</button>
 </form>
 <br>
 
@@ -198,7 +198,7 @@ const char main_html[] PROGMEM = R"rawliteral(
 </head>
 <body>
 <script>
-  function submit_form(address, key, button, no_check=false) {
+  function submit_form(btn, address, key, button, no_check=false) {
     console.log(address, key, button);
     var form = document.getElementById(address);
     if (!no_check && !form.checkValidity()) {
@@ -206,12 +206,25 @@ const char main_html[] PROGMEM = R"rawliteral(
       form.reportValidity();
       return false;
     }
+    document.body.classList.add("waiting");
+    var btn_text = btn.innerHTML;
+    btn.innerHTML = "Wait";
+    btn.disabled=true;
     var data = new FormData(form);
     data.append(key, button);
     var xhr = new XMLHttpRequest();
     xhr.open("POST", '/'+address);
+    var timer = setTimeout(() => {
+      btn.innerHTML = btn_text;
+      btn.disabled=false;
+      alert("keine Antwort vom TonUINO");
+    }, 8000)
     xhr.onload = () => {
       console.log(xhr);
+      clearTimeout(timer);
+      document.body.classList.remove("waiting");
+      btn.innerHTML = btn_text;
+      btn.disabled=false;
       if (xhr.status != 200)
         alert(xhr.response);
     };
@@ -256,8 +269,8 @@ const char main_html[] PROGMEM = R"rawliteral(
                                                                   <span class="tooltiptext">* von bis: letzter Track
                                                                                         <br>Quiz: Anzahl der Lösungen (0 oder 1)</span></div>
 <br>
-<button onclick="return submit_form('card', 'card_action', 'start');">Start</button>
-<button onclick="return submit_form('card', 'card_action', 'write' );">Schreibe</button>
+<button onclick="return submit_form(this, 'card', 'card_action', 'start');">Start</button>
+<button onclick="return submit_form(this, 'card', 'card_action', 'write' );">Schreibe</button>
 </form>
 <br>
 
@@ -277,9 +290,9 @@ const char main_html[] PROGMEM = R"rawliteral(
                                                                          <br>Stopptanz: Zeit zw. Pausen (min/max)
                                                                          <br>0: 15/30, 1: 25/40, 2: 35/50</span></div>
 <br>
-<button onclick="return submit_form('modifier', 'mod_action', 'activate'    );">Activate</button>
-<button onclick="return submit_form('modifier', 'mod_action', 'delete', true);">Delete</button>
-<button onclick="return submit_form('modifier', 'mod_action', 'write'       );">Schreibe</button>
+<button onclick="return submit_form(this, 'modifier', 'mod_action', 'activate'    );">Activate</button>
+<button onclick="return submit_form(this, 'modifier', 'mod_action', 'delete', true);">Delete</button>
+<button onclick="return submit_form(this, 'modifier', 'mod_action', 'write'       );">Schreibe</button>
 </form>
 <br>
 
@@ -307,7 +320,7 @@ const char main_html[] PROGMEM = R"rawliteral(
   document.getElementById("f_right1").style.display = "block";
   var ws;
   function f_right1() {
-    return submit_form('service', 'command', 'shutdown');
+    return submit_form(this, 'service', 'command', 'shutdown');
   }
   function connect() {
     console.log('create new websocket');

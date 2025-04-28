@@ -482,8 +482,8 @@ void Webservice::service(AsyncWebServerRequest *request) {
     if      (request->arg("command") == "shutdown" ) {
       if (SM_tonuino::is_in_state<Play>())
         cmd = commandRaw::pause;
-      delay(1000);
-      tonuino.shutdown();
+      delay(2*cycleTime);
+      tonuino.set_shutdown();
     }
   }
   request->send(200);
@@ -726,7 +726,7 @@ void Webservice::push_status() {
   if (ws.count() == 0)
     return;
 
-  String status = get_status();;
+  String status = get_status();
 
   if (old_status != status) {
     LOG(webserv_log, s_debug, "Webservice::push_status() status: \n", status);
@@ -734,6 +734,16 @@ void Webservice::push_status() {
     old_status = status;
     ws.textAll(status);
   }
+}
+
+void Webservice::push_shutdown() {
+
+  if (ws.count() == 0)
+    return;
+
+  LOG(webserv_log, s_debug, "Webservice::push_stutdown()");
+
+  ws.textAll("Ausgeschaltet");
 }
 
 void Webservice::scan_networks(AsyncWebServerRequest *request) {

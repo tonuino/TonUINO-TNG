@@ -193,6 +193,12 @@ void Tonuino::loop() {
   unsigned long  start_cycle = millis();
   checkStandby();
 
+  if (request_shutdown) {
+    delay(100);
+    shutdown();
+    delay(1000);
+  }
+
   static bool is_playing = false;
   LOG_CODE(play_log, s_info, {
     if (is_playing != mp3.isPlaying()) {
@@ -411,6 +417,10 @@ void Tonuino::checkStandby() {
 
 void Tonuino::shutdown() {
   LOG(standby_log, s_info, F("power off!"));
+
+#ifdef ESP32
+  webservice.push_shutdown();
+#endif
 
 #ifdef NEO_RING
   ring.call_on_sleep();
