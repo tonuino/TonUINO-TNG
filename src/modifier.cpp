@@ -64,8 +64,9 @@ void SleepTimer::init(pmode_t, uint8_t special /* is minutes*/) {
 }
 
 bool SleepTimer::handleButton(command cmd) {
-  if (cmd == command::pause && fired) {
-    LOG(modifier_log, s_debug, F("SleepTimer::PauseButton -> LOCKED!"));
+  if ((cmd == command::next || cmd == command::next10 || cmd == command::previous || cmd == command::previous10)
+      && stopAfterTrackFinished_active) {
+    LOG(modifier_log, s_debug, F("SleepTimer: prev and next -> LOCKED!"));
     return true;
   }
   return false;

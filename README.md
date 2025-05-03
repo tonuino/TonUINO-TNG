@@ -106,7 +106,7 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.0 (28.04.2025)
+## Version 3.3.0 (03.05.2025)
 - [Issue 259](https://github.com/tonuino/TonUINO-TNG/issues/259): New Hardware Type ESP32 Nano
 
 ## Version 3.2.1 (25.03.2025)
