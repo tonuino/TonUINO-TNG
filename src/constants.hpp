@@ -321,8 +321,12 @@ inline constexpr float   voltageMeasurementCorrection  = 2.007; // Spannungsteil
 inline constexpr float   voltageMeasurementCorrection  = 0.710; // Spannungsteiler 100k/100k
 #endif
 
+// for Li-Ion
 inline constexpr float   batVoltageLow                 = 2.95;
 inline constexpr float   batVoltageEmpty               = 2.90;
+// for Li-PO
+//inline constexpr float   batVoltageLow                 = 3.40;
+//inline constexpr float   batVoltageEmpty               = 3.20;
 
 // ######################################################################
 

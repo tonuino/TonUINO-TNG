@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-const char TONUINO_TNG_VERSION[] PROGMEM = "V3.3.0 03.05.25";
+const char TONUINO_TNG_VERSION[] PROGMEM = "V3.3.0 26.05.25";
 
 
 #endif /* SRC_VERSION_HPP_ */
