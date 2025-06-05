@@ -53,6 +53,9 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
     - esp32async/ESPAsyncWebServer: 3.7.2
     - bblanchon/ArduinoJson: 7.3.0
 
+**ESP32 Nano**
+Bei der Arduino IDE muss unter "Werkzeuge/Tools" --> "Pin Numbering" unbedingt "By GPIO number (legacy)" eingestellt werden! 
+
 ## platform.io
 
 - Es werden die gleichen HW Varianten angeboten wie beim Online Upload ohne die Datei constants.hpp editieren zu müssen
@@ -106,7 +109,7 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.0 (26.05.2025)
+## Version 3.3.0 (05.06.2025)
 - [Issue 259](https://github.com/tonuino/TonUINO-TNG/issues/259): New Hardware Type ESP32 Nano
 
 ## Version 3.2.1 (25.03.2025)
