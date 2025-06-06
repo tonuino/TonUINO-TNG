@@ -642,11 +642,11 @@ const char wifi_html[] PROGMEM = R"rawliteral(
   }
 
   function select_network(l){
-    document.getElementById('s').value = l.getAttribute('data-ssid')||l.innerText||l.textContent;
+    document.getElementById('ssid').value = l.getAttribute('data-ssid')||l.innerText||l.textContent;
     p = l.nextElementSibling.classList.contains('l');
-    document.getElementById('p').disabled = !p;
+    document.getElementById('password').disabled = !p;
     if(p)
-      document.getElementById('p').focus();
+      document.getElementById('password').focus();
   };
 
   function toggle_pass() {

@@ -584,7 +584,7 @@ void Webservice::card(AsyncWebServerRequest *request) {
     card.special  = 0;
     card.special2 = 0;
   }
-  else {
+  else if (tonuino.getActiveModifier().getActive() != pmode_t::jukebox){
 
     if (SM_tonuino::is_in_state<Play>())
       cmd = commandRaw::pause;
