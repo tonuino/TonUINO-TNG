@@ -769,23 +769,15 @@ Installed firmware: %aboutver%<br>
 Build date: %aboutdate%
 
   <p class='red' id="status"></p>
-  <p id="detailsheader"></p>
-  <p id="details"></p>
+  <input type="file" name="file1" id="file1" accept=".bin"><br><br>
+  <button onclick="uploadFile()">Upgrade</button><br><br>
+  <progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
+  <p id="loaded_n_total"></p>
 
 <script>
   document.getElementById("nav_hostname").innerHTML = '%HOSTNAME%';
-function showUploadButtonFancy() {
-  document.getElementById("detailsheader").innerHTML = "<h3>Select File:<h3>"
   document.getElementById("status").innerHTML = "";
-  var uploadform =
-  "<form id=\"upload_form\" enctype=\"multipart/form-data\" method=\"post\">" +
-  "<input type=\"file\" name=\"file1\" id=\"file1\" accept=\".bin\" onchange=\"uploadFile()\"><br><br>" +
-  "<progress id=\"progressBar\" value=\"0\" max=\"100\" style=\"width:300px;\"></progress>" +
-  "<h3 id=\"status\"></h3>" +
-  "<p id=\"loaded_n_total\"></p>" +
-  "</form>";
-  document.getElementById("details").innerHTML = uploadform;
-}
+  document.getElementById("loaded_n_total").innerHTML = "";
 function _(el) {
   return document.getElementById(el);
 }
@@ -824,7 +816,6 @@ function errorHandler(event) {
 function abortHandler(event) {
   _("status").innerHTML = "Upload Aborted";
 }
-showUploadButtonFancy();
 </script>
 
 </body></html>
