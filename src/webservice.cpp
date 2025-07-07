@@ -1034,6 +1034,129 @@ String Webservice::getInfoData(const String& id){
   else if(id==F("aboutver")){
     p = FPSTR(TONUINO_TNG_VERSION);
   }
+  else if(id==F("aboutconfig")){
+    #if  TonUINO_Esp32 == 100
+      p = "ESP32 Nano, ";
+    #endif
+    #ifdef THREEBUTTONS
+      p += "3 Tasten";
+    #endif
+    #ifdef FIVEBUTTONS
+      p += "5 Tasten";
+    #endif
+    #ifdef BUTTONS3X3
+      p += "3 x 3 Button Board";
+    #endif
+
+    #ifdef DFPlayerUsesHardwareSerial
+      p += "<br>DF-Player mit HW Serial";
+    #endif
+    #ifdef SerialInputAsCommand
+      p += "<br>Serial Input als Command";
+    #endif
+
+    #ifdef DFMiniMp3_T_CHIP_GD3200B
+      p += "<br>DF-Player Chip GD3200B";
+    #endif
+    #ifdef DFMiniMp3_T_CHIP_MH2024K16SS
+      p += "<br>DF-Player Chip MH2024K16SS";
+    #endif
+    #ifdef DFMiniMp3_T_CHIP_LISP3
+      p += "<br>DF-Player Chip LISP3";
+    #endif
+    #ifdef DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
+      p += "<br>DF-Player Chip MH2024K24SS";
+    #endif
+    #ifdef DFMiniMp3_T_CHIP_Mp3ChipIncongruousNoAck
+      p += "<br>DF-Player Chip NoAck (LKP Player)";
+    #endif
+
+    #ifdef DISABLE_SHUTDOWN_VIA_BUTTON
+      p += "<br>Kein Shutdown via Button";
+    #endif
+
+    #ifdef ROTARY_ENCODER
+      p += "<br>Rotary Encoder";
+    #endif
+    #ifdef ROTARY_ENCODER_LONGPRESS
+      p += " mit Long Press Simulation";
+    #endif
+    #ifdef POTI
+      p += "<br>Potentiometer";
+    #endif
+
+    #ifdef NEO_RING
+      p += "<br>Neo-Pixel";
+    #endif
+    #ifdef NEO_RING_EXT
+      p += " (extended)";
+    #endif
+    #ifdef NEO_RING_2
+      p += " 2nd Neo-Pixel";
+    #endif
+
+    #ifdef SPKONOFF
+      p += "<br>Speaker Off";
+    #endif
+
+    #ifdef HPJACKDETECT
+      p += "<br>Jack Detection";
+    #endif
+
+    #ifdef DONT_ACCEPT_SAME_RFID_TWICE
+      p += "<br>Don't accept same RFID twice";
+    #endif
+    #ifdef RESUME_ON_SAME_RFID
+      p += "<br>Resume on same RFID";
+    #endif
+
+    #ifdef REPLAY_ON_PLAY_BUTTON
+      p += "<br>Replay on Play Button";
+    #endif
+
+    #ifdef QUIZ_GAME
+      p += "<br>Quiz Game";
+    #endif
+    #ifdef MEMORY_GAME
+      p += "<br>Memory Game";
+    #endif
+
+    #ifdef STORE_LAST_CARD
+      p += "<br>Speichere letzte Karte";
+    #endif
+    #ifdef SPECIAL_START_SHORTCUT
+      p += "<br>Start Shortcut via GPIO";
+    #endif
+
+    #ifdef BT_MODULE
+      p += "<br>Bluetooth Modul";
+    #endif
+
+
+    #ifdef BAT_VOLTAGE_MEASUREMENT
+      p += "<br>Batterie-Spannungs Messung";
+    #endif
+
+    #ifdef USE_POLOLU_SHUTDOWN
+      p += "<br>Shutdown mit Pololu";
+    #endif
+    #ifdef USE_TRAEGER_PLATINE_SHUTDOWN
+      p += "<br>Shutdown mit Tägerplatine";
+    #endif
+
+#define STRING(s) #s
+#define TO_LITERAL(string) STRING(string)
+
+    #ifdef MRFC522_RX_GAIN
+      p += "<br>MFRC Gain = ";
+      p += TO_LITERAL(MRFC522_RX_GAIN);
+    #endif
+
+
+    #ifdef MODIFICATION_CARD_JUKEBOX
+      p += "<br>Jukebox";
+    #endif
+  }
   else if(id==F("aboutarduinover")){
     p = String(W_STRING(ESP_ARDUINO_VERSION_MAJOR)  "."  W_STRING(ESP_ARDUINO_VERSION_MINOR)  "."  W_STRING(ESP_ARDUINO_VERSION_PATCH));
   }

@@ -737,6 +737,7 @@ const char info_html[] PROGMEM = R"rawliteral(
 
 <h3>About</h3><hr><dl>
 <dt>TonUINO TNG Version</dt><dd>%aboutver%</dd>
+<dt>TonUINO TNG Konfiguration</dt><dd>%aboutconfig%</dd>
 <dt>Arduino</dt><dd>%aboutarduinover%</dd>
 <dt>Build date</dt><dd>%aboutdate%</dd>
 </dl>
