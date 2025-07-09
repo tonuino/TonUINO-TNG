@@ -703,6 +703,13 @@ const char info_html[] PROGMEM = R"rawliteral(
 
 <h2>TonUINO Info</h2>
 
+<h3>About</h3><hr><dl>
+<dt>TonUINO TNG Version</dt><dd>%aboutver%</dd>
+<dt>TonUINO TNG Konfiguration</dt><dd>%aboutconfig%</dd>
+<dt>Arduino</dt><dd>%aboutarduinover%</dd>
+<dt>Build date</dt><dd>%aboutdate%</dd>
+</dl>
+
 <h3>esp32</h3><hr><dl>%esphead%<br><br>
 <dt>Uptime</dt><dd>%uptime%</dd>
 <dt>Chip ID</dt><dd>%chipid%</dd>
@@ -732,14 +739,6 @@ const char info_html[] PROGMEM = R"rawliteral(
 <dt>Access point IP</dt><dd>%apip%</dd>
 <dt>Access point MAC</dt><dd>%apmac%</dd>
 <dt>Access point hostname</dt><dd>%aphost%</dd>
-
-</dl>
-
-<h3>About</h3><hr><dl>
-<dt>TonUINO TNG Version</dt><dd>%aboutver%</dd>
-<dt>TonUINO TNG Konfiguration</dt><dd>%aboutconfig%</dd>
-<dt>Arduino</dt><dd>%aboutarduinover%</dd>
-<dt>Build date</dt><dd>%aboutdate%</dd>
 </dl>
 
 <script>

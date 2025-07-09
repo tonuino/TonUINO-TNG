@@ -1087,6 +1087,7 @@ String Webservice::getInfoData(const String& id){
 
     #ifdef NEO_RING
       p += "<br>Neo-Pixel";
+      p += " with " + String(neoPixelNumber) + " LED";
     #endif
     #ifdef NEO_RING_EXT
       p += " (extended)";
