@@ -296,6 +296,13 @@ public:
       EXPECT_TRUE(getMp3().is_stopped());
       return;
     }
+    if (SM_tonuino::is_in_state<StartPlay<Play>>()) {
+      execute_cycle(); // start pling
+      getMp3().end_track();
+      execute_cycle(); // start timer
+      current_time += dfPlayer_timeUntilStarts+1;
+      execute_cycle();
+    }
     if (SM_tonuino::is_in_state<Pause>()) {
       button_for_command(command::pause, state_for_command::idle_pause);
       EXPECT_TRUE(SM_tonuino::is_in_state<Play>());

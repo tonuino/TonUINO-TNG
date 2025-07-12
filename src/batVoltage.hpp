@@ -13,8 +13,14 @@ public:
   BatVoltage(Mp3& mp3);
   bool check();
 
+  float getVoltage() { return voltage; }
+  bool isLow      () { return low; }
+
 private:
   void lowMessage();
+
+  float voltage{};
+  bool  low{};
 
   Timer logTimer{};
   Timer lowTimer{};

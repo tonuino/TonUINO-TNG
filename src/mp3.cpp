@@ -133,7 +133,7 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
     waitForTrackToStart();
     LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
-    delay(dfPlayer_timeUntilStarts);
+    delay(700);
     LOG(mp3_log, s_debug, F("before waitForTrackToFinish()"));
     waitForTrackToFinish(); // finish adv
     LOG(mp3_log, s_debug, F("before waitForTrackToStart()"));
@@ -281,6 +281,7 @@ uint16_t Mp3::getFolderTrackCount(uint16_t folder)
     LOG(mp3_log, s_debug, F("getFolderTrackCount return: "), ret);
 
 #ifdef DFMiniMp3_T_CHIP_GD3200B
+    Base::stop();
     Base::setVolume(*volume);
 #endif
 
@@ -366,6 +367,33 @@ void Mp3::hpjackdetect() {
   }
 }
 #endif
+
+#ifdef TonUINO_Esp32
+  String Mp3::getQueue() {
+    String res;
+    constexpr uint8_t additional = 4;
+
+    if (isPlayingFolder()) {
+      uint8_t first = (current_track < additional) ? 0 : current_track-additional;
+      uint8_t last  = (current_track > q.size()-1-additional) ? q.size()-1 : current_track+additional;
+      if (first > 0)
+        res += "... ";
+      for (uint8_t t = first; t <= last; ++t) {
+        if (t == current_track)
+          res += "<b>";
+        res += String(q.get(t));
+        if (t == current_track)
+          res += "</b>";
+        res += " ";
+      }
+      if (last < q.size()-1)
+        res += "...";
+    }
+
+    return res;
+  }
+#endif
+
 
 void Mp3::loop() {
 

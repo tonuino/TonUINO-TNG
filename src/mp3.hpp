@@ -233,6 +233,7 @@ public:
   void playPrevious(uint8_t tracks = 1);
   uint8_t getCurrentTrack() { return playing ? q.get(current_track) : 0; }
   uint16_t getFolderTrackCount(uint16_t folder);
+  uint8_t getCurrentFolder() { return current_folder; }
   bool isLastTrack() { return current_track+1 >= q.size(); }
 
   void start() { if (isPause) { isPause = false; Base::start();} }
@@ -258,6 +259,10 @@ public:
   void hpjackdetect         ();
   bool isHeadphoneJackDetect() { return noHeadphoneJackDetect == level::inactive; }
   void setTempSpkOn         () { tempSpkOn = 2; }
+#endif
+
+#ifdef TonUINO_Esp32
+  String getQueue();
 #endif
 
 private:

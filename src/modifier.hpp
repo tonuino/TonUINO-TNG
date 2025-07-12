@@ -26,7 +26,11 @@ public:
   virtual bool handleRFID(const folderSettings&)
                                       { return false; }
   virtual pmode_t getActive        () { return pmode_t::none; }
-  virtual void init         (pmode_t, uint8_t) {}
+  virtual void init(pmode_t, uint8_t) {}
+
+#ifdef TonUINO_Esp32
+  virtual String getDescription    () { return ""; }
+#endif
 
   Modifier& operator=(const Modifier&) = delete;
 };
@@ -42,11 +46,16 @@ public:
   pmode_t getActive () final { return pmode_t::sleep_timer; }
   void   init(pmode_t, uint8_t) final;
 
+#ifdef TonUINO_Esp32
+  String getDescription() final;
+#endif
+
 private:
   Timer sleepTimer{};
   bool  stopAfterTrackFinished{};
   bool  stopAfterTrackFinished_active{};
   bool  fired{};
+  static constexpr unsigned long maxWaitForTrackFinished = 10 * 60 *1000; // 10 minutes
 };
 
 class DanceGame: public Modifier {
@@ -56,6 +65,10 @@ public:
 
   pmode_t getActive ()        final { return mode; }
   void   init(pmode_t, uint8_t) final;
+
+#ifdef TonUINO_Esp32
+  String getDescription() final;
+#endif
 
   static constexpr uint8_t minSecondsBetweenStops[]      = {15, 25, 35};
   static constexpr uint8_t maxSecondsBetweenStops[]      = {30, 40, 50};
@@ -77,6 +90,11 @@ public:
   bool handleButton(command) final { LOG(modifier_log, s_debug, F("ToddlerMode::Button -> LOCKED!")); return true; }
 
   pmode_t getActive()        final { return pmode_t::toddler; }
+
+#ifdef TonUINO_Esp32
+  String getDescription()    final { return "Gesperrt"; }
+#endif
+
 };
 
 class KindergardenMode: public Modifier {
@@ -89,6 +107,10 @@ public:
   pmode_t getActive (                          ) final { return pmode_t::kindergarden; }
   void   init       (pmode_t, uint8_t          ) final { cardQueued = false; }
 
+#ifdef TonUINO_Esp32
+  String getDescription() final { return "Kita Modus"; }
+#endif
+
 private:
   folderSettings nextCard{};
   bool cardQueued{false};
@@ -100,6 +122,11 @@ public:
   bool   handleNext    () final;
   bool   handlePrevious() final;
   pmode_t getActive    () final { return pmode_t::repeat_single; }
+
+#ifdef TonUINO_Esp32
+  String getDescription() final { return "Wiederhole Track"; }
+#endif
+
 };
 
 #ifdef MODIFICATION_CARD_JUKEBOX
@@ -107,10 +134,15 @@ class JukeboxModifier: public Modifier {
 public:
   JukeboxModifier() {}
   bool handleNext  (                           ) final;
+  bool handleButton(command cmd                ) final;
   bool handleRFID  (const folderSettings &newCard) final;
 
   pmode_t getActive (                          ) final { return pmode_t::jukebox; }
   void   init       (pmode_t, uint8_t          ) final { cards.clear(); }
+
+#ifdef TonUINO_Esp32
+  String getDescription() final;
+#endif
 
 private:
   typedef queue<folderSettings, jukebox_max_cards> card_queue;

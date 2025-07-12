@@ -61,6 +61,7 @@ public:
   bool isAbort(command cmd);
 
   static folderSettings folder;
+  static const __FlashStringHelper* state_str;
 protected:
   static Timer          timer;
   static bool           waitForPlayFinish; // with this it needs 66 Byte lesser program code ;-)
@@ -77,6 +78,10 @@ protected:
   bool handleShortcut(uint8_t shortCut);
   void handleReadCard();
   bool checkForShortcutAndShutdown(command cmd);
+#ifdef TonUINO_Esp32
+  bool checkForWritingCard(command cmd, command_e const &cmd_e);
+  bool writingCard{};
+#endif
 #ifdef NEO_RING
   void handleBrightness(command cmd);
 #endif

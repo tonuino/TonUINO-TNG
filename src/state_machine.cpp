@@ -102,12 +102,12 @@ void VoiceMenu<SMT>::react(command cmd) {
 
   switch(cmd) {
   case command::next10:
-    currentValue = min(currentValue + 10, numberOfOptions);
+    currentValue = min(currentValue + 10, static_cast<int>(numberOfOptions));
     playCurrentValue();
     break;
 
   case command::next:
-    currentValue = min(currentValue + 1, numberOfOptions);
+    currentValue = min(currentValue + 1, static_cast<int>(numberOfOptions));
     playCurrentValue();
     break;
 
@@ -123,7 +123,7 @@ void VoiceMenu<SMT>::react(command cmd) {
 
 #ifdef SerialInputAsCommand
   case command::menu_jump:
-    currentValue = min(max(tonuino.getMenuJump(), 1),numberOfOptions);
+    currentValue = min(max(tonuino.getMenuJump(), static_cast<uint8_t>(1)),numberOfOptions);
     playCurrentValue();
     break;
 #endif
@@ -520,7 +520,8 @@ bool Base::readCard() {
 
 bool Base::handleShortcut(uint8_t shortCut) {
   folderSettings sc_folderSettings = settings.getShortCut(shortCut);
-  if (sc_folderSettings.folder != 0) {
+  if (sc_folderSettings.folder != 0 && sc_folderSettings.special != 0xff) {
+    LOG(state_log, s_debug, F("shortcut, folder: "), sc_folderSettings.folder, F(", mode: "), static_cast<uint8_t>(sc_folderSettings.mode));
 #ifdef BT_MODULE
     if (sc_folderSettings.mode == pmode_t::switch_bt) {
       tonuino.switchBtModuleOnOff();
@@ -579,10 +580,13 @@ void Base::handleReadCard() {
 bool Base::checkForShortcutAndShutdown(command cmd) {
   uint8_t shortCut = 0xff;
   switch(cmd) {
-  case command::shortcut1: shortCut = 1      ; break;
-  case command::shortcut2: shortCut = 2      ; break;
-  case command::shortcut3: shortCut = 3      ; break;
-  case command::start    : shortCut = 4      ; break;
+  case command::shortcut1    : shortCut = 1      ; break;
+  case command::shortcut2    : shortCut = 2      ; break;
+  case command::shortcut3    : shortCut = 3      ; break;
+  case command::start        : shortCut = 4      ; break;
+#ifdef TonUINO_Esp32
+  case command::card_from_web: shortCut = 0      ; break;
+#endif
 #ifndef DISABLE_SHUTDOWN_VIA_BUTTON
   case command::shutdown : if (tonuino.getActiveModifier().handleButton(command::shutdown))
                              return false;
@@ -599,7 +603,7 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
     shortCut = static_cast<uint8_t>(cmd);
 #endif
   if (shortCut != 0xff) {
-    if (tonuino.getActiveModifier().handleButton(command::shortcut1))
+    if (tonuino.getActiveModifier().handleButton(cmd))
       return false;
     if (handleShortcut(shortCut))
       return true;
@@ -608,6 +612,28 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
   }
   return false;
 }
+
+#ifdef TonUINO_Esp32
+bool Base::checkForWritingCard(command cmd, command_e const &cmd_e) {
+
+  if (cmd == command::write_card_from_web) {
+    if (chip_card.isCardRemoved()) {
+      SM_writeCard::folder = settings.getShortCut(0);
+      SM_writeCard::start();
+      writingCard = true;
+      return true;
+    }
+  }
+  if (writingCard) {
+    SM_writeCard::dispatch(cmd_e);
+    if (SM_writeCard::is_in_state<finished_writeCard>() or SM_writeCard::is_in_state<finished_abort_writeCard>()) {
+      writingCard = false;
+    }
+    return true;
+  }
+  return false;
+}
+#endif
 
 #ifdef NEO_RING
 void Base::handleBrightness(command cmd) {
@@ -624,6 +650,7 @@ void Base::handleBrightness(command cmd) {
 
 void Idle::entry() {
   LOG(state_log, s_info, str_enter(), str_Idle());
+  state_str = str_Idle();
   tonuino.setStandbyTimer();
 }
 
@@ -639,6 +666,11 @@ void Idle::react(command_e const &cmd_e) {
 
   if (checkForShortcutAndShutdown(cmd))
     return;
+
+#ifdef TonUINO_Esp32
+  if (checkForWritingCard(cmd, cmd_e))
+    return;
+#endif
 
 #ifdef NEO_RING
   handleBrightness(cmd);
@@ -688,6 +720,10 @@ void Idle::react(card_e const &c_e) {
   if (c_e.card_ev != cardEvent::none) {
     LOG(state_log, s_debug, str_Idle(), F("::react(c) "), static_cast<int>(c_e.card_ev));
   }
+#ifdef TonUINO_Esp32
+  if (writingCard)
+    return;
+#endif
   switch (c_e.card_ev) {
   case cardEvent::inserted:
     if (readCard())
@@ -704,6 +740,7 @@ void Idle::react(card_e const &c_e) {
 
 void Play::entry() {
   LOG(state_log, s_info, str_enter(), str_Play());
+  state_str = str_Play();
   tonuino.disableStandbyTimer();
   mp3.start();
 }
@@ -800,6 +837,7 @@ void Play::react(card_e const &c_e) {
 
 void Pause::entry() {
   LOG(state_log, s_info, str_enter(), str_Pause());
+  state_str = str_Pause();
   tonuino.setStandbyTimer();
   mp3.pause();
 }
@@ -816,6 +854,11 @@ void Pause::react(command_e const &cmd_e) {
 
   if (checkForShortcutAndShutdown(cmd))
     return;
+
+#ifdef TonUINO_Esp32
+  if (checkForWritingCard(cmd, cmd_e))
+    return;
+#endif
 
 #ifdef NEO_RING
   handleBrightness(cmd);
@@ -845,6 +888,10 @@ void Pause::react(card_e const &c_e) {
   if (c_e.card_ev != cardEvent::none) {
     LOG(state_log, s_debug, str_Pause(), F("::react(c) "), static_cast<int>(c_e.card_ev));
   }
+#ifdef TonUINO_Esp32
+  if (writingCard)
+    return;
+#endif
   switch (c_e.card_ev) {
   case cardEvent::inserted:
     if (readCard()) {
@@ -872,6 +919,7 @@ void Pause::react(card_e const &c_e) {
 
 template<class P> void StartPlay<P>::entry() {
   LOG(state_log, s_info, str_enter(), str_StartPlay());
+  state_str = str_StartPlay();
   mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
   timer.stop();
 }
@@ -897,6 +945,7 @@ template<class P> void StartPlay<P>::react(command_e const &/*cmd_e*/) {
 
 void Quiz::entry() {
   LOG(state_log, s_info, str_enter(), str_Quiz());
+  state_str = str_Quiz();
   tonuino.disableStandbyTimer();
   tonuino.resetActiveModifier();
   numAnswer   = tonuino.getMyFolder().special;
@@ -1138,6 +1187,7 @@ void Quiz::finish() {
 
 void Memory::entry() {
   LOG(state_log, s_info, str_enter(), str_Memory());
+  state_str = str_Memory();
   tonuino.disableStandbyTimer();
   tonuino.resetActiveModifier();
   first  = 0;
@@ -1293,6 +1343,7 @@ bool Amin_BaseWriteCard::handleWriteCard(command_e const &cmd_e, bool return_to_
 
 void Admin_Allow::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_Allow());
+  state_str = str_Admin_Allow();
   current_subState = select_method;
   tonuino.resetActiveModifier();
 }
@@ -1411,6 +1462,7 @@ void Admin_Allow::react(command_e const &cmd_e) {
 
 void Admin_Entry::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_Entry());
+  state_str = str_Admin_Entry();
   tonuino.disableStandbyTimer();
   tonuino.resetActiveModifier();
 
@@ -1524,6 +1576,7 @@ void Admin_Entry::react(command_e const &cmd_e) {
 
 void Admin_NewCard::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_NewCard());
+  state_str = str_Admin_NewCard();
   if (wait_track_finished) {
     current_subState = wait_track;
     timer.start(dfPlayer_timeUntilStarts);
@@ -1579,6 +1632,7 @@ void Admin_NewCard::react(command_e const &cmd_e) {
 
 void Admin_SimpleSetting::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_SimpleSetting(), type);
+  state_str = str_Admin_SimpleSetting();
 
   numberOfOptions   = type == maxVolume  ? 30 - mp3.getMinVolume()                        :
                       type == minVolume  ? mp3.getMaxVolume() - 1                         :
@@ -1632,6 +1686,7 @@ void Admin_SimpleSetting::react(command_e const &cmd_e) {
 
 void Admin_ModCard::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_ModCard());
+  state_str = str_Admin_ModCard();
 
   numberOfOptions   = 8;
   startMessage      = mp3Tracks::t_970_modifier_Intro;
@@ -1738,6 +1793,7 @@ void Admin_ModCard::react(command_e const &cmd_e) {
 
 void Admin_ShortCut::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_ShortCut());
+  state_str = str_Admin_ShortCut();
 
   numberOfOptions   = 4;
   startMessage      = mp3Tracks::t_940_shortcut_into;
@@ -1807,6 +1863,7 @@ void Admin_ShortCut::react(command_e const &cmd_e) {
 
 void Admin_StandbyTimer::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_StandbyTimer());
+  state_str = str_Admin_StandbyTimer();
 
   numberOfOptions   = 5;
   startMessage      = mp3Tracks::t_960_timer_intro;
@@ -1845,6 +1902,7 @@ void Admin_StandbyTimer::react(command_e const &cmd_e) {
 
 void Admin_CardsForFolder::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_CardsForFolder());
+  state_str = str_Admin_CardsForFolder();
 
   folder.mode = pmode_t::einzel;
 
@@ -1929,6 +1987,7 @@ void Admin_CardsForFolder::react(command_e const &cmd_e) {
 
 void Admin_InvButtons::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_InvButtons());
+  state_str = str_Admin_InvButtons();
 
   numberOfOptions   = 2;
   startMessage      = mp3Tracks::t_933_switch_volume_intro;
@@ -1964,6 +2023,7 @@ void Admin_InvButtons::react(command_e const &cmd_e) {
 
 void Admin_ResetEeprom::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_ResetEeprom());
+  state_str = str_Admin_ResetEeprom();
   settings.clearEEPROM();
   settings.resetSettings();
   mp3.enqueueMp3FolderTrack(mp3Tracks::t_999_reset_ok);
@@ -1979,6 +2039,7 @@ void Admin_ResetEeprom::react(command_e const &/*cmd_e*/) {
 
 void Admin_LockAdmin::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_LockAdmin());
+  state_str = str_Admin_LockAdmin();
 
   numberOfOptions   = 3;
   startMessage      = mp3Tracks::t_980_admin_lock_intro;
@@ -2038,6 +2099,7 @@ void Admin_LockAdmin::react(command_e const &cmd_e) {
 
 void Admin_PauseIfCardRemoved::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_PauseIfCardRemoved());
+  state_str = str_Admin_PauseIfCardRemoved();
 
   numberOfOptions   = 2;
   startMessage      = mp3Tracks::t_913_pause_on_card_removed;
@@ -2074,6 +2136,7 @@ void Admin_PauseIfCardRemoved::react(command_e const &cmd_e) {
 #ifdef MEMORY_GAME
 void Admin_MemoryGameCards::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_MemoryGameCards());
+  state_str = str_Admin_MemoryGameCards();
 
   folder.mode     = pmode_t::memory_game;
   folder.special  = 1; // start with card 1
@@ -2178,6 +2241,8 @@ template<SM_type SMT>
 Timer           SM<SMT>::timer{};
 template<SM_type SMT>
 bool            SM<SMT>::waitForPlayFinish{};
+template<SM_type SMT>
+const __FlashStringHelper* SM<SMT>::state_str{};
 
 template<SM_type SMT>
 uint8_t   VoiceMenu<SMT>::numberOfOptions  ;
