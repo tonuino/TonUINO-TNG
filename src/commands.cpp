@@ -3,6 +3,10 @@
 #include "constants.hpp"
 #include "logger.hpp"
 
+#ifdef USE_LED_BUTTONS
+#include "tonuino.hpp"
+#endif
+
 const command cmd_table[][4] PROGMEM = {
 /*  raw commands                   adm             idle/pause               play           play_invert       */
 /*  0 none,           */  { command::none      , command::none       , command::none       , command::none        }
@@ -98,6 +102,14 @@ command Commands::getCommand(commandRaw b, state_for_command s) {
   if (b < commandRaw::cmd_end) {
     PROGMEM_read(&cmd_table[static_cast<int>(b)][static_cast<int>(s)], ret);
   }
+
+#ifdef USE_LED_BUTTONS
+  // The LED control is initialized here to allow triggering
+  // from both a physical button and remote commands received
+  // via the web frontend interface (for ESP32-based devices).
+  if (ret != command::none)
+    Tonuino::getTonuino().getLedManager().handleBlinkOnce();
+#endif
 
   if (ret != command::none && ret < command::last)
 #ifdef ALLinONE

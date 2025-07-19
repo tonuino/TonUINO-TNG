@@ -40,6 +40,11 @@ ISR(TIMER1_COMPA_vect){
 #endif
 
 void Tonuino::setup() {
+#ifdef USE_LED_BUTTONS
+  ledManager.begin();
+  ledManager.setState(STARTUP);
+#endif
+
 #ifdef USE_TIMER
   setup_timer();
 #endif
@@ -266,6 +271,36 @@ void Tonuino::loop() {
 
 #ifdef TonUINO_Esp32
   webservice.loop();
+#endif
+
+#ifdef USE_LED_BUTTONS
+  if (SM_tonuino::is_in_state<Idle>())
+    ledManager.setState(AWAIT_INPUT);
+  else if (SM_tonuino::is_in_state<StartPlay<Play>>()
+#ifdef QUIZ_GAME
+           || SM_tonuino::is_in_state<StartPlay<Quiz>>()
+#endif
+#ifdef MEMORY_GAME
+           || SM_tonuino::is_in_state<StartPlay<Memory>>()
+#endif
+  )
+    ledManager.setState(STARTUP);
+  else if (SM_tonuino::is_in_state<Play>())
+    ledManager.setState(PLAYING);
+  else if (SM_tonuino::is_in_state<Pause>())
+    ledManager.setState(PAUSED);
+#ifdef QUIZ_GAME
+  else if (SM_tonuino::is_in_state<Quiz>())
+    ledManager.setState(PLAYING); // TODO Should be changed to another state.
+#endif                            // QUIZ_GAME
+#ifdef MEMORY_GAME
+  else if (SM_tonuino::is_in_state<Memory>())
+    ledManager.setState(PLAYING); // TODO should be changed to another state
+#endif                            // MEMORY_GAME
+  else                            // admin menu
+    ledManager.setState(AWAIT_INPUT);
+
+  ledManager.update();
 #endif
 
   unsigned long  stop_cycle = millis();
