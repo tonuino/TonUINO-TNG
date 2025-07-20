@@ -15,6 +15,10 @@
 #define ROTARY_ENCODER_USES_TIMER
 #endif
 
+#ifndef TonUINO_Esp32
+#define IRAM_ATTR
+#endif
+
 class RotaryEncoder: public CommandSource {
 public:
 
