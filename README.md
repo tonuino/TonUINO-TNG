@@ -112,6 +112,7 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 ## Version 3.3.1 (22.07.2025)
 - [Issue 270](https://github.com/tonuino/TonUINO-TNG/issues/270): Add LedManager to control button LEDs with animated states
 - [Issue 272](https://github.com/tonuino/TonUINO-TNG/issues/272): Refactor constants.hpp - Avoid unnecessary global definitions
+- [Issue 268](https://github.com/tonuino/TonUINO-TNG/issues/268): Compile Error when using Rotary-Encoder and Classic HW
 
 ## Version 3.3.0 (09.07.2025)
 - [Issue 259](https://github.com/tonuino/TonUINO-TNG/issues/259): New Hardware Type ESP32 Nano
