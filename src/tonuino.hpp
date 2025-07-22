@@ -18,6 +18,10 @@
 #ifdef TonUINO_Esp32
 #include "webservice.hpp"
 #endif
+#ifdef USE_LED_BUTTONS
+#include "led_manager.hpp"
+#endif
+
 
 class Tonuino {
 public:
@@ -60,6 +64,9 @@ public:
   Chip_card& getChipCard() { return chip_card; }
 #ifdef NEO_RING
   Ring&     getRing     () { return ring     ; }
+#endif
+#ifdef USE_LED_BUTTONS
+  LedManager& getLedManager () {return ledManager;};
 #endif
 #ifdef BAT_VOLTAGE_MEASUREMENT
   BatVoltage& getBatVoltage() { return batVoltage; }
@@ -134,6 +141,9 @@ private:
   Chip_card            chip_card           {mp3};
 #ifdef NEO_RING
   Ring                 ring                {};
+#endif
+#ifdef USE_LED_BUTTONS
+  LedManager           ledManager          {};
 #endif
 
   friend class Base;

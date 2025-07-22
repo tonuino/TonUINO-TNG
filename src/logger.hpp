@@ -17,6 +17,9 @@ DEFINE_LOGGER(mp3_log     , s_info   , tonuino_log);
 DEFINE_LOGGER(settings_log, s_info   , tonuino_log);
 DEFINE_LOGGER(batvol_log  , s_info   , tonuino_log);
 DEFINE_LOGGER(webserv_log , s_info   , tonuino_log);
+#ifdef USE_LED_BUTTONS
+DEFINE_LOGGER(ledManager_log  , s_info   , tonuino_log);
+#endif
 #else
 DEFINE_LOGGER(init_log    , s_info   , tonuino_log);
 DEFINE_LOGGER(card_log    , s_warning, tonuino_log);

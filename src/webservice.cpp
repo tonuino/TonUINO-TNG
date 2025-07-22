@@ -1144,6 +1144,9 @@ String Webservice::getInfoData(const String& id){
     #ifdef USE_TRAEGER_PLATINE_SHUTDOWN
       p += "<br>Shutdown mit Tägerplatine";
     #endif
+    #ifdef USE_LED_BUTTONS
+      p += "<br>Animierte LED Buttons";
+    #endif
 
 #define STRING(s) #s
 #define TO_LITERAL(string) STRING(string)
