@@ -1,6 +1,8 @@
-#include "constants.hpp"
-#ifdef USE_LED_BUTTONS
 #include "led_manager.hpp"
+#include "constants.hpp"
+
+#ifdef USE_LED_BUTTONS
+
 #include "logger.hpp"
 
 void LedManager::begin() {
@@ -8,88 +10,81 @@ void LedManager::begin() {
     pinMode(pin, OUTPUT);
   }
 
-  LOG(ledManager_log, s_info, F("LEDs(D/P/U): "), LED_DOWN_PIN, F(" "),
-      LED_PLAY_PIN, F(" "), LED_UP_PIN);
+  setAllOff();
+
+  LOG(ledManager_log, s_info, F("LEDs(D/P/U): "), led_down_pin, F(" "), led_play_pin, F(" "), led_up_pin);
   LOG(ledManager_log, s_info, F("NUM LEDS"), NUM_LEDS, F(" "));
 }
 
-void LedManager::setState(LedState state) {
+void LedManager::setState(ledState state) {
 
   if (currentState != state) {
     currentState = state;
     animationStep = 0;
 
     if (!buttonPressBlinkActive) //Prevent immediate update if a blink triggered by a button press is active.
-      lastUpdate = 0;
+      updateTimer.start(led_update_interval);
 
-    if (currentState == SHUTDOWN) //Immediate Update
-      lastUpdate = 0;
+    if (currentState == ledState::shutdown) //Immediate Update
+      updateTimer.stop();
 
     update();
   }
 }
 
 void LedManager::handleBlinkOnce() {
-  for (uint8_t pin : ledPins) {
-    digitalWrite(pin, !digitalRead(pin));
-  }
+  toggleAll();
 
   buttonPressBlinkActive = true;
-  lastUpdate = millis() - 400; // Reduce the blink cycle duration to speed up blinking.
-
+  updateTimer.start(led_short_blink);
 }
 
-void LedManager::setAll(bool state) {
+void LedManager::setAll(uint8_t state) {
   for (uint8_t pin : ledPins) {
     digitalWrite(pin, state);
   }
 }
 
-void LedManager::setAllOn() { setAll(true); }
+void LedManager::toggleAll() {
+  for (uint8_t pin : ledPins) {
+    digitalWrite(pin, !digitalRead(pin));
+  }
+}
 
-void LedManager::setAllOff() { setAll(false); }
-
-void LedManager::setLED(bool state, uint8_t pin) { digitalWrite(pin, state); }
-
-void LedManager::toggleLED(uint8_t pin) {
-  digitalWrite(pin, !digitalRead(pin));
+void LedManager::setLED(uint8_t state, uint8_t pin) {
+  digitalWrite(pin, state);
 }
 
 void LedManager::update() {
 
-  unsigned long now = millis();
-
   // Only update LEDs if enough time has passed since last update.
-  if (now - lastUpdate < LED_UPDATE_INTERVAL) {
+  if (not updateTimer.isExpired())
     return;
-  }
+  else
+    updateTimer.start(led_update_interval);
 
-  lastUpdate = now;
-
-  if (buttonPressBlinkActive && currentState != SHUTDOWN) {
-    for (uint8_t pin : ledPins) {
-      toggleLED(pin);
-    }
+  if (buttonPressBlinkActive && currentState != ledState::shutdown) {
+    toggleAll();
     buttonPressBlinkActive = false;
     return;
   }
 
   switch (currentState) {
-  case STARTUP:
+  case ledState::startup:
     // Running light effect: only one LED is on, moves to next LED on each step.
     for (size_t i = 0; i < NUM_LEDS; ++i) {
       digitalWrite(ledPins[i], animationStep % NUM_LEDS == i);
     }
-    animationStep++;
+    ++animationStep;
     break;
 
-  case AWAIT_INPUT:
+  case ledState::await_input:
     /// All LEDs blink on and off in sync.
     (animationStep % 2 == 0) ? setAllOn() : setAllOff();
-     animationStep = (animationStep + 1) % 2;
+     ++animationStep;
     break;
 
-  case PLAYING:
+  case ledState::playing:
     // All LEDs turned on continuously. Ensures LEDs are only set once to avoid repeated writes.
     if (animationStep == 0) {
       setAllOn();
@@ -97,15 +92,15 @@ void LedManager::update() {
     } 
     break;
 
-  case PAUSED:
+  case ledState::paused:
     // Only the middle LED (PLAY) blinks; others remain off.
-    digitalWrite(LED_DOWN_PIN, LOW);
-    digitalWrite(LED_PLAY_PIN, animationStep % 2 == 0);
-    digitalWrite(LED_UP_PIN, LOW);
-    animationStep = (animationStep + 1) % 2;
+    digitalWrite(led_down_pin, LOW);
+    digitalWrite(led_play_pin, animationStep % 2 == 0);
+    digitalWrite(led_up_pin, LOW);
+    ++animationStep;
     break;
 
-  case SHUTDOWN:
+  case ledState::shutdown:
     // Turn off all LEDs.
     setAllOff();
     break;

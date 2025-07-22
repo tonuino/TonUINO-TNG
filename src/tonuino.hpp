@@ -22,7 +22,6 @@
 #include "led_manager.hpp"
 #endif
 
-
 class Tonuino {
 public:
   Tonuino() {}
@@ -66,7 +65,7 @@ public:
   Ring&     getRing     () { return ring     ; }
 #endif
 #ifdef USE_LED_BUTTONS
-  LedManager& getLedManager () {return ledManager;};
+  LedManager& getLedManager() { return ledManager; }
 #endif
 #ifdef BAT_VOLTAGE_MEASUREMENT
   BatVoltage& getBatVoltage() { return batVoltage; }

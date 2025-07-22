@@ -133,6 +133,7 @@ public:
 
   commandRaw getCommandRaw();
   command    getCommand   (commandRaw b, state_for_command s);
+  command    getLastCommand() { return last_command; }
 
   const __FlashStringHelper* getCommandRawStr(commandRaw cmd);
   const __FlashStringHelper* getCommandStr   (command    cmd);
@@ -153,6 +154,7 @@ public:
 private:
   const Settings&           settings;
   array<CommandSource*, 4>  sources;
+  command                   last_command{command::none};
 };
 
 #endif /* SRC_COMMANDS_HPP_ */
