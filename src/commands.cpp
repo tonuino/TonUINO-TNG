@@ -99,6 +99,8 @@ command Commands::getCommand(commandRaw b, state_for_command s) {
     PROGMEM_read(&cmd_table[static_cast<int>(b)][static_cast<int>(s)], ret);
   }
 
+  last_command = ret;
+
   if (ret != command::none && ret < command::last)
 #ifdef ALLinONE
     LOG(button_log, s_debug, F("btn/cmd: "), static_cast<uint8_t>(b), F("/"), static_cast<uint8_t>(ret));

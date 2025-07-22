@@ -25,6 +25,7 @@
  * bat voltage measurement |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |
  * Bluetooth ON/OFF        |   |   |   |   |   |   |   |   |   |   | x*|   |   | x |   |   |
  * Bluetooth Pairing       |   |   |   |   |   |   |   |   |   |   |   | x*|   |   |   | x |
+ * Button LED Pins         |   |   |   |   |   | P |   |   |   |   |   |   | D | U |   |   |
  * #########################################################################################
  *
  * (*) Hardware Serial on Every/Esp32-Nano
@@ -358,6 +359,46 @@ inline constexpr float   batVoltageEmpty               = 2.90;
  */
 //#define MODIFICATION_CARD_JUKEBOX
 inline constexpr uint8_t jukebox_max_cards  = 10;
+
+// ######################################################################
+
+/* Enable this definition to activate animated LED button support via the LedManager.
+ *
+ * LED behavior:
+ * - Startup:        All LEDs blink one after another.
+ * - Awaiting input: All LEDs blink synchronously.
+ * - Playing:        All LEDs stay on continuously.
+ * - Paused:         Only the Play/Pause LED blinks.
+ * - Shutdown:       All LEDs are turned off.
+ * - On a valid button press, all LEDs blink once by toggling their current state.
+ *
+ * Use a series resistor (e.g. 1KΩ) per LED to limit current.
+ *
+ * ----------------------------------------------------------------------
+ *
+ * Nachfolgenden Kommentar entfernen, um animierte LED-Tasten über den LedManager zu nutzen.
+ *
+ * LED-Verhalten:
+ * - Beim Start:          Alle LEDs blinken nacheinander.
+ * - Wartet auf Eingabe:  Alle LEDs blinken synchron.
+ * - Wiedergabe läuft:    Alle LEDs leuchten dauerhaft.
+ * - Wiedergabe pausiert: Nur die Play/Pause-LED blinkt.
+ * - Abschaltung:         Alle LEDs werden ausgeschalten.
+ * - Bei einem gültigen Tastendruck blinken alle LEDs einmal, indem ihr aktueller Zustand invertiert wird.
+ *
+ * Verwende einen Widerstand (z.B. 1KΩ) in Reihe zu jeder LED zur Strombegrenzung.
+ */
+
+//#define USE_LED_BUTTONS
+
+#ifdef USE_LED_BUTTONS
+inline constexpr uint8_t led_play_pin = A5;
+inline constexpr uint8_t led_up_pin   = D6;
+inline constexpr uint8_t led_down_pin = D5;
+
+inline constexpr unsigned long led_update_interval = 800; // ms
+inline constexpr unsigned long led_short_blink     = 400; // ms
+#endif // USE_LED_BUTTONS
 
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
