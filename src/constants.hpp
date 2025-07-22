@@ -149,6 +149,7 @@
  */
 //#define ROTARY_ENCODER_LONGPRESS
 
+#ifdef ROTARY_ENCODER
 #ifdef ALLinONE_Plus
 // if using Rotary Encoder Buchse
 //inline constexpr uint8_t   rotaryEncoderClkPin    = 31; // PE1
@@ -161,6 +162,7 @@ inline constexpr uint8_t   rotaryEncoderDtPin     = 37; // PF3
 inline constexpr uint8_t   rotaryEncoderClkPin    = A3; // A3
 inline constexpr uint8_t   rotaryEncoderDtPin     = A4; // A4
 #endif // ALLinONE_Plus
+#endif // ROTARY_ENCODER
 
 // ######################################################################
 
@@ -168,11 +170,14 @@ inline constexpr uint8_t   rotaryEncoderDtPin     = A4; // A4
  * um den Poti zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
  */
 //#define POTI
+
+#ifdef POTI
 #ifdef ALLinONE_Plus
 inline constexpr uint8_t   potiPin    = A14; // AiO+ PF4
 #else
 inline constexpr uint8_t   potiPin    = A3 ; // AiO/Classic A3
 #endif // ALLinONE_Plus
+#endif // POTI
 
 // ######################################################################
 
@@ -185,6 +190,7 @@ inline constexpr uint8_t   potiPin    = A3 ; // AiO/Classic A3
 //#define NEO_RING_EXT
 //#define NEO_RING_2
 
+#ifdef NEO_RING
 #ifdef ALLinONE_Plus
 inline constexpr uint8_t neoPixelRingPin = 10; // PB2 on AiOplus (Erweiterungsleiste (Female))
 #else
@@ -199,6 +205,7 @@ inline constexpr uint8_t neoPixelRingPin2= D2; // D2 on AiO/Classic (only Every)
 #endif // ALLinONE_Plus
 inline constexpr uint8_t neoPixelNumber2 = 24; // Total Number of Pixels
 #endif // NEO_RING_2
+#endif // NEO_RING
 
 // ######################################################################
 
@@ -209,10 +216,13 @@ inline constexpr uint8_t neoPixelNumber2 = 24; // Total Number of Pixels
  * (automatisch eingeschaltet für AiO und AiOplus)
  */
 //#define SPKONOFF
+
+#ifdef SPKONOFF
 #if not defined(ALLinONE_Plus) and not defined(ALLinONE)
 inline constexpr uint8_t       ampEnablePin     = D6;
 inline constexpr levelType     ampEnablePinType = levelType::activeHigh;
 #endif
+#endif // SPKONOFF
 
 // ######################################################################
 
@@ -221,10 +231,13 @@ inline constexpr levelType     ampEnablePinType = levelType::activeHigh;
  * (automatisch eingeschaltet für AiOplus)
  */
 //#define HPJACKDETECT
+
+#ifdef HPJACKDETECT
 #ifndef ALLinONE_Plus
 inline constexpr uint8_t       dfPlayer_noHeadphoneJackDetect     = D8;
 inline constexpr levelType     dfPlayer_noHeadphoneJackDetectType = levelType::activeLow;
 #endif
+#endif // HPJACKDETECT
 
 // ######################################################################
 
@@ -269,6 +282,8 @@ inline constexpr levelType     dfPlayer_noHeadphoneJackDetectType = levelType::a
  * um den spezial Shortcut beim Start via GPIO zu aktivieren, in der nächste Zeile den Kommentar entfernen
  */
 //#define SPECIAL_START_SHORTCUT
+
+#ifdef SPECIAL_START_SHORTCUT
 #ifdef ALLinONE_Plus
 inline constexpr uint8_t   specialStartShortcutPin     = 33; // PE3
 #else
@@ -277,6 +292,7 @@ inline constexpr uint8_t   specialStartShortcutPin     = A6; // A6 on AiO/Classi
 inline constexpr levelType specialStartShortcutPinType = levelType::activeHigh;
 inline constexpr uint8_t   specialStartShortcutFolder  = 1;
 inline constexpr uint8_t   specialStartShortcutTrack   = 1;
+#endif // SPECIAL_START_SHORTCUT
 
 // ######################################################################
 
@@ -284,6 +300,8 @@ inline constexpr uint8_t   specialStartShortcutTrack   = 1;
  * um die Unterstützung des BT Modules zu aktivieren, in der nächste Zeile den Kommentar entfernen
  */
 //#define BT_MODULE
+
+#ifdef BT_MODULE
 #ifdef DFPlayerUsesHardwareSerial
 inline constexpr uint8_t   btModuleOnPin               =  D2; // D2
 inline constexpr uint8_t   btModulePairingPin          =  D3; // D3
@@ -294,6 +312,7 @@ inline constexpr uint8_t   btModulePairingPin          =  D8; // D8
 inline constexpr levelType btModuleOnPinType           = levelType::activeHigh;
 inline constexpr levelType btModulePairingPinType      = levelType::activeHigh;
 inline constexpr unsigned long btModulePairingPulse    = 500;
+#endif // BT_MODULE
 
 // ######################################################################
 
@@ -302,6 +321,8 @@ inline constexpr unsigned long btModulePairingPulse    = 500;
  * (nicht für ALLinONE, nicht empfohlen für TonUINO_Classic)
  */
 //#define BAT_VOLTAGE_MEASUREMENT
+
+#ifdef BAT_VOLTAGE_MEASUREMENT
 #if not defined(ALLinONE_Plus) and not defined(ALLinONE)
 inline constexpr uint8_t voltageMeasurementPin         = A5;
 #endif // ALLinONE_Plus
@@ -328,6 +349,7 @@ inline constexpr float   batVoltageEmpty               = 2.90;
 // for Li-PO
 //inline constexpr float   batVoltageLow                 = 3.40;
 //inline constexpr float   batVoltageEmpty               = 3.20;
+#endif // BAT_VOLTAGE_MEASUREMENT
 
 // ######################################################################
 
@@ -358,7 +380,10 @@ inline constexpr float   batVoltageEmpty               = 2.90;
  * wenn du die Jukebox haben willst, in den nächsten Zeile den Kommentar entfernen
  */
 //#define MODIFICATION_CARD_JUKEBOX
+
+#ifdef MODIFICATION_CARD_JUKEBOX
 inline constexpr uint8_t jukebox_max_cards  = 10;
+#endif
 
 // ######################################################################
 
