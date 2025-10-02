@@ -54,7 +54,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: TonUINO_firmware
-          path: .pio/build/**/firmware.hex
+          path: |
+            .pio/build/**/firmware.hex
+            .pio/build/**/firmware.bin
       - uses: actions/upload-artifact@v4
         with:
           name: TonUINO_sd_card
