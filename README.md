@@ -109,7 +109,8 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.1 (02.10.2025)
+## Version 3.3.1 (09.10.2025)
+- [Issue 278](https://github.com/tonuino/TonUINO-TNG/issues/278): Version string not shown in Log
 - [Issue 276](https://github.com/tonuino/TonUINO-TNG/issues/276): Deploy also binary for Esp32
 
 ## Version 3.3.1 (22.07.2025)

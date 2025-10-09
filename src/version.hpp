@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 
-const char TONUINO_TNG_VERSION[] PROGMEM = "V3.3.1 02.10.25";
-
+static const __FlashStringHelper* TONUINO_TNG_VERSION() { return F("V3.3.1 09.10.25"); }
 
 #endif /* SRC_VERSION_HPP_ */

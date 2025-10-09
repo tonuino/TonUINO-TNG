@@ -43,7 +43,7 @@ void setup()
   LOG(init_log, s_error, F("created by Thorsten Voß and licensed under GNU/GPL."));
   LOG(init_log, s_error, F("Information and contribution at https://tonuino.de."));
   LOG(init_log, s_error, F(""));
-  LOG(init_log, s_error, TONUINO_TNG_VERSION);
+  LOG(init_log, s_error, TONUINO_TNG_VERSION());
 
 #ifdef TonUINO_Classic
   LOG(init_log, s_error, F("C "), lf_no);
