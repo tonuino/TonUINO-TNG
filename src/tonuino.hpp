@@ -35,6 +35,7 @@ public:
 
   void       nextTrack(uint8_t tracks = 1, bool fromOnPlayFinished = false);
   void   previousTrack(uint8_t tracks = 1);
+  void     jumpToTrack(uint8_t track);
 
   void resetActiveModifier   () { activeModifier = &noneModifier; }
   Modifier& getActiveModifier() { return *activeModifier; }

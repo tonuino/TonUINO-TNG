@@ -264,6 +264,18 @@ void Mp3::playPrevious(uint8_t tracks) {
   }
 }
 
+void Mp3::jumpTo(uint8_t track) {
+#ifdef HPJACKDETECT
+  if (playing == play_folder)
+    tempSpkOn = 0;
+#endif
+  if (playing == play_folder && (track < q.size())) {
+    current_track = track;
+    LOG(mp3_log, s_debug, F("jumpTo: "), current_track);
+    playCurrent();
+  }
+}
+
 uint16_t Mp3::getFolderTrackCount(uint16_t folder)
 {
     uint16_t ret = 0;

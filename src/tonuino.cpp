@@ -430,6 +430,14 @@ void Tonuino::previousTrack(uint8_t tracks) {
   }
 }
 
+void Tonuino::jumpToTrack(uint8_t track) {
+  LOG(play_log, s_debug, F("jumpToTrack"));
+  mp3.jumpTo(track);
+  if (mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1)) {
+    settings.writeFolderSettingToFlash(myFolder.folder, mp3.getCurrentTrack());
+  }
+}
+
 // functions for the standby timer (e.g.. with Pololu-Switch or Mosfet)
 void Tonuino::setStandbyTimer() {
   LOG(standby_log, s_debug, F("setStandbyTimer"));

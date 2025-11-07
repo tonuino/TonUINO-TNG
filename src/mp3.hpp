@@ -231,6 +231,7 @@ public:
   void playCurrent();
   void playNext(uint8_t tracks, bool fromOnPlayFinished);
   void playPrevious(uint8_t tracks = 1);
+  void jumpTo(uint8_t track);
   uint8_t getCurrentTrack() { return playing ? q.get(current_track) : 0; }
   uint16_t getFolderTrackCount(uint16_t folder);
   uint8_t getCurrentFolder() { return current_folder; }
