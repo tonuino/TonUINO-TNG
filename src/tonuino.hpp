@@ -154,6 +154,9 @@ private:
   ToddlerMode          toddlerMode         {};
   KindergardenMode     kindergardenMode    {};
   RepeatSingleModifier repeatSingleModifier{};
+#ifdef MODIFICATION_CARD_PAUSE_AFTER_TRACK
+  PauseAfterTrack      pauseAfterTrack     {};
+#endif
 #ifdef MODIFICATION_CARD_JUKEBOX
   JukeboxModifier      jukeboxModifier     {};
 #endif

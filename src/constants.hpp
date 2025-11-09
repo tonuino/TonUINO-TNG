@@ -387,6 +387,13 @@ inline constexpr uint8_t jukebox_max_cards  = 10;
 
 // ######################################################################
 
+/* uncomment the below lines if you want to have the Pause after Track modification card
+ * wenn du die Pause nach jedem Track Modifikationskarte haben willst, in den nächsten Zeile den Kommentar entfernen
+ */
+//#define MODIFICATION_CARD_PAUSE_AFTER_TRACK
+
+// ######################################################################
+
 /* Enable this definition to activate animated LED button support via the LedManager.
  *
  * LED behavior:

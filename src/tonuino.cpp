@@ -573,6 +573,13 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
                               activeModifier = &repeatSingleModifier;
                               break;
 
+#ifdef MODIFICATION_CARD_PAUSE_AFTER_TRACK
+  case pmode_t::pause_aft_tr: LOG(card_log, s_info, F("act. pauseAftTr"));
+                              mp3.playAdvertisement(advertTracks::t_260_activate_mod_card, false/*olnyIfIsPlaying*/);
+                              activeModifier = &pauseAfterTrack;
+                              break;
+#endif
+
 #ifdef MODIFICATION_CARD_JUKEBOX
   case pmode_t::jukebox:      LOG(card_log, s_info, F("act. jukebox"));
                               mp3.playAdvertisement(advertTracks::t_309_jukebox          , false/*olnyIfIsPlaying*/);

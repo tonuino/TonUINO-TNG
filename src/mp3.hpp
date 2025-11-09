@@ -149,6 +149,7 @@ enum class mp3Tracks: uint16_t {
   t_976_modifier_repeat1       = 976,
   t_977_modifier_bluetooth     = 977,
   t_978_modifier_jukebox       = 978,
+  t_979_modifier_pauseAftTr    = 979,
   t_980_admin_lock_intro       = 980,
   t_981_admin_lock_disabled    = 981,
   t_982_admin_lock_card        = 982,

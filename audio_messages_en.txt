@@ -117,6 +117,8 @@ mp3/0974_modifier_Toddler.mp3|Toddler mode - All keys of the TonUINO are locked 
 mp3/0975_modifier_KinderGarden.mp3|Kindergarten mode - In order to avoid conflicts, new cards are not played immediately, but only after the current song is over. The forward and back buttons are locked.
 mp3/0976_modifier_repeat1.mp3|Repeat title - repeat the current title endlessly.
 mp3/0977_modifier_bluetooth.mp3|Bluetooth card - You can use the Bluetooth card to switch Bluetooth on or off.
+mp3/0978_modifier_jukebox.mp3|Jukebox card - If a track is already playing and a new card is inserted, it is not played immediately but placed in a queue. Only when the current card has finished playing is the next card taken from the queue.
+mp3/0979_modifier_pauseAftTr.mp3|Pause after each track card - With this card, the Tonuino enters pause state after each track.
 mp3/0980_admin_lock_intro.mp3|Please select if and how the admin menu should be protected.
 mp3/0981_admin_lock_disabled.mp3|No protection - the admin menu can be activated at any time by pressing all three buttons.
 mp3/0982_admin_lock_card.mp3|Admin card only - the admin menu can only be opened with an admin card. A new admin card can be learned at any time.

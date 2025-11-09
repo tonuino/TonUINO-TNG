@@ -912,6 +912,13 @@ void Pause::react(card_e const &c_e) {
       }
       handleReadCard();
     }
+    else {
+      if (lastCardRead.mode == pmode_t::memory_game) {
+        mp3.jumpTo(lastCardRead.special-1);
+        transit<Play>();
+        return;
+      }
+    }
     return;
   case cardEvent::removed:
     break;
@@ -1693,7 +1700,7 @@ void Admin_ModCard::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_ModCard());
   state_str = str_Admin_ModCard();
 
-  numberOfOptions   = 8;
+  numberOfOptions   = 9;
   startMessage      = mp3Tracks::t_970_modifier_Intro;
   messageOffset     = mp3Tracks::t_970_modifier_Intro;
   preview           = false;
