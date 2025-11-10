@@ -1700,7 +1700,7 @@ void Admin_ModCard::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_ModCard());
   state_str = str_Admin_ModCard();
 
-  numberOfOptions   = 9;
+  numberOfOptions   = 10;
   startMessage      = mp3Tracks::t_970_modifier_Intro;
   messageOffset     = mp3Tracks::t_970_modifier_Intro;
   preview           = false;
@@ -2054,8 +2054,8 @@ void Admin_LockAdmin::entry() {
   state_str = str_Admin_LockAdmin();
 
   numberOfOptions   = 3;
-  startMessage      = mp3Tracks::t_980_admin_lock_intro;
-  messageOffset     = mp3Tracks::t_980_admin_lock_intro;
+  startMessage      = mp3Tracks::t_985_admin_lock_intro;
+  messageOffset     = mp3Tracks::t_985_admin_lock_intro;
   preview           = false;
   previewFromFolder = 0;
 

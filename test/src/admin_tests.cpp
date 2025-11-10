@@ -39,7 +39,7 @@ public:
     case Admin_Entry_menu_items::Admin_CardsForFolder          : return mp3Tracks::t_301_select_folder;
     case Admin_Entry_menu_items::Admin_InvButtons              : return mp3Tracks::t_933_switch_volume_intro;
     case Admin_Entry_menu_items::Admin_ResetEeprom             : return mp3Tracks::t_999_reset_ok;
-    case Admin_Entry_menu_items::Admin_LockAdmin               : return mp3Tracks::t_980_admin_lock_intro;
+    case Admin_Entry_menu_items::Admin_LockAdmin               : return mp3Tracks::t_985_admin_lock_intro;
     case Admin_Entry_menu_items::Admin_PauseIfCardRemoved      : return mp3Tracks::t_913_pause_on_card_removed;
     }
     return mp3Tracks::t_0;
@@ -356,7 +356,7 @@ TEST_F(admin_test_fixture, sunny_day_adm) {
   EXPECT_TRUE(SM_tonuino::is_in_state<Admin_LockAdmin>());
   execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_mp3());
-  EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_980_admin_lock_intro));
+  EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_985_admin_lock_intro));
 
   // end t_980_admin_lock_intro
   getMp3().end_track();
@@ -369,7 +369,7 @@ TEST_F(admin_test_fixture, sunny_day_adm) {
   EXPECT_TRUE(SM_tonuino::is_in_state<Admin_LockAdmin>());
   execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_mp3());
-  EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_981_admin_lock_disabled));
+  EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_986_admin_lock_disabled));
 
   // end t_981_admin_lock_disabled
   getMp3().end_track();
@@ -1371,7 +1371,7 @@ TEST_F(admin_test_fixture, Admin_LockAdmin) {
       button_for_command(command::next, state_for_command::admin);
       execute_cycle_for_ms(time_check_play);
       EXPECT_TRUE(getMp3().is_playing_mp3());
-      EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_980_admin_lock_intro) + m);
+      EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_985_admin_lock_intro) + m);
     }
     // button select --> select mode
     button_for_command(command::select, state_for_command::admin);

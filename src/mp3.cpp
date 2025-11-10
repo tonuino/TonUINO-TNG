@@ -123,17 +123,21 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
     Base::playAdvertisement(track);
   }
   else if (not olnyIfIsPlaying) {
+    LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
     if (isPause) {
       start();
+      LOG(mp3_log, s_debug, F("after start"));
     }
     else {
       Base::playFolderTrack(1, 1);
+      LOG(mp3_log, s_debug, F("after playFolderTrack"));
       delay(dfPlayer_timeUntilStarts);
     }
+    LOG(mp3_log, s_debug, F("before waitForTrackToStart()"));
     waitForTrackToStart();
-    LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
+    LOG(mp3_log, s_debug, F("after waitForTrackToStart"));
     Base::playAdvertisement(track);
-    delay(700);
+    delay(dfPlayer_timeUntilStarts);
     LOG(mp3_log, s_debug, F("before waitForTrackToFinish()"));
     waitForTrackToFinish(); // finish adv
     LOG(mp3_log, s_debug, F("before waitForTrackToStart()"));

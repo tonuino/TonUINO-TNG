@@ -12,6 +12,8 @@ advert/0308_air.mp3|Luft....10s....und weiter geht's
 advert/0320_bt_on.mp3|Bluetooth wird eingeschaltet
 advert/0321_bt_off.mp3|Bluetooth wird ausgeschaltet
 advert/0322_bt_pairing.mp3|Bluetooth wird verbunden
+advert/0323_standby_timer_off.mp3|Der Standby Timer wird ausgeschaltet
+advert/0324_standby_timer_on.mp3|Der Standby Timer wird wieder eingeschaltet
 mp3/0300_new_tag.mp3|Oh, eine neue Karte!
 mp3/0301_select_folder.mp3|Ok, verwende nun die Lautstärketasten um einen Ordner für die Karte auszuwählen.
 mp3/0310.mp3|Wähle mit den Lautstärketasten den Wiedergabemodus aus. Drücke die Pausetaste um fortzufahren.
@@ -119,11 +121,12 @@ mp3/0976_modifier_repeat1.mp3|Titel wiederholen - den aktuellen Titel endlos wie
 mp3/0977_modifier_bluetooth.mp3|Bluetoothkarte - Mit der Bluetoothkarte kannst du Bluetooth ein- oder ausschalten.
 mp3/0978_modifier_jukebox.mp3|Jukeboxkarte - Wenn schon ein Track abgespielt wird und eine neue Karte wird, wird diese nicht sofort abgespielt sondern in eine Warteschlange gestellt. Erst, wenn die aktuelle Karte beendet ist, wird die nächste Karte aus der Warteschlange genommen.
 mp3/0979_modifier_pauseAftTr.mp3|Pause nach jedem Track Karte - Mit diese Karte geht der Tonuino nach jedem Track in den Pausenstate.
-mp3/0980_admin_lock_intro.mp3|Wähle bitte aus ob und wie das Adminmenü geschützt werden soll.
-mp3/0981_admin_lock_disabled.mp3|Kein Schutz - das Adminmenü kann jederzeit durch drücken von allen drei Tasten aktiviert werden.
-mp3/0982_admin_lock_card.mp3|Nur Adminkarte - das Adminmenü kann nur mit einer Adminkarte geöffnet werden. Eine neue Adminkarte kann jederzeit angelernt werden.
-mp3/0983_admin_lock_pin.mp3|Codeeingabe - das Adminmenü wird durch eine vierstellige Pin geschützt. Wenn du diese Option auswählst musst du als nächstes die Pin festlegen.
-mp3/0984_admin_lock_calc.mp3|Rechenaufgabe - das Adminmenü kann nur durch Lösen einer Rechenaufgabe betreten werden.
+mp3/0980_modifier_disableStandby.mp3|Disable Standby Karte - Mit dieser Karte kannst du den Standby Timer temporär aus- und wieder einschalten
+mp3/0985_admin_lock_intro.mp3|Wähle bitte aus ob und wie das Adminmenü geschützt werden soll.
+mp3/0986_admin_lock_disabled.mp3|Kein Schutz - das Adminmenü kann jederzeit durch drücken von allen drei Tasten aktiviert werden.
+mp3/0987_admin_lock_card.mp3|Nur Adminkarte - das Adminmenü kann nur mit einer Adminkarte geöffnet werden. Eine neue Adminkarte kann jederzeit angelernt werden.
+mp3/0988_admin_lock_pin.mp3|Codeeingabe - das Adminmenü wird durch eine vierstellige Pin geschützt. Wenn du diese Option auswählst musst du als nächstes die Pin festlegen.
+mp3/0989_admin_lock_calc.mp3|Rechenaufgabe - das Adminmenü kann nur durch Lösen einer Rechenaufgabe betreten werden.
 mp3/0991_admin_pin.mp3|Bitte gebe die Pin ein.
 mp3/0992_admin_calc.mp3|Wieviel ist
 mp3/0993_admin_calc.mp3|Plus

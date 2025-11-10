@@ -456,7 +456,7 @@ void Tonuino::disableStandbyTimer() {
 }
 
 void Tonuino::checkStandby() {
-  if (standbyTimer.isActive() && standbyTimer.isExpired()) {
+  if (not standbyTimerOff && standbyTimer.isActive() && standbyTimer.isExpired()) {
     shutdown();
   }
 }
@@ -522,6 +522,15 @@ void Tonuino::btModulePairing() {
   }
 }
 #endif // BT_MODULE
+
+void Tonuino::switchStandbyTimerOnOff() {
+  standbyTimerOff = not standbyTimerOff;
+  if (standbyTimerOff)
+    mp3.playAdvertisement(advertTracks::t_323_standby_timer_off , false/*olnyIfIsPlaying*/);
+  else
+    mp3.playAdvertisement(advertTracks::t_324_standby_timer_on, false/*olnyIfIsPlaying*/);
+
+}
 
 bool Tonuino::specialCard(const folderSettings &nfcTag) {
   LOG(card_log, s_debug, F("special card, mode = "), static_cast<uint8_t>(nfcTag.mode));
@@ -592,6 +601,10 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
                               switchBtModuleOnOff();
                               return true;
 #endif // BT_MODULE
+
+  case pmode_t::stdb_timer_sw:LOG(card_log, s_info, F("toggle std timer from "), standbyTimerOff);
+                              switchStandbyTimerOnOff();
+                              return true;
 
   default:                    return false;
   }

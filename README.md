@@ -109,7 +109,8 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.2 (07.11.2025)
+## Version 3.3.2 (10.11.2025)
+- [Issue 284](https://github.com/tonuino/TonUINO-TNG/issues/284): New Modification Card: Disable standby timer
 - [Issue 282](https://github.com/tonuino/TonUINO-TNG/issues/282): Allow to jump to a track in the queue via mfc card
 - [Issue 274](https://github.com/tonuino/TonUINO-TNG/issues/278): Proposal - Add Language-Specific Voice Packs (Beginning with English)
 - [Issue 278](https://github.com/tonuino/TonUINO-TNG/issues/278): Version string not shown in Log
