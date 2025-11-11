@@ -92,6 +92,7 @@ public:
 #endif
 
   void switchStandbyTimerOnOff();
+  bool isStandbyTimerOff() { return standbyTimerOff; }
 
 private:
 

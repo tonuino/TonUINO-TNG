@@ -284,6 +284,7 @@ const char main_html[] PROGMEM = R"rawliteral(
                                                    <option>Wiederhole Track      </option>
                                                    <option>Jukebox               </option>
                                                    <option>Pause nach jedem Track</option>
+                                                   <option>Standby Timer Off     </option>
                                                  </select>
 <br><label for="mod_special" >Parameter  </label><div class="tooltip"><input type="number" name="mod_special" id="mod_special" value="1" min="-127" max="127">
                                                    <span class="tooltiptext">Sleep-Timer: Timeout in min [1..127] (neg.: Tr. wird beendet)
@@ -291,8 +292,7 @@ const char main_html[] PROGMEM = R"rawliteral(
                                                                          <br>Stopptanz: Zeit zw. Pausen (min/max)
                                                                          <br>0: 15/30, 1: 25/40, 2: 35/50</span></div>
 <br>
-<button onclick="return submit_form(this, 'modifier', 'mod_action', 'activate'    );">Activate</button>
-<button onclick="return submit_form(this, 'modifier', 'mod_action', 'delete', true);">Delete</button>
+<button onclick="return submit_form(this, 'modifier', 'mod_action', 'activate'    );">Activate/Deact.</button>
 <button onclick="return submit_form(this, 'modifier', 'mod_action', 'write'       );">Schreibe</button>
 </form>
 <br>
