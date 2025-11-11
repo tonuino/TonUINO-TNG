@@ -216,10 +216,13 @@ bool RepeatSingleModifier::handlePrevious() {
 bool PauseAfterTrack::handleNext() {
   LOG(modifier_log, s_debug, str_PauseAfterTrack(), F(" -> Pause"));
   mp3.playNext(1, false);
-  mp3.waitForTrackToFinish();
+  delay(100);
+  LOG(modifier_log, s_debug, "after waitForTrackToFinish");
   mp3.waitForTrackToStart();
+  LOG(modifier_log, s_debug, "after waitForTrackToStart");
   if (SM_tonuino::is_in_state<Play>())
     SM_tonuino::dispatch(command_e(commandRaw::pause));
+  LOG(modifier_log, s_debug, "after dispatch pause");
   return true;
 }
 #endif

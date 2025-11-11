@@ -412,7 +412,7 @@ void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
         mp3.clearFolderQueue();
     }
   }
-  if (activeModifier->handleNext())
+  if (mp3.isPlayingFolder() && activeModifier->handleNext())
     return;
   mp3.playNext(tracks, fromOnPlayFinished);
   if (not fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1)) {
