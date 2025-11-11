@@ -125,7 +125,7 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
   else if (not olnyIfIsPlaying) {
     LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
     if (isPause) {
-      start();
+      Base::start();
       LOG(mp3_log, s_debug, F("after start"));
     }
     else {
@@ -144,7 +144,7 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
     waitForTrackToStart();  // start folder track
     LOG(mp3_log, s_debug, F("after waitForTrackToStart()"));
     delay(10);
-    pause();
+    Base::pause();
     loop();
   }
 }
