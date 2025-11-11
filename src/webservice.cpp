@@ -1032,7 +1032,7 @@ String Webservice::getInfoData(const String& id){
     p = temperatureRead();
   }
   else if(id==F("aboutver")){
-    p = FPSTR(TONUINO_TNG_VERSION);
+    p = TONUINO_TNG_VERSION();
   }
   else if(id==F("aboutconfig")){
     #if  TonUINO_Esp32 == 100
