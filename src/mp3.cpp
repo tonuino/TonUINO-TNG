@@ -89,8 +89,8 @@ void Mp3::init() {
   loop();
 }
 
-bool Mp3::isPlaying() const {
-  return !digitalRead(dfPlayer_busyPin);
+void Mp3::refreshIsPlaying() {
+  is_playing_cache = !digitalRead(dfPlayer_busyPin);
 }
 
 void Mp3::waitForTrackToFinish() {
@@ -412,6 +412,15 @@ void Mp3::hpjackdetect() {
 
 
 void Mp3::loop() {
+
+  refreshIsPlaying();
+  static bool is_playing = false;
+  LOG_CODE(mp3_log, s_info, {
+    if (is_playing != is_playing_cache) {
+      is_playing = is_playing_cache;
+      LOG(mp3_log, s_info, F("isPlaying: "), is_playing);
+    }
+  } );
 
   if (not isPause && playing != play_none && startTrackTimer.isExpired() && not isPlaying()) {
     if (not missingOnPlayFinishedTimer.isActive())

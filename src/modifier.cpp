@@ -219,6 +219,10 @@ bool PauseAfterTrack::handleNext() {
   delay(100);
   LOG(modifier_log, s_debug, "after waitForTrackToFinish");
   mp3.waitForTrackToStart();
+#ifdef DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
+  mp3.waitForTrackToFinish();
+  mp3.waitForTrackToStart();
+#endif
   LOG(modifier_log, s_debug, "after waitForTrackToStart");
   if (SM_tonuino::is_in_state<Play>())
     SM_tonuino::dispatch(command_e(commandRaw::pause));
