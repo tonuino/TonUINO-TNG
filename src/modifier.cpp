@@ -217,13 +217,15 @@ bool PauseAfterTrack::handleNext() {
   LOG(modifier_log, s_debug, str_PauseAfterTrack(), F(" -> Pause"));
   mp3.playNext(1, false);
   delay(100);
-  LOG(modifier_log, s_debug, "after waitForTrackToFinish");
+  LOG(modifier_log, s_debug, "after delay");
   mp3.waitForTrackToStart();
+  LOG(modifier_log, s_debug, "after waitForTrackToStart");
 #ifdef DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
   mp3.waitForTrackToFinish();
+  LOG(modifier_log, s_debug, "after waitForTrackToFinish");
   mp3.waitForTrackToStart();
-#endif
   LOG(modifier_log, s_debug, "after waitForTrackToStart");
+#endif
   if (SM_tonuino::is_in_state<Play>())
     SM_tonuino::dispatch(command_e(commandRaw::pause));
   LOG(modifier_log, s_debug, "after dispatch pause");
