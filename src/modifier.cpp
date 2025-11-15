@@ -10,12 +10,15 @@ namespace {
 Tonuino        &tonuino   = Tonuino::getTonuino();
 Mp3            &mp3       = tonuino.getMp3();
 
-const __FlashStringHelper* str_SleepTimer          () { return F("SleepTimer")  ; }
-const __FlashStringHelper* str_danceGame           () { return F("DanceGame")   ; }
-const __FlashStringHelper* str_KindergardenMode    () { return F("Kita")        ; }
-const __FlashStringHelper* str_RepeatSingleModifier() { return F("RepeatSingle"); }
+const __FlashStringHelper* str_SleepTimer             () { return F("SleepTimer")  ; }
+const __FlashStringHelper* str_danceGame              () { return F("DanceGame")   ; }
+const __FlashStringHelper* str_KindergardenMode       () { return F("Kita")        ; }
+const __FlashStringHelper* str_RepeatSingleModifier   () { return F("RepeatSingle"); }
+#ifdef MODIFICATION_CARD_PAUSE_AFTER_TRACK
+const __FlashStringHelper* str_PauseAfterTrack        () { return F("PauseAftTr")  ; }
+#endif
 #ifdef MODIFICATION_CARD_JUKEBOX
-const __FlashStringHelper* str_JukeboxModifier    () { return F("Jukebox")      ; }
+const __FlashStringHelper* str_JukeboxModifier        () { return F("Jukebox")      ; }
 #endif
 
 } // anonymous namespace
@@ -208,6 +211,27 @@ bool RepeatSingleModifier::handleNext() {
 bool RepeatSingleModifier::handlePrevious() {
   return handleNext();
 }
+
+#ifdef MODIFICATION_CARD_PAUSE_AFTER_TRACK
+bool PauseAfterTrack::handleNext() {
+  LOG(modifier_log, s_debug, str_PauseAfterTrack(), F(" -> Pause"));
+  mp3.playNext(1, false);
+  delay(100);
+  LOG(modifier_log, s_debug, "after delay");
+  mp3.waitForTrackToStart();
+  LOG(modifier_log, s_debug, "after waitForTrackToStart");
+#ifdef DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
+  mp3.waitForTrackToFinish();
+  LOG(modifier_log, s_debug, "after waitForTrackToFinish");
+  mp3.waitForTrackToStart();
+  LOG(modifier_log, s_debug, "after waitForTrackToStart");
+#endif
+  if (SM_tonuino::is_in_state<Play>())
+    SM_tonuino::dispatch(command_e(commandRaw::pause));
+  LOG(modifier_log, s_debug, "after dispatch pause");
+  return true;
+}
+#endif
 
 #ifdef MODIFICATION_CARD_JUKEBOX
 bool JukeboxModifier::handleNext() {

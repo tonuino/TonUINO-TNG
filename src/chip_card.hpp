@@ -35,6 +35,7 @@ enum class pmode_t: uint8_t {
   repeat_single =   6,
   bt_module     =   7,
   jukebox       =   8,
+  pause_aft_tr  =   9,
 
   admin_card    = 0xff,
 };

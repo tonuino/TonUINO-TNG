@@ -276,13 +276,14 @@ const char main_html[] PROGMEM = R"rawliteral(
 
 <form class="service1" id="modifier">
 <br><label for="mod_mode"    >Modifier:  </label><select size=1 name="mod_mode" id="mod_mode" onchange="mod_mode_changed(this)">
-                                                   <option>Sleep-Timer      </option>
-                                                   <option>Stopptanz        </option>
-                                                   <option>Feuer-Wasser-Luft</option>
-                                                   <option>Gesperrt         </option>
-                                                   <option>Kita Modus       </option>
-                                                   <option>Wiederhole Track </option>
-                                                   <option>Jukebox          </option>
+                                                   <option>Sleep-Timer           </option>
+                                                   <option>Stopptanz             </option>
+                                                   <option>Feuer-Wasser-Luft     </option>
+                                                   <option>Gesperrt              </option>
+                                                   <option>Kita Modus            </option>
+                                                   <option>Wiederhole Track      </option>
+                                                   <option>Jukebox               </option>
+                                                   <option>Pause nach jedem Track</option>
                                                  </select>
 <br><label for="mod_special" >Parameter  </label><div class="tooltip"><input type="number" name="mod_special" id="mod_special" value="1" min="-127" max="127">
                                                    <span class="tooltiptext">Sleep-Timer: Timeout in min [1..127] (neg.: Tr. wird beendet)

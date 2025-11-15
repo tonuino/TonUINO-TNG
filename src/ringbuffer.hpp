@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 template<size_t LOG_BUFFER_SIZE>
-class RingBuffer : public Print
+class RingBuffer
 {
 public:
   RingBuffer() {}

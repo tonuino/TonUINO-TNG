@@ -286,6 +286,7 @@ public:
     execute_cycle();
     execute_cycle();
     execute_cycle();
+    execute_cycle();
 
     EXPECT_TRUE(SM_writeCard::is_in_state<finished_writeCard>());
 
@@ -1019,6 +1020,7 @@ TEST_F(admin_test_fixture, New_Card) {
     // wait for end t_300_new_tag
     execute_cycle_for_ms(dfPlayer_timeUntilStarts);
     getMp3().end_track();
+    execute_cycle();
     execute_cycle();
     execute_cycle();
     execute_cycle(); // --> start_setupCard

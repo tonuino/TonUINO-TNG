@@ -89,8 +89,8 @@ void Mp3::init() {
   loop();
 }
 
-bool Mp3::isPlaying() const {
-  return !digitalRead(dfPlayer_busyPin);
+void Mp3::refreshIsPlaying() {
+  is_playing_cache = !digitalRead(dfPlayer_busyPin);
 }
 
 void Mp3::waitForTrackToFinish() {
@@ -123,24 +123,40 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
     Base::playAdvertisement(track);
   }
   else if (not olnyIfIsPlaying) {
+    LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
     if (isPause) {
-      start();
+      Base::start();
+      LOG(mp3_log, s_debug, F("after start"));
     }
     else {
       Base::playFolderTrack(1, 1);
+      LOG(mp3_log, s_debug, F("after playFolderTrack"));
       delay(dfPlayer_timeUntilStarts);
+      LOG(mp3_log, s_debug, F("after delay"));
     }
     waitForTrackToStart();
-    LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
+    LOG(mp3_log, s_debug, F("after waitForTrackToStart"));
+
     Base::playAdvertisement(track);
-    delay(700);
-    LOG(mp3_log, s_debug, F("before waitForTrackToFinish()"));
+    delay(dfPlayer_timeUntilStarts);
+    LOG(mp3_log, s_debug, F("after delay"));
+
     waitForTrackToFinish(); // finish adv
-    LOG(mp3_log, s_debug, F("before waitForTrackToStart()"));
+    LOG(modifier_log, s_debug, "after waitForTrackToFinish");
+
     waitForTrackToStart();  // start folder track
     LOG(mp3_log, s_debug, F("after waitForTrackToStart()"));
+
+#ifdef DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
+    waitForTrackToFinish();
+    LOG(modifier_log, s_debug, "after waitForTrackToFinish");
+
+    waitForTrackToStart();
+    LOG(modifier_log, s_debug, "after waitForTrackToStart");
+#endif
+
     delay(10);
-    pause();
+    Base::pause();
     loop();
   }
 }
@@ -260,6 +276,18 @@ void Mp3::playPrevious(uint8_t tracks) {
     int current_track_tmp = static_cast<int>(current_track) - tracks;
     current_track = endless ? (current_track_tmp%q.size()+q.size()) % q.size() : max(current_track_tmp, 0);
     LOG(mp3_log, s_debug, F("playPrevious: "), current_track);
+    playCurrent();
+  }
+}
+
+void Mp3::jumpTo(uint8_t track) {
+#ifdef HPJACKDETECT
+  if (playing == play_folder)
+    tempSpkOn = 0;
+#endif
+  if (playing == play_folder && (track < q.size())) {
+    current_track = track;
+    LOG(mp3_log, s_debug, F("jumpTo: "), current_track);
     playCurrent();
   }
 }
@@ -396,6 +424,15 @@ void Mp3::hpjackdetect() {
 
 
 void Mp3::loop() {
+
+  refreshIsPlaying();
+  static bool is_playing = false;
+  LOG_CODE(mp3_log, s_info, {
+    if (is_playing != is_playing_cache) {
+      is_playing = is_playing_cache;
+      LOG(mp3_log, s_info, F("isPlaying: "), is_playing);
+    }
+  } );
 
   if (not isPause && playing != play_none && startTrackTimer.isExpired() && not isPlaying()) {
     if (not missingOnPlayFinishedTimer.isActive())

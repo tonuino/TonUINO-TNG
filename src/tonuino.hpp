@@ -35,6 +35,7 @@ public:
 
   void       nextTrack(uint8_t tracks = 1, bool fromOnPlayFinished = false);
   void   previousTrack(uint8_t tracks = 1);
+  void     jumpToTrack(uint8_t track);
 
   void resetActiveModifier   () { activeModifier = &noneModifier; }
   Modifier& getActiveModifier() { return *activeModifier; }
@@ -153,6 +154,9 @@ private:
   ToddlerMode          toddlerMode         {};
   KindergardenMode     kindergardenMode    {};
   RepeatSingleModifier repeatSingleModifier{};
+#ifdef MODIFICATION_CARD_PAUSE_AFTER_TRACK
+  PauseAfterTrack      pauseAfterTrack     {};
+#endif
 #ifdef MODIFICATION_CARD_JUKEBOX
   JukeboxModifier      jukeboxModifier     {};
 #endif

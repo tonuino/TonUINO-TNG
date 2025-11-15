@@ -149,6 +149,7 @@ enum class mp3Tracks: uint16_t {
   t_976_modifier_repeat1       = 976,
   t_977_modifier_bluetooth     = 977,
   t_978_modifier_jukebox       = 978,
+  t_979_modifier_pauseAftTr    = 979,
   t_980_admin_lock_intro       = 980,
   t_981_admin_lock_disabled    = 981,
   t_982_admin_lock_card        = 982,
@@ -206,7 +207,7 @@ public:
   Mp3(Settings& settings);
 
   void init();
-  bool isPlaying() const;
+  bool isPlaying() const { return is_playing_cache; }
   void waitForTrackToFinish();
   void waitForTrackToStart();
   void playAdvertisement(uint16_t     track, bool olnyIfIsPlaying = true);
@@ -231,6 +232,7 @@ public:
   void playCurrent();
   void playNext(uint8_t tracks, bool fromOnPlayFinished);
   void playPrevious(uint8_t tracks = 1);
+  void jumpTo(uint8_t track);
   uint8_t getCurrentTrack() { return playing ? q.get(current_track) : 0; }
   uint16_t getFolderTrackCount(uint16_t folder);
   uint8_t getCurrentFolder() { return current_folder; }
@@ -269,6 +271,7 @@ private:
   friend class tonuino_fixture;
 
   void logVolume();
+  void refreshIsPlaying();
 
   typedef queue<uint8_t, maxTracksInFolder> track_queue;
 
@@ -298,6 +301,8 @@ private:
   // mp3 queue
   uint16_t             mp3_track{};
   uint16_t             mp3_track_next{};
+
+  bool                 is_playing_cache{};
 
   enum play_type: uint8_t {
     play_none,

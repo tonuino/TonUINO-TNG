@@ -501,16 +501,17 @@ void Webservice::modifier(AsyncWebServerRequest *request) {
   folderSettings mod;
   mod.folder   = 0;
   mod.special2 = 0;
-  mod.mode     = request->arg("mod_mode") == "Sleep-Timer"       ? pmode_t::sleep_timer   :
-                 request->arg("mod_mode") == "Stopptanz"         ? pmode_t::freeze_dance  :
-                 request->arg("mod_mode") == "Feuer-Wasser-Luft" ? pmode_t::fi_wa_ai      :
-                 request->arg("mod_mode") == "Gesperrt"          ? pmode_t::toddler       :
-                 request->arg("mod_mode") == "Kita Modus"        ? pmode_t::kindergarden  :
-                 request->arg("mod_mode") == "Wiederhole Track"  ? pmode_t::repeat_single :
+  mod.mode     = request->arg("mod_mode") == "Sleep-Timer"           ? pmode_t::sleep_timer   :
+                 request->arg("mod_mode") == "Stopptanz"             ? pmode_t::freeze_dance  :
+                 request->arg("mod_mode") == "Feuer-Wasser-Luft"     ? pmode_t::fi_wa_ai      :
+                 request->arg("mod_mode") == "Gesperrt"              ? pmode_t::toddler       :
+                 request->arg("mod_mode") == "Kita Modus"            ? pmode_t::kindergarden  :
+                 request->arg("mod_mode") == "Wiederhole Track"      ? pmode_t::repeat_single :
 #ifdef MODIFICATION_CARD_JUKEBOX
-                 request->arg("mod_mode") == "Jukebox"           ? pmode_t::jukebox       :
+                 request->arg("mod_mode") == "Jukebox"               ? pmode_t::jukebox       :
 #endif
-                                                                   pmode_t::none          ;
+                 request->arg("mod_mode") == "Pause nach jedem Track"? pmode_t::pause_aft_tr  :
+                                                                       pmode_t::none          ;
   int special  = request->arg("mod_special").toInt();
   if (mod.mode == pmode_t::sleep_timer) {
     if (special < 0) {
