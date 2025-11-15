@@ -89,8 +89,8 @@ void Mp3::init() {
   loop();
 }
 
-bool Mp3::isPlaying() const {
-  return !digitalRead(dfPlayer_busyPin);
+void Mp3::refreshIsPlaying() {
+  is_playing_cache = !digitalRead(dfPlayer_busyPin);
 }
 
 void Mp3::waitForTrackToFinish() {
@@ -132,17 +132,29 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
       Base::playFolderTrack(1, 1);
       LOG(mp3_log, s_debug, F("after playFolderTrack"));
       delay(dfPlayer_timeUntilStarts);
+      LOG(mp3_log, s_debug, F("after delay"));
     }
-    LOG(mp3_log, s_debug, F("before waitForTrackToStart()"));
     waitForTrackToStart();
     LOG(mp3_log, s_debug, F("after waitForTrackToStart"));
+
     Base::playAdvertisement(track);
     delay(dfPlayer_timeUntilStarts);
-    LOG(mp3_log, s_debug, F("before waitForTrackToFinish()"));
+    LOG(mp3_log, s_debug, F("after delay"));
+
     waitForTrackToFinish(); // finish adv
-    LOG(mp3_log, s_debug, F("before waitForTrackToStart()"));
+    LOG(modifier_log, s_debug, "after waitForTrackToFinish");
+
     waitForTrackToStart();  // start folder track
     LOG(mp3_log, s_debug, F("after waitForTrackToStart()"));
+
+#ifdef DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
+    waitForTrackToFinish();
+    LOG(modifier_log, s_debug, "after waitForTrackToFinish");
+
+    waitForTrackToStart();
+    LOG(modifier_log, s_debug, "after waitForTrackToStart");
+#endif
+
     delay(10);
     Base::pause();
     loop();
@@ -412,6 +424,15 @@ void Mp3::hpjackdetect() {
 
 
 void Mp3::loop() {
+
+  refreshIsPlaying();
+  static bool is_playing = false;
+  LOG_CODE(mp3_log, s_info, {
+    if (is_playing != is_playing_cache) {
+      is_playing = is_playing_cache;
+      LOG(mp3_log, s_info, F("isPlaying: "), is_playing);
+    }
+  } );
 
   if (not isPause && playing != play_none && startTrackTimer.isExpired() && not isPlaying()) {
     if (not missingOnPlayFinishedTimer.isActive())

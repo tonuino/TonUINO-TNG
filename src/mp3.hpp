@@ -210,7 +210,7 @@ public:
   Mp3(Settings& settings);
 
   void init();
-  bool isPlaying() const;
+  bool isPlaying() const { return is_playing_cache; }
   void waitForTrackToFinish();
   void waitForTrackToStart();
   void playAdvertisement(uint16_t     track, bool olnyIfIsPlaying = true);
@@ -274,6 +274,7 @@ private:
   friend class tonuino_fixture;
 
   void logVolume();
+  void refreshIsPlaying();
 
   typedef queue<uint8_t, maxTracksInFolder> track_queue;
 
@@ -303,6 +304,8 @@ private:
   // mp3 queue
   uint16_t             mp3_track{};
   uint16_t             mp3_track_next{};
+
+  bool                 is_playing_cache{};
 
   enum play_type: uint8_t {
     play_none,
