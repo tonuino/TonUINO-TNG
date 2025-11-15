@@ -118,7 +118,7 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 - [Issue 278](https://github.com/tonuino/TonUINO-TNG/issues/278): Version string not shown in Log
 - [Issue 276](https://github.com/tonuino/TonUINO-TNG/issues/276): Deploy also binary for Esp32
 
-## Version 3.3.1 (22.07.2025)
+## Version 3.3.0 (26.07.2025)
 - [Issue 270](https://github.com/tonuino/TonUINO-TNG/issues/270): Add LedManager to control button LEDs with animated states
 - [Issue 272](https://github.com/tonuino/TonUINO-TNG/issues/272): Refactor constants.hpp - Avoid unnecessary global definitions
 - [Issue 268](https://github.com/tonuino/TonUINO-TNG/issues/268): Compile Error when using Rotary-Encoder and Classic HW
