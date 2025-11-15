@@ -109,8 +109,10 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.2 (11.11.2025)
+## Version 3.3.2 (15.11.2025)
 - [Issue 282](https://github.com/tonuino/TonUINO-TNG/issues/282): Allow to jump to a track in the queue via mfc card
+
+## Version 3.3.1 (11.11.2025)
 - [Issue 285](https://github.com/tonuino/TonUINO-TNG/issues/285): ESP32: Crash in pages Info and FwUpgrade while getting version
 - [Issue 274](https://github.com/tonuino/TonUINO-TNG/issues/278): Proposal - Add Language-Specific Voice Packs (Beginning with English)
 - [Issue 278](https://github.com/tonuino/TonUINO-TNG/issues/278): Version string not shown in Log
