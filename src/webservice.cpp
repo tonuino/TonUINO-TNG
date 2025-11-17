@@ -1160,6 +1160,10 @@ String Webservice::getInfoData(const String& id){
     #ifdef MODIFICATION_CARD_JUKEBOX
       p += "<br>Jukebox";
     #endif
+
+    #ifdef MODIFICATION_CARD_PAUSE_AFTER_TRACK
+      p += "<br>Pause nach jedem Track";
+    #endif
   }
   else if(id==F("aboutarduinover")){
     p = String(W_STRING(ESP_ARDUINO_VERSION_MAJOR)  "."  W_STRING(ESP_ARDUINO_VERSION_MINOR)  "."  W_STRING(ESP_ARDUINO_VERSION_PATCH));
