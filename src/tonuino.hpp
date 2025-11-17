@@ -91,6 +91,9 @@ public:
   void btModulePairing();
 #endif
 
+  void switchStandbyTimerOnOff();
+  bool isStandbyTimerOff() { return standbyTimerOff; }
+
 private:
 
   void setup_timer();
@@ -175,6 +178,8 @@ private:
   bool                 btModuleOn          {};
   Timer                btModulePairingTimer{};
 #endif
+
+  bool                 standbyTimerOff     {};
 };
 
 #endif /* SRC_TONUINO_HPP_ */

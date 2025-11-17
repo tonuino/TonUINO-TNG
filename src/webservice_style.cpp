@@ -79,7 +79,7 @@ select {
 
 .service1 button {
   margin-top: 2em;
-  width: 9ch;
+  width: 16ch;
   height: 5ch;
 }
 

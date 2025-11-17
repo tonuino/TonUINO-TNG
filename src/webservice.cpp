@@ -511,6 +511,7 @@ void Webservice::modifier(AsyncWebServerRequest *request) {
                  request->arg("mod_mode") == "Jukebox"               ? pmode_t::jukebox       :
 #endif
                  request->arg("mod_mode") == "Pause nach jedem Track"? pmode_t::pause_aft_tr  :
+                 request->arg("mod_mode") == "Standby Timer Off"     ? pmode_t::stdb_timer_sw :
                                                                        pmode_t::none          ;
   int special  = request->arg("mod_special").toInt();
   if (mod.mode == pmode_t::sleep_timer) {
@@ -523,12 +524,7 @@ void Webservice::modifier(AsyncWebServerRequest *request) {
   }
   mod.special  = special;
 
-  if (request->arg("mod_action") == "delete") {
-    LOG(webserv_log, s_info, "delete modifier");
-    tonuino.resetActiveModifier();
-    mp3.playAdvertisement(advertTracks::t_261_deactivate_mod_card, false/*olnyIfIsPlaying*/);
- }
-  else if (request->arg("mod_action") == "activate") {
+  if (request->arg("mod_action") == "activate") {
     LOG(webserv_log, s_info, "activate modifier mode: ", static_cast<uint8_t>(mod.mode), " special: ", mod.special);
     tonuino.specialCard(mod);
   }
@@ -711,6 +707,9 @@ String Webservice::get_status() {
 #endif
   if (tonuino.getActiveModifier().getActive() != pmode_t::none) {
     status += String("<br>Modifier: ") + tonuino.getActiveModifier().getDescription();
+  }
+  if (tonuino.isStandbyTimerOff()) {
+    status += String("<br>Modifier: Standby Timer Off");
   }
   if (tonuino.getRemainingStandbyTimer() < 60 * 60 * 1000ul) {
     unsigned long remaining = tonuino.getRemainingStandbyTimer()/1000;

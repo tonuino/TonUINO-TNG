@@ -432,6 +432,8 @@ void Tonuino::jumpToTrack(uint8_t track) {
 
 // functions for the standby timer (e.g.. with Pololu-Switch or Mosfet)
 void Tonuino::setStandbyTimer() {
+  if (isStandbyTimerOff())
+    return;
   LOG(standby_log, s_debug, F("setStandbyTimer"));
   if (settings.standbyTimer != 0 && not standbyTimer.isActive()) {
     standbyTimer.start(settings.standbyTimer * 60 * 1000);
@@ -515,6 +517,20 @@ void Tonuino::btModulePairing() {
 }
 #endif // BT_MODULE
 
+void Tonuino::switchStandbyTimerOnOff() {
+  standbyTimerOff = not standbyTimerOff;
+  if (standbyTimerOff) {
+    disableStandbyTimer();
+    mp3.playAdvertisement(advertTracks::t_323_standby_timer_off , false/*olnyIfIsPlaying*/);
+  }
+  else {
+    if (SM_tonuino::is_in_state<Pause>() || SM_tonuino::is_in_state<Idle>())
+      setStandbyTimer();
+    mp3.playAdvertisement(advertTracks::t_324_standby_timer_on, false/*olnyIfIsPlaying*/);
+  }
+
+}
+
 bool Tonuino::specialCard(const folderSettings &nfcTag) {
   LOG(card_log, s_debug, F("special card, mode = "), static_cast<uint8_t>(nfcTag.mode));
   if (activeModifier->getActive() == nfcTag.mode) {
@@ -584,6 +600,10 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
                               switchBtModuleOnOff();
                               return true;
 #endif // BT_MODULE
+
+  case pmode_t::stdb_timer_sw:LOG(card_log, s_info, F("toggle std timer from "), standbyTimerOff);
+                              switchStandbyTimerOnOff();
+                              return true;
 
   default:                    return false;
   }

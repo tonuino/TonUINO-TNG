@@ -12,6 +12,8 @@ advert/0308_air.mp3|Wind....10s....and on we go!
 advert/0320_bt_on.mp3|Bluetooth switched on
 advert/0321_bt_off.mp3|Bluetooth switched off
 advert/0322_bt_pairing.mp3|Bluetooth will be reconnected
+advert/0323_standby_timer_off.mp3|Standby timer switched off
+advert/0324_standby_timer_on.mp3|Standby timer switched on
 mp3/0300_new_tag.mp3|Oh, a new card!
 mp3/0301_select_folder.mp3|Ok, now use the volume keys to select a folder for the card.
 mp3/0310.mp3|Use the volume keys to select the playback mode. Press the pause button to continue.
@@ -119,11 +121,12 @@ mp3/0976_modifier_repeat1.mp3|Repeat title - repeat the current title endlessly.
 mp3/0977_modifier_bluetooth.mp3|Bluetooth card - You can use the Bluetooth card to switch Bluetooth on or off.
 mp3/0978_modifier_jukebox.mp3|Jukebox card - If a track is already playing and a new card is inserted, it is not played immediately but placed in a queue. Only when the current card has finished playing is the next card taken from the queue.
 mp3/0979_modifier_pauseAftTr.mp3|Pause after each track card - With this card, the Tonuino enters pause state after each track.
-mp3/0980_admin_lock_intro.mp3|Please select if and how the admin menu should be protected.
-mp3/0981_admin_lock_disabled.mp3|No protection - the admin menu can be activated at any time by pressing all three buttons.
-mp3/0982_admin_lock_card.mp3|Admin card only - the admin menu can only be opened with an admin card. A new admin card can be learned at any time.
-mp3/0983_admin_lock_pin.mp3|Enter Pin Code - the admin menu is protected by a four-digit pin. When you select this option, the next thing you need to do is set the pin.
-mp3/0984_admin_lock_calc.mp3|Calculation task - the admin menu can be entered only by solving a calculation task.
+mp3/0980_modifier_disableStandby.mp3|Disable Standby Card - With this card, you can temporarily turn the standby timer off and on again
+mp3/0985_admin_lock_intro.mp3|Please select if and how the admin menu should be protected.
+mp3/0986_admin_lock_disabled.mp3|No protection - the admin menu can be activated at any time by pressing all three buttons.
+mp3/0987_admin_lock_card.mp3|Admin card only - the admin menu can only be opened with an admin card. A new admin card can be learned at any time.
+mp3/0988_admin_lock_pin.mp3|Enter Pin Code - the admin menu is protected by a four-digit pin. When you select this option, the next thing you need to do is set the pin.
+mp3/0989_admin_lock_calc.mp3|Calculation task - the admin menu can be entered only by solving a calculation task.
 mp3/0991_admin_pin.mp3|Please enter the pin
 mp3/0992_admin_calc.mp3|How many is
 mp3/0993_admin_calc.mp3|plus
