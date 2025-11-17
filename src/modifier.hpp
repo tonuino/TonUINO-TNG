@@ -129,6 +129,20 @@ public:
 
 };
 
+#ifdef MODIFICATION_CARD_PAUSE_AFTER_TRACK
+class PauseAfterTrack: public Modifier {
+public:
+  PauseAfterTrack() {}
+  bool   handleNext    () final;
+  pmode_t getActive    () final { return pmode_t::pause_aft_tr; }
+
+#ifdef TonUINO_Esp32
+  String getDescription() final { return "Pause nach jedem Track"; }
+#endif
+
+};
+#endif
+
 #ifdef MODIFICATION_CARD_JUKEBOX
 class JukeboxModifier: public Modifier {
 public:

@@ -204,14 +204,6 @@ void Tonuino::loop() {
     delay(1000);
   }
 
-  static bool is_playing = false;
-  LOG_CODE(play_log, s_info, {
-    if (is_playing != mp3.isPlaying()) {
-      is_playing = !is_playing;
-      LOG(play_log, s_info, F("isPlaying: "), is_playing);
-    }
-  } );
-
 #ifdef BAT_VOLTAGE_MEASUREMENT
   if (batVoltage.check())
     shutdown();
@@ -412,7 +404,7 @@ void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
         mp3.clearFolderQueue();
     }
   }
-  if (activeModifier->handleNext())
+  if (mp3.isPlayingFolder() && activeModifier->handleNext())
     return;
   mp3.playNext(tracks, fromOnPlayFinished);
   if (not fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1)) {
@@ -425,6 +417,14 @@ void Tonuino::previousTrack(uint8_t tracks) {
   if (activeModifier->handlePrevious())
     return;
   mp3.playPrevious(tracks);
+  if (mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1)) {
+    settings.writeFolderSettingToFlash(myFolder.folder, mp3.getCurrentTrack());
+  }
+}
+
+void Tonuino::jumpToTrack(uint8_t track) {
+  LOG(play_log, s_debug, F("jumpToTrack"));
+  mp3.jumpTo(track);
   if (mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1)) {
     settings.writeFolderSettingToFlash(myFolder.folder, mp3.getCurrentTrack());
   }
@@ -564,6 +564,13 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
                               mp3.playAdvertisement(advertTracks::t_260_activate_mod_card, false/*olnyIfIsPlaying*/);
                               activeModifier = &repeatSingleModifier;
                               break;
+
+#ifdef MODIFICATION_CARD_PAUSE_AFTER_TRACK
+  case pmode_t::pause_aft_tr: LOG(card_log, s_info, F("act. pauseAftTr"));
+                              mp3.playAdvertisement(advertTracks::t_260_activate_mod_card, false/*olnyIfIsPlaying*/);
+                              activeModifier = &pauseAfterTrack;
+                              break;
+#endif
 
 #ifdef MODIFICATION_CARD_JUKEBOX
   case pmode_t::jukebox:      LOG(card_log, s_info, F("act. jukebox"));

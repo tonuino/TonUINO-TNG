@@ -45,9 +45,9 @@ const __FlashStringHelper* str_Admin_InvButtons        () { return F("AdmInvBut"
 const __FlashStringHelper* str_Admin_ResetEeprom       () { return F("AdmREeprom") ; }
 const __FlashStringHelper* str_Admin_LockAdmin         () { return F("AdmLAdm") ; }
 const __FlashStringHelper* str_Admin_PauseIfCardRemoved() { return F("AdmPIfCRem") ; }
-#ifdef MEMORY_GAME
+//#ifdef MEMORY_GAME
 const __FlashStringHelper* str_Admin_MemoryGameCards   () { return F("AdmMemoryGameCards") ; }
-#endif
+//#endif
 const __FlashStringHelper* str_VoiceMenu               () { return F("VMenu") ; }
 const __FlashStringHelper* str_to                      () { return F(" -> ") ; }
 const __FlashStringHelper* str_enter                   () { return F("enter ") ; }
@@ -821,6 +821,11 @@ void Play::react(card_e const &c_e) {
 #endif
         handleReadCard();
     }
+    else {
+      if (lastCardRead.mode == pmode_t::memory_game) {
+        mp3.jumpTo(lastCardRead.special-1);
+      }
+    }
     return;
   case cardEvent::removed:
     if ((settings.pauseWhenCardRemoved==1) && not tonuino.getActiveModifier().handleButton(command::pause)) {
@@ -906,6 +911,13 @@ void Pause::react(card_e const &c_e) {
         return;
       }
       handleReadCard();
+    }
+    else {
+      if (lastCardRead.mode == pmode_t::memory_game) {
+        mp3.jumpTo(lastCardRead.special-1);
+        transit<Play>();
+        return;
+      }
     }
     return;
   case cardEvent::removed:
@@ -1561,12 +1573,12 @@ void Admin_Entry::react(command_e const &cmd_e) {
              transit<Admin_PauseIfCardRemoved>();
              return;
     case 14: // Memory Spiel Karten
-#ifdef MEMORY_GAME
+//#ifdef MEMORY_GAME
              LOG(state_log, s_debug, str_Admin_Entry(), str_to(), str_Admin_MemoryGameCards());
              transit<Admin_MemoryGameCards>();
-#else
-             mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
-#endif
+//#else
+//             mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
+//#endif
              return;
     }
   }
@@ -1688,7 +1700,7 @@ void Admin_ModCard::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_ModCard());
   state_str = str_Admin_ModCard();
 
-  numberOfOptions   = 8;
+  numberOfOptions   = 9;
   startMessage      = mp3Tracks::t_970_modifier_Intro;
   messageOffset     = mp3Tracks::t_970_modifier_Intro;
   preview           = false;
@@ -2133,7 +2145,7 @@ void Admin_PauseIfCardRemoved::react(command_e const &cmd_e) {
 
 // #######################################################
 
-#ifdef MEMORY_GAME
+//#ifdef MEMORY_GAME
 void Admin_MemoryGameCards::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_MemoryGameCards());
   state_str = str_Admin_MemoryGameCards();
@@ -2227,7 +2239,7 @@ void Admin_MemoryGameCards::react(command_e const &cmd_e) {
     break;
   }
 }
-#endif
+//#endif
 
 // #######################################################
 

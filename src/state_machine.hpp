@@ -430,7 +430,7 @@ public:
   void react(command_e const &) final;
 };
 
-#ifdef MEMORY_GAME
+//#ifdef MEMORY_GAME
 class Admin_MemoryGameCards: public Amin_BaseWriteCard
 {
 public:
@@ -444,7 +444,7 @@ private:
   };
   subState current_subState{};
 };
-#endif
+//#endif
 
 
 #endif /* SRC_STATE_MACHINE_HPP_ */

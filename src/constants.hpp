@@ -109,7 +109,7 @@
  * -1: up/downLong -2: down       -3: downLong
  * number n > 0: Springe im Voice Menü zum n-ten Eintrag und selektiere ihn
  */
-#define SerialInputAsCommand
+//#define SerialInputAsCommand
 
 // ######################################################################
 
@@ -384,6 +384,13 @@ inline constexpr float   batVoltageEmpty               = 2.90;
 #ifdef MODIFICATION_CARD_JUKEBOX
 inline constexpr uint8_t jukebox_max_cards  = 10;
 #endif
+
+// ######################################################################
+
+/* uncomment the below lines if you want to have the Pause after Track modification card
+ * wenn du die Pause nach jedem Track Modifikationskarte haben willst, in den nächsten Zeile den Kommentar entfernen
+ */
+//#define MODIFICATION_CARD_PAUSE_AFTER_TRACK
 
 // ######################################################################
 
@@ -676,7 +683,7 @@ inline constexpr uint32_t cardCookie      = 0x1337b347;
 inline constexpr uint8_t  cardVersion     = 0x02;
 inline constexpr byte     mfrc522_RSTPin  =  D9;
 inline constexpr byte     mfrc522_SSPin   = D10;
-inline constexpr uint8_t  cardRemoveDelay =  D3;
+inline constexpr uint8_t  cardRemoveDelay =   3;
 
 // ####### mp3 #########################################
 
