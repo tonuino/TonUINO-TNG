@@ -1161,7 +1161,7 @@ void Quiz::react(command_e const &cmd_e) {
   default:
     break;
   }
-  if (timer.isExpired()) {
+  if (tonuino.isStandbyTimerOff() && timer.isExpired()) {
     finish();
     return;
   }
@@ -1277,7 +1277,7 @@ void Memory::react(command_e const &cmd_e) {
 
   }
 
-  if (timer.isExpired()) {
+  if (tonuino.isStandbyTimerOff() && timer.isExpired()) {
     finish();
     return;
   }

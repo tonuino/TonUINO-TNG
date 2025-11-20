@@ -109,6 +109,9 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
+## Version 3.3.2 (20.11.2025)
+- [Issue 288](https://github.com/tonuino/TonUINO-TNG/issues/288): Mod card "Disable standby timer": disable also timeouts for quiz and memory game
+
 ## Version 3.3.2 (15.11.2025)
 - [Issue 284](https://github.com/tonuino/TonUINO-TNG/issues/284): New Modification Card: Disable standby timer
 - [Issue 282](https://github.com/tonuino/TonUINO-TNG/issues/282): Allow to jump to a track in the queue via mfc card
