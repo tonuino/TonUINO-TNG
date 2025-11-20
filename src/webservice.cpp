@@ -952,8 +952,10 @@ String Webservice::getInfoData(const String& id){
     p = WiFi.getMode()<=3? WIFI_MODES[WiFi.getMode()] : "n/a";
   }
   else if(id==F("uptime")){
-    int64_t seconds = esp_timer_get_time()  / 1000000ULL;
-    p = (String)(seconds / 60) + " mins " + (String)(seconds % 60) + " secs";
+    const int64_t seconds = esp_timer_get_time()  / 1000000ULL;
+    const int32_t hrs  = seconds / 3600;
+    const int32_t mins = seconds % 3600 / 60;
+    p = String(hrs) + " hrs " + String(mins) + " mins " + String(seconds % 60) + " secs";
   }
   else if(id==F("chipid")){
     p = String(ESP.getEfuseMac(),HEX);
