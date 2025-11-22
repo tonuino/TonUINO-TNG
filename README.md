@@ -109,7 +109,8 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.2 (20.11.2025)
+## Version 3.3.2 (22.11.2025)
+- [Issue 290](https://github.com/tonuino/TonUINO-TNG/issues/290): Compiler error if HPJACKDETECT is enabled but not SPKONOFF
 - [Issue 288](https://github.com/tonuino/TonUINO-TNG/issues/288): Mod card "Disable standby timer": disable also timeouts for quiz and memory game
 
 ## Version 3.3.2 (15.11.2025)
