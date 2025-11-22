@@ -378,7 +378,9 @@ void Mp3::hpjackdetect() {
   if (noHeadphoneJackDetect != noHeadphoneJackDetect_now) {
     noHeadphoneJackDetect = noHeadphoneJackDetect_now;
     LOG(mp3_log, s_info, F("hpJackDetect: "), noHeadphoneJackDetect == level::active ? 0 : 1);
+#ifdef SPKONOFF
     digitalWrite(ampEnablePin, getLevel(ampEnablePinType, noHeadphoneJackDetect));
+#endif
     if (isHeadphoneJackDetect()) {
       volume     = &hpVolume;
       maxVolume  = &settings.hpMaxVolume;
