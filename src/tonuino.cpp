@@ -541,11 +541,11 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
   }
 
 #ifdef QUIZ_GAME
-  if (SM_tonuino::is_in_state<Quiz>() && nfcTag.mode != pmode_t::bt_module)
+  if (SM_tonuino::is_in_state<Quiz>() && nfcTag.mode != pmode_t::bt_module && nfcTag.mode != pmode_t::stdb_timer_sw)
     return false;
 #endif // QUIZ_GAME
 #ifdef MEMORY_GAME
-  if (SM_tonuino::is_in_state<Memory>() && nfcTag.mode != pmode_t::bt_module)
+  if (SM_tonuino::is_in_state<Memory>() && nfcTag.mode != pmode_t::bt_module && nfcTag.mode != pmode_t::stdb_timer_sw)
     return false;
 #endif // MEMORY_GAME
 
