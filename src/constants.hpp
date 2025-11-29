@@ -510,10 +510,10 @@ inline constexpr unsigned long dfPlayer_timeUntilStarts = 1200;
 // ####### tonuino #####################################
 
 inline constexpr uint8_t       shutdownPin      = 7;
-#ifdef USE_POLOLU_SHUTDOWN
-inline constexpr levelType     shutdownPinType  = levelType::activeHigh;
-#else
+#ifdef USE_TRAEGER_PLATINE_SHUTDOWN
 inline constexpr levelType     shutdownPinType  = levelType::activeLow;
+#else
+inline constexpr levelType     shutdownPinType  = levelType::activeHigh;
 #endif
 inline constexpr uint8_t       openAnalogPin    = A7;
 inline constexpr unsigned long cycleTime        = 50;
@@ -708,10 +708,10 @@ inline constexpr unsigned long dfPlayer_timeUntilStarts = 1200;
 // ####### tonuino #####################################
 
 inline constexpr uint8_t       shutdownPin      = D7;
-#ifdef USE_POLOLU_SHUTDOWN
-inline constexpr levelType     shutdownPinType  = levelType::activeHigh;
-#else
+#ifdef USE_TRAEGER_PLATINE_SHUTDOWN
 inline constexpr levelType     shutdownPinType  = levelType::activeLow;
+#else
+inline constexpr levelType     shutdownPinType  = levelType::activeHigh;
 #endif
 inline constexpr uint8_t       openAnalogPin    = A7;
 inline constexpr unsigned long cycleTime        = 50;
