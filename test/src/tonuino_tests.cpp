@@ -21,7 +21,7 @@ TEST_F(tonuino_test_fixture, initial_state) {
   EXPECT_EQ(pin_mode[shutdownPin], OUTPUT);
 
 #ifdef TonUINO_Classic
-  EXPECT_EQ(pin_value[shutdownPin], HIGH);
+  EXPECT_EQ(pin_value[shutdownPin], LOW);
 #endif
 
 #if defined ALLinONE || defined ALLinONE_Plus
@@ -210,7 +210,7 @@ TEST_F(tonuino_test_fixture, shutdown_in_idle) {
   EXPECT_EQ(pin_value[shutdownPin], LOW);
 #endif
 #ifdef TonUINO_Classic
-  EXPECT_EQ(pin_value[shutdownPin], LOW);
+  EXPECT_EQ(pin_value[shutdownPin], HIGH);
 #endif
   EXPECT_TRUE(getMp3()    .called_sleep        );
   EXPECT_TRUE(getMFRC522().called_AntennaOff   );
@@ -241,7 +241,7 @@ TEST_F(tonuino_test_fixture, shutdown_in_pause) {
   EXPECT_EQ(pin_value[shutdownPin], LOW);
 #endif
 #ifdef TonUINO_Classic
-  EXPECT_EQ(pin_value[shutdownPin], LOW);
+  EXPECT_EQ(pin_value[shutdownPin], HIGH);
 #endif
   EXPECT_TRUE(getMp3()    .called_sleep        );
   EXPECT_TRUE(getMFRC522().called_AntennaOff   );

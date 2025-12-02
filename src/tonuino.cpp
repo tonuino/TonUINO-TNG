@@ -94,8 +94,11 @@ void Tonuino::setup() {
   ring.call_on_startup();
 #endif
 
-  // load Settings from EEPROM
   settings.init();
+  // RESET flash if all buttons pressed
+  if (buttons.isReset())
+    settings.clearEEPROM();
+  // load Settings from EEPROM
   settings.loadSettingsFromFlash();
 #ifdef STORE_LAST_CARD
   settings.readExtShortCutFromFlash(lastSortCut, myFolder);
@@ -110,12 +113,6 @@ void Tonuino::setup() {
 
   // init NFC reader
   chip_card.initCard();
-
-  // RESET flash if all buttons pressed
-  if (buttons.isReset()) {
-    settings.clearEEPROM();
-    settings.loadSettingsFromFlash();
-  }
 
   // init DFPlayer Mini
   mp3.init();

@@ -1368,13 +1368,12 @@ void Admin_Allow::react(command_e const &cmd_e) {
   switch (current_subState) {
   case select_method       :
     switch (settings.adminMenuLocked) {
-    case 0 : current_subState = allow;       break;
     case 1 : current_subState = not_allow;   break;
     case 2 : mp3.enqueueMp3FolderTrack(mp3Tracks::t_991_admin_pin);
              pin_number = 0;
              current_subState = get_pin;     break;
 //    case 3 : current_subState = start_match; break;
-    default: current_subState = not_allow;   break;
+    default: current_subState = allow;       break;
     }
     break;
   case get_pin             :
