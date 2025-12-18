@@ -109,7 +109,8 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.2 (29.11.2025)
+## Version 3.3.2 (28.12.2025)
+- [Issue 294](https://github.com/tonuino/TonUINO-TNG/issues/294): Esp32 webinterface: missing mutex on mp3 track queue
 - [Issue 292](https://github.com/tonuino/TonUINO-TNG/issues/292): Some improvements for settings and shutdown pin
 - [Issue 290](https://github.com/tonuino/TonUINO-TNG/issues/290): Compiler error if HPJACKDETECT is enabled but not SPKONOFF
 - [Issue 288](https://github.com/tonuino/TonUINO-TNG/issues/288): Mod card "Disable standby timer": disable also timeouts for quiz and memory game
