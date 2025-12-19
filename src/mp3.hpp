@@ -5,11 +5,12 @@
 //#define DfMiniMp3Debug Serial
 #include <DFMiniMp3.h>
 
+#include "constants.hpp"
+
 #ifdef TonUINO_Esp32
 #include <mutex>
 #endif
 
-#include "constants.hpp"
 #include "settings.hpp"
 #include "queue.hpp"
 #include "timer.hpp"
