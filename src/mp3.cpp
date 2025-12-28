@@ -179,6 +179,9 @@ void Mp3::clearMp3Queue() {
   mp3_track_next = 0;
 }
 void Mp3::enqueueTrack(uint8_t folder, uint8_t firstTrack, uint8_t lastTrack, uint8_t currentTrack) {
+#ifdef TonUINO_Esp32
+  std::lock_guard<std::mutex> lck(q_mtx);
+#endif
 #ifdef HPJACKDETECT
   if (tempSpkOn > 0)
     --tempSpkOn;
@@ -200,6 +203,9 @@ void Mp3::enqueueTrack(uint8_t folder, uint8_t track) {
   enqueueTrack(folder, track, track);
 }
 void Mp3::shuffleQueue() {
+#ifdef TonUINO_Esp32
+  std::lock_guard<std::mutex> lck(q_mtx);
+#endif
   q.shuffle();
   LOG(mp3_log, s_info, F("shuffled "), lf_no);
   for (uint8_t i = 0; i<q.size(); ++i)
@@ -400,6 +406,7 @@ void Mp3::hpjackdetect() {
 
 #ifdef TonUINO_Esp32
   String Mp3::getQueue() {
+    std::lock_guard<std::mutex> lck(q_mtx);
     String res;
     constexpr uint8_t additional = 4;
 

@@ -6,6 +6,11 @@
 #include <DFMiniMp3.h>
 
 #include "constants.hpp"
+
+#ifdef TonUINO_Esp32
+#include <mutex>
+#endif
+
 #include "settings.hpp"
 #include "queue.hpp"
 #include "timer.hpp"
@@ -300,6 +305,10 @@ private:
   uint8_t              current_folder{};
   uint16_t             current_track{};
   bool                 endless{false};
+#ifdef TonUINO_Esp32
+  std::mutex           q_mtx{};
+#endif
+
 
   // mp3 queue
   uint16_t             mp3_track{};
