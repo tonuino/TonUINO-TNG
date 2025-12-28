@@ -1,91 +1,134 @@
 advert/0300_freeze_into.mp3|Nous allons maintenant jouer le jeu de la statue musicale. Quand la musique s'arrête, reste immobile !
-advert/0301_freeze_freeze1.mp3|Et arrête !
+advert/0301_freeze_freeze1.mp3|Et stop !
 advert/0301_freeze_freeze2.mp3|Ne bouge pas !
-advert/0301_freeze_freeze3.mp3|continuons !
-advert/0302_sleep.mp3|Fonction sommeil activée.
-advert/0303_locked.mp3|L'appareil est maintenant verrouillé.
-advert/0304_buttonslocked.mp3|Les boutons sont désormais verrouillés.
+advert/0301_freeze_freeze3.mp3|On continue !
+advert/0302_sleep.mp3|Mode veille activé.
+advert/0303_fi_wa_ai.mp3|Nous allons maintenant jouer à feu, eau et air. En cas de feu, cours dans un coin, en cas d'eau grimpe quelque part et en cas d'air, allonge-toi à plat sur le sol.
+advert/0304_buttonslocked.mp3|Les boutons sont maintenant verrouillés.
 advert/0305_kindergarden.mp3|Mode crèche activé.
+advert/0306_fire.mp3|Feu… 10 secondes… et on continue
+advert/0307_water.mp3|Eau… 10 secondes… et on continue
+advert/0308_air.mp3|Air… 10 secondes… et on continue
+advert/0320_bt_on.mp3|Le Bluetooth est activé
+advert/0321_bt_off.mp3|Le Bluetooth est désactivé
+advert/0322_bt_pairing.mp3|Connexion Bluetooth en cours
+advert/0323_standby_timer_off.mp3|Le minuteur de veille est désactivé
+advert/0324_standby_timer_on.mp3|Le minuteur de veille est réactivé
 mp3/0300_new_tag.mp3|Oh, une nouvelle carte !
-mp3/0301_select_folder.mp3|Ok, utilise maintenant les touches de volume pour sélectionner un dossier pour la carte.
-mp3/0310.mp3|Sélectionne le mode de lecture à l'aide des touches de volume. Appuie sur la touche pause pour continuer.
-mp3/0311_mode_random_episode.mp3|Mode de lecture audio : lire un fichier aléatoire du dossier
-mp3/0312_mode_album.mp3|Mode album : lire le dossier complet
-mp3/0313_mode_party.mp3|Mode fête : lire le dossier de façon aléatoire.
-mp3/0314_mode_single_track.mp3|Mode unique : lire un fichier spécifique du dossier.
-mp3/0315_mode_audio_book.mp3|Mode livre audio : lire un dossier et enregistrer la progression.
-mp3/0316_admin.mp3|Fonctions d'administration.
-mp3/0317_special_random.mp3|Mode spécial de-à, jeu d'écoute : lire un fichier aléatoire entre le fichier de début et le fichier de fin.
-mp3/0318_special_album.mp3|Mode spécial de-à, album : lire tous les fichiers entre le fichier de départ et le fichier final.
-mp3/0319_special_party.mp3|Mode spécial de-à, fête : lire tous les fichiers de manière aléatoire entre le fichier de départ et le fichier final.
-mp3/0320_mode_audio_book_single.mp3|Mode livre audio seul : lire le titre suivant dans le dossier et enregistrer la progression.
-mp3/0321_mode_repeat_last_card.mp3|Mode répéter la carte : la dernière carte ou le dernier raccourci est répété.
-mp3/0327_select_file.mp3|OK, sélectionne maintenant le fichier à l'aide des touches de volume.
-mp3/0328_select_first_file.mp3|OK, sélectionne maintenant le fichier de départ à l'aide des touches de volume.
-mp3/0329_select_last_file.mp3|Sélectionne maintenant le fichier final à l'aide des touches de volume.
-mp3/0330.mp3|Dois-je annoncer le numéro avant chaque fichier ? Tu peux à tout moment demander le numéro actuel en appuyant longuement sur la touche pause.
-mp3/0331.mp3|Non, n'annonce pas le numéro.
-mp3/0332.mp3|Oui, annonce le numéro.
+mp3/0301_select_folder.mp3|OK, utilise maintenant les boutons de volume pour sélectionner un dossier pour la carte.
+mp3/0310.mp3|Sélectionne le mode de lecture avec les boutons de volume. Appuie sur le bouton pause pour continuer.
+mp3/0311_mode_random_episode.mp3|Mode histoire : lire un fichier aléatoire du dossier
+mp3/0312_mode_album.mp3|Mode album : lire tout le dossier
+mp3/0313_mode_party.mp3|Mode fête : lire le dossier en mode aléatoire
+mp3/0314_mode_single_track.mp3|Mode piste unique : lire un fichier précis du dossier
+mp3/0315_mode_audio_book.mp3|Mode livre audio : lire un dossier et sauvegarder la progression
+mp3/0316_admin.mp3|Fonctions administrateur.
+mp3/0317_special_random.mp3|Mode spécial de à : histoire. Lire un fichier aléatoire entre le fichier de début et de fin
+mp3/0318_special_album.mp3|Mode spécial de à : album. Lire tous les fichiers entre le fichier de début et de fin
+mp3/0319_special_party.mp3|Mode spécial de à : fête. Lire tous les fichiers entre le fichier de début et de fin en mode aléatoire
+mp3/0320_mode_audio_book_single.mp3|Mode livre audio individuel : lire le titre suivant du dossier et sauvegarder la progression
+mp3/0321_mode_repeat_last_card.mp3|Mode répéter carte : la dernière carte ou le dernier raccourci est répété
+mp3/0322_mode_quiz_game.mp3|Mode quiz : jouer à un quiz
+mp3/0323_mode_memory_game.mp3|Mode memory : jouer à un jeu de memory
+mp3/0324_mode_switch_bt.mp3|Basculer Bluetooth : activer ou désactiver le Bluetooth
+mp3/0327_select_file.mp3|OK, sélectionne maintenant le fichier avec les boutons de volume.
+mp3/0328_select_first_file.mp3|OK, sélectionne maintenant le fichier de départ avec les boutons de volume.
+mp3/0329_select_last_file.mp3|Sélectionne maintenant le fichier de fin avec les boutons de volume.
+mp3/0330.mp3|Dois-je annoncer le numéro avant chaque fichier ? Tu peux demander le numéro actuel à tout moment en maintenant le bouton pause appuyé.
+mp3/0331.mp3|Non, ne pas annoncer le numéro.
+mp3/0332.mp3|Oui, annoncer le numéro.
+mp3/0333_num_answer.mp3|Combien de réponses différentes le quiz a-t-il pour une question ?
+mp3/0334_num_answer_2.mp3|2 réponses.
+mp3/0335_num_answer_4.mp3|4 réponses.
+mp3/0336_num_answer_2_1.mp3|2 réponses et une solution.
+mp3/0337_num_answer_4_1.mp3|4 réponses et une solution.
+mp3/0338_num_answer_0_1.mp3|Une seule solution avec buzzer.
 mp3/0400_ok.mp3|OK. J'ai configuré la carte.
-mp3/0401_error.mp3|Hélas ! Malheureusement, cela n'a pas fonctionné !
-mp3/0402_ok_settings.mp3|Ok, j'ai enregistré les paramètres.
-mp3/0800_waiting_for_card.mp3|S'il te plaît, pose la carte !
-mp3/0801_remove_card.mp3|Bitte die Karte vom Leser entfernen!
-mp3/0802_reset_aborted.mp3|OK, j'ai annulé le processus.
-mp3/0900_admin.mp3|Bienvenue dans le menu Admin. Sélectionne une fonction à l'aide des touches de volume et confirmer avec la touche pause ! Tu peux interrompre le processus en appuyant longuement sur la touche pause.
+mp3/0401_error.mp3|Oh non ! Cela n'a malheureusement pas fonctionné !
+mp3/0402_ok_settings.mp3|OK, j'ai enregistré les paramètres.
+mp3/0500_quiz_game_intro.mp3|Tu joues maintenant à un quiz. Appuie sur le bouton pause pour obtenir une nouvelle question. Ensuite, appuie sur les boutons suivant, précédent ou volume pour écouter les différentes réponses. Quand tu penses avoir entendu la bonne réponse, appuie sur le bouton pause pour savoir si c'est correct. Répète autant de fois que tu veux. Tu peux quitter le quiz en maintenant les boutons suivant et précédent appuyés.
+mp3/0501_quiz_game_ok.mp3|Oui, c'est la bonne réponse. Bien joué. Continue avec le bouton pause.
+mp3/0502_quiz_game_bad.mp3|Oh non, ce n'est pas la bonne réponse. Essaie la question suivante. Continue avec le bouton pause.
+mp3/0503_quiz_game_ok_with_solution.mp3|Oui, c'est la bonne réponse. Bien joué. Voici l'explication de la solution.
+mp3/0504_quiz_game_bad_with_solution.mp3|Oh non, ce n'est pas la bonne réponse. Voici la solution.
+mp3/0505_quiz_game_buzzer_down.mp3|Le joueur précédent a été le plus rapide ! Quelle est la solution ? Lance ensuite la solution avec le bouton pause.
+mp3/0506_quiz_game_buzzer_up.mp3|Le joueur suivant a été le plus rapide ! Quelle est la solution ? Lance ensuite la solution avec le bouton pause.
+mp3/0507_quiz_game_buzzer_vol-.mp3|Le joueur volume bas a été le plus rapide ! Quelle est la solution ? Lance ensuite la solution avec le bouton pause.
+mp3/0508_quiz_game_buzzer_vol+.mp3|Le joueur volume fort a été le plus rapide ! Quelle est la solution ? Lance ensuite la solution avec le bouton pause.
+mp3/0509_quiz_game_buzzer_intro.mp3|Tu joues maintenant à un quiz avec buzzer. Appuie sur le bouton pause pour obtenir une nouvelle question. Ensuite, utilise les boutons précédent, suivant, volume bas et volume fort comme buzzers. Quand le joueur le plus rapide a donné sa réponse, appuie sur le bouton pause pour savoir si c'est correct. Répète autant de fois que tu veux. Tu peux quitter le quiz en maintenant les boutons suivant et précédent appuyés.
+mp3/0510_quiz_game_continue.mp3|Continue avec le bouton pause.
+mp3/0520_memory_game_intro.mp3|Tu joues maintenant à un jeu de memory. Pose d'abord une carte, puis une seconde carte. Après la deuxième carte, appuie sur le bouton pause pour savoir si les deux cartes vont ensemble. Si oui, garde-les, sinon remets-les dans le jeu. Puis c'est au tour du joueur suivant. Tu peux quitter le jeu de memory en maintenant les boutons suivant et précédent appuyés.
+mp3/0521_memory_game_ok.mp3|Oui, les deux cartes vont ensemble.
+mp3/0522_memory_game_bad.mp3|Oh non, les cartes ne correspondent pas.
+mp3/0523_memory_game_1.mp3|Pose maintenant la première carte memory.
+mp3/0524_memory_game_2.mp3|Pose maintenant la deuxième carte memory.
+mp3/0800_waiting_for_card.mp3|Pose maintenant la carte !
+mp3/0801_remove_card.mp3|Retire la carte du lecteur !
+mp3/0802_reset_aborted.mp3|OK, j'ai annulé l'opération.
+mp3/0900_admin.mp3|Bienvenue dans le menu administrateur. Choisis une fonction avec les boutons de volume et confirme avec le bouton pause. Un appui long sur le bouton pause permet d’annuler l’opération.
 mp3/0901_card_reset.mp3|Reconfigurer une carte.
 mp3/0902_max_volume.mp3|Définir le volume maximal.
 mp3/0903_min_volume.mp3|Définir le volume minimal.
 mp3/0904_init_volume.mp3|Définir le volume au démarrage.
 mp3/0905_eq.mp3|Configurer l'égaliseur.
-mp3/0906_modifiers.mp3|Créer une carte de modification. Ces cartes sont placées après les cartes de musique proprement dites et modifient le comportement de ton appareil.
-mp3/0907_shortcut.mp3|Configurer les raccourcis. Un raccourci est lancé par un appui long sur une touche et ne fonctionne que si rien n'est en cours de lecture.
-mp3/0908_standbytimer.mp3|Configurer la minuterie.
+mp3/0906_modifiers.mp3|Créer une carte de modification. Ces cartes sont posées après les cartes musicales et modifient le comportement de ton TonUINO.
+mp3/0907_shortcut.mp3|Configurer les raccourcis. Un raccourci est lancé par un appui long sur un bouton et ne fonctionne que lorsqu'aucune lecture n'est en cours.
+mp3/0908_standbytimer.mp3|Configurer le minuteur.
 mp3/0909_batch_cards.mp3|Créer des cartes individuelles pour un dossier.
 mp3/0910_switch_volume.mp3|Inverser la fonction des boutons de volume.
-mp3/0911_reset.mp3|Effacer tous les paramètres.
-mp3/0912_admin_lock.mp3|Vérouiller le menu admin.
-mp3/0913_pause_on_card_removed.mp3|Pause lorsque la carte est retirée.
-mp3/0919_continue_admin.mp3|et on continue dans le menu Admin. En appuyant longuement sur la touche Pause, tu peux interrompre le menu Admin.
-mp3/0920_eq_intro.mp3|Sélectionne un réglage pour l'égaliseur à l'aide des touches de volume et le confirmer en appuyant sur la touche de pause.
+mp3/0911_reset.mp3|Supprimer tous les réglages.
+mp3/0912_admin_lock.mp3|Sécuriser le menu administrateur.
+mp3/0913_pause_on_card_removed.mp3|Pause lorsque la carte est retirée. Attention : incompatible avec la carte de modification crèche !
+mp3/0914_memory_cards.mp3|Créer les cartes pour le jeu de memory.
+mp3/0919_continue_admin.mp3|Retour au menu administrateur. Un appui long sur le bouton pause permet de quitter le menu administrateur.
+mp3/0920_eq_intro.mp3|Choisis un réglage de l’égaliseur avec les boutons de volume et confirme avec le bouton pause.
 mp3/0921_normal.mp3|Normal
 mp3/0922_pop.mp3|Pop
 mp3/0923_rock.mp3|Rock
 mp3/0924_jazz.mp3|Jazz
 mp3/0925_classic.mp3|Classique
-mp3/0926_bass.mp3|Bass
-mp3/0930_max_volume_intro.mp3|Sélectionner le volume maximal et confirmer avec la touche pause.
-mp3/0931_min_volume_into.mp3|Sélectionner le volume minimal et confirmer avec la touche pause.
-mp3/0932_init_volume_into.mp3|Sélectionner le volume au démarrage et confirmer avec la touche pause.
-mp3/0933_switch_volume_intro.mp3|Tu veux inverser la fonction des touches de volume ? Tu dois alors appuyer longuement sur les touches pour avancer ou reculer d'une chanson.
+mp3/0926_bass.mp3|Basses
+mp3/0930_max_volume_intro.mp3|Sélectionne le volume maximal et confirme avec le bouton pause.
+mp3/0931_min_volume_into.mp3|Sélectionne le volume minimal et confirme avec le bouton pause.
+mp3/0932_init_volume_into.mp3|Sélectionne le volume au démarrage et confirme avec le bouton pause.
+mp3/0933_switch_volume_intro.mp3|Souhaites-tu inverser la fonction des boutons de volume sur la version à 3 boutons ? Tu pourras ainsi changer le volume avec un appui court, mais devras maintenir les boutons appuyés pour passer à la piste suivante ou précédente.
 mp3/0934_no.mp3|Non.
 mp3/0935_yes.mp3|Oui.
-mp3/0936_batch_cards_intro.mp3|OK, pose maintenant les cartes l'une après l'autre sur la boîte. J'annoncerai le numéro de chaque carte à l'avance pour que tu ne te trompes pas. Pour annuler, il suffit d'appuyer longuement sur la touche pause !
-mp3/0940_shortcut_into.mp3|Sélectionne le raccourci que tu veux configurer. Si tu as le panneau de boutons 3 par 3, tu peux aussi appuyer sur une touche à cet endroit. 
-mp3/0941_pause.mp3|touche d'avance et de retour
-mp3/0942_up.mp3|Touche d'avance ou touche de volume
-mp3/0943_down.mp3|Bouton de retour ou de silence
-mp3/0944_startup.mp3|Définir le raccourci au démarrage
-mp3/0960_timer_intro.mp3|Après combien de minutes l'appareil doit-il être désactivé ?
+mp3/0936_batch_cards_intro.mp3|OK, pose maintenant les cartes une par une sur la boîte. J'annoncerai le numéro correspondant pour éviter toute confusion. Pour annuler, maintiens simplement le bouton pause appuyé.
+mp3/0937_memory_game_cards_intro.mp3|OK, pose maintenant les cartes du jeu de memory une par une sur la boîte. J'annoncerai le numéro correspondant pour éviter toute confusion. Pour annuler, appuie brièvement sur le bouton pause.
+mp3/0940_shortcut_into.mp3|Choisis le raccourci que tu souhaites configurer. Si tu disposes du clavier 3x3, tu peux aussi appuyer sur une touche.
+mp3/0941_pause.mp3|Boutons suivant et précédent
+mp3/0942_up.mp3|Bouton suivant ou volume +
+mp3/0943_down.mp3|Bouton précédent ou volume -
+mp3/0944_startup.mp3|Définir un raccourci au démarrage
+mp3/0960_timer_intro.mp3|Après combien de minutes le TonUINO doit-il s'éteindre ?
 mp3/0961_timer_5.mp3|5 minutes.
 mp3/0962_timer_15.mp3|15 minutes.
 mp3/0963_timer_30.mp3|30 minutes.
 mp3/0964_timer_60.mp3|60 minutes.
-mp3/0965_timer_disabled.mp3|Ne s'arrête pas automatiquement
-mp3/0970_modifier_Intro.mp3|Sélectionne maintenant ta carte de modification à l'aide des touches de volume.
-mp3/0971_modifier_SleepTimer.mp3|Mode sieste
-mp3/0972_modifier_FreezeDance.mp3|Jeu de la statue musicale - L'appareil joue le jeu de la statue musicale avec toi et arrête brièvement la lecture de manière aléatoire pour toi.
-mp3/0973_modifier_Locked.mp3|Verrouiller l'appareil
-mp3/0974_modifier_Toddler.mp3|Mode rampant - Toutes les touches de l'appareil sont verrouillées pour les tout-petits. Les cartes continuent de fonctionner.
-mp3/0975_modifier_KinderGarden.mp3|Mode crèche - Pour éviter les disputes, les nouvelles cartes ne sont pas jouées immédiatement mais seulement après la fin du titre en cours. Les touches avant et arrière sont bloquées.
-mp3/0976_modifier_repeat1.mp3|Répéter le titre - répéter indéfiniment le titre actuel.
-mp3/0980_admin_lock_intro.mp3|Sélectionnez si et comment le menu administrateur doit être protégé.
-mp3/0981_admin_lock_disabled.mp3|Pas de protection - le menu admin peut être activé à tout moment en appuyant sur les trois boutons.
-mp3/0982_admin_lock_card.mp3|Carte admin uniquement - le menu admin ne peut être ouvert qu'avec une carte admin. Une nouvelle carte admin peut être apprise à tout moment.
-mp3/0983_admin_lock_pin.mp3|Entrer un code - le menu admin est protégé par un code pin à quatre chiffres. Si tu sélectionnes cette option, tu dois ensuite définir le pin.
-mp3/0984_admin_lock_calc.mp3|Tâche de calcul - le menu admin ne peut être accédé qu'en résolvant une tâche de calcul.
-mp3/0991_admin_pin.mp3|Saisis le code PIN.
-mp3/0992_admin_calc.mp3|Combien fait ?
-mp3/0993_admin_calc.mp3|pluss
-mp3/0994_admin_calc.mp3|moins
+mp3/0965_timer_disabled.mp3|Ne pas éteindre automatiquement
+mp3/0966_dance_pause_intro.mp3|Combien de temps la musique doit-elle jouer entre les pauses ?
+mp3/0967_dance_pause_15_30.mp3|15 à 30 secondes
+mp3/0968_dance_pause_25_40.mp3|25 à 40 secondes
+mp3/0969_dance_pause_35_50.mp3|35 à 50 secondes
+mp3/0970_modifier_Intro.mp3|Choisis maintenant ta carte de modification avec les boutons de volume.
+mp3/0971_modifier_SleepTimer.mp3|Mode veille
+mp3/0972_modifier_FreezeDance.mp3|Jeu de la statue musicale – le TonUINO joue au jeu de la statue musicale avec toi et met la lecture en pause de manière aléatoire.
+mp3/0973_modifier_FiWaAi.mp3|Jeu feu, eau et air.
+mp3/0974_modifier_Toddler.mp3|Mode tout-petit – tous les boutons du TonUINO sont verrouillés pour les plus petits. Les cartes continuent de fonctionner.
+mp3/0975_modifier_KinderGarden.mp3|Mode crèche – pour éviter les disputes, les nouvelles cartes ne sont pas lues immédiatement mais seulement à la fin du titre en cours. Les boutons suivant et précédent sont verrouillés.
+mp3/0976_modifier_repeat1.mp3|Répéter le titre – répéter le titre actuel en boucle.
+mp3/0977_modifier_bluetooth.mp3|Carte Bluetooth – permet d'activer ou de désactiver le Bluetooth.
+mp3/0978_modifier_jukebox.mp3|Carte jukebox – si un titre est déjà en cours et qu'une nouvelle carte est posée, elle n'est pas lue immédiatement mais ajoutée à une file d'attente.
+mp3/0979_modifier_pauseAftTr.mp3|Carte pause après chaque piste – avec cette carte, le TonUINO passe en pause après chaque piste.
+mp3/0980_modifier_disableStandby.mp3|Carte désactiver veille – permet d'activer ou de désactiver temporairement le minuteur de veille.
+mp3/0985_admin_lock_intro.mp3|Choisis si et comment le menu administrateur doit être protégé.
+mp3/0986_admin_lock_disabled.mp3|Aucune protection – le menu administrateur peut être ouvert à tout moment en appuyant sur les trois boutons.
+mp3/0987_admin_lock_card.mp3|Carte admin uniquement – le menu administrateur ne peut être ouvert qu'avec une carte admin. Une nouvelle carte admin peut être enregistrée à tout moment.
+mp3/0988_admin_lock_pin.mp3|Code PIN – le menu administrateur est protégé par un code PIN à quatre chiffres. Si tu choisis cette option, tu devras définir le code ensuite.
+mp3/0989_admin_lock_calc.mp3|Calcul – le menu administrateur ne peut être ouvert qu'en résolvant un calcul.
+mp3/0991_admin_pin.mp3|Entre le code PIN.
+mp3/0992_admin_calc.mp3|Combien font
+mp3/0993_admin_calc.mp3|Plus
+mp3/0994_admin_calc.mp3|Moins
 mp3/0999_reset_ok.mp3|La réinitialisation a été effectuée !
