@@ -97,10 +97,6 @@
 //#define FIVEBUTTONS
 //#define BUTTONS3X3
 
-#if not defined(THREEBUTTONS) and not defined(FIVEBUTTONS) and not defined(BUTTONS3X3)
-#error Please uncomment one of the button-support lines (THREEBUTTONS, FIVEBUTTONS, BUTTONS3X3). Bitte eine der Zeilen zur Auswahl einer Tastenkonfiguraiton einkommentieren (THREEBUTTONS, FIVEBUTTONS, BUTTONS3X3).
-#endif
-
 // ######################################################################
 
 /* If using Nano Every with connected DfPlayer Rx/Tx to D0/D1 uncomment the following lines
