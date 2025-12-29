@@ -82,7 +82,7 @@
 
 #include "gpioHelper.hpp"
 
-#if not defined(TonUINO_Classic) and not defined(TonUINO_Every) and not defined(TonUINO_Every_4808) and not defined(ALLinONE) and not defined(ALLinONE_Plus)
+#if not defined(TonUINO_Classic) and not defined(TonUINO_Every) and not defined(TonUINO_Every_4808) and not defined(ALLinONE) and not defined(ALLinONE_Plus) and not defined(TonUINO_Esp32)
 #error Please uncomment one of the PCB lines (TonUINO_Classic, TonUINO_Every, etc.). Bitte eine der Zeilen zur Definition einer Platine einkommentieren (TonUINO_Classic, TonUINO_Every, etc.).
 #endif
 
