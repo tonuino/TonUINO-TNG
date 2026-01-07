@@ -37,4 +37,18 @@ inline constexpr level getLevel(levelType t, int   l) { return (l == LOW)       
 #define D13 13
 #endif
 
+template<int i> struct check_pcb {
+  enum {v = 0};
+  enum {s = v + check_pcb<i-1>::s};
+};
+template<> struct check_pcb<0> {
+  enum {s = 0};
+};
+
+#define DECL_PCB(i)           \
+template<> struct check_pcb<i> {       \
+  enum {v = 1};                  \
+  enum {s = v + check_pcb<i-1>::s};    \
+};
+
 #endif /* SRC_GPIOHELPER_HPP_ */
