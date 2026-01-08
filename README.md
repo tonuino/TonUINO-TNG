@@ -109,6 +109,9 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
+## Version 3.3.2 (08.01.2026)
+- [Issue 302](https://github.com/tonuino/TonUINO-TNG/issues/302): Memory game: ignore second card if it is the same
+
 ## Version 3.3.2 (19.12.2025)
 - [Issue 297](https://github.com/tonuino/TonUINO-TNG/issues/297): Update french translation and add audio files
 - [Issue 294](https://github.com/tonuino/TonUINO-TNG/issues/294): Esp32 webinterface: missing mutex on mp3 track queue
