@@ -100,7 +100,7 @@ DECL_PCB(5)
 #if defined(TonUINO_Esp32)
 DECL_PCB(6)
 #endif
-static_assert(check_pcb<6>::s == 1 , "Please uncomment exactly one of the PCB lines (TonUINO_Classic, TonUINO_Every, etc.). Bitte genau eine der Zeilen zur Definition einer Platine einkommentieren (TonUINO_Classic, TonUINO_Every, etc.).");
+static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (TonUINO_Classic, TonUINO_Every, etc.). Bitte genau eine der Zeilen zur Definition einer Platine einkommentieren (TonUINO_Classic, TonUINO_Every, etc.).");
 
 // ######################################################################
 

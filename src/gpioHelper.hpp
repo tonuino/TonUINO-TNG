@@ -51,4 +51,6 @@ template<> struct check_pcb<i> {       \
   enum {s = v + check_pcb<i-1>::s};    \
 };
 
+#define SUM_PCB check_pcb<20>::s
+
 #endif /* SRC_GPIOHELPER_HPP_ */
