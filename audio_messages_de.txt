@@ -31,6 +31,7 @@ mp3/0321_mode_repeat_last_card.mp3|Wiederhole Karte Modus: Die letzte Karte oder
 mp3/0322_mode_quiz_game.mp3|Quiz Spiel Modus: Spiele ein Quiz.
 mp3/0323_mode_memory_game.mp3|Memory Spiel Modus: Spiele ein Memory.
 mp3/0324_mode_switch_bt.mp3|Switch Bluetooth: Schalte Bluetooth an oder aus.
+mp3/0325_mode_teapot_game.mp3|Teekesselchen Spiel Modus: Spiele ein Teekesselchen Spiel.
 mp3/0327_select_file.mp3|OK, wähle nun bitte die Datei mit den Lautstärketasten aus.
 mp3/0328_select_first_file.mp3|OK, wähle nun bitte die Startdatei mit den Lautstärketasten aus.
 mp3/0329_select_last_file.mp3|Wähle nun bitte die Enddatei mit den Lautstärketasten aus.
@@ -62,6 +63,9 @@ mp3/0521_memory_game_ok.mp3|Ja, die beiden Karten gehören zusammen.
 mp3/0522_memory_game_bad.mp3|Oh nein, die Karten passen nicht. 
 mp3/0523_memory_game_1.mp3|Lege bitte die erste Memory Karte auf. 
 mp3/0524_memory_game_2.mp3|Lege bitte die zweite Memory Karte auf. 
+mp3/0530_teapot_game_intro.mp3|Du spielst jetzt das Teekesselchen Raten. Drücke die Pausetaste lange, um eine neue Beschreibung zu hören. Danach drücke die Pause-, Zurück-, Vor-, Leiser- oder Lauter Taste um weitere Beschreibungen zu hören. Wenn du denkst, dass du den richtigen Begriff erraten hast, kannst du die Pause Taste lange drücken, um die Auflösung zu hören. Wiederhole das Ganze, so oft du willst. Du kannst das Spiel mit dem langen Druck auf die Vor- und Zurück Taste beenden.  
+mp3/0531_teapot_game_continue.mp3|Weiter mit einem langen Druck auf die Pause Taste. 
+mp3/0532_teapot_game_solution.mp3|Hier nun die Auflösung. 
 mp3/0800_waiting_for_card.mp3|Bitte lege nun die Karte auf!
 mp3/0801_remove_card.mp3|Bitte die Karte vom Leser entfernen!
 mp3/0802_reset_aborted.mp3|OK, ich habe den Vorgang abgebrochen.

@@ -25,6 +25,7 @@ enum class pmode_t: uint8_t {
   quiz_game     =  12,
   memory_game   =  13,
   switch_bt     =  14,
+  teapot_game   =  15,
 
   // modifier modes
   sleep_timer   =   1,
