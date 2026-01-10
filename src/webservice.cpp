@@ -606,6 +606,7 @@ void Webservice::card(AsyncWebServerRequest *request) {
         message += "\nDer Parameter Special1 muss mindestens 1 sein";
       if (card.special > track_count)
         message += String("\nDer Parameter Special1 muss kleiner oder gleich der Anzahl der Tracks im Folder sein (") + String(track_count) + ")";
+      card.special2 = 0;
       break;
     case pmode_t::hoerspiel_vb :
     case pmode_t::album_vb     :
@@ -620,6 +621,7 @@ void Webservice::card(AsyncWebServerRequest *request) {
     case pmode_t::hoerbuch_1   :
       if (card.special >= 30)
         message += "\nDer Parameter Special1 muss kleiner als 30 sein";
+      card.special2 = 0;
       break;
     case pmode_t::quiz_game    :
       if (card.special != 0 && card.special != 2 && card.special != 4)
@@ -628,6 +630,8 @@ void Webservice::card(AsyncWebServerRequest *request) {
         message += "\nDer Parameter Special2 muss 0 oder 1 sein";
       break;
     default                    :
+      card.special  = 0;
+      card.special2 = 0;
       break;
     }
     if (message != "") {
