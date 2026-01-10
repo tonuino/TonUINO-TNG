@@ -1430,7 +1430,7 @@ void Teapot::react(command_e const &cmd_e) {
     break;
   case command::pause:
     if ((trackQuestion != 0) && not mp3.isPlayingFolder()) {
-      mp3.enqueueTrack(tonuino.getFolder(), trackQuestion);
+      mp3.enqueueTrack(tonuino.getFolder(), (playState == PlayState::playDescriptions)? trackQuestion : trackQuestion+numDescriptions+1);
     }
     break;
   case command::volume_up:

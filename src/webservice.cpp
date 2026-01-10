@@ -582,12 +582,11 @@ void Webservice::card(AsyncWebServerRequest *request) {
     return;
   }
 
-  if (card.mode == pmode_t::repeat_last || card.mode == pmode_t::switch_bt) {
-    card.folder   = 0xff; // dummy value > 0 to make readCard() returning true
-    card.special  = 0;
-    card.special2 = 0;
-  }
-  else if (tonuino.getActiveModifier().getActive() != pmode_t::jukebox){
+  uint16_t track_count = 255;
+
+  if ((tonuino.getActiveModifier().getActive() != pmode_t::jukebox) &&
+      (card.mode != pmode_t::repeat_last) &&
+      (card.mode != pmode_t::switch_bt)){
 
     if (SM_tonuino::is_in_state<Play>())
       cmd = commandRaw::pause;
@@ -599,45 +598,51 @@ void Webservice::card(AsyncWebServerRequest *request) {
       request->send(400, "text/html", "Der Folder existiert nicht");
       return;
     }
-    String message;
-    switch (card.mode) {
-    case pmode_t::einzel       :
-      if (card.special < 1)
-        message += "\nDer Parameter Special1 muss mindestens 1 sein";
-      if (card.special > track_count)
-        message += String("\nDer Parameter Special1 muss kleiner oder gleich der Anzahl der Tracks im Folder sein (") + String(track_count) + ")";
-      card.special2 = 0;
-      break;
-    case pmode_t::hoerspiel_vb :
-    case pmode_t::album_vb     :
-    case pmode_t::party_vb     :
-      if (card.special < 1)
-        message += "\nDer Parameter Special1 muss mindestens 1 sein";
-      if (card.special > card.special2)
-        message += "\nDer Parameter Special1 muss kleiner oder gleich Special2 sein";
-      if (card.special2 > track_count)
-        message += String("\nDer Parameter Special2 muss kleiner oder gleich der Anzahl der Tracks im Folder sein (") + String(track_count) + ")";
-      break;
-    case pmode_t::hoerbuch_1   :
-      if (card.special >= 30)
-        message += "\nDer Parameter Special1 muss kleiner als 30 sein";
-      card.special2 = 0;
-      break;
-    case pmode_t::quiz_game    :
-      if (card.special != 0 && card.special != 2 && card.special != 4)
-        message += "\nDer Parameter Special1 muss 0, 2 oder 4 sein";
-      if (card.special2 != 0 && card.special2 != 1)
-        message += "\nDer Parameter Special2 muss 0 oder 1 sein";
-      break;
-    default                    :
-      card.special  = 0;
-      card.special2 = 0;
-      break;
-    }
-    if (message != "") {
-      request->send(400, "text/html", message);
-      return;
-    }
+  }
+  String message;
+  switch (card.mode) {
+  case pmode_t::einzel       :
+    if (card.special < 1)
+      message += "\nDer Parameter Special1 muss mindestens 1 sein";
+    if (card.special > track_count)
+      message += String("\nDer Parameter Special1 muss kleiner oder gleich der Anzahl der Tracks im Folder sein (") + String(track_count) + ")";
+    card.special2 = 0;
+    break;
+  case pmode_t::hoerspiel_vb :
+  case pmode_t::album_vb     :
+  case pmode_t::party_vb     :
+    if (card.special < 1)
+      message += "\nDer Parameter Special1 muss mindestens 1 sein";
+    if (card.special > card.special2)
+      message += "\nDer Parameter Special1 muss kleiner oder gleich Special2 sein";
+    if (card.special2 > track_count)
+      message += String("\nDer Parameter Special2 muss kleiner oder gleich der Anzahl der Tracks im Folder sein (") + String(track_count) + ")";
+    break;
+  case pmode_t::hoerbuch_1   :
+    if (card.special >= 30)
+      message += "\nDer Parameter Special1 muss kleiner als 30 sein";
+    card.special2 = 0;
+    break;
+  case pmode_t::quiz_game    :
+    if (card.special != 0 && card.special != 2 && card.special != 4)
+      message += "\nDer Parameter Special1 muss 0, 2 oder 4 sein";
+    if (card.special2 != 0 && card.special2 != 1)
+      message += "\nDer Parameter Special2 muss 0 oder 1 sein";
+    break;
+  case pmode_t::repeat_last  :
+  case pmode_t::switch_bt    :
+    card.folder   = 0xff; // dummy value > 0 to make readCard() returning true
+    card.special  = 0;
+    card.special2 = 0;
+    break;
+  default                    :
+    card.special  = 0;
+    card.special2 = 0;
+    break;
+  }
+  if (message != "") {
+    request->send(400, "text/html", message);
+    return;
   }
 
   if (request->arg("card_action") == "start") {
