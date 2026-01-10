@@ -1359,14 +1359,14 @@ void Teapot::entry() {
   state_str = str_Teapot();
   tonuino.disableStandbyTimer();
   tonuino.resetActiveModifier();
-  numDescriptions   = tonuino.getMyFolder().special;
-  if (numDescriptions == 0)
-    numDescriptions = 2;
-  if (numDescriptions != 2 and numDescriptions != 4) {
-    LOG(state_log, s_error, F("numD: "), numDescriptions);
-    finish();
-    return;
-  }
+  //numDescriptions   = tonuino.getMyFolder().special;
+  //if (numDescriptions == 0)
+  numDescriptions = 4;
+//  if (numDescriptions != 2 and numDescriptions != 4) {
+//    LOG(state_log, s_error, F("numD: "), numDescriptions);
+//    finish();
+//    return;
+//  }
   playState = PlayState::startNext;
   numQuestion = tonuino.getNumTracksInFolder()/(numDescriptions+2);
   trackQuestion = 0;
