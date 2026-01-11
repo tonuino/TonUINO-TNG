@@ -1297,12 +1297,15 @@ void Memory::react(card_e const &c_e) {
         handleReadCard();
     }
     else if (lastCardRead.mode == pmode_t::memory_game && lastCardRead.folder == 0) {
-      mp3.enqueueTrack(tonuino.getFolder(), lastCardRead.special);
       if (first == 0) {
         first = lastCardRead.special;
+        mp3.enqueueTrack(tonuino.getFolder(), lastCardRead.special);
       }
       else if (second == 0) {
-        second = lastCardRead.special;
+        if (first != lastCardRead.special) {
+          second = lastCardRead.special;
+          mp3.enqueueTrack(tonuino.getFolder(), lastCardRead.special);
+        }
       }
       else {
         mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
