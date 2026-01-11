@@ -103,6 +103,26 @@
 
 #include "gpioHelper.hpp"
 
+#if defined(TonUINO_Classic)
+DECL_PCB(1)
+#endif
+#if defined(TonUINO_Every)
+DECL_PCB(2)
+#endif
+#if defined(TonUINO_Every_4808)
+DECL_PCB(3)
+#endif
+#if defined(ALLinONE)
+DECL_PCB(4)
+#endif
+#if defined(ALLinONE_Plus)
+DECL_PCB(5)
+#endif
+#if defined(TonUINO_Esp32)
+DECL_PCB(6)
+#endif
+static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (TonUINO_Classic, TonUINO_Every, etc.). Bitte genau eine der Zeilen zur Definition einer Platine einkommentieren (TonUINO_Classic, TonUINO_Every, etc.).");
+
 // ######################################################################
 
 /* uncomment one of the below lines to enable special button support
@@ -309,11 +329,12 @@ inline constexpr levelType      dfPlayer_noHeadphoneJackDetectType = levelType::
 
 // ######################################################################
 
-/* uncomment the below line(s) to enable the quiz or memory game
- * um das Quiz oder Memory Spiel zu aktivieren, in der nächste Zeile(n) den Kommentar entfernen
+/* uncomment the below line(s) to enable the quiz, memory teapot game
+ * um das Quiz, Memory oder Teekesselchen Spiel zu aktivieren, in der nächste Zeile(n) den Kommentar entfernen
  */
 //#define QUIZ_GAME
 //#define MEMORY_GAME
+//#define TEAPOT_GAME
 
 // ######################################################################
 

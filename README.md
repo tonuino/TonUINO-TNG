@@ -109,8 +109,11 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.3 (07.01.2026)
+## Version 3.3.3 (11.01.2026)
 - [Issue 301](https://github.com/tonuino/TonUINO-TNG/issues/301): Support ESP32 Wroom 32
+- [Issue 303](https://github.com/tonuino/TonUINO-TNG/issues/303): New game: Teekesselchen
+- [Issue 302](https://github.com/tonuino/TonUINO-TNG/issues/302): Memory game: ignore second card if it is the same
+- [Issue 300](https://github.com/tonuino/TonUINO-TNG/issues/300): Error message when no PCB define was specified
 
 ## Version 3.3.2 (19.12.2025)
 - [Issue 297](https://github.com/tonuino/TonUINO-TNG/issues/297): Update french translation and add audio files
