@@ -1140,7 +1140,7 @@ String Webservice::getInfoData(const String& id){
       p += "<br>Memory Game";
     #endif
     #ifdef TEAPOT_GAME
-      p += "<br>Taepot Game";
+      p += "<br>Teapot Game";
     #endif
 
     #ifdef STORE_LAST_CARD
