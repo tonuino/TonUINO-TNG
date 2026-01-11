@@ -283,11 +283,12 @@ inline constexpr levelType     dfPlayer_noHeadphoneJackDetectType = levelType::a
 
 // ######################################################################
 
-/* uncomment the below line(s) to enable the quiz or memory game
- * um das Quiz oder Memory Spiel zu aktivieren, in der nächste Zeile(n) den Kommentar entfernen
+/* uncomment the below line(s) to enable the quiz, memory teapot game
+ * um das Quiz, Memory oder Teekesselchen Spiel zu aktivieren, in der nächste Zeile(n) den Kommentar entfernen
  */
 //#define QUIZ_GAME
 //#define MEMORY_GAME
+//#define TEAPOT_GAME
 
 // ######################################################################
 

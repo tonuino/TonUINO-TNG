@@ -31,6 +31,7 @@ const __FlashStringHelper* str_Play                    () { return F("Play") ; }
 const __FlashStringHelper* str_Pause                   () { return F("Pause") ; }
 const __FlashStringHelper* str_Quiz                    () { return F("Quiz") ; }
 const __FlashStringHelper* str_Memory                  () { return F("Memory") ; }
+const __FlashStringHelper* str_Teapot                  () { return F("Teapot") ; }
 const __FlashStringHelper* str_Admin_BaseSetting       () { return F("AdmBaseSet") ; }
 const __FlashStringHelper* str_Admin_BaseWriteCard     () { return F("AdmBaseWC") ; }
 const __FlashStringHelper* str_Admin_Allow             () { return F("AdmAllow") ; }
@@ -140,7 +141,7 @@ void ChMode::entry() {
 
   folder = folderSettings{};
 
-  numberOfOptions   = 14;
+  numberOfOptions   = 15;
   startMessage      = mp3Tracks::t_310_select_mode;
   messageOffset     = mp3Tracks::t_310_select_mode;
   preview           = false;
@@ -182,6 +183,12 @@ void ChMode::react(command_e const &cmd_e) {
 #endif
 #ifndef MEMORY_GAME
     if (folder.mode == pmode_t::memory_game) {
+      transit<finished_abort>();
+      return;
+    }
+#endif
+#ifndef TEAPOT_GAME
+    if (folder.mode == pmode_t::teapot_game) {
       transit<finished_abort>();
       return;
     }
@@ -545,6 +552,13 @@ bool Base::handleShortcut(uint8_t shortCut) {
         return true;
       }
 #endif // MEMORY_GAME
+#ifdef TEAPOT_GAME
+      if (tonuino.getMyFolder().mode == pmode_t::teapot_game) {
+        LOG(state_log, s_debug, str_Base(), str_to(), str_Teapot());
+        transit<StartPlay<Teapot>>();
+        return true;
+      }
+#endif // TEAPOT_GAME
       LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
       transit<StartPlay<Play>>();
       return true;
@@ -572,6 +586,13 @@ void Base::handleReadCard() {
         return;
       }
 #endif // MEMORY_GAME
+#ifdef TEAPOT_GAME
+    if (tonuino.getMyFolder().mode == pmode_t::teapot_game) {
+      LOG(state_log, s_debug, str_Base(), str_to(), str_Teapot());
+      transit<StartPlay<Teapot>>();
+      return;
+    }
+#endif // TEAPOT_GAME
     LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
     transit<StartPlay<Play>>();
   }
@@ -698,6 +719,13 @@ void Idle::react(command_e const &cmd_e) {
         return;
       }
 #endif // MEMORY_GAME
+#ifdef TEAPOT_GAME
+      if (tonuino.getMyFolder().mode == pmode_t::teapot_game) {
+        LOG(state_log, s_debug, str_Base(), str_to(), str_Teapot());
+        transit<StartPlay<Teapot>>();
+        return;
+      }
+#endif // TEAPOT_GAME
       LOG(state_log, s_debug, str_Idle(), str_to(), str_StartPlay());
       transit<StartPlay<Play>>();
       return;
@@ -1324,6 +1352,180 @@ void Memory::finish() {
     mp3.stop();
   }
   transit<Idle>();
+}
+
+
+// #######################################################
+
+void Teapot::entry() {
+  LOG(state_log, s_info, str_enter(), str_Teapot());
+  state_str = str_Teapot();
+  tonuino.disableStandbyTimer();
+  tonuino.resetActiveModifier();
+  //numDescriptions   = tonuino.getMyFolder().special;
+  //if (numDescriptions == 0)
+  numDescriptions = 4;
+//  if (numDescriptions != 2 and numDescriptions != 4) {
+//    LOG(state_log, s_error, F("numD: "), numDescriptions);
+//    finish();
+//    return;
+//  }
+  playState = PlayState::startNext;
+  numQuestion = tonuino.getNumTracksInFolder()/(numDescriptions+2);
+  trackQuestion = 0;
+
+  remainingQuestions = numQuestion;
+  r.setAll(0xFF);
+
+  timer.start(timeout);
+
+  mp3.enqueueMp3FolderTrack(mp3Tracks::t_530_teapot_game_intro);
+}
+
+void Teapot::react(command_e const &cmd_e) {
+  if (cmd_e.cmd_raw != commandRaw::none) {
+    timer.start(timeout);
+    LOG(state_log, s_debug, str_Teapot(), F("::react(cmd_e) "), static_cast<int>(cmd_e.cmd_raw));
+  }
+
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
+
+  if (tonuino.getActiveModifier().handleButton(cmd))
+    return;
+
+  if (checkForShortcutAndShutdown(cmd))
+    return;
+
+  if (playState == PlayState::playContinue && not mp3.isPlayingFolder()) {
+    mp3.enqueueMp3FolderTrack(mp3Tracks::t_531_teapot_game_continue);
+    playState = PlayState::startNext;
+  }
+  if (playState == PlayState::playSolution && not mp3.isPlayingMp3()) {
+    mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+numDescriptions+1);
+    playState = PlayState::playContinue;
+  }
+
+  switch (cmd) {
+  case command::admin:
+    if (settings.adminMenuLocked != 1) { // only card is allowed
+      LOG(state_log, s_debug, str_Teapot(), str_to(), str_Admin_Allow());
+      transit<Admin_Allow>();
+    }
+    return;
+  case command::track:
+    LOG(state_log, s_debug, F("Track Taste"));
+
+    switch (playState) {
+    case PlayState::startNext:
+      trackQuestion = getNextQuestion()*(numDescriptions+2)+1;
+
+      mp3.enqueueTrack(tonuino.getFolder(), trackQuestion);
+
+      playState = PlayState::playDescriptions;
+      break;
+    case PlayState::playDescriptions:
+      mp3.enqueueMp3FolderTrack(mp3Tracks::t_532_teapot_game_solution);
+      playState = PlayState::playSolution;
+      break;
+    default:
+      break;
+    }
+    break;
+  case command::pause:
+    if ((trackQuestion != 0) && not mp3.isPlayingFolder()) {
+      mp3.enqueueTrack(tonuino.getFolder(), (playState == PlayState::playDescriptions)? trackQuestion : trackQuestion+numDescriptions+1);
+    }
+    break;
+  case command::volume_up:
+    if ((trackQuestion != 0) && not mp3.isPlayingFolder()) {
+      mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+0+1);
+    }
+    else {
+      mp3.increaseVolume();
+    }
+    break;
+  case command::next:
+    if ((trackQuestion != 0) && not mp3.isPlayingFolder()) {
+      mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+1+1);
+    }
+    break;
+  case command::volume_down:
+    if ((trackQuestion != 0) && not mp3.isPlayingFolder()) {
+      mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+2+1);
+    }
+    else {
+      mp3.decreaseVolume();
+    }
+    break;
+  case command::previous:
+    if ((trackQuestion != 0) && not mp3.isPlayingFolder()) {
+      mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+3+1);
+    }
+    break;
+  case command::to_first:
+    finish();
+    return;
+  default:
+    break;
+  }
+  if (not tonuino.isStandbyTimerOff() && timer.isExpired()) {
+    finish();
+    return;
+  }
+}
+
+void Teapot::react(card_e const &c_e) {
+  if (c_e.card_ev != cardEvent::none) {
+    LOG(state_log, s_debug, str_Teapot(), F("::react(c) "), static_cast<int>(c_e.card_ev));
+  }
+  switch (c_e.card_ev) {
+  case cardEvent::inserted:
+    if (readCard()) {
+#ifdef DONT_ACCEPT_SAME_RFID_TWICE
+      if (not (tonuino.getMyFolder() == lastCardRead))
+#endif
+        handleReadCard();
+    }
+    return;
+  default:
+    break;
+  }
+}
+
+void Teapot::finish() {
+  // todo play end
+  if (mp3.isPlaying()) {
+    mp3.clearAllQueue();
+    mp3.stop();
+  }
+  transit<Idle>();
+}
+
+uint8_t Teapot::getNextQuestion() {
+  uint8_t question = random(0, remainingQuestions);
+  LOG(state_log, s_debug, F("random: "), question, F(", remain: "), remainingQuestions);
+  {
+    uint8_t i = 0;
+    while (true) {
+      if (question == 0) {
+        while (not r.getBit(i)) ++i;
+        question = i;
+        r.clearBit(i);
+        LOG(state_log, s_debug, F("question: "), question);
+        break;
+      }
+      if (r.getBit(i++)) {
+        --question;
+      }
+    }
+  }
+  --remainingQuestions;
+  LOG(state_log, s_debug, F("r: "), lf_no);
+  for (uint8_t i = 0; i<numQuestion; ++i)
+    LOG(state_log, s_debug, r.getBit(i), lf_no);
+  LOG(state_log, s_debug, F(" "));
+
+  return question;
 }
 
 

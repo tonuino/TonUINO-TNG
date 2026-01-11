@@ -257,6 +257,7 @@ const char main_html[] PROGMEM = R"rawliteral(
                                                                   <option>Quiz Spiel</option>                                  
                                                                   <option>Memory Spiel</option>                                
                                                                   <option>Bluetooth ein/aus</option>                                
+                                                                  <option>Teekesselchen Spiel</option>                                  
                                                                 </select>                                                      
 <br><label for="folder"         >Folder / Sp1 / Sp2     </label><div class="tooltip"><input type="number" name="folder"             id="folder" value="1" min="1" max="99">  
                                                                   <span class="tooltiptext">Folder</span></div>
@@ -441,6 +442,7 @@ const char settings_html[] PROGMEM = R"rawliteral(
  +'                                                                  <option>Quiz Spiel</option>                                     '
  +'                                                                  <option>Memory Spiel</option>                                   '
  +'                                                                  <option>Bluetooth ein/aus</option>                                   '
+ +'                                                                  <option>Teekesselchen Spiel</option>                                     '
  +'                                                                </select>                                                         '
  +'<br><label for="sc_folder_n_"   >Folder / Sp1 / Sp2     </label><div class="tooltip"><input type="number" name="sc_folder_n_"      id="sc_folder_n_">  '  
  +'                                                                 <span class="tooltiptext">Folder</span></div>                                         '

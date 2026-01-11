@@ -163,6 +163,33 @@ private:
   static constexpr long timeout{ 5 * 60 * 1000l};
 };
 
+class Teapot: public Base
+{
+public:
+  void entry() override;
+  void react(command_e const &) override;
+  void react(card_e    const &) override;
+private:
+  enum class PlayState: uint8_t {
+    startNext,
+    playDescriptions,
+    playSolution,
+    playContinue,
+  };
+
+  void finish();
+
+  uint8_t getNextQuestion();
+
+  uint8_t   numDescriptions {};
+  PlayState playState       {};
+  uint8_t   trackQuestion   {};
+  uint8_t   numQuestion     {};
+  bitfield<128> r           {}; // max in buzzer mode (num answer = 0, num solution = 1)
+  uint8_t remainingQuestions{};
+  static constexpr long timeout{ 5 * 60 * 1000l};
+};
+
 // ----------------------------------------------------------------------------
 // State Machine end states
 //
