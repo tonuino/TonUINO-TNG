@@ -31,6 +31,7 @@ mp3/0321_mode_repeat_last_card.mp3|Repeat card mode: the last card or shortcut i
 mp3/0322_mode_quiz_game.mp3|Quiz play mode: play a quiz.
 mp3/0323_mode_memory_game.mp3|Memory play mode: play a memory memory game.
 mp3/0324_mode_switch_bt.mp3|Switch Bluetooth: Switch on or off Bluetooth.
+mp3/0325_mode_teapot_game.mp3|Teapot play mode: play a Teapot game.
 mp3/0327_select_file.mp3|OK, now please select the file with the volume keys.
 mp3/0328_select_first_file.mp3|OK, now please select the start file with the volume keys.
 mp3/0329_select_last_file.mp3|Now please select the final file with the volume keys.
@@ -62,6 +63,9 @@ mp3/0521_memory_game_ok.mp3|Yes, the two cards belong together.
 mp3/0522_memory_game_bad.mp3|Oh no, the cards don't fit. 
 mp3/0523_memory_game_1.mp3|Please turn over the first memory card. 
 mp3/0524_memory_game_2.mp3|Please turn over the second memory card. 
+mp3/0530_teapot_game_intro.mp3|You are now playing the Teekesselchen guessing game. Press and hold the pause button to hear a new description. Then press the pause, back, forward, volume down, or volume up button to hear more descriptions. When you think you have guessed the correct term, press and hold the pause button to hear the answer. Repeat as often as you like. You can end the game by pressing and holding the forward or back button.  
+mp3/0531_teapot_game_continue.mp3|Continue by long-pressing the pause button. 
+mp3/0532_teapot_game_solution.mp3|Here is the solution.
 mp3/0800_waiting_for_card.mp3|Please put the card on now!
 mp3/0801_remove_card.mp3|Please remove the card from the reader!
 mp3/0802_reset_aborted.mp3|OK, I have canceled the process.
