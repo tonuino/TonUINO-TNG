@@ -99,7 +99,7 @@ Eine Anleitung dafür findet man [hier](https://discourse.voss.earth/t/tonuino-s
 
 # Installation
 
-Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.3.1 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
+Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.3.2 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
 
 # Hinweise zur WLAN Konfigurattion des ESP32
 
@@ -109,7 +109,7 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.3 (10.01.2026)
+## Version 3.3.3 (12.01.2026)
 - [Issue 303](https://github.com/tonuino/TonUINO-TNG/issues/303): New game: Teekesselchen
 - [Issue 302](https://github.com/tonuino/TonUINO-TNG/issues/302): Memory game: ignore second card if it is the same
 - [Issue 300](https://github.com/tonuino/TonUINO-TNG/issues/300): Error message when no PCB define was specified
