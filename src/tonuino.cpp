@@ -59,30 +59,30 @@ void Tonuino::setup() {
 #endif
 
   pinMode(shutdownPin  , OUTPUT);
-  digitalWrite(shutdownPin, getLevel(shutdownPinType, level::inactive));
+  pin_set_inactive(shutdownPin, shutdownPinType);
 
   randomSeed(generateRamdomSeed());
 
   // speaker switch off
 #if defined SPKONOFF
   pinMode(ampEnablePin, OUTPUT);
-  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
+  pin_set_inactive(ampEnablePin, ampEnablePinType);
 #endif
 
 #if defined ALLinONE || defined ALLinONE_Plus
   pinMode(usbAccessPin, OUTPUT);
-  digitalWrite(usbAccessPin, getLevel(usbAccessPinType, level::inactive));
+  pin_set_inactive(usbAccessPin, usbAccessPinType);
 #endif
 
 #ifdef SPECIAL_START_SHORTCUT
-  pinMode(specialStartShortcutPin, INPUT);
+  input_pin_mode(specialStartShortcutPin, specialStartShortcutPinType);
 #endif
 
 #ifdef BT_MODULE
   pinMode(btModuleOnPin          , OUTPUT);
   pinMode(btModulePairingPin     , OUTPUT);
-  digitalWrite(btModuleOnPin     , getLevel(btModuleOnPinType     , level::inactive));
-  digitalWrite(btModulePairingPin, getLevel(btModulePairingPinType, level::inactive));
+  pin_set_inactive(btModuleOnPin     , btModuleOnPinType     );
+  pin_set_inactive(btModulePairingPin, btModulePairingPinType);
 #endif // BT_MODULE
 
 #ifdef ROTARY_ENCODER
@@ -125,16 +125,17 @@ void Tonuino::setup() {
 
   // speaker switch on
 #if defined SPKONOFF
-  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::active));
+  pin_set_active(ampEnablePin, ampEnablePinType);
 #endif
 
   // Start Shortcut "at Startup" - e.g. Welcome Sound
 #ifdef SPECIAL_START_SHORTCUT
 
 #ifdef TonUINO_Classic
-  if (getLevel(specialStartShortcutPinType, (analogRead(specialStartShortcutPin)<512)?0:1) == level::active) {
+  // You cannot digitalRead the A6 on Arduino Nano
+  if ((analogRead(specialStartShortcutPin)<512)?0:1 == level2int(specialStartShortcutPinType, level::  active)) {
 #else // TonUINO_Classic
-  if (getLevel(specialStartShortcutPinType, digitalRead(specialStartShortcutPin)) == level::active) {
+  if (digitalRead(specialStartShortcutPin) == level2int(specialStartShortcutPinType, level::  active)) {
 #endif // TonUINO_Classic
 
 #ifdef HPJACKDETECT
@@ -288,7 +289,7 @@ void Tonuino::loop() {
 
 #ifdef BT_MODULE
   if (btModulePairingTimer.isActive() && btModulePairingTimer.isExpired())
-    digitalWrite(btModulePairingPin, getLevel(btModulePairingPinType, level::inactive));
+    pin_set_inactive(btModulePairingPin, btModulePairingPinType);
 #endif // BT_MODULE
 
 #ifdef TonUINO_Esp32
@@ -464,12 +465,12 @@ void Tonuino::shutdown() {
 #endif
 
 #if defined SPKONOFF
-  digitalWrite(ampEnablePin, getLevel(ampEnablePinType, level::inactive));
+  pin_set_inactive(ampEnablePin, ampEnablePinType);
   delay(1000);
 #endif
 
   // enter sleep state
-  digitalWrite(shutdownPin, getLevel(shutdownPinType, level::active));
+  pin_set_active(shutdownPin, shutdownPinType);
   delay(500);
 
 #if defined(USE_POLOLU_SHUTDOWN) or defined(USE_TRAEGER_PLATINE_SHUTDOWN)
@@ -502,14 +503,14 @@ void Tonuino::switchBtModuleOnOff() {
     mp3.playAdvertisement(advertTracks::t_320_bt_on , false/*olnyIfIsPlaying*/);
   else
     mp3.playAdvertisement(advertTracks::t_321_bt_off, false/*olnyIfIsPlaying*/);
-  digitalWrite(btModuleOnPin, getLevel(btModuleOnPinType, btModuleOn ? level::active : level::inactive));
+  pin_set_level(btModuleOnPin, btModuleOnPinType, btModuleOn ? level::active : level::inactive);
 }
 
 void Tonuino::btModulePairing() {
   if (not btModulePairingTimer.isActive()) {
     mp3.playAdvertisement(advertTracks::t_322_bt_pairing, false/*olnyIfIsPlaying*/);
     btModulePairingTimer.start(btModulePairingPulse);
-    digitalWrite(btModulePairingPin, getLevel(btModulePairingPinType, level::active));
+    pin_set_active(btModulePairingPin, btModulePairingPinType);
   }
 }
 #endif // BT_MODULE

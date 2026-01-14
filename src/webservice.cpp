@@ -110,7 +110,7 @@ void Webservice::init() {
 
   wifi_settings.init();
 
-  if ((digitalRead(buttonUpPin) != getLevel(buttonPinType, level::active)) && (wifi_settings.get_ssid() != "")) {
+  if ((pin_is_inactive(buttonUpPin, buttonPinType)) && (wifi_settings.get_ssid() != "")) {
     WiFi.setHostname(wifi_settings.get_hostname().c_str());
     WiFi.mode(WIFI_MODE_STA);
 

@@ -28,7 +28,7 @@ void setup()
 {
   Serial.begin(115200);
 #ifdef TonUINO_Esp32
-  if (digitalRead(buttonDownPin) == getLevel(buttonPinType, level::active))
+  if (pin_is_active(buttonDownPin, buttonPinType))
     delay(5000);
 #endif
 

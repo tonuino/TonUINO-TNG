@@ -50,14 +50,15 @@ Mp3::Mp3(Settings &settings)
 #endif /* DFPlayerUsesHardwareSerial */
 {
   // Busy Pin
-  pinMode(dfPlayer_busyPin              , dfPlayer_busyPinType               == levelType::activeHigh ? INPUT : INPUT_PULLUP);
+  input_pin_mode(dfPlayer_busyPin, dfPlayer_busyPinType);
 
 #ifdef HPJACKDETECT
   // Headphone Jack Detection
 #ifdef ALLinONE_Plus
+  // although it is activeLow INPUT_PULLUP is not allowed
   pinMode(dfPlayer_noHeadphoneJackDetect, INPUT);
 #else
-  pinMode(dfPlayer_noHeadphoneJackDetect, INPUT_PULLUP);
+  input_pin_mode(dfPlayer_noHeadphoneJackDetect, dfPlayer_noHeadphoneJackDetectType);
 #endif
 #endif
 }
@@ -90,7 +91,7 @@ void Mp3::init() {
 }
 
 void Mp3::refreshIsPlaying() {
-  is_playing_cache = !digitalRead(dfPlayer_busyPin);
+  is_playing_cache = pin_is_active(dfPlayer_busyPin, dfPlayer_busyPinType);
 }
 
 void Mp3::waitForTrackToFinish() {
@@ -377,15 +378,15 @@ void Mp3::logVolume() {
 #ifdef HPJACKDETECT
 void Mp3::hpjackdetect() {
 
-  level noHeadphoneJackDetect_now = getLevel(dfPlayer_noHeadphoneJackDetectType, digitalRead(dfPlayer_noHeadphoneJackDetect));
+  bool headphoneJackDetect_now = pin_is_inactive(dfPlayer_noHeadphoneJackDetect, dfPlayer_noHeadphoneJackDetectType);
   if (tempSpkOn)
-    noHeadphoneJackDetect_now = level::active;
+    headphoneJackDetect_now = false;
 
-  if (noHeadphoneJackDetect != noHeadphoneJackDetect_now) {
-    noHeadphoneJackDetect = noHeadphoneJackDetect_now;
-    LOG(mp3_log, s_info, F("hpJackDetect: "), noHeadphoneJackDetect == level::active ? 0 : 1);
+  if (headphoneJackDetect != headphoneJackDetect_now) {
+    headphoneJackDetect = headphoneJackDetect_now;
+    LOG(mp3_log, s_info, F("hpJackDetect: "), headphoneJackDetect);
 #ifdef SPKONOFF
-    digitalWrite(ampEnablePin, getLevel(ampEnablePinType, noHeadphoneJackDetect));
+    pin_set_level(ampEnablePin, ampEnablePinType, headphoneJackDetect ? level::inactive : level::active);
 #endif
     if (isHeadphoneJackDetect()) {
       volume     = &hpVolume;
