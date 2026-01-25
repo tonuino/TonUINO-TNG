@@ -267,6 +267,9 @@ void Tonuino::loop() {
 #ifdef MEMORY_GAME
         || SM_tonuino::is_in_state<StartPlay<Memory>>()
 #endif
+#ifdef TEAPOT_GAME
+        || SM_tonuino::is_in_state<StartPlay<Teapot>>()
+#endif
   )
     ledManager.setState(ledState::startup);
   else if (SM_tonuino::is_in_state<Play>())
@@ -281,6 +284,10 @@ void Tonuino::loop() {
   else if (SM_tonuino::is_in_state<Memory>())
     ledManager.setState(ledState::playing); // TODO should be changed to another state
 #endif // MEMORY_GAME
+#ifdef TEAPOT_GAME
+  else if (SM_tonuino::is_in_state<Teapot>())
+    ledManager.setState(ledState::playing); // TODO should be changed to another state
+#endif // TEAPOT_GAME
   else // admin menu
     ledManager.setState(ledState::await_input);
 

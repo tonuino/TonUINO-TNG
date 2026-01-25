@@ -13,12 +13,13 @@ void LedManager::begin() {
   setAllOff();
 
   LOG(ledManager_log, s_info, F("LEDs(D/P/U): "), led_down_pin, F(" "), led_play_pin, F(" "), led_up_pin);
-  LOG(ledManager_log, s_info, F("NUM LEDS"), NUM_LEDS, F(" "));
+  LOG(ledManager_log, s_info, F("NUM LEDS: "), NUM_LEDS);
 }
 
 void LedManager::setState(ledState state) {
 
   if (currentState != state) {
+    LOG(ledManager_log, s_debug, F("LED Manager, new state: "), static_cast<uint8_t>(state));
     currentState = state;
     animationStep = 0;
 
@@ -27,16 +28,18 @@ void LedManager::setState(ledState state) {
 
     if (currentState == ledState::shutdown) //Immediate Update
       updateTimer.stop();
-
-    update();
   }
 }
 
 void LedManager::handleBlinkOnce() {
+  if (buttonPressBlinkActive)
+    return;
+
   toggleAll();
 
   buttonPressBlinkActive = true;
   updateTimer.start(led_short_blink);
+  LOG(ledManager_log, s_debug, F("LED Manager start buttonPressBlink"));
 }
 
 void LedManager::setAll(uint8_t state) {
@@ -53,6 +56,7 @@ void LedManager::toggleAll() {
 
 void LedManager::setLED(uint8_t state, uint8_t pin) {
   digitalWrite(pin, state);
+  LOG(ledManager_log, s_debug, F("LED Manager, set["), pin, F("] to "), state);
 }
 
 void LedManager::update() {
@@ -63,9 +67,12 @@ void LedManager::update() {
   else
     updateTimer.start(led_update_interval);
 
+  LOG(ledManager_log, s_debug, F("LED Manager update in state: "),  static_cast<uint8_t>(currentState));
+
   if (buttonPressBlinkActive && currentState != ledState::shutdown) {
     toggleAll();
     buttonPressBlinkActive = false;
+    LOG(ledManager_log, s_debug, F("LED Manager end buttonPressBlink"));
     return;
   }
 
@@ -73,7 +80,7 @@ void LedManager::update() {
   case ledState::startup:
     // Running light effect: only one LED is on, moves to next LED on each step.
     for (size_t i = 0; i < NUM_LEDS; ++i) {
-      digitalWrite(ledPins[i], animationStep % NUM_LEDS == i);
+      setLED(animationStep % NUM_LEDS == i, ledPins[i]);
     }
     ++animationStep;
     break;
@@ -94,9 +101,9 @@ void LedManager::update() {
 
   case ledState::paused:
     // Only the middle LED (PLAY) blinks; others remain off.
-    digitalWrite(led_down_pin, LOW);
-    digitalWrite(led_play_pin, animationStep % 2 == 0);
-    digitalWrite(led_up_pin, LOW);
+    setLED(LOW                   , led_down_pin);
+    setLED(animationStep % 2 == 0, led_play_pin);
+    setLED(LOW                   , led_up_pin);
     ++animationStep;
     break;
 
