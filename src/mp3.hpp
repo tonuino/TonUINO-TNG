@@ -271,7 +271,7 @@ public:
 
 #ifdef HPJACKDETECT
   void hpjackdetect         ();
-  bool isHeadphoneJackDetect() { return noHeadphoneJackDetect == level::inactive; }
+  bool isHeadphoneJackDetect() { return headphoneJackDetect; }
   void setTempSpkOn         () { tempSpkOn = 2; }
 #endif
 
@@ -334,7 +334,7 @@ private:
 #endif
 
 #ifdef HPJACKDETECT
-  level                noHeadphoneJackDetect{level::unknown};
+  bool                 headphoneJackDetect{};
   uint8_t              tempSpkOn{};
 #endif
 

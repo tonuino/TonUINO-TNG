@@ -169,10 +169,9 @@ bool Buttons::isNoButton() {
 }
 
 bool Buttons::isReset() {
-  constexpr int buttonActiveLevel = getLevel(buttonPinType, level::active);
-  return (digitalRead(buttonPausePin) == buttonActiveLevel &&
-          digitalRead(buttonUpPin   ) == buttonActiveLevel &&
-          digitalRead(buttonDownPin ) == buttonActiveLevel );
+  return (pin_is_active(buttonPausePin, buttonPinType) &&
+          pin_is_active(buttonUpPin   , buttonPinType) &&
+          pin_is_active(buttonDownPin , buttonPinType) );
 }
 
 void Buttons::readButtons() {
