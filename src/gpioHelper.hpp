@@ -15,10 +15,19 @@ enum class levelType : uint8_t {
   activeLow , // normally closed
 };
 
-inline constexpr int   getLevel(levelType t, level l) { return (l == level::inactive) ? (t == levelType::activeHigh ? LOW : HIGH)
-                                                                                      : (t == levelType::activeHigh ? HIGH : LOW); }
-inline constexpr level getLevel(levelType t, int   l) { return (l == LOW)             ? (t == levelType::activeHigh ? level::inactive : level::active  )
-                                                                                      : (t == levelType::activeHigh ? level::active   : level::inactive); }
+inline constexpr int   level2int(levelType t, level l) { return (l == level::inactive) ? (t == levelType::activeHigh ? LOW : HIGH)
+                                                                                       : (t == levelType::activeHigh ? HIGH : LOW); }
+
+inline void input_pin_mode (uint8_t pin, levelType pin_type) { pinMode(pin, (pin_type == levelType::activeHigh) ? INPUT : INPUT_PULLUP); };
+
+inline bool pin_is_active  (uint8_t pin, levelType pin_type) { return digitalRead(pin)==level2int(pin_type, level::  active); };
+inline bool pin_is_inactive(uint8_t pin, levelType pin_type) { return digitalRead(pin)==level2int(pin_type, level::inactive); };
+
+inline void pin_set_active  (uint8_t pin, levelType pin_type) { digitalWrite(pin, level2int(pin_type, level::  active)); };
+inline void pin_set_inactive(uint8_t pin, levelType pin_type) { digitalWrite(pin, level2int(pin_type, level::inactive)); };
+inline void pin_set_level   (uint8_t pin, levelType pin_type, level l) { digitalWrite(pin, level2int(pin_type, l)); };
+
+
 #if not defined(TonUINO_Esp32) and not defined(D0)
 #define D0   0
 #define D1   1
