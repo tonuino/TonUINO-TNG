@@ -42,7 +42,6 @@ ISR(TIMER1_COMPA_vect){
 void Tonuino::setup() {
 #ifdef USE_LED_BUTTONS
   ledManager.begin();
-  ledManager.setState(ledState::startup);
 #endif
 
 #ifdef USE_TIMER
@@ -469,6 +468,10 @@ void Tonuino::shutdown() {
 
 #ifdef NEO_RING
   ring.call_on_sleep();
+#endif
+
+#ifdef USE_LED_BUTTONS
+  ledManager.setState(ledState::shutdown);
 #endif
 
 #if defined SPKONOFF
