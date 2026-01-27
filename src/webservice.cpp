@@ -98,7 +98,7 @@ void WifiSettings::set(const String& n_ssid,
   prefs.putString("WiFi_st_ip_subn", static_ip_subnet );
   prefs.putString("WiFi_st_ip_dns1", static_ip_dns1   );
   prefs.putString("WiFi_st_ip_dns2", static_ip_dns2   );
-  prefs.putString("AP_password"    , appassword    );
+  prefs.putString("AP_password"    , appassword       );
   LOG(webserv_log, s_info, "wifi settings saved - ssid: ", ssid,
                            ", hostname: "     , hostname,
                            ", st_ip: "        , static_ip,
@@ -114,7 +114,9 @@ void Webservice::init() {
 
   wifi_settings.init();
 
-  if ((pin_is_inactive(buttonUpPin, buttonPinType)) && (wifi_settings.get_ssid() != "")) {
+  const bool force_ap = pin_is_active(buttonUpPin, buttonPinType);
+
+  if (not force_ap && (wifi_settings.get_ssid() != "")) {
     WiFi.setHostname(wifi_settings.get_hostname().c_str());
     WiFi.mode(WIFI_MODE_STA);
 
@@ -146,7 +148,7 @@ void Webservice::init() {
     LOG(webserv_log, s_info, "Not connected to WiFi ", wifi_settings.get_ssid(), ", starting AP TonUINO");
     WiFi.softAPsetHostname("tonuino");
     WiFi.mode(WIFI_MODE_AP);
-    if (wifi_settings.get_appassword().length() < 8) {
+    if ((wifi_settings.get_appassword().length() < 8) || force_ap) {
       WiFi.softAP("TonUINO");
     }
     else {
