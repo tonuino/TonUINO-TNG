@@ -8,7 +8,7 @@
 #ifdef USE_LED_BUTTONS
 
 /**
- * startup: Running light animation during initialization
+ * startup: Running light animation during stating new card
  * await_input: All LEDs blink synchronously
  * playing: All LEDs turned on continuously
  * paused: Only the PLAY LED blinks
@@ -19,11 +19,11 @@ enum class ledState: uint8_t {
   await_input,
   playing,
   paused,
-  shutdown
+  shutdown,
 };
 
-constexpr uint8_t ledPins[] = {led_down_pin, led_play_pin, led_up_pin};
-constexpr size_t NUM_LEDS   = sizeof(ledPins)/sizeof(ledPins[0]);
+inline constexpr uint8_t ledPins[] = {led_down_pin, led_play_pin, led_up_pin};
+inline constexpr size_t NUM_LEDS   = sizeof(ledPins)/sizeof(ledPins[0]);
 
 class LedManager {
 public:
@@ -45,7 +45,7 @@ private:
   void setAllOn () { setAll(HIGH); }
   void setAllOff() { setAll(LOW); }
 
-  void setLED   (uint8_t state, uint8_t pin);
+  void setLED   (uint8_t pin, uint8_t state);
 };
 #endif // USE_LED_BUTTONS
 #endif
