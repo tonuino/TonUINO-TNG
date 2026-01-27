@@ -24,7 +24,8 @@ public:
            const String& static_ip_gw,
            const String& static_ip_subnet,
            const String& static_ip_dns1,
-           const String& static_ip_dns2
+           const String& static_ip_dns2,
+           const String& appassword
            );
   String get_ssid             () { return ssid             ; }
   String get_password         () { return password         ; }
@@ -35,6 +36,7 @@ public:
   String get_static_ip_subnet () { return static_ip_subnet ; }
   String get_static_ip_dns1   () { return static_ip_dns1   ; }
   String get_static_ip_dns2   () { return static_ip_dns2   ; }
+  String get_appassword       () { return appassword       ; }
 private:
   Preferences prefs            {};
   String      ssid             {};
@@ -46,6 +48,7 @@ private:
   String      static_ip_subnet {};
   String      static_ip_dns1   {};
   String      static_ip_dns2   {};
+  String      appassword       {};
 };
 
 class Webservice: public CommandSource {

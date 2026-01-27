@@ -57,6 +57,7 @@ void WifiSettings::init() {
   static_ip_subnet  = prefs.getString("WiFi_st_ip_subn", "0.0.0.0");
   static_ip_dns1    = prefs.getString("WiFi_st_ip_dns1", "0.0.0.0");
   static_ip_dns2    = prefs.getString("WiFi_st_ip_dns2", "0.0.0.0");
+  appassword        = prefs.getString("AP_password");
   LOG(webserv_log, s_info, "wifi settings - ssid: ", ssid,
                            ", hostname: "     , hostname,
                            ", st_ip: "        , static_ip,
@@ -76,7 +77,8 @@ void WifiSettings::set(const String& n_ssid,
                        const String& n_static_ip_gw,
                        const String& n_static_ip_subnet,
                        const String& n_static_ip_dns1,
-                       const String& n_static_ip_dns2   ) {
+                       const String& n_static_ip_dns2,
+                       const String& n_appassword   ) {
   ssid              = n_ssid             ;
   password          = n_password         ;
   hostname          = n_hostname         ;
@@ -86,6 +88,7 @@ void WifiSettings::set(const String& n_ssid,
   static_ip_subnet  = n_static_ip_subnet ;
   static_ip_dns1    = n_static_ip_dns1   ;
   static_ip_dns2    = n_static_ip_dns2   ;
+  appassword        = n_appassword         ;
   prefs.putString("WiFi_ssid"      , ssid             );
   prefs.putString("WiFi_password"  , password         );
   prefs.putString("WiFi_hostname"  , hostname         );
@@ -95,6 +98,7 @@ void WifiSettings::set(const String& n_ssid,
   prefs.putString("WiFi_st_ip_subn", static_ip_subnet );
   prefs.putString("WiFi_st_ip_dns1", static_ip_dns1   );
   prefs.putString("WiFi_st_ip_dns2", static_ip_dns2   );
+  prefs.putString("AP_password"    , appassword    );
   LOG(webserv_log, s_info, "wifi settings saved - ssid: ", ssid,
                            ", hostname: "     , hostname,
                            ", st_ip: "        , static_ip,
@@ -142,7 +146,12 @@ void Webservice::init() {
     LOG(webserv_log, s_info, "Not connected to WiFi ", wifi_settings.get_ssid(), ", starting AP TonUINO");
     WiFi.softAPsetHostname("tonuino");
     WiFi.mode(WIFI_MODE_AP);
-    WiFi.softAP("TonUINO");
+    if (wifi_settings.get_appassword().length() < 8) {
+      WiFi.softAP("TonUINO");
+    }
+    else {
+      WiFi.softAP("TonUINO", wifi_settings.get_appassword());
+    }
     delay(500); // slight delay to make sure we get an AP IP
     LOG(webserv_log, s_info, "AP IP address: ",WiFi.softAPIP());
     dns_server.start(53, "*", WiFi.softAPIP());
@@ -837,7 +846,8 @@ void Webservice::wifi_save(AsyncWebServerRequest *request) {
       request->hasArg("static_ip_gw"    ) &&
       request->hasArg("static_ip_subnet") &&
       request->hasArg("static_ip_dns1"  ) &&
-      request->hasArg("static_ip_dns2"  )
+      request->hasArg("static_ip_dns2"  ) &&
+      request->hasArg("appassword"      )
       ) {
     wifi_settings.set(request->arg("ssid"            ),
                       request->arg("password"        ),
@@ -847,7 +857,8 @@ void Webservice::wifi_save(AsyncWebServerRequest *request) {
                       request->arg("static_ip_gw"    ),
                       request->arg("static_ip_subnet"),
                       request->arg("static_ip_dns1"  ),
-                      request->arg("static_ip_dns2"  )
+                      request->arg("static_ip_dns2"  ),
+                      request->arg("appassword"      )
                       );
     LOG(webserv_log, s_info, "wifi settings saved");
   }
@@ -952,6 +963,8 @@ String Webservice::process_page(const String& var) {
     return wifi_settings.get_static_ip_dns1();
   else if (var == "DNS2")
     return wifi_settings.get_static_ip_dns2();
+  else if (var == "APPASSWORD")
+    return wifi_settings.get_appassword();
 
   return getInfoData(var);
 
