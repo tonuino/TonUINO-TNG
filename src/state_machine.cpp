@@ -964,7 +964,8 @@ template<class P> void StartPlay<P>::entry() {
   timer.stop();
 }
 
-template<class P> void StartPlay<P>::react(command_e const &/*cmd_e*/) {
+template<class P> void StartPlay<P>::react(command_e const &cmd_e) {
+  commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
   if (timer.isActive()) {
     if (timer.isExpired()) {
       LOG(state_log, s_debug, str_StartPlay(), str_to(), str_Play());

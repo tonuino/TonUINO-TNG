@@ -109,8 +109,10 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.3 (25.01.2026)
+## Version 3.3.3 (01.02.2026)
 - [Issue 301](https://github.com/tonuino/TonUINO-TNG/issues/301): Support ESP32 Wroom 32
+- [Issue 312](https://github.com/tonuino/TonUINO-TNG/issues/312): Add password protection to wifi AP
+- [Issue 313](https://github.com/tonuino/TonUINO-TNG/issues/313): Fix some bugs in the LED Manager
 - [Issue 309](https://github.com/tonuino/TonUINO-TNG/issues/309): Improve GPIO handling
 - [Issue 303](https://github.com/tonuino/TonUINO-TNG/issues/303): New game: Teekesselchen
 - [Issue 302](https://github.com/tonuino/TonUINO-TNG/issues/302): Memory game: ignore second card if it is the same
