@@ -368,22 +368,24 @@ void Tonuino::playFolder() {
 
   case pmode_t::hoerbuch:
   case pmode_t::hoerbuch_1:
-  {
     // Hörbuch Modus: kompletten Ordner spielen und Fortschritt merken (oder nur eine Datei)
+    myFolder.special = 1;
+    myFolder.special2 = numTracksInFolder;
+    __attribute__ ((fallthrough));
+    /* no break */
+  case pmode_t::hoerbuch_vb:
+  {
     LOG(play_log, s_debug, F("Hörbuch"));
+    LOG(play_log, s_debug, myFolder.special, str_bis(), myFolder.special2);
     uint16_t startTrack = settings.readFolderSettingFromFlash(myFolder.folder);
-    if ((startTrack == 0) || (startTrack > numTracksInFolder))
-      startTrack = 1;
-    mp3.enqueueTrack(myFolder.folder, 1, numTracksInFolder, startTrack-1);
+    if ((startTrack < myFolder.special) || (startTrack > myFolder.special2))
+      startTrack = myFolder.special;
+    mp3.enqueueTrack(myFolder.folder, myFolder.special, myFolder.special2, startTrack-myFolder.special);
   }
     break;
 
-  case pmode_t::quiz_game:
-  case pmode_t::memory_game:
-    // Nothing to enqueue here
-    break;
-
   default:
+    // Nothing to enqueue here
     break;
   }
 }
@@ -398,7 +400,7 @@ void Tonuino::playTrackNumber () {
 // Leider kann das Modul selbst keine Queue abspielen, daher müssen wir selbst die Queue verwalten
 void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
   LOG(play_log, s_debug, F("nextTrack"));
-  if (fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1)) {
+  if (fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1 || myFolder.mode == pmode_t::hoerbuch_vb)) {
     const uint8_t trackToSave = (mp3.getCurrentTrack() < numTracksInFolder) ? mp3.getCurrentTrack()+1 : 1;
     settings.writeFolderSettingToFlash(myFolder.folder, trackToSave);
     if (myFolder.mode == pmode_t::hoerbuch_1) {
@@ -411,7 +413,7 @@ void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
   if (mp3.isPlayingFolder() && activeModifier->handleNext())
     return;
   mp3.playNext(tracks, fromOnPlayFinished);
-  if (not fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1)) {
+  if (not fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1 || myFolder.mode == pmode_t::hoerbuch_vb)) {
     settings.writeFolderSettingToFlash(myFolder.folder, mp3.getCurrentTrack());
   }
 }

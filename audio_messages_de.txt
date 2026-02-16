@@ -32,6 +32,7 @@ mp3/0322_mode_quiz_game.mp3|Quiz Spiel Modus: Spiele ein Quiz.
 mp3/0323_mode_memory_game.mp3|Memory Spiel Modus: Spiele ein Memory.
 mp3/0324_mode_switch_bt.mp3|Switch Bluetooth: Schalte Bluetooth an oder aus.
 mp3/0325_mode_teapot_game.mp3|Teekesselchen Spiel Modus: Spiele ein Teekesselchen Spiel.
+mp3/0326_special_audio_book.mp3|Spezialmodus Von-Bis, Hörbuch: Alle Dateien zwischen der Start und Enddatei wiedergeben und den Fortschritt speichern.
 mp3/0327_select_file.mp3|OK, wähle nun bitte die Datei mit den Lautstärketasten aus.
 mp3/0328_select_first_file.mp3|OK, wähle nun bitte die Startdatei mit den Lautstärketasten aus.
 mp3/0329_select_last_file.mp3|Wähle nun bitte die Enddatei mit den Lautstärketasten aus.
