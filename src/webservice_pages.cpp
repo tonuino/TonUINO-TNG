@@ -782,7 +782,7 @@ Build date: %aboutdate%
 
   <p class='red' id="status"></p>
   <input type="file" name="file1" id="file1" accept=".bin"><br><br>
-  <button onclick="uploadFile()">Upgrade</button><br><br>
+  <button onclick="uploadFile()" %ota_disabled%>Upgrade</button><br><br>
   <progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
   <p id="loaded_n_total"></p>
 
