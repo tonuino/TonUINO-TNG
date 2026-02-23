@@ -109,7 +109,7 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.3 (28.01.2026)
+## Version 3.3.3 (23.02.2026)
 - [Issue 317](https://github.com/tonuino/TonUINO-TNG/issues/317): New play mode: hoerbuch von bis
 - [Issue 312](https://github.com/tonuino/TonUINO-TNG/issues/312): Add password protection to wifi AP
 - [Issue 313](https://github.com/tonuino/TonUINO-TNG/issues/313): Fix some bugs in the LED Manager

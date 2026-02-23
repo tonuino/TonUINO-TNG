@@ -990,6 +990,10 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_in_with_other) {
           { 1, pmode_t::party_vb    , 3, 5 },
           { 1, pmode_t::party_vb    , 5, 5 }
       },
+      {
+          { 1, pmode_t::hoerbuch_vb , 1, 5 },
+          { 1, pmode_t::hoerbuch_vb , 6, 8 }
+      },
 
       // special2
       {

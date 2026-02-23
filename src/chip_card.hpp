@@ -49,12 +49,7 @@ struct folderSettings {
   uint8_t special;
   uint8_t special2;
   bool operator==(const folderSettings& rhs) const {
-    if (folder != rhs.folder || mode != rhs.mode)
-      return false;
-    if (mode == pmode_t::einzel && special != rhs.special)
-      return false;
-    if ((mode == pmode_t::hoerspiel_vb || mode == pmode_t::album_vb || mode == pmode_t::party_vb) &&
-        (special != rhs.special || special2 != rhs.special2))
+    if (folder != rhs.folder || mode != rhs.mode || special != rhs.special || special2 != rhs.special2)
       return false;
     return true;
   }
