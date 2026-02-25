@@ -141,7 +141,7 @@ void ChMode::entry() {
 
   folder = folderSettings{};
 
-  numberOfOptions   = 15;
+  numberOfOptions   = 16;
   startMessage      = mp3Tracks::t_310_select_mode;
   messageOffset     = mp3Tracks::t_310_select_mode;
   preview           = false;
@@ -242,7 +242,8 @@ void ChFolder::react(command_e const &cmd_e) {
     }
     if (  ( folder.mode == pmode_t::hoerspiel_vb)
         ||( folder.mode == pmode_t::album_vb    )
-        ||( folder.mode == pmode_t::party_vb    )) {
+        ||( folder.mode == pmode_t::party_vb    )
+        ||( folder.mode == pmode_t::hoerbuch_vb )) {
       transit<ChFirstTrack>();
       return;
     }

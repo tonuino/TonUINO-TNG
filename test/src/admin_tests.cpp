@@ -192,7 +192,7 @@ public:
 
     if (card.mode == pmode_t::hoerbuch_1) {
       // ===== select number of tracks
-      for (uint8_t num = 1; num <= 5; ++num) {
+      for (uint8_t num = 1; num <= card.special+1; ++num) {
         // button up --> play track number and track
         button_for_command(command::next, state_for_command::admin);
         EXPECT_TRUE(SM_setupCard::is_in_state<ChNumTracks>());
@@ -204,7 +204,7 @@ public:
       // button select --> finish
       button_for_command(command::select, state_for_command::admin);
       EXPECT_TRUE(SM_setupCard::is_in_state<finished_setupCard>());
-      EXPECT_EQ(SM_setupCard::folder.special, 5-1);
+      EXPECT_EQ(SM_setupCard::folder.special, card.special);
       return;
     }
 
@@ -471,7 +471,8 @@ TEST_F(admin_test_fixture, Admin_NewCard) {
       { 6, pmode_t::hoerspiel_vb, 1, 2 },
       { 7, pmode_t::album_vb    , 2, 3 },
       { 8, pmode_t::party_vb    , 4, 5 },
-      { 9, pmode_t::hoerbuch_1  , 0, 0 }
+      { 9, pmode_t::hoerbuch_1  , 4, 0 },
+      {10, pmode_t::hoerbuch_vb , 3, 7 }
   };
 
   Print::clear_output();
@@ -808,7 +809,8 @@ TEST_F(admin_test_fixture, Admin_ShortCut) {
       { 6, pmode_t::hoerspiel_vb, 1, 2 },
       { 7, pmode_t::album_vb    , 2, 3 },
       { 8, pmode_t::party_vb    , 4, 5 },
-      { 9, pmode_t::hoerbuch_1  , 0, 0 }
+      { 9, pmode_t::hoerbuch_1  , 4, 0 },
+      {10, pmode_t::hoerbuch_vb , 3, 7 }
   };
 
   Print::clear_output();
@@ -867,7 +869,8 @@ TEST_F(admin_test_fixture, Admin_ShortCut_extButtons) {
       { 6, pmode_t::hoerspiel_vb, 1, 2 },
       { 7, pmode_t::album_vb    , 2, 3 },
       { 8, pmode_t::party_vb    , 4, 5 },
-      { 9, pmode_t::hoerbuch_1  , 0, 0 }
+      { 9, pmode_t::hoerbuch_1  , 4, 0 },
+      {10, pmode_t::hoerbuch_vb , 3, 7 }
   };
 
   Print::clear_output();
@@ -930,7 +933,8 @@ TEST_F(admin_test_fixture, Admin_ShortCut_extButtons_longPress) {
       { 6, pmode_t::hoerspiel_vb, 1, 2 },
       { 7, pmode_t::album_vb    , 2, 3 },
       { 8, pmode_t::party_vb    , 4, 5 },
-      { 9, pmode_t::hoerbuch_1  , 0, 0 }
+      { 9, pmode_t::hoerbuch_1  , 4, 0 },
+      {10, pmode_t::hoerbuch_vb , 3, 7 }
   };
 
   Print::clear_output();
@@ -998,7 +1002,8 @@ TEST_F(admin_test_fixture, New_Card) {
       { 6, pmode_t::hoerspiel_vb, 1, 2 },
       { 7, pmode_t::album_vb    , 2, 3 },
       { 8, pmode_t::party_vb    , 4, 5 },
-      { 9, pmode_t::hoerbuch_1  , 0, 0 }
+      { 9, pmode_t::hoerbuch_1  , 4, 0 },
+      {10, pmode_t::hoerbuch_vb , 3, 7 }
   };
 
   Print::clear_output();

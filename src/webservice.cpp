@@ -301,6 +301,7 @@ void Webservice::update_settings(AsyncWebServerRequest *request) {
                                                                                request->arg("sc_mode1"            ) == "Bluetooth ein/aus"? pmode_t::switch_bt    :
 #endif
                                                                                request->arg("sc_mode1"            ) == "Teekesselchen Spiel"? pmode_t::teapot_game:
+                                                                               request->arg("sc_mode1"            ) == "Hörbuch von bis"  ? pmode_t::hoerbuch_vb  :
                                                                                                                                             pmode_t::none         ;
   if (request->hasArg("sc_folder1"          )) settings.shortCuts[0].folder  = request->arg("sc_folder1"          ).toInt();
   if (request->hasArg("sc_special11"        )) settings.shortCuts[0].special = request->arg("sc_special11"        ).toInt();
@@ -323,6 +324,7 @@ void Webservice::update_settings(AsyncWebServerRequest *request) {
                                                                                request->arg("sc_mode2"            ) == "Bluetooth ein/aus"? pmode_t::switch_bt    :
 #endif
                                                                                request->arg("sc_mode2"            ) == "Teekesselchen Spiel"? pmode_t::teapot_game:
+                                                                               request->arg("sc_mode2"            ) == "Hörbuch von bis"  ? pmode_t::hoerbuch_vb  :
                                                                                                                                             pmode_t::none         ;
   if (request->hasArg("sc_folder2"          )) settings.shortCuts[1].folder  = request->arg("sc_folder2"          ).toInt();
   if (request->hasArg("sc_special12"        )) settings.shortCuts[1].special = request->arg("sc_special12"        ).toInt();
@@ -367,6 +369,7 @@ void Webservice::update_settings(AsyncWebServerRequest *request) {
                                                                                request->arg("sc_mode4"            ) == "Bluetooth ein/aus"? pmode_t::switch_bt    :
 #endif
                                                                                request->arg("sc_mode4"            ) == "Teekesselchen Spiel"? pmode_t::teapot_game:
+                                                                               request->arg("sc_mode4"            ) == "Hörbuch von bis"  ? pmode_t::hoerbuch_vb  :
                                                                                                                                             pmode_t::none         ;
   if (request->hasArg("sc_folder4"          )) settings.shortCuts[3].folder  = request->arg("sc_folder4"          ).toInt();
   if (request->hasArg("sc_special14"        )) settings.shortCuts[3].special = request->arg("sc_special14"        ).toInt();
@@ -459,6 +462,7 @@ void Webservice::get_settings(AsyncWebServerRequest *request) {
                                   settings.shortCuts[i-1].mode == pmode_t::switch_bt    ? "Bluetooth ein/aus":
 #endif
                                   settings.shortCuts[i-1].mode == pmode_t::teapot_game  ? "Teekesselchen Spiel":
+                                  settings.shortCuts[i-1].mode == pmode_t::hoerbuch_vb  ? "Hörbuch von bis"  :
                                                                                           "--------"         ;
 
     doc["sc_folder"+String(i)  ] = String(settings.shortCuts[i-1].folder  );
@@ -584,6 +588,7 @@ void Webservice::card(AsyncWebServerRequest *request) {
                   request->arg("mode") == "Bluetooth ein/aus"? pmode_t::switch_bt    :
 #endif
                   request->arg("mode") == "Teekesselchen Spiel"? pmode_t::teapot_game:
+                  request->arg("mode") == "Hörbuch von bis"  ? pmode_t::hoerbuch_vb  :
                                                                pmode_t::none         ;
 #ifdef BT_MODULE
   if (card.mode == pmode_t::switch_bt) card.folder = 0xff;
@@ -623,6 +628,7 @@ void Webservice::card(AsyncWebServerRequest *request) {
   case pmode_t::hoerspiel_vb :
   case pmode_t::album_vb     :
   case pmode_t::party_vb     :
+  case pmode_t::hoerbuch_vb  :
     if (card.special < 1)
       message += "\nDer Parameter Special1 muss mindestens 1 sein";
     if (card.special > card.special2)
@@ -723,7 +729,8 @@ String Webservice::get_status() {
                   (tonuino.getMyFolder().mode == pmode_t::repeat_last ) ? String("Wiederhole"      ) :
                   (tonuino.getMyFolder().mode == pmode_t::quiz_game   ) ? String("Quiz Spiel"      ) :
                   (tonuino.getMyFolder().mode == pmode_t::memory_game ) ? String("Memory Spiel"    ) :
-                  (tonuino.getMyFolder().mode == pmode_t::teapot_game ) ? String("Teekesselchen Spiel") : String("?");
+                  (tonuino.getMyFolder().mode == pmode_t::teapot_game ) ? String("Teekesselchen Spiel") :
+                  (tonuino.getMyFolder().mode == pmode_t::hoerbuch_vb ) ? String("Hörbuch von bis" ) : String("?");
     status += String(" (Mode: ") + mode + String(", Folder: ") + String(mp3.getCurrentFolder()) + String(")");
   }
 
