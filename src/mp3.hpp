@@ -64,6 +64,7 @@ enum class mp3Tracks: uint16_t {
   t_323_mode_memory_game       = 323,
   t_324_mode_switch_bt         = 324,
   t_325_mode_teapot_game       = 325,
+  t_326_special_audio_book     = 326,
   t_327_select_file            = 327,
   t_328_select_first_file      = 328,
   t_329_select_last_file       = 329,

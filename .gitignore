@@ -34,20 +34,14 @@ Temporary Items
 
 # Eclipse Sloeber plugin for Arduino
 /sloeber.ino.cpp
-/spec.d
 /.cproject
 /.project
 /.pydevproject
 /.sproject
 /.settings
+/.autoBuildProject
 /build
-/Classic_3/
-/Classic_5/
-/Classic_3x3/
-/ALLinONE/
-/ALLinONE_3x3/
-/ALLinONE_plus/
-/ALLinONE_plus_3x3/
+/bin
 
 # VS code
 .pio
