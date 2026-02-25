@@ -63,6 +63,9 @@ void setup()
 #if TonUINO_Esp32 == 100
   LOG(init_log, s_error, F("ESP32 Nano "), lf_no);
 #endif
+#if TonUINO_Esp32 == 200
+  LOG(init_log, s_error, F("ESP32 Wroom 32 "), lf_no);
+#endif
 
 #ifdef FIVEBUTTONS
   LOG(init_log, s_error, F("5"));

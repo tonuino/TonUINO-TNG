@@ -5,6 +5,7 @@
 
 #include <ArduinoJson.h>
 #include <Update.h>
+#include <esp_ota_ops.h>
 
 #include "logger.hpp"
 #include "state_machine.hpp"
@@ -906,7 +907,7 @@ void Webservice::onOtaUpload(AsyncWebServerRequest *request, String filename, si
       StreamString str;
       Update.printError(str);
       LOG(webserv_log, s_error, "Failed to start update process: ", str.c_str());
-      request->send(400, "text/plain", "Failed to start update process");
+      request->send(400, "text/plain", String("Failed to start update process: ")+str.c_str());
       return;
     }
   }
@@ -1078,6 +1079,9 @@ String Webservice::getInfoData(const String& id){
     #if  TonUINO_Esp32 == 100
       p = "ESP32 Nano, ";
     #endif
+    #if  TonUINO_Esp32 == 200
+      p = "ESP32 Wroom, ";
+    #endif
     #ifdef THREEBUTTONS
       p += "3 Tasten";
     #endif
@@ -1207,6 +1211,12 @@ String Webservice::getInfoData(const String& id){
     #ifdef MODIFICATION_CARD_PAUSE_AFTER_TRACK
       p += "<br>Pause nach jedem Track";
     #endif
+
+      p += "<br>OTA possible: ";
+      if (esp_ota_get_app_partition_count() > 1)
+        p += "yes";
+      else
+        p += "no";
   }
   else if(id==F("aboutarduinover")){
     p = String(W_STRING(ESP_ARDUINO_VERSION_MAJOR)  "."  W_STRING(ESP_ARDUINO_VERSION_MINOR)  "."  W_STRING(ESP_ARDUINO_VERSION_PATCH));
@@ -1216,6 +1226,10 @@ String Webservice::getInfoData(const String& id){
   }
   else if(id==F("aboutdate")){
     p = String(__DATE__ " " __TIME__);
+  }
+  else if(id==F("ota_disabled")){
+    if (esp_ota_get_app_partition_count()<=1)
+      p = "disabled";
   }
   return p;
 }
