@@ -109,7 +109,7 @@ def detectAudioData(mp3File):
     except Exception as e:
         output = str(e.output)
 
-    match = re.match('.*Stream #\\d+:\\d+: Audio: mp3, (\\d+) Hz, (mono|stereo), .*', output, re.S)
+    match = re.match('.*Stream #\\d+:\\d+: Audio: mp3.*, (\\d+) Hz, (mono|stereo), .*', output, re.S)
     if match:
         return {
             'sampleRate': match.group(1),
