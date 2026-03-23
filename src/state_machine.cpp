@@ -2479,6 +2479,7 @@ template<SM_type SMT>
 bool      VoiceMenu<SMT>::previewStarted   ;
 
 folderSettings Base::lastCardRead{};
+folderSettings Base::previousCardRead{};
 uint8_t Admin_Entry::lastCurrentValue{};
 Admin_SimpleSetting::Type Admin_SimpleSetting::type{};
 bool Admin_NewCard::return_to_idle{false};

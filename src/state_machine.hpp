@@ -86,6 +86,7 @@ protected:
   void handleBrightness(command cmd);
 #endif
   static folderSettings lastCardRead;
+  static folderSettings previousCardRead;
 };
 
 class Idle: public Base

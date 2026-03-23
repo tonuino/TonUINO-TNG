@@ -52,6 +52,7 @@ public:
     }
 #endif
     myFolderIsCard = a_myFolderIsCard;
+    previousFolder = myFolder;
     myFolder = newFolder;
   }
   const folderSettings& getMyFolder() const     { return myFolder; }
@@ -169,6 +170,7 @@ private:
   Timer                standbyTimer        {};
 
   folderSettings       myFolder            {};
+  folderSettings       previousFolder      {};
   bool                 myFolderIsCard      {};
   uint16_t             numTracksInFolder   {};
 
