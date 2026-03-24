@@ -2,6 +2,7 @@
 #define SRC_TONUINO_HPP_
 
 #include "settings.hpp"
+#include "constants.hpp"
 #include "commands.hpp"
 #include "buttons.hpp"
 #include "buttons3x3.hpp"
@@ -182,6 +183,9 @@ private:
 #endif
 
   bool                 standbyTimerOff     {};
+
+  typedef queue<uint8_t, 99> folder_randomizer;
+  folder_randomizer          random_folder{};
 };
 
 #endif /* SRC_TONUINO_HPP_ */

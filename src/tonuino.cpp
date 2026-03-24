@@ -319,6 +319,9 @@ void Tonuino::playFolder() {
 
   uint8_t first_track = 1;
   uint8_t last_track  = numTracksInFolder;
+  bool shouldReuseRandomizer = false;
+  uint8_t first_random_folder = myFolder.special;
+  uint8_t last_random_folder = myFolder.special2;
 
   switch (myFolder.mode) {
 
@@ -369,6 +372,46 @@ void Tonuino::playFolder() {
     mp3.enqueueTrack(myFolder.folder, myFolder.special);
     break;
 
+  case pmode_t::hoerbuch_rnd: {
+    LOG(play_log, s_debug, F("Hörbuch random"));
+    LOG(play_log, s_debug, first_track, str_bis(), last_track);
+
+
+    if (previousFolder.folder != myFolder.folder) {
+      // other card read
+      myFolder.folder = 0;
+      random_folder.clear();
+      for (uint8_t i = first_random_folder; i <= last_random_folder; i++) {
+        random_folder.push(i);
+
+        if (myFolder.folder == 0) {
+          uint8_t savedTrack = settings.readFolderSettingFromFlash(i);
+          if (savedTrack > 0) {
+            myFolder.folder = i;
+          }
+        }
+      }
+      random_folder.shuffle();
+
+      if (myFolder.folder == 0) {
+        myFolder.folder = random_folder.get(0);
+      }
+    } else {
+      settings.writeFolderSettingToFlash(previousFolder.folder, 0);
+      for (uint8_t i = 0; i<random_folder.size(); ++i) {
+        if (random_folder.get(i) == previousFolder.folder) {
+          myFolder.folder = random_folder.get((i + 1) % random_folder.size());
+          break;
+        }
+      }
+    }
+    uint16_t startTrack = settings.readFolderSettingFromFlash(myFolder.folder);
+    if ((startTrack < first_track) || (startTrack > last_track))
+      startTrack = first_track;
+    mp3.enqueueTrack(myFolder.folder, first_track, last_track, startTrack-first_track);
+  }
+    break;
+
   case pmode_t::hoerbuch_vb:
     first_track = myFolder.special;
     last_track  = myFolder.special2;
@@ -403,7 +446,7 @@ void Tonuino::playTrackNumber () {
 // Leider kann das Modul selbst keine Queue abspielen, daher müssen wir selbst die Queue verwalten
 void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
   LOG(play_log, s_debug, F("nextTrack"));
-  if (fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1 || myFolder.mode == pmode_t::hoerbuch_vb)) {
+  if (fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1 || myFolder.mode == pmode_t::hoerbuch_vb || myFolder.mode == pmode_t::hoerbuch_rnd)) {
     const uint8_t trackToSave = (mp3.getCurrentTrack() < numTracksInFolder) ? mp3.getCurrentTrack()+1 : 1;
     settings.writeFolderSettingToFlash(myFolder.folder, trackToSave);
     if (myFolder.mode == pmode_t::hoerbuch_1) {
