@@ -109,6 +109,9 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
+## Version 3.3.3 (26.03.2026)
+- [Issue 319](https://github.com/tonuino/TonUINO-TNG/issues/319): Hoerbuch mode "random folder"
+
 ## Version 3.3.3 (25.02.2026)
 - [Issue 301](https://github.com/tonuino/TonUINO-TNG/issues/301): Support ESP32 Wroom 32
 - [Issue 317](https://github.com/tonuino/TonUINO-TNG/issues/317): New play mode: hoerbuch von bis

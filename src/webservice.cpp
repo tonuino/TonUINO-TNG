@@ -636,10 +636,12 @@ void Webservice::card(AsyncWebServerRequest *request) {
     if (card.special2 > track_count)
       message += String("\nDer Parameter Special2 muss kleiner oder gleich der Anzahl der Tracks im Folder sein (") + String(track_count) + ")";
     break;
+  case pmode_t::hoerbuch     :
+    card.special  = 0;
+    break;
   case pmode_t::hoerbuch_1   :
     if (card.special >= 30)
       message += "\nDer Parameter Special1 muss kleiner als 30 sein";
-    card.special2 = 0;
     break;
   case pmode_t::quiz_game    :
     if (card.special != 0 && card.special != 2 && card.special != 4)

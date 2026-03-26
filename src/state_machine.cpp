@@ -18,6 +18,7 @@ Chip_card      &chip_card = tonuino.getChipCard();
 
 const __FlashStringHelper* str_ChMode                  () { return F("ChMode") ; }
 const __FlashStringHelper* str_ChFolder                () { return F("ChFold") ; }
+const __FlashStringHelper* str_ChLastFolder            () { return F("ChLFold") ; }
 const __FlashStringHelper* str_ChTrack                 () { return F("ChTr") ; }
 const __FlashStringHelper* str_ChFirstTrack            () { return F("ChFTr") ; }
 const __FlashStringHelper* str_ChLastTrack             () { return F("ChLTr") ; }
@@ -236,8 +237,9 @@ void ChFolder::react(command_e const &cmd_e) {
       transit<ChTrack>();
       return;
     }
-    if (folder.mode == pmode_t::hoerbuch_1) {
-      transit<ChNumTracks>();
+    if (  ( folder.mode == pmode_t::hoerbuch  )
+        ||( folder.mode == pmode_t::hoerbuch_1)){
+      transit<ChLastFolder>();
       return;
     }
     if (  ( folder.mode == pmode_t::hoerspiel_vb)
@@ -245,6 +247,46 @@ void ChFolder::react(command_e const &cmd_e) {
         ||( folder.mode == pmode_t::party_vb    )
         ||( folder.mode == pmode_t::hoerbuch_vb )) {
       transit<ChFirstTrack>();
+      return;
+    }
+    transit<finished>();
+    return;
+  }
+}
+
+// #######################################################
+
+void ChLastFolder::entry() {
+  LOG(state_log, s_info, str_enter(), str_ChLastFolder());
+
+  numberOfOptions   = 99;
+  startMessage      = mp3Tracks::t_302_select_last_folder;
+  messageOffset     = mp3Tracks::t_0;
+  preview           = true;
+  previewFromFolder = 0;
+
+  VoiceMenu::entry();
+
+  currentValue      = folder.folder;
+}
+
+void ChLastFolder::react(command_e const &cmd_e) {
+  if (cmd_e.cmd_raw != commandRaw::none) {
+    LOG(state_log, s_debug, str_ChLastFolder(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
+  }
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
+
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
+    return;
+
+  if (Commands::isSelect(cmd) && (currentValue != 0)) {
+    folder.folder = currentValue - folder.folder;
+    LOG(state_log, s_debug, str_ChLastFolder(), F(": "), currentValue);
+
+    if (folder.mode == pmode_t::hoerbuch_1) {
+      transit<ChNumTracks>();
       return;
     }
     transit<finished>();

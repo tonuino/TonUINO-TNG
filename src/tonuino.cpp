@@ -378,12 +378,32 @@ void Tonuino::playFolder() {
   case pmode_t::hoerbuch_1:
   // Hörbuch Modus: kompletten Ordner spielen und Fortschritt merken (oder von-bis oder nur eine Datei)
   {
+    folderForHoerbuch = 0;
+    if ((myFolder.mode != pmode_t::hoerbuch_vb) && myFolder.special2 > 0) {
+      for (uint8_t f = myFolder.folder; f <= myFolder.folder + myFolder.special2; ++f) {
+          uint8_t start = settings.readFolderSettingFromFlash(f);
+        if ((start > 1) && (start != 0xff)) {
+          folderForHoerbuch = f;
+          LOG(play_log, s_debug, F("Hörbuch - not finished for folder: "), folderForHoerbuch);
+          break;
+        }
+      }
+      if (folderForHoerbuch == 0) {
+        folderForHoerbuch = random(myFolder.folder, myFolder.folder + myFolder.special2+1);
+        LOG(play_log, s_debug, F("Hörbuch - select folder: "), folderForHoerbuch);
+      }
+      numTracksInFolder = mp3.getFolderTrackCount(folderForHoerbuch);
+      LOG(play_log, s_warning, numTracksInFolder, F(" tr in folder "), folderForHoerbuch);
+    }
+    else {
+      folderForHoerbuch = myFolder.folder;
+    }
     LOG(play_log, s_debug, F("Hörbuch"));
     LOG(play_log, s_debug, first_track, str_bis(), last_track);
-    uint16_t startTrack = settings.readFolderSettingFromFlash(myFolder.folder);
+    uint16_t startTrack = settings.readFolderSettingFromFlash(folderForHoerbuch);
     if ((startTrack < first_track) || (startTrack > last_track))
       startTrack = first_track;
-    mp3.enqueueTrack(myFolder.folder, first_track, last_track, startTrack-first_track);
+    mp3.enqueueTrack(folderForHoerbuch, first_track, last_track, startTrack-first_track);
   }
     break;
 
@@ -405,7 +425,7 @@ void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
   LOG(play_log, s_debug, F("nextTrack"));
   if (fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1 || myFolder.mode == pmode_t::hoerbuch_vb)) {
     const uint8_t trackToSave = (mp3.getCurrentTrack() < numTracksInFolder) ? mp3.getCurrentTrack()+1 : 1;
-    settings.writeFolderSettingToFlash(myFolder.folder, trackToSave);
+    settings.writeFolderSettingToFlash(folderForHoerbuch, trackToSave);
     if (myFolder.mode == pmode_t::hoerbuch_1) {
       if (myFolder.special > 0)
         --myFolder.special;
@@ -417,7 +437,7 @@ void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
     return;
   mp3.playNext(tracks, fromOnPlayFinished);
   if (not fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1 || myFolder.mode == pmode_t::hoerbuch_vb)) {
-    settings.writeFolderSettingToFlash(myFolder.folder, mp3.getCurrentTrack());
+    settings.writeFolderSettingToFlash(folderForHoerbuch, mp3.getCurrentTrack());
   }
 }
 
@@ -426,16 +446,16 @@ void Tonuino::previousTrack(uint8_t tracks) {
   if (activeModifier->handlePrevious())
     return;
   mp3.playPrevious(tracks);
-  if (mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1)) {
-    settings.writeFolderSettingToFlash(myFolder.folder, mp3.getCurrentTrack());
+  if (mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1 || myFolder.mode == pmode_t::hoerbuch_vb)) {
+    settings.writeFolderSettingToFlash(folderForHoerbuch, mp3.getCurrentTrack());
   }
 }
 
 void Tonuino::jumpToTrack(uint8_t track) {
   LOG(play_log, s_debug, F("jumpToTrack"));
   mp3.jumpTo(track);
-  if (mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1)) {
-    settings.writeFolderSettingToFlash(myFolder.folder, mp3.getCurrentTrack());
+  if (mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1 || myFolder.mode == pmode_t::hoerbuch_vb)) {
+    settings.writeFolderSettingToFlash(folderForHoerbuch, mp3.getCurrentTrack());
   }
 }
 

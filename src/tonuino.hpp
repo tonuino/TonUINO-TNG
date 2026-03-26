@@ -171,6 +171,7 @@ private:
   folderSettings       myFolder            {};
   bool                 myFolderIsCard      {};
   uint16_t             numTracksInFolder   {};
+  uint8_t              folderForHoerbuch   {};
 
   bool                 request_shutdown    {};
 

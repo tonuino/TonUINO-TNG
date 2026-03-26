@@ -16,6 +16,7 @@ advert/0323_standby_timer_off.mp3|Der Standby Timer wird ausgeschaltet
 advert/0324_standby_timer_on.mp3|Der Standby Timer wird wieder eingeschaltet
 mp3/0300_new_tag.mp3|Oh, eine neue Karte!
 mp3/0301_select_folder.mp3|Ok, verwende nun die Lautstärketasten um einen Ordner für die Karte auszuwählen.
+mp3/0302_select_last_folder.mp3|Ok, verwende nun die Lautstärketasten um einen letzen Ordner für die Karte auszuwählen.
 mp3/0310.mp3|Wähle mit den Lautstärketasten den Wiedergabemodus aus. Drücke die Pausetaste um fortzufahren.
 mp3/0311_mode_random_episode.mp3|Hörspielmodus: Eine zufällige Datei aus dem Ordner wiedergeben
 mp3/0312_mode_album.mp3|Albummodus: Den kompletten Ordner wiedergeben
