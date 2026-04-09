@@ -59,6 +59,10 @@ void Tonuino::setup() {
 
   pinMode(shutdownPin  , OUTPUT);
   pin_set_inactive(shutdownPin, shutdownPinType);
+#ifdef POWER_HOLD_READY
+  pinMode(power_hold_ready_pin  , OUTPUT);
+  pin_set_active(power_hold_ready_pin, power_hold_ready_pin_type);
+#endif
 
   randomSeed(generateRamdomSeed());
 
