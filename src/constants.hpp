@@ -509,6 +509,13 @@ inline constexpr unsigned long led_update_interval = 800; // ms
 inline constexpr unsigned long led_short_blink     = 400; // ms
 #endif // USE_LED_BUTTONS
 
+//#define POWER_HOLD_READY
+
+#ifdef POWER_HOLD_READY
+inline constexpr uint8_t power_hold_ready_pin        = D2;
+inline constexpr levelType power_hold_ready_pin_type = levelType::activeHigh;
+#endif
+
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
  * ##### mormalerweise müssen die folgende Zeilen nicht editiert werden ############################
