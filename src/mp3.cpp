@@ -76,10 +76,13 @@ void Mp3::init() {
     LOG(init_log, s_error, F("Com to DFPlayer broken"));
 
   setEq(static_cast<DfMp3_Eq>(settings.eq - 1));
+  delay(100);
+  loop();
 
   startTrackTimer.start(6000); // 6 seconds
   while (not startTrackTimer.isExpired() && (getTotalTrackCount() == 0)) {
-    delay(100);
+    LOG(init_log, s_debug, F("retry getTotalTrackCount"));
+    delay(1000);
     loop();
   }
   startTrackTimer.stop();

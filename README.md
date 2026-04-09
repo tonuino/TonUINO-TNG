@@ -109,8 +109,10 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.3 (26.03.2026)
+## Version 3.3.3 (10.04.2026)
 - [Issue 319](https://github.com/tonuino/TonUINO-TNG/issues/319): Hoerbuch mode "random folder"
+- [Issue 322](https://github.com/tonuino/TonUINO-TNG/issues/322): ESP32: add a possibility to indicate that the power hold pin is ready.
+- [Issue 321](https://github.com/tonuino/TonUINO-TNG/issues/321): LKP Player with HW serial doesn't not work
 
 ## Version 3.3.3 (25.02.2026)
 - [Issue 301](https://github.com/tonuino/TonUINO-TNG/issues/301): Support ESP32 Wroom 32
