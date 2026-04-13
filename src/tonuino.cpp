@@ -389,6 +389,7 @@ void Tonuino::playFolder() {
       if (lastMyFolder == myFolder) {
         // same card again: reuse folder queue
         LOG(play_log, s_info, F("Hörbuch - selbe Karte"));
+        ++folder_q_index;
         if (folder_q.size() > 0 && folder_q_index < folder_q.size()) {
           LOG(play_log, s_info, F("folder queue: "), lf_no);
           for (uint8_t i = 0; i<folder_q.size(); ++i)
@@ -462,10 +463,6 @@ void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
   if (fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1 || myFolder.mode == pmode_t::hoerbuch_vb)) {
     const uint8_t trackToSave = (mp3.getCurrentTrack() < numTracksInFolder) ? mp3.getCurrentTrack()+1 : 1;
     settings.writeFolderSettingToFlash(folderForHoerbuch, trackToSave);
-#ifdef FOLDER_QUEUE_HOERBUCH
-    if (trackToSave == 1)
-      ++folder_q_index;
-#endif
     if (myFolder.mode == pmode_t::hoerbuch_1) {
       if (myFolder.special > 0)
         --myFolder.special;
