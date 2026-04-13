@@ -267,7 +267,7 @@ void ChLastFolder::entry() {
 
   VoiceMenu::entry();
 
-  currentValue      = folder.folder;
+  currentValue      = folder.folder-1;
 }
 
 void ChLastFolder::react(command_e const &cmd_e) {
@@ -282,7 +282,7 @@ void ChLastFolder::react(command_e const &cmd_e) {
     return;
 
   if (Commands::isSelect(cmd) && (currentValue != 0)) {
-    folder.folder = currentValue - folder.folder;
+    folder.special2 = currentValue - folder.folder;
     LOG(state_log, s_debug, str_ChLastFolder(), F(": "), currentValue);
 
     if (folder.mode == pmode_t::hoerbuch_1) {

@@ -970,7 +970,7 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_in_with_other) {
       },
       {
           { 1, pmode_t::einzel      , 1, 0 },
-          { 1, pmode_t::hoerbuch    , 1, 1 }
+          { 1, pmode_t::hoerbuch    , 1, 0 }
       },
 
       // special
@@ -1043,7 +1043,7 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_in_with_other) {
     // play 1-1
     execute_cycle_for_ms(time_check_play);
     EXPECT_TRUE(getMp3().is_playing_folder());
-    EXPECT_EQ(getMp3().df_folder, data.card2.folder);
+    EXPECT_EQ(getMp3().df_folder, data.card2.folder) << "Index: " << ind;
 
     card_out();
     getSettings().pauseWhenCardRemoved = 0;
