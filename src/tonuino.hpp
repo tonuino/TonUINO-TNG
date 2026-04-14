@@ -175,7 +175,6 @@ private:
 #ifdef FOLDER_QUEUE_HOERBUCH
   typedef queue<uint8_t, 99> folder_queue;
   folder_queue         folder_q            {};
-  uint8_t              folder_q_index      {};
   folderSettings       lastMyFolder        {};
 #endif
 

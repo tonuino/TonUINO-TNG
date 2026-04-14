@@ -605,12 +605,21 @@ void Webservice::card(AsyncWebServerRequest *request) {
       (card.mode != pmode_t::repeat_last) &&
       (card.mode != pmode_t::switch_bt)){
 
-    if (SM_tonuino::is_in_state<Play>())
+    bool back_to_play = false;
+    if (SM_tonuino::is_in_state<Play>()) {
       cmd = commandRaw::pause;
-    delay(2*cycleTime);
+      back_to_play = true;
+      delay(2*cycleTime);
+    }
 
     uint16_t track_count = mp3.getFolderTrackCount(card.folder);
     LOG(webserv_log, s_info, "track count: ", track_count);
+
+    if (back_to_play) {
+      cmd = commandRaw::pause;
+      delay(2*cycleTime);
+    }
+
     if (track_count == 0) {
       request->send(400, "text/html", "Der Folder existiert nicht");
       return;

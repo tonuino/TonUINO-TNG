@@ -70,6 +70,10 @@ bool SM<SMT>::isAbort(command cmd) {
   return false;
 }
 
+template<class C>
+void Base::transitToStartPlay() { startPlayFromPlay = is_in_state<Play>(); transit<StartPlay<C>>(); }
+
+
 // #######################################################
 
 template<SM_type SMT>
@@ -584,26 +588,26 @@ bool Base::handleShortcut(uint8_t shortCut) {
 #ifdef QUIZ_GAME
       if (tonuino.getMyFolder().mode == pmode_t::quiz_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
-        transit<StartPlay<Quiz>>();
+        transitToStartPlay<Quiz>();
         return true;
       }
 #endif // QUIZ_GAME
 #ifdef MEMORY_GAME
       if (tonuino.getMyFolder().mode == pmode_t::memory_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Memory());
-        transit<StartPlay<Memory>>();
+        transitToStartPlay<Memory>();
         return true;
       }
 #endif // MEMORY_GAME
 #ifdef TEAPOT_GAME
       if (tonuino.getMyFolder().mode == pmode_t::teapot_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Teapot());
-        transit<StartPlay<Teapot>>();
+        transitToStartPlay<Teapot>();
         return true;
       }
 #endif // TEAPOT_GAME
       LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
-      transit<StartPlay<Play>>();
+      transitToStartPlay<Play>();
       return true;
     }
   }
@@ -618,26 +622,26 @@ void Base::handleReadCard() {
 #ifdef QUIZ_GAME
     if (tonuino.getMyFolder().mode == pmode_t::quiz_game) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
-      transit<StartPlay<Quiz>>();
+      transitToStartPlay<Quiz>();
       return;
     }
 #endif // QUIZ_GAME
 #ifdef MEMORY_GAME
       if (tonuino.getMyFolder().mode == pmode_t::memory_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Memory());
-        transit<StartPlay<Memory>>();
+        transitToStartPlay<Memory>();
         return;
       }
 #endif // MEMORY_GAME
 #ifdef TEAPOT_GAME
     if (tonuino.getMyFolder().mode == pmode_t::teapot_game) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_Teapot());
-      transit<StartPlay<Teapot>>();
+      transitToStartPlay<Teapot>();
       return;
     }
 #endif // TEAPOT_GAME
     LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
-    transit<StartPlay<Play>>();
+    transitToStartPlay<Play>();
   }
 }
 
@@ -751,26 +755,26 @@ void Idle::react(command_e const &cmd_e) {
 #ifdef QUIZ_GAME
       if (tonuino.getMyFolder().mode == pmode_t::quiz_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
-        transit<StartPlay<Quiz>>();
+        transitToStartPlay<Quiz>();
         return;
       }
 #endif // QUIZ_GAME
 #ifdef MEMORY_GAME
       if (tonuino.getMyFolder().mode == pmode_t::memory_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Memory());
-        transit<StartPlay<Memory>>();
+        transitToStartPlay<Memory>();
         return;
       }
 #endif // MEMORY_GAME
 #ifdef TEAPOT_GAME
       if (tonuino.getMyFolder().mode == pmode_t::teapot_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Teapot());
-        transit<StartPlay<Teapot>>();
+        transitToStartPlay<Teapot>();
         return;
       }
 #endif // TEAPOT_GAME
       LOG(state_log, s_debug, str_Idle(), str_to(), str_StartPlay());
-      transit<StartPlay<Play>>();
+      transitToStartPlay<Play>();
       return;
     }
     break;
@@ -779,7 +783,7 @@ void Idle::react(command_e const &cmd_e) {
     case command::specialStart:
       tonuino.setMyFolder({specialStartShortcutFolder, pmode_t::einzel, specialStartShortcutTrack, 0}, true /*myFolderIsCard*/);
       LOG(state_log, s_debug, str_Idle(), str_to(), str_StartPlay());
-      transit<StartPlay<Play>>();
+      transitToStartPlay<Play>();
       break;
 #endif
   default:
@@ -2497,6 +2501,8 @@ FSM_INITIAL_STATE(SM_tonuino  , Idle)
 
 template<SM_type SMT>
 folderSettings  SM<SMT>::folder{};
+template<>
+bool            SM_tonuino::startPlayFromPlay{};
 template<SM_type SMT>
 Timer           SM<SMT>::timer{};
 template<SM_type SMT>
@@ -2521,6 +2527,7 @@ template<SM_type SMT>
 bool      VoiceMenu<SMT>::previewStarted   ;
 
 folderSettings Base::lastCardRead{};
+
 uint8_t Admin_Entry::lastCurrentValue{};
 Admin_SimpleSetting::Type Admin_SimpleSetting::type{};
 bool Admin_NewCard::return_to_idle{false};

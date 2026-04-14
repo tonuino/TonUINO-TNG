@@ -62,6 +62,7 @@ public:
 
   static folderSettings folder;
   static const __FlashStringHelper* state_str;
+  static bool           startPlayFromPlay;
 protected:
   static Timer          timer;
   static bool           waitForPlayFinish; // with this it needs 66 Byte lesser program code ;-)
@@ -86,6 +87,8 @@ protected:
   void handleBrightness(command cmd);
 #endif
   static folderSettings lastCardRead;
+  template<class C>
+  void transitToStartPlay();
 };
 
 class Idle: public Base

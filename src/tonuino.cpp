@@ -383,38 +383,16 @@ void Tonuino::playFolder() {
   case pmode_t::hoerbuch_1:
   // Hörbuch Modus: kompletten Ordner spielen und Fortschritt merken (oder von-bis oder nur eine Datei)
   {
-    folderForHoerbuch = 0;
     if ((myFolder.mode != pmode_t::hoerbuch_vb) && myFolder.special2 > 0) {
 #ifdef FOLDER_QUEUE_HOERBUCH
-      if (lastMyFolder == myFolder) {
-        // same card again: reuse folder queue
+      if (lastMyFolder == myFolder && SM_tonuino::startPlayFromPlay) {
+        // same card again in Play state: reset progress to choose new folder
         LOG(play_log, s_info, F("Hörbuch - selbe Karte"));
-        ++folder_q_index;
-        if (folder_q.size() > 0 && folder_q_index < folder_q.size()) {
-          LOG(play_log, s_info, F("folder queue: "), lf_no);
-          for (uint8_t i = 0; i<folder_q.size(); ++i)
-            LOG(play_log, s_info, folder_q.get(i), str_Space(), lf_no);
-          LOG(play_log, s_info, str_Space());
-          folderForHoerbuch = folder_q.get(folder_q_index);
-          LOG(play_log, s_info, F("Hörbuch - folder from queue: "), folderForHoerbuch, str_Space(), folder_q_index);
-        }
+        settings.writeFolderSettingToFlash(folderForHoerbuch, 1);
       }
-      if (folderForHoerbuch == 0) {
-        lastMyFolder = myFolder;
-        folder_q.clear();
-        folder_q_index = 0;
-        for (uint8_t f = myFolder.folder; f <= myFolder.folder + myFolder.special2; ++f) {
-          folder_q.push(f);
-        }
-        folder_q.shuffle();
-        LOG(play_log, s_info, F("shuffled folder "), lf_no);
-        for (uint8_t i = 0; i<folder_q.size(); ++i)
-          LOG(play_log, s_info, folder_q.get(i), str_Space(), lf_no);
-        LOG(play_log, s_info, str_Space());
-        folderForHoerbuch = folder_q.get(folder_q_index);
-        LOG(play_log, s_info, F("Hörbuch - first folder: "), folderForHoerbuch);
-      }
-#else
+      lastMyFolder = myFolder;
+#endif
+      folderForHoerbuch = 0;
       for (uint8_t f = myFolder.folder; f <= myFolder.folder + myFolder.special2; ++f) {
           uint8_t start = settings.readFolderSettingFromFlash(f);
         if ((start > 1) && (start != 0xff)) {
@@ -423,11 +401,27 @@ void Tonuino::playFolder() {
           break;
         }
       }
-      if (folderForHoerbuch == 0) {
-        folderForHoerbuch = random(myFolder.folder, myFolder.folder + myFolder.special2+1);
-        LOG(play_log, s_info, F("Hörbuch - select folder: "), folderForHoerbuch);
+#ifdef FOLDER_QUEUE_HOERBUCH
+      if (folder_q.size() == 0) {
+        for (uint8_t f = myFolder.folder; f < myFolder.folder + myFolder.special2+1; ++f) {
+          if (f != folderForHoerbuch)
+            folder_q.push(f);
+        }
+        folder_q.shuffle();
+        LOG(play_log, s_info, F("shuffled folder "), lf_no);
+        for (uint8_t i = 0; i<folder_q.size(); ++i)
+          LOG(play_log, s_info, folder_q.get(i), str_Space(), lf_no);
+        LOG(play_log, s_info, str_Space());
       }
 #endif
+      if (folderForHoerbuch == 0) {
+#ifdef FOLDER_QUEUE_HOERBUCH
+        folderForHoerbuch = folder_q.pop();
+#else
+        folderForHoerbuch = random(myFolder.folder, myFolder.folder + myFolder.special2+1);
+#endif
+        LOG(play_log, s_info, F("Hörbuch - select folder: "), folderForHoerbuch);
+      }
       numTracksInFolder = mp3.getFolderTrackCount(folderForHoerbuch);
       last_track = numTracksInFolder;
       LOG(play_log, s_warning, numTracksInFolder, F(" tr in folder "), folderForHoerbuch);
