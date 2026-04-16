@@ -285,7 +285,7 @@ void ChLastFolder::react(command_e const &cmd_e) {
   if (isAbort(cmd))
     return;
 
-  if (Commands::isSelect(cmd) && (currentValue != 0)) {
+  if (Commands::isSelect(cmd) && (currentValue >= folder.folder)) {
     folder.special2 = currentValue - folder.folder;
     LOG(state_log, s_debug, str_ChLastFolder(), F(": "), currentValue);
 
