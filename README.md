@@ -109,7 +109,8 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.3 (09.03.2026)
+## Version 3.3.3 (19.04.2026)
+- [Issue 324](https://github.com/tonuino/TonUINO-TNG/issues/324): Rotary Encoder doesn't work stable for ESP32
 - [Issue 322](https://github.com/tonuino/TonUINO-TNG/issues/322): ESP32: add a possibility to indicate that the power hold pin is ready.
 - [Issue 321](https://github.com/tonuino/TonUINO-TNG/issues/321): LKP Player with HW serial doesn't not work
 
