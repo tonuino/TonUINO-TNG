@@ -44,8 +44,8 @@ RotaryEncoder::RotaryEncoder(const Settings& settings)
 
 void RotaryEncoder::init()
 {
-  pinMode(rotaryEncoderClkPin, INPUT);
-  pinMode(rotaryEncoderDtPin , INPUT);
+  pinMode(rotaryEncoderClkPin, rotaryEncoderPullUp ? INPUT_PULLUP : INPUT);
+  pinMode(rotaryEncoderDtPin , rotaryEncoderPullUp ? INPUT_PULLUP : INPUT);
 
 #ifndef ROTARY_ENCODER_USES_TIMER
   attachInterrupt(digitalPinToInterrupt(rotaryEncoderClkPin), RotaryEncoder::changed, FALLING);

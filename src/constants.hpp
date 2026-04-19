@@ -210,6 +210,7 @@ inline constexpr uint8_t   rotaryEncoderDtPin     = A4; // A4
 #endif // ALLinONE_Plus
 
 inline constexpr uint8_t   rotaryEncoderDebounce  = 75; // ms
+inline constexpr bool      rotaryEncoderPullUp    = false;
 #endif // ROTARY_ENCODER
 
 // ######################################################################
