@@ -37,6 +37,7 @@ private:
   const Settings& settings;
 
   volatile static int8_t  pos;
+  static Timer debounceTimer;
 #ifdef USE_TIMER
   volatile static uint8_t clk;
 #endif

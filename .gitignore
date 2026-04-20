@@ -40,6 +40,7 @@ Temporary Items
 /.sproject
 /.settings
 /.autoBuildProject
+/autoBuildProject.cfg
 /build
 /bin
 
