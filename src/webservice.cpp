@@ -605,12 +605,21 @@ void Webservice::card(AsyncWebServerRequest *request) {
       (card.mode != pmode_t::repeat_last) &&
       (card.mode != pmode_t::switch_bt)){
 
-    if (SM_tonuino::is_in_state<Play>())
+    bool back_to_play = false;
+    if (SM_tonuino::is_in_state<Play>()) {
       cmd = commandRaw::pause;
-    delay(2*cycleTime);
+      back_to_play = true;
+      delay(2*cycleTime);
+    }
 
     uint16_t track_count = mp3.getFolderTrackCount(card.folder);
     LOG(webserv_log, s_info, "track count: ", track_count);
+
+    if (back_to_play) {
+      cmd = commandRaw::pause;
+      delay(2*cycleTime);
+    }
+
     if (track_count == 0) {
       request->send(400, "text/html", "Der Folder existiert nicht");
       return;
@@ -636,10 +645,12 @@ void Webservice::card(AsyncWebServerRequest *request) {
     if (card.special2 > track_count)
       message += String("\nDer Parameter Special2 muss kleiner oder gleich der Anzahl der Tracks im Folder sein (") + String(track_count) + ")";
     break;
+  case pmode_t::hoerbuch     :
+    card.special  = 0;
+    break;
   case pmode_t::hoerbuch_1   :
     if (card.special >= 30)
       message += "\nDer Parameter Special1 muss kleiner als 30 sein";
-    card.special2 = 0;
     break;
   case pmode_t::quiz_game    :
     if (card.special != 0 && card.special != 2 && card.special != 4)

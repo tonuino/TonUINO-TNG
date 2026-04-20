@@ -171,6 +171,12 @@ private:
   folderSettings       myFolder            {};
   bool                 myFolderIsCard      {};
   uint16_t             numTracksInFolder   {};
+  uint8_t              folderForHoerbuch   {};
+#ifdef FOLDER_QUEUE_HOERBUCH
+  typedef queue<uint8_t, 99> folder_queue;
+  folder_queue         folder_q            {};
+  folderSettings       lastMyFolder        {};
+#endif
 
   bool                 request_shutdown    {};
 

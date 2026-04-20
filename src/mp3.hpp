@@ -48,6 +48,7 @@ enum class mp3Tracks: uint16_t {
   t_262_pling                  = 262,
   t_300_new_tag                = 300,
   t_301_select_folder          = 301,
+  t_302_select_last_folder     = 302,
   t_310_select_mode            = 310,
   t_311_mode_random_episode    = 311,
   t_312_mode_album             = 312,

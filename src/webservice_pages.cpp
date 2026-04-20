@@ -269,6 +269,7 @@ const char main_html[] PROGMEM = R"rawliteral(
                                                                                         <br>Quiz: Anzahl der Antworten (0, 2 oder 4)</span></div>
                                                               / <div class="tooltip"><input type="number" name="special2"           id="special2" value="0" min="0" max="255">
                                                                   <span class="tooltiptext">* von bis: letzter Track
+                                                                                        <br>Hörbuch (einzel): Anzahl der Folder
                                                                                         <br>Quiz: Anzahl der Lösungen (0 oder 1)</span></div>
 <br>
 <button onclick="return submit_form(this, 'card', 'card_action', 'start');">Start</button>
@@ -455,6 +456,7 @@ const char settings_html[] PROGMEM = R"rawliteral(
  +'                                                                                       <br>Quiz: Anzahl der Antworten (0, 2 oder 4)</span></div>       '
  +'                                                              / <div class="tooltip"><input type="number" name="sc_special2_n_"    id="sc_special2_n_">'
  +'                                                                 <span class="tooltiptext">* von bis: letzter Track                                    '
+ +'                                                                                       <br>Hörbuch (einzel): Anzahl der Folder                            '
  +'                                                                                       <br>Quiz: Anzahl der Lösungen (0 oder 1)</span></div>           '
  +'<br>';
 

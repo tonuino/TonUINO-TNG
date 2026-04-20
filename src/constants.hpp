@@ -519,6 +519,8 @@ inline constexpr uint8_t power_hold_ready_pin        = D2;
 inline constexpr levelType power_hold_ready_pin_type = levelType::activeHigh;
 #endif
 
+//#define FOLDER_QUEUE_HOERBUCH
+
 /* #################################################################################################
  * ##### normally, you don't have to edit lines below                   ############################
  * ##### mormalerweise müssen die folgende Zeilen nicht editiert werden ############################

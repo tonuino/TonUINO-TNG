@@ -18,6 +18,7 @@ Chip_card      &chip_card = tonuino.getChipCard();
 
 const __FlashStringHelper* str_ChMode                  () { return F("ChMode") ; }
 const __FlashStringHelper* str_ChFolder                () { return F("ChFold") ; }
+const __FlashStringHelper* str_ChLastFolder            () { return F("ChLFold") ; }
 const __FlashStringHelper* str_ChTrack                 () { return F("ChTr") ; }
 const __FlashStringHelper* str_ChFirstTrack            () { return F("ChFTr") ; }
 const __FlashStringHelper* str_ChLastTrack             () { return F("ChLTr") ; }
@@ -68,6 +69,10 @@ bool SM<SMT>::isAbort(command cmd) {
   }
   return false;
 }
+
+template<class C>
+void Base::transitToStartPlay() { startPlayFromPlay = is_in_state<Play>(); transit<StartPlay<C>>(); }
+
 
 // #######################################################
 
@@ -236,8 +241,9 @@ void ChFolder::react(command_e const &cmd_e) {
       transit<ChTrack>();
       return;
     }
-    if (folder.mode == pmode_t::hoerbuch_1) {
-      transit<ChNumTracks>();
+    if (  ( folder.mode == pmode_t::hoerbuch  )
+        ||( folder.mode == pmode_t::hoerbuch_1)){
+      transit<ChLastFolder>();
       return;
     }
     if (  ( folder.mode == pmode_t::hoerspiel_vb)
@@ -245,6 +251,46 @@ void ChFolder::react(command_e const &cmd_e) {
         ||( folder.mode == pmode_t::party_vb    )
         ||( folder.mode == pmode_t::hoerbuch_vb )) {
       transit<ChFirstTrack>();
+      return;
+    }
+    transit<finished>();
+    return;
+  }
+}
+
+// #######################################################
+
+void ChLastFolder::entry() {
+  LOG(state_log, s_info, str_enter(), str_ChLastFolder());
+
+  numberOfOptions   = 99;
+  startMessage      = mp3Tracks::t_302_select_last_folder;
+  messageOffset     = mp3Tracks::t_0;
+  preview           = true;
+  previewFromFolder = 0;
+
+  VoiceMenu::entry();
+
+  currentValue      = folder.folder-1;
+}
+
+void ChLastFolder::react(command_e const &cmd_e) {
+  if (cmd_e.cmd_raw != commandRaw::none) {
+    LOG(state_log, s_debug, str_ChLastFolder(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
+  }
+  const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
+
+  VoiceMenu::react(cmd);
+
+  if (isAbort(cmd))
+    return;
+
+  if (Commands::isSelect(cmd) && (currentValue >= folder.folder)) {
+    folder.special2 = currentValue - folder.folder;
+    LOG(state_log, s_debug, str_ChLastFolder(), F(": "), currentValue);
+
+    if (folder.mode == pmode_t::hoerbuch_1) {
+      transit<ChNumTracks>();
       return;
     }
     transit<finished>();
@@ -542,26 +588,26 @@ bool Base::handleShortcut(uint8_t shortCut) {
 #ifdef QUIZ_GAME
       if (tonuino.getMyFolder().mode == pmode_t::quiz_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
-        transit<StartPlay<Quiz>>();
+        transitToStartPlay<Quiz>();
         return true;
       }
 #endif // QUIZ_GAME
 #ifdef MEMORY_GAME
       if (tonuino.getMyFolder().mode == pmode_t::memory_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Memory());
-        transit<StartPlay<Memory>>();
+        transitToStartPlay<Memory>();
         return true;
       }
 #endif // MEMORY_GAME
 #ifdef TEAPOT_GAME
       if (tonuino.getMyFolder().mode == pmode_t::teapot_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Teapot());
-        transit<StartPlay<Teapot>>();
+        transitToStartPlay<Teapot>();
         return true;
       }
 #endif // TEAPOT_GAME
       LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
-      transit<StartPlay<Play>>();
+      transitToStartPlay<Play>();
       return true;
     }
   }
@@ -576,26 +622,26 @@ void Base::handleReadCard() {
 #ifdef QUIZ_GAME
     if (tonuino.getMyFolder().mode == pmode_t::quiz_game) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
-      transit<StartPlay<Quiz>>();
+      transitToStartPlay<Quiz>();
       return;
     }
 #endif // QUIZ_GAME
 #ifdef MEMORY_GAME
       if (tonuino.getMyFolder().mode == pmode_t::memory_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Memory());
-        transit<StartPlay<Memory>>();
+        transitToStartPlay<Memory>();
         return;
       }
 #endif // MEMORY_GAME
 #ifdef TEAPOT_GAME
     if (tonuino.getMyFolder().mode == pmode_t::teapot_game) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_Teapot());
-      transit<StartPlay<Teapot>>();
+      transitToStartPlay<Teapot>();
       return;
     }
 #endif // TEAPOT_GAME
     LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
-    transit<StartPlay<Play>>();
+    transitToStartPlay<Play>();
   }
 }
 
@@ -709,26 +755,26 @@ void Idle::react(command_e const &cmd_e) {
 #ifdef QUIZ_GAME
       if (tonuino.getMyFolder().mode == pmode_t::quiz_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
-        transit<StartPlay<Quiz>>();
+        transitToStartPlay<Quiz>();
         return;
       }
 #endif // QUIZ_GAME
 #ifdef MEMORY_GAME
       if (tonuino.getMyFolder().mode == pmode_t::memory_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Memory());
-        transit<StartPlay<Memory>>();
+        transitToStartPlay<Memory>();
         return;
       }
 #endif // MEMORY_GAME
 #ifdef TEAPOT_GAME
       if (tonuino.getMyFolder().mode == pmode_t::teapot_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Teapot());
-        transit<StartPlay<Teapot>>();
+        transitToStartPlay<Teapot>();
         return;
       }
 #endif // TEAPOT_GAME
       LOG(state_log, s_debug, str_Idle(), str_to(), str_StartPlay());
-      transit<StartPlay<Play>>();
+      transitToStartPlay<Play>();
       return;
     }
     break;
@@ -737,7 +783,7 @@ void Idle::react(command_e const &cmd_e) {
     case command::specialStart:
       tonuino.setMyFolder({specialStartShortcutFolder, pmode_t::einzel, specialStartShortcutTrack, 0}, true /*myFolderIsCard*/);
       LOG(state_log, s_debug, str_Idle(), str_to(), str_StartPlay());
-      transit<StartPlay<Play>>();
+      transitToStartPlay<Play>();
       break;
 #endif
   default:
@@ -2455,6 +2501,8 @@ FSM_INITIAL_STATE(SM_tonuino  , Idle)
 
 template<SM_type SMT>
 folderSettings  SM<SMT>::folder{};
+template<>
+bool            SM_tonuino::startPlayFromPlay{};
 template<SM_type SMT>
 Timer           SM<SMT>::timer{};
 template<SM_type SMT>
@@ -2479,6 +2527,7 @@ template<SM_type SMT>
 bool      VoiceMenu<SMT>::previewStarted   ;
 
 folderSettings Base::lastCardRead{};
+
 uint8_t Admin_Entry::lastCurrentValue{};
 Admin_SimpleSetting::Type Admin_SimpleSetting::type{};
 bool Admin_NewCard::return_to_idle{false};
