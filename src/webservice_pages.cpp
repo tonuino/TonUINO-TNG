@@ -1,5 +1,5 @@
 #include "constants.hpp"
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
 
 #include <Arduino.h>
 
@@ -96,10 +96,10 @@ const char topnav_html[] PROGMEM = R"rawliteral(
 </style>
 <!-- Top Navigation Menu -->
 <div class="topnav">
-  <a id='nav_hostname' href="/" class="active">TonUINO</a>
+  <a id='nav_hostname' href="/" class="active">TrovaLibre</a>
   <div id="nav_links">
     <a href="/">Home</a>
-    <a href="/settings">Einstellungen</a>
+    <a href="/settings">Settings / Configuracion</a>
     <a href="/system">System</a>
     <a href="/webserial">Log</a>
   </div>
@@ -191,7 +191,7 @@ const char main_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html>
 <head>
-  <title>TonUINO</title>
+  <title>TrovaLibre</title>
   <meta charset=utf-8>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
@@ -217,7 +217,7 @@ const char main_html[] PROGMEM = R"rawliteral(
     var timer = setTimeout(() => {
       btn.innerHTML = btn_text;
       btn.disabled=false;
-      alert("keine Antwort vom TonUINO");
+      alert("no response from TrovaLibre / sin respuesta de TrovaLibre");
     }, 8000)
     xhr.onload = () => {
       console.log(xhr);
@@ -235,67 +235,67 @@ const char main_html[] PROGMEM = R"rawliteral(
 
 %TOPNAV%
 
-<h2>TonUINO</h2>
+<h2>TrovaLibre</h2>
 
-<div class="status" id="tonuino_status">%STATE%</div>
+<div class="status" id="trovalibre_status">%STATE%</div>
 <br>
 
 %SERVICE%
 
 <form class="service1" id="card">
-<br><label for="mode"              >Karte:              </label><select size=1       name="mode"             id="mode">      
-                                                                  <option>Hörspiel</option>                                    
+<br><label for="mode"              >Card: / Tarjeta:              </label><select size=1       name="mode"             id="mode">      
+                                                                  <option>Audio play / Audio</option>                                    
                                                                   <option>Album</option>                                       
                                                                   <option>Party</option>                                       
-                                                                  <option>Einzel</option>                                      
-                                                                  <option>Hörbuch</option>                                     
-                                                                  <option>Hörspiel von bis</option>                            
+                                                                  <option>Single track / Pista unica</option>                                      
+                                                                  <option>Audiobook / Audiolibro</option>                                     
+                                                                  <option>Audio play range / Rango audio</option>                            
                                                                   <option>Album von bis</option>                               
                                                                   <option>Party von bis</option>                               
-                                                                  <option>Hörbuch einzel</option>                              
+                                                                  <option>Audiobook / Audiolibro single_track</option>                              
                                                                   <option>Wiederhole</option>                                  
                                                                   <option>Quiz Spiel</option>                                  
                                                                   <option>Memory Spiel</option>                                
                                                                   <option>Bluetooth ein/aus</option>                                
-                                                                  <option>Teekesselchen Spiel</option>                                  
-                                                                  <option>Hörbuch von bis</option>                               
+                                                                  <option>teapot game</option>                                  
+                                                                  <option>Audiobook range / Rango audiolibro</option>                               
                                                                 </select>                                                      
 <br><label for="folder"         >Folder / Sp1 / Sp2     </label><div class="tooltip"><input type="number" name="folder"             id="folder" value="1" min="1" max="99">  
                                                                   <span class="tooltiptext">Folder</span></div>
                                                               / <div class="tooltip"><input type="number" name="special1"           id="special1" value="0" min="0" max="255">
-                                                                  <span class="tooltiptext">Einzel: Track
+                                                                  <span class="tooltiptext">Single track / Pista unica: Track
                                                                                         <br>* von bis: erster Track
-                                                                                        <br>Hörbuch einzel: Anzahl der Tracks - 1
+                                                                                        <br>Audiobook / Audiolibro single_track: Anzahl der Tracks - 1
                                                                                         <br>Quiz: Anzahl der Antworten (0, 2 oder 4)</span></div>
                                                               / <div class="tooltip"><input type="number" name="special2"           id="special2" value="0" min="0" max="255">
                                                                   <span class="tooltiptext">* von bis: letzter Track
                                                                                         <br>Quiz: Anzahl der Lösungen (0 oder 1)</span></div>
 <br>
 <button onclick="return submit_form(this, 'card', 'card_action', 'start');">Start</button>
-<button onclick="return submit_form(this, 'card', 'card_action', 'write' );">Schreibe</button>
+<button onclick="return submit_form(this, 'card', 'card_action', 'write' );">Write / Escribir</button>
 </form>
 <br>
 
 <form class="service1" id="modifier">
 <br><label for="mod_mode"    >Modifier:  </label><select size=1 name="mod_mode" id="mod_mode" onchange="mod_mode_changed(this)">
                                                    <option>Sleep-Timer           </option>
-                                                   <option>Stopptanz             </option>
-                                                   <option>Feuer-Wasser-Luft     </option>
-                                                   <option>Gesperrt              </option>
-                                                   <option>Kita Modus            </option>
-                                                   <option>Wiederhole Track      </option>
+                                                   <option>Freeze dance / Baile congelado             </option>
+                                                   <option>Fire-Water-Air / Fuego-Agua-Aire     </option>
+                                                   <option>Locked / Bloqueado              </option>
+                                                   <option>Daycare mode / Modo guarderia            </option>
+                                                   <option>Repeat track / Repetir pista      </option>
                                                    <option>Jukebox               </option>
-                                                   <option>Pause nach jedem Track</option>
+                                                   <option>Pause after each track / Pausa tras cada pista</option>
                                                    <option>Standby Timer Off     </option>
                                                  </select>
 <br><label for="mod_special" >Parameter  </label><div class="tooltip"><input type="number" name="mod_special" id="mod_special" value="1" min="-127" max="127">
-                                                   <span class="tooltiptext">Sleep-Timer: Timeout in min [1..127] (neg.: Tr. wird beendet)
-                                                                         <br>Feuer-Wasser-Luft/
-                                                                         <br>Stopptanz: Zeit zw. Pausen (min/max)
+                                                   <span class="tooltiptext">Sleep-Timer: Timeout in min [1..127] (neg.: track is finished / la pista termina)
+                                                                         <br>Fire-Water-Air / Fuego-Agua-Aire/
+                                                                         <br>Freeze dance / Baile congelado: time between pauses (min/max)
                                                                          <br>0: 15/30, 1: 25/40, 2: 35/50</span></div>
 <br>
 <button onclick="return submit_form(this, 'modifier', 'mod_action', 'activate'    );">Activate/Deact.</button>
-<button onclick="return submit_form(this, 'modifier', 'mod_action', 'write'       );">Schreibe</button>
+<button onclick="return submit_form(this, 'modifier', 'mod_action', 'write'       );">Write / Escribir</button>
 </form>
 <br>
 
@@ -306,7 +306,7 @@ const char main_html[] PROGMEM = R"rawliteral(
       mod_special.min = -127;
       mod_special.max =  127;
     }
-    else if (el.value == "Feuer-Wasser-Luft" || el.value == "Stopptanz") {
+    else if (el.value == "Fire-Water-Air / Fuego-Agua-Aire" || el.value == "Freeze dance / Baile congelado") {
       mod_special.min = 0;
       mod_special.max = 2;
     }
@@ -329,7 +329,7 @@ const char main_html[] PROGMEM = R"rawliteral(
     console.log('create new websocket');
     ws = new WebSocket('ws://' + window.location.hostname + '/ws');
     ws.onmessage = function(event) {
-      document.getElementById("tonuino_status").innerHTML = event.data;
+      document.getElementById("trovalibre_status").innerHTML = event.data;
     };
     ws.onclose = function (e) {
       console.log('websocket closed, reason: ', e.reason);
@@ -356,7 +356,7 @@ const char settings_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML>
 <html>
 <head>
-  <title>TonUINO Einstellungen</title>
+  <title>TrovaLibre Settings / Configuracion</title>
   <meta charset=utf-8>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
@@ -365,27 +365,27 @@ const char settings_html[] PROGMEM = R"rawliteral(
 
 %TOPNAV%
 
-<h2>Einstellungen</h2>
+<h2>Settings / Configuracion</h2>
 
   <br>  <label for="version">Version:                     </label><input type="number" name="version"             id="version" readonly>
 
   <form action='update_settings' method='post' id='mainConfigForm' accept-charset='utf-8' >
   <div id="form">
-    <br><label for="max"             >Lautstärke          </label><div class='as_input_number' id='max' >max </div>
+    <br><label for="max"             >Volume / Volumen          </label><div class='as_input_number' id='max' >max </div>
                                                                   <div class='as_input_number' id='min' >min </div>
                                                                   <div class='as_input_number' id='init'>init</div>
-    <br><label for="spkMaxVolume"    >Lautsprecher:       </label><div class="tooltip"><input type="number" name="spkMaxVolume"        id="spkMaxVolume">
-                                                                    <span class="tooltiptext">Maximale Lautstärke (Lautsprecher) [0...25]</span></div>
+    <br><label for="spkMaxVolume"    >Speaker:       </label><div class="tooltip"><input type="number" name="spkMaxVolume"        id="spkMaxVolume">
+                                                                    <span class="tooltiptext">Maximale Volume / Volumen (Speaker) [0...25]</span></div>
                                                                   <div class="tooltip"><input type="number" name="spkMinVolume"        id="spkMinVolume">
-                                                                    <span class="tooltiptext">Minimale Lautstärke (Lautsprecher) [0...max]</span></div>
+                                                                    <span class="tooltiptext">Minimale Volume / Volumen (Speaker) [0...max]</span></div>
                                                                   <div class="tooltip"><input type="number" name="spkInitVolume"       id="spkInitVolume">
-                                                                    <span class="tooltiptext">Initiale Lautstärke (Lautsprecher) [min...max]</span></div>
-    <br><label for="hpMaxVolume"     >Kopfhörer:          </label><div class="tooltip"><input type="number" name="hpMaxVolume"         id="hpMaxVolume">
-                                                                    <span class="tooltiptext">Maximale Lautstärke (Kopfhörer) [0...25]</span></div>
+                                                                    <span class="tooltiptext">Initiale Volume / Volumen (Speaker) [min...max]</span></div>
+    <br><label for="hpMaxVolume"     >Headphones / Auriculares:          </label><div class="tooltip"><input type="number" name="hpMaxVolume"         id="hpMaxVolume">
+                                                                    <span class="tooltiptext">Maximale Volume / Volumen (Headphones / Auriculares) [0...25]</span></div>
                                                                   <div class="tooltip"><input type="number" name="hpMinVolume"         id="hpMinVolume">
-                                                                    <span class="tooltiptext">Minimale Lautstärke (Kopfhörer) [0...max]</span></div>
+                                                                    <span class="tooltiptext">Minimale Volume / Volumen (Headphones / Auriculares) [0...max]</span></div>
                                                                   <div class="tooltip"><input type="number" name="hpInitVolume"        id="hpInitVolume">
-                                                                    <span class="tooltiptext">Initiale Lautstärke (Kopfhörer) [min...max]</span></div>
+                                                                    <span class="tooltiptext">Initiale Volume / Volumen (Headphones / Auriculares) [min...max]</span></div>
     <br>
     <br><label for="eq"              >Equalizer:          </label><select size=1       name="eq"                  id="eq">
                                                                     <option>Normal</option>
@@ -402,8 +402,8 @@ const char settings_html[] PROGMEM = R"rawliteral(
     <br><label for="invertVolButtons">Inv. Volume Buttons:</label><input type="checkbox" name="invertVolumeButtons" id="invertVolumeButtons">
     <br>
     <br><label for="adminMenuLocked" >Admin-Menü Lock:    </label><select size=1       name="adminMenuLocked"     id="adminMenuLocked">
-                                                                    <option>kein Lock</option>
-                                                                    <option>nur Karte</option>
+                                                                    <option>no lock</option>
+                                                                    <option>card only / solo tarjeta</option>
                                                                     <option>Pin</option>
                                                                   </select>
     <br>
@@ -430,28 +430,28 @@ const char settings_html[] PROGMEM = R"rawliteral(
   var form_shortcut =
   '<br><label for="sc_mode_n_"      >Shortcut_t_:         </label><select size=1       name="sc_mode_n_"         id="sc_mode_n_">    '
  +'                                                                  <option>--------</option>                                       '
- +'                                                                  <option>Hörspiel</option>                                       '
+ +'                                                                  <option>Audio play / Audio</option>                                       '
  +'                                                                  <option>Album</option>                                          '
  +'                                                                  <option>Party</option>                                          '
- +'                                                                  <option>Einzel</option>                                         '
- +'                                                                  <option>Hörbuch</option>                                        '
- +'                                                                  <option>Hörspiel von bis</option>                               '
+ +'                                                                  <option>Single track / Pista unica</option>                                         '
+ +'                                                                  <option>Audiobook / Audiolibro</option>                                        '
+ +'                                                                  <option>Audio play range / Rango audio</option>                               '
  +'                                                                  <option>Album von bis</option>                                  '
  +'                                                                  <option>Party von bis</option>                                  '
- +'                                                                  <option>Hörbuch einzel</option>                                 '
+ +'                                                                  <option>Audiobook / Audiolibro single_track</option>                                 '
  +'                                                                  <option>Wiederhole</option>                                     '
  +'                                                                  <option>Quiz Spiel</option>                                     '
  +'                                                                  <option>Memory Spiel</option>                                   '
  +'                                                                  <option>Bluetooth ein/aus</option>                              '
- +'                                                                  <option>Teekesselchen Spiel</option>                            '
- +'                                                                  <option>Hörbuch von bis</option>                                '
+ +'                                                                  <option>teapot game</option>                            '
+ +'                                                                  <option>Audiobook range / Rango audiolibro</option>                                '
  +'                                                                </select>                                                         '
  +'<br><label for="sc_folder_n_"   >Folder / Sp1 / Sp2     </label><div class="tooltip"><input type="number" name="sc_folder_n_"      id="sc_folder_n_">  '  
  +'                                                                 <span class="tooltiptext">Folder</span></div>                                         '
  +'                                                              / <div class="tooltip"><input type="number" name="sc_special1_n_"    id="sc_special1_n_">'
- +'                                                                 <span class="tooltiptext">Einzel: Track                                               '
+ +'                                                                 <span class="tooltiptext">Single track / Pista unica: Track                                               '
  +'                                                                                       <br>* von bis: erster Track                                     '
- +'                                                                                       <br>Hörbuch einzel: Anzahl der Tracks                           '
+ +'                                                                                       <br>Audiobook / Audiolibro single_track: Anzahl der Tracks                           '
  +'                                                                                       <br>Quiz: Anzahl der Antworten (0, 2 oder 4)</span></div>       '
  +'                                                              / <div class="tooltip"><input type="number" name="sc_special2_n_"    id="sc_special2_n_">'
  +'                                                                 <span class="tooltiptext">* von bis: letzter Track                                    '
@@ -528,7 +528,7 @@ const char system_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html>
 <head>
-  <title>TonUINO</title>
+  <title>TrovaLibre</title>
   <meta charset=utf-8>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
@@ -537,7 +537,7 @@ const char system_html[] PROGMEM = R"rawliteral(
 
 %TOPNAV%
 
-<h2>TonUINO System</h2>
+<h2>TrovaLibre System</h2>
 
 <form class="system" action='/wifi'    method='get'><button>Configure WiFi</button></form><br>
 <form class="system" action='/info'    method='get'><button>Info</button></form><br>
@@ -556,7 +556,7 @@ const char wifi_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html>
 <head>
-  <title>TonUINO</title>
+  <title>TrovaLibre</title>
   <meta charset=utf-8>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
@@ -565,7 +565,7 @@ const char wifi_html[] PROGMEM = R"rawliteral(
 
 %TOPNAV%
 
-<h2>TonUINO WiFi Konfiguration</h2>
+<h2>TrovaLibre WiFi Configuration</h2>
 
 <div class='wifi'>
   <button onclick='refresh()'>Refresh</button>
@@ -606,9 +606,9 @@ const char wifi_html[] PROGMEM = R"rawliteral(
   <button onclick='return save()'>Save</button>
 </form>
 <dialog id="dialog">
-    <p>Die WLAN Daten wurden gespeichert. Falls Reboot nicht ausgewählt, 
-       starte den TonUINO neu. Verbinde dich mit dem jetzt gespeicherten WLAN 
-       und drücke dann Ok. Du wirst nach 5 Sekunden auf die TonUINO 
+    <p>Wi-Fi credentials have been saved. / Los datos WiFi se han guardado. Falls Reboot nicht ausgewählt, 
+       restart TrovaLibre. Connect to the saved Wi-Fi / Conectate al Wi-Fi guardado 
+       and press OK. You will be redirected to TrovaLibre in 5 seconds. / Pulsa OK. Seras redirigido a TrovaLibre en 5 segundos. 
        Seite umgeleitet</p>
     <p><button id="ok">Ok</button></p>
 </dialog>
@@ -706,7 +706,7 @@ const char info_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html>
 <head>
-  <title>TonUINO</title>
+  <title>TrovaLibre</title>
   <meta charset=utf-8>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
@@ -715,11 +715,11 @@ const char info_html[] PROGMEM = R"rawliteral(
 
 %TOPNAV%
 
-<h2>TonUINO Info</h2>
+<h2>TrovaLibre Info</h2>
 
 <h3>About</h3><hr><dl>
-<dt>TonUINO TNG Version</dt><dd>%aboutver%</dd>
-<dt>TonUINO TNG Konfiguration</dt><dd>%aboutconfig%</dd>
+<dt>TrovaLibre Version</dt><dd>%aboutver%</dd>
+<dt>TrovaLibre Configuration</dt><dd>%aboutconfig%</dd>
 <dt>Arduino</dt><dd>%aboutarduinover%</dd>
 <dt>Build date</dt><dd>%aboutdate%</dd>
 </dl>
@@ -768,7 +768,7 @@ const char upgrade_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title>TonUINO</title>
+  <title>TrovaLibre</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
@@ -777,7 +777,7 @@ const char upgrade_html[] PROGMEM = R"rawliteral(
 
 %TOPNAV%
 
-<h2>TonUINO OTA FW Upgrade</h2>
+<h2>TrovaLibre OTA FW Upgrade</h2>
 
 Installed firmware: %aboutver%<br>
 Build date: %aboutdate%

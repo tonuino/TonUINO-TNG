@@ -11,7 +11,7 @@
 #include "queue.hpp"
 #endif
 
-class Tonuino;
+class TrovaLibre;
 class Mp3;
 struct folderSettings;
 
@@ -28,7 +28,7 @@ public:
   virtual pmode_t getActive        () { return pmode_t::none; }
   virtual void init(pmode_t, uint8_t) {}
 
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   virtual String getDescription    () { return ""; }
 #endif
 
@@ -46,7 +46,7 @@ public:
   pmode_t getActive () final { return pmode_t::sleep_timer; }
   void   init(pmode_t, uint8_t) final;
 
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   String getDescription() final;
 #endif
 
@@ -66,7 +66,7 @@ public:
   pmode_t getActive ()        final { return mode; }
   void   init(pmode_t, uint8_t) final;
 
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   String getDescription() final;
 #endif
 
@@ -91,8 +91,8 @@ public:
 
   pmode_t getActive()        final { return pmode_t::toddler; }
 
-#ifdef TonUINO_Esp32
-  String getDescription()    final { return "Gesperrt"; }
+#ifdef TROVALIBRE_ESP32
+  String getDescription()    final { return "Locked / Bloqueado"; }
 #endif
 
 };
@@ -107,8 +107,8 @@ public:
   pmode_t getActive (                          ) final { return pmode_t::kindergarden; }
   void   init       (pmode_t, uint8_t          ) final { cardQueued = false; }
 
-#ifdef TonUINO_Esp32
-  String getDescription() final { return "Kita Modus"; }
+#ifdef TROVALIBRE_ESP32
+  String getDescription() final { return "Daycare mode / Modo guarderia"; }
 #endif
 
 private:
@@ -123,8 +123,8 @@ public:
   bool   handlePrevious() final;
   pmode_t getActive    () final { return pmode_t::repeat_single; }
 
-#ifdef TonUINO_Esp32
-  String getDescription() final { return "Wiederhole Track"; }
+#ifdef TROVALIBRE_ESP32
+  String getDescription() final { return "Repeat track / Repetir pista"; }
 #endif
 
 };
@@ -136,8 +136,8 @@ public:
   bool   handleNext    () final;
   pmode_t getActive    () final { return pmode_t::pause_aft_tr; }
 
-#ifdef TonUINO_Esp32
-  String getDescription() final { return "Pause nach jedem Track"; }
+#ifdef TROVALIBRE_ESP32
+  String getDescription() final { return "Pause after each track / Pausa tras cada pista"; }
 #endif
 
 };
@@ -154,7 +154,7 @@ public:
   pmode_t getActive (                          ) final { return pmode_t::jukebox; }
   void   init       (pmode_t, uint8_t          ) final { cards.clear(); }
 
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   String getDescription() final;
 #endif
 

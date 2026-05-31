@@ -22,7 +22,7 @@ public:
   };
 
   int levels[Buttons3x3::maxLevel+1] = {
-#ifdef TonUINO_Classic
+#ifdef TROVALIBRE_CLASSIC
          0,
         92,
        194,

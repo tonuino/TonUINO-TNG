@@ -1,0 +1,143 @@
+advert/0300_freeze_into.mp3|Jugamos ahora al baile de las estatuas. ¡Cuando la música se pare, quédate quieto!
+advert/0308_air.mp3|<prosody volume="x-loud" pitch="high" rate="fast">¡Aire!</prosody><break time="500ms"/>diez<break time="250ms"/>nueve<break time="250ms"/>ocho<break time="250ms"/>siete<break time="250ms"/>seis<break time="250ms"/>cinco<break time="250ms"/>cuatro<break time="250ms"/>tres<break time="250ms"/>dos<break time="250ms"/>uno<break time="500ms"/>¡y seguimos!
+advert/0306_fire.mp3|<prosody volume="x-loud" pitch="high" rate="fast">¡Fuego!</prosody><break time="500ms"/>diez<break time="250ms"/>nueve<break time="250ms"/>ocho<break time="250ms"/>siete<break time="250ms"/>seis<break time="250ms"/>cinco<break time="250ms"/>cuatro<break time="250ms"/>tres<break time="250ms"/>dos<break time="250ms"/>uno<break time="500ms"/>¡y continuamos!
+advert/0307_water.mp3|<prosody volume="x-loud" pitch="high" rate="fast">¡Agua!</prosody><break time="500ms"/>diez<break time="250ms"/>nueve<break time="250ms"/>ocho<break time="250ms"/>siete<break time="250ms"/>seis<break time="250ms"/>cinco<break time="250ms"/>cuatro<break time="250ms"/>tres<break time="250ms"/>dos<break time="250ms"/>uno<break time="500ms"/>¡y adelante!
+advert/0301_freeze_freeze1.mp3|¡Y alto!
+advert/0301_freeze_freeze2.mp3|¡No te muevas!
+advert/0301_freeze_freeze3.mp3|¡Seguimos!
+advert/0302_sleep.mp3|Función de reposo activada.
+advert/0303_fi_wa_ai.mp3|Jugamos ahora a fuego, agua y aire. Con fuego, corre a una esquina; con agua, súbete a algún sitio alto; y con aire, túmbate en el suelo.
+advert/0304_buttonslocked.mp3|Los botones están ahora bloqueados.
+advert/0305_kindergarden.mp3|Modo guardería activado.
+advert/0309_jukebox.mp3|Jukebox
+advert/0320_bt_on.mp3|Bluetooth activándose
+advert/0321_bt_off.mp3|Bluetooth desactivándose
+advert/0322_bt_pairing.mp3|Conectando Bluetooth
+advert/0323_standby_timer_off.mp3|Temporizador desactivado
+advert/0324_standby_timer_on.mp3|Temporizador activado
+#MP3
+mp3/0300_new_tag.mp3|¡Oh, una tarjeta nueva!
+mp3/0301_select_folder.mp3|Vale, usa ahora los botones de volumen para seleccionar una carpeta para la tarjeta.
+mp3/0310.mp3|Selecciona el modo de reproducción con los botones de volumen. Pulsa el botón de pausa para continuar.
+mp3/0311_mode_random_episode.mp3|Modo cuento: reproducir un archivo aleatorio de la carpeta
+mp3/0312_mode_album.mp3|Modo álbum: reproducir toda la carpeta
+mp3/0313_mode_party.mp3|Modo fiesta: reproducir la carpeta de forma aleatoria.
+mp3/0314_mode_single_track.mp3|Modo individual: reproducir un archivo concreto de la carpeta.
+mp3/0315_mode_audio_book.mp3|Modo audiolibro: reproducir una carpeta y guardar el progreso.
+mp3/0316_admin.mp3|Funciones de administración.
+mp3/0317_special_random.mp3|Modo especial de inicio a fin, cuento: reproducir un archivo aleatorio entre el archivo inicial y el final.
+mp3/0318_special_album.mp3|Modo especial de inicio a fin, álbum: reproducir todos los archivos entre el archivo inicial y el final.
+mp3/0319_special_party.mp3|Modo especial de inicio a fin, fiesta: reproducir aleatoriamente todos los archivos entre el archivo inicial y el final.
+mp3/0320_mode_audio_book_single.mp3|Modo audiolibro individual: reproducir el siguiente título de la carpeta y guardar el progreso.
+mp3/0321_mode_repeat_last_card.mp3|Modo repetir tarjeta: se repite la última tarjeta o el último acceso directo.
+mp3/0322_mode_trivial_game.mp3|Modo juego de preguntas: juega a un trivial.
+mp3/0323_mode_memory_game.mp3|Modo juego de memoria: juega a un memory.
+mp3/0324_mode_switch_bt.mp3|Cambiar Bluetooth: activa o desactiva Bluetooth.
+mp3/0325_mode_teapot_game.mp3|Modo juego de adivinanzas: juega a las adivinanzas.
+mp3/0326_special_audio_book.mp3|Modo especial de inicio a fin, audiolibro: reproducir todos los archivos entre el archivo inicial y el final y guardar el progreso.
+mp3/0327_select_file.mp3|OK, selecciona ahora el archivo con los botones de volumen.
+mp3/0328_select_first_file.mp3|OK, selecciona ahora el archivo inicial con los botones de volumen.
+mp3/0329_select_last_file.mp3|Selecciona ahora el archivo final con los botones de volumen.
+mp3/0330.mp3|¿Quieres que diga el número antes de cada archivo? Puedes consultar el número actual en cualquier momento manteniendo pulsado el botón de pausa.
+mp3/0331.mp3|No, no decir el número.
+mp3/0332.mp3|Sí, decir el número.
+mp3/0333_num_answer.mp3|¿Cuántas respuestas diferentes tiene el trivial para cada pregunta?
+mp3/0334_num_answer_2.mp3|2 respuestas.
+mp3/0335_num_answer_4.mp3|4 respuestas.
+mp3/0336_num_answer_2_1.mp3|2 respuestas y una solución.
+mp3/0337_num_answer_4_1.mp3|4 respuestas y una solución.
+mp3/0338_num_answer_0_1.mp3|Solo una solución con pulsador.
+mp3/0340_num_tracks.mp3| ¿Cuántas pistas se deben reproducir?
+mp3/0400_ok.mp3|OK. He configurado la tarjeta.
+mp3/0401_error.mp3|¡Vaya! Por desgracia, no ha funcionado.
+mp3/0402_ok_settings.mp3|OK, he guardado los ajustes
+mp3/0500_trivial_game_intro.mp3|Vas a jugar a un trivial. Pulsa el botón de pausa para recibir una nueva pregunta. Después, pulsa los botones de siguiente, anterior o volumen para escuchar las distintas respuestas. Cuando creas que has oído la respuesta correcta, pulsa el botón de pausa para saber si lo es. Repite todo esto tantas veces como quieras. Puedes terminar el trivial manteniendo pulsados los botones de siguiente y anterior.
+mp3/0501_trivial_game_ok.mp3|Sí, esa es la respuesta correcta. Muy bien. Continúa con el botón de pausa.
+mp3/0502_trivial_game_bad.mp3|Oh, no, esa no es la respuesta correcta. Intenta la siguiente pregunta. Continúa con el botón de pausa.
+mp3/0503_trivial_game_ok_with_solution.mp3|Sí, esa es la respuesta correcta. Muy bien. Aquí tienes la explicación de la solución.
+mp3/0504_trivial_game_bad_with_solution.mp3|Oh, no, esa no es la respuesta correcta. Aquí tienes la solución.
+mp3/0505_trivial_game_buzzer_down.mp3|¡El jugador anterior ha sido el primero! ¿Cuál es la solución? <break time="1000ms"/> Después reproduce la solución con el botón de pausa.
+mp3/0506_trivial_game_buzzer_up.mp3|¡El jugador siguiente ha sido el primero! ¿Cuál es la solución? <break time="1000ms"/>Después reproduce la solución con el botón de pausa.
+mp3/0507_trivial_game_buzzer_vol-.mp3|¡El jugador volumen bajo ha sido el primero! ¿Cuál es la solución? <break time="1000ms"/>Después reproduce la solución con el botón de pausa.
+mp3/0508_trivial_game_buzzer_vol+.mp3|¡El jugador volumen alto ha sido el primero! ¿Cuál es la solución? <break time="1000ms"/>Después reproduce la solución con el botón de pausa.
+mp3/0509_trivial_game_buzzer_intro.mp3|Vas a jugar a un trivial con pulsador. <break time="250ms"/>Pulsa el botón de pausa para recibir una nueva pregunta. <break time="250ms"/>Después, los botones anterior, siguiente, bajar volumen y subir volumen funcionan como pulsadores. Cuando el jugador más rápido haya dicho la respuesta, pulsa el botón de pausa para saber si es correcta. Repite todo esto tantas veces como quieras. Puedes terminar el trivial manteniendo pulsados los botones de siguiente y anterior.
+mp3/0510_trivial_game_continue.mp3|Continúa con el botón de pausa.
+mp3/0520_memory_game_intro.mp3|Vas a jugar a un juego de memory. <break time="250ms"/>Coloca primero una tarjeta de memory y después una segunda. Tras la segunda tarjeta, pulsa el botón de pausa para saber si las dos tarjetas forman pareja. Si es así, puedes quedarte con ambas; si no, vuelve a dejarlas en el juego. Después sigue el siguiente jugador. Puedes terminar el juego manteniendo pulsados los botones de siguiente y anterior.
+mp3/0521_memory_game_ok.mp3|Sí, las dos tarjetas forman pareja.
+mp3/0522_memory_game_bad.mp3|Oh, no, las tarjetas no coinciden.
+mp3/0523_memory_game_1.mp3|Coloca la primera tarjeta de memory.
+mp3/0524_memory_game_2.mp3|Coloca la segunda tarjeta de memory.
+mp3/0530_teapot_game_intro.mp3|Vas a jugar a adivinar la palabra. Mantén pulsado el botón de pausa para escuchar una nueva descripción. Después pulsa pausa, anterior, siguiente, bajar volumen o subir volumen para escuchar más descripciones. Cuando creas que has adivinado la palabra correcta, mantén pulsado el botón de pausa para escuchar la solución. Repite todo esto tantas veces como quieras. Puedes terminar el juego manteniendo pulsados los botones de siguiente y anterior.
+mp3/0531_teapot_game_continue.mp3|Continúa manteniendo pulsado el botón de pausa.
+mp3/0532_teapot_game_solution.mp3|Aquí tienes la solución.
+mp3/0800_waiting_for_card.mp3|¡Coloca ahora la tarjeta!
+mp3/0801_remove_card.mp3|Retira la tarjeta del lector.
+mp3/0802_reset_aborted.mp3|OK, he cancelado el proceso.
+mp3/0900_admin.mp3|Bienvenido al menú de administración. Selecciona una función con los botones de volumen y confírmala con el botón de pausa. Mantén pulsado el botón de pausa para cancelar el proceso.
+mp3/0901_card_reset.mp3|Reconfigurar una tarjeta.
+mp3/0902_max_volume.mp3|Configurar el volumen máximo.
+mp3/0903_min_volume.mp3|Configurar el volumen mínimo.
+mp3/0904_init_volume.mp3|Configurar el volumen al iniciar.
+mp3/0905_eq.mp3|Configurar el ecualizador.
+mp3/0906_modifiers.mp3|Crear una tarjeta de modificación. Estas tarjetas se colocan después de las tarjetas de música y cambian el comportamiento de tu TrovaLibre.
+mp3/0907_shortcut.mp3|Configurar accesos directos. Un acceso directo se inicia con una pulsación larga y solo funciona cuando no se está reproduciendo nada.
+mp3/0908_standbytimer.mp3|Configurar el temporizador.
+mp3/0909_batch_cards.mp3|Crear tarjetas individuales para una carpeta.
+mp3/0910_switch_volume.mp3|Invertir la función de los botones de volumen.
+mp3/0911_reset.mp3|Borrar todos los ajustes.
+mp3/0912_admin_lock.mp3|Proteger el menú de administración.
+mp3/0913_pause_on_card_removed.mp3|Pausar cuando se retire la tarjeta. Atención: esto no es compatible con la tarjeta de modificación de guardería.
+mp3/0914_memory_cards.mp3|Crear las tarjetas para el juego de memory.
+mp3/0919_continue_admin.mp3|Seguimos en el menú de administración. Mantén pulsado el botón de pausa para salir del menú de administración.
+mp3/0920_eq_intro.mp3|Selecciona un ajuste para el ecualizador con los botones de volumen y confírmalo con el botón de pausa.
+mp3/0921_normal.mp3|Normal
+mp3/0922_pop.mp3|Pop
+mp3/0923_rock.mp3|Rock
+mp3/0924_jazz.mp3|Jazz
+mp3/0925_classic.mp3|Clásica
+mp3/0926_bass.mp3|Graves
+mp3/0930_max_volume_intro.mp3|Selecciona el volumen máximo y confirma con el botón de pausa.
+mp3/0931_min_volume_into.mp3|Selecciona el volumen mínimo y confirma con el botón de pausa.
+mp3/0932_init_volume_into.mp3|Selecciona el volumen al iniciar y confirma con el botón de pausa.
+mp3/0933_switch_volume_intro.mp3|¿Quieres invertir la función de los botones de volumen en la variante de 3 botones? Así podrás cambiar el volumen con una pulsación corta, pero tendrás que mantener pulsados los botones para avanzar o retroceder una canción.
+mp3/0934_no.mp3|No.
+mp3/0935_yes.mp3|Sí.
+mp3/0936_batch_cards_intro.mp3|OK, coloca ahora las tarjetas una tras otra sobre la caja. Diré antes el número correspondiente para que no te confundas. Para cancelar, mantén pulsado el botón de pausa.
+mp3/0937_memory_game_cards_intro.mp3|OK, coloca ahora una tras otra las tarjetas para el juego de memory sobre la caja. Diré antes el número correspondiente para que no te confundas. Para cancelar, pulsa brevemente el botón de pausa.
+mp3/0938_modifier_sleep_mode.mp3|¿Debe terminar de reproducirse la pista actual?
+mp3/0940_shortcut_into.mp3|Selecciona el acceso directo que quieres configurar. Si tienes el teclado de botones 3 por 3, también puedes pulsar allí una tecla.
+mp3/0941_pause.mp3|Botones siguiente y anterior
+mp3/0942_up.mp3|Botón siguiente o subir volumen
+mp3/0943_down.mp3|Botón anterior o bajar volumen
+mp3/0944_startup.mp3|Configurar acceso directo al iniciar
+mp3/0960_timer_intro.mp3|¿Después de cuántos minutos debe apagarse el TrovaLibre?
+mp3/0961_timer_5.mp3|5 minutos.
+mp3/0962_timer_15.mp3|15 minutos.
+mp3/0963_timer_30.mp3|30 minutos.
+mp3/0964_timer_60.mp3|60 minutos.
+mp3/0965_timer_disabled.mp3|No apagar automáticamente
+mp3/0966_dance_pause_intro.mp3|¿Durante cuánto tiempo debe sonar la música entre las pausas?
+mp3/0967_dance_pause_15_30.mp3|De 15 a 30 segundos
+mp3/0968_dance_pause_25_40.mp3|De 25 a 40 segundos
+mp3/0969_dance_pause_35_50.mp3|De 35 a 50 segundos
+mp3/0970_modifier_Intro.mp3|Selecciona ahora tu tarjeta de modificación con los botones de volumen.
+mp3/0971_modifier_SleepTimer.mp3|Modo reposo
+mp3/0972_modifier_FreezeDance.mp3|Baile de las estatuas: TrovaLibre juega contigo y pausa la reproducción aleatoriamente durante un momento.
+mp3/0973_modifier_FiWaAi.mp3|Juego de fuego, agua y aire.
+mp3/0974_modifier_Toddler.mp3|Modo peques: todos los botones del TrovaLibre quedan bloqueados para los más pequeños. Las tarjetas siguen funcionando.
+mp3/0975_modifier_KinderGarden.mp3|Modo guardería: para evitar discusiones, las tarjetas nuevas no se reproducen inmediatamente, sino cuando termine la canción actual. Los botones siguiente y anterior quedan bloqueados.
+mp3/0976_modifier_repeat1.mp3|Repetir título: repetir el título actual indefinidamente.
+mp3/0977_modifier_bluetooth.mp3|Tarjeta Bluetooth: con la tarjeta Bluetooth puedes activar o desactivar Bluetooth.
+mp3/0978_modifier_jukebox.mp3|Tarjeta jukebox: si ya se está reproduciendo una pista y se coloca una tarjeta nueva, esta no se reproduce inmediatamente, sino que se añade a una cola. Cuando termine la tarjeta actual, se toma la siguiente tarjeta de la cola.
+mp3/0979_modifier_pauseAftTr.mp3|Tarjeta pausa tras cada pista: con esta tarjeta, el TrovaLibre pasa al estado de pausa después de cada pista.
+mp3/0980_modifier_disableStandby.mp3|Tarjeta desactivar espera: con esta tarjeta puedes desactivar y volver a activar temporalmente el temporizador de espera
+mp3/0985_admin_lock_intro.mp3|Selecciona si el menú de administración debe protegerse y de qué forma.
+mp3/0986_admin_lock_disabled.mp3|Sin protección: el menú de administración puede activarse en cualquier momento pulsando los tres botones.
+mp3/0987_admin_lock_card.mp3|Solo tarjeta de administración: el menú de administración solo puede abrirse con una tarjeta de administración. Se puede registrar una nueva tarjeta de administración en cualquier momento.
+mp3/0988_admin_lock_pin.mp3|Introducción de código: el menú de administración queda protegido con un PIN de cuatro cifras. Si eliges esta opción, a continuación tendrás que establecer el PIN.
+mp3/0989_admin_lock_calc.mp3|Operación matemática: solo se puede entrar en el menú de administración resolviendo una operación matemática.
+mp3/0991_admin_pin.mp3|Introduce el PIN.
+mp3/0992_admin_calc.mp3|Cuánto es
+mp3/0993_admin_calc.mp3|Más
+mp3/0994_admin_calc.mp3|Menos
+mp3/0999_reset_ok.mp3|¡Reinicio realizado!

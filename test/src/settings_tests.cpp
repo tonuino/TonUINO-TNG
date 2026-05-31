@@ -45,7 +45,7 @@ public:
       {{
           { 1, pmode_t::album   , 0, 0 },
           { 2, pmode_t::album_vb, 1, 2 },
-          { 3, pmode_t::hoerbuch, 0, 0 },
+          { 3, pmode_t::audiobook, 0, 0 },
           { 4, pmode_t::party   , 0, 0 }
       }}            ,//shortCuts_t shortCuts;
       0             ,//uint8_t     adminMenuLocked;

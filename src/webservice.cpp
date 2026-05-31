@@ -1,5 +1,5 @@
 #include "constants.hpp"
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
 
 #include "webservice.hpp"
 
@@ -9,7 +9,7 @@
 
 #include "logger.hpp"
 #include "state_machine.hpp"
-#include "tonuino.hpp"
+#include "trovalibre.hpp"
 #include "timer.hpp"
 #include "version.hpp"
 
@@ -24,7 +24,7 @@ namespace {
 const char ota_user  [] = "admin";
 const char ota_passwd[] = "admin";
 
-Tonuino        &tonuino   = Tonuino::getTonuino();
+TrovaLibre        &trovaLibre   = TrovaLibre::getInstance();
 
 /**************
 Static HTML Definition
@@ -51,7 +51,7 @@ void WifiSettings::init() {
 
   ssid              = prefs.getString("WiFi_ssid"      );
   password          = prefs.getString("WiFi_password"  );
-  hostname          = prefs.getString("WiFi_hostname"  , "tonuino");
+  hostname          = prefs.getString("WiFi_hostname"  , "trovalibre");
   static_ip         = prefs.getBool  ("WiFi_st_ip"     , false);
   static_ip_address = prefs.getString("WiFi_st_ip_addr", "0.0.0.0");
   static_ip_gw      = prefs.getString("WiFi_st_ip_gw"  , "0.0.0.0");
@@ -146,14 +146,14 @@ void Webservice::init() {
   }
   else {
     connected = false;
-    LOG(webserv_log, s_info, "Not connected to WiFi ", wifi_settings.get_ssid(), ", starting AP TonUINO");
-    WiFi.softAPsetHostname("tonuino");
+    LOG(webserv_log, s_info, "Not connected to WiFi ", wifi_settings.get_ssid(), ", starting AP TrovaLibre");
+    WiFi.softAPsetHostname("trovalibre");
     WiFi.mode(WIFI_MODE_AP);
     if ((wifi_settings.get_appassword().length() < 8) || force_ap) {
-      WiFi.softAP("TonUINO");
+      WiFi.softAP("TrovaLibre");
     }
     else {
-      WiFi.softAP("TonUINO", wifi_settings.get_appassword());
+      WiFi.softAP("TrovaLibre", wifi_settings.get_appassword());
     }
     delay(500); // slight delay to make sure we get an AP IP
     LOG(webserv_log, s_info, "AP IP address: ",WiFi.softAPIP());
@@ -196,7 +196,7 @@ void Webservice::init() {
 void Webservice::loop() {
   if (ota_reboot) {
     LOG(webserv_log, s_info, "OTA finished, Rebooting ESP32...");
-    if (SM_tonuino::is_in_state<Play>())
+    if (SM_trovaLibre::is_in_state<Play>())
       cmd = commandRaw::pause;
     delay(2000);
     ESP.restart();
@@ -275,8 +275,8 @@ void Webservice::update_settings(AsyncWebServerRequest *request) {
                                                                                request->arg("eq"                  ) == "Bass"    ? 6 : 1;
   if (request->hasArg("standbyTimer"        )) settings.standbyTimer         = request->arg("standbyTimer"        ).toInt();
   if (request->hasArg("invertVolumeButtons" )) settings.invertVolumeButtons  = 1; else settings.invertVolumeButtons = 0;
-  if (request->hasArg("adminMenuLocked"     )) settings.adminMenuLocked      = request->arg("adminMenuLocked"     ) == "kein Lock"? 0 :
-                                                                               request->arg("adminMenuLocked"     ) == "nur Karte"? 1 :
+  if (request->hasArg("adminMenuLocked"     )) settings.adminMenuLocked      = request->arg("adminMenuLocked"     ) == "no lock"? 0 :
+                                                                               request->arg("adminMenuLocked"     ) == "card only"? 1 :
                                                                                request->arg("adminMenuLocked"     ) == "Pin"      ? 2 : 0;
   if (request->hasArg("adminMenuPin1"       )) settings.adminMenuPin[0]      = request->arg("adminMenuPin1"       ).toInt();
   if (request->hasArg("adminMenuPin2"       )) settings.adminMenuPin[1]      = request->arg("adminMenuPin2"       ).toInt();
@@ -285,91 +285,91 @@ void Webservice::update_settings(AsyncWebServerRequest *request) {
   if (request->hasArg("pauseWhenCardRemoved")) settings.pauseWhenCardRemoved = 1; else settings.pauseWhenCardRemoved = 0;
 
   if (request->hasArg("sc_mode1"            )) settings.shortCuts[0].mode    = request->arg("sc_mode1"            ) == "--------"         ? pmode_t::none         :
-                                                                               request->arg("sc_mode1"            ) == "Hörspiel"         ? pmode_t::hoerspiel    :
+                                                                               request->arg("sc_mode1"            ) == "Audio play / Audio"         ? pmode_t::audio_play    :
                                                                                request->arg("sc_mode1"            ) == "Album"            ? pmode_t::album        :
                                                                                request->arg("sc_mode1"            ) == "Party"            ? pmode_t::party        :
-                                                                               request->arg("sc_mode1"            ) == "Einzel"           ? pmode_t::einzel       :
-                                                                               request->arg("sc_mode1"            ) == "Hörbuch"          ? pmode_t::hoerbuch     :
-                                                                               request->arg("sc_mode1"            ) == "Hörspiel von bis" ? pmode_t::hoerspiel_vb :
+                                                                               request->arg("sc_mode1"            ) == "Single track / Pista unica"           ? pmode_t::single_track       :
+                                                                               request->arg("sc_mode1"            ) == "Audiobook / Audiolibro"          ? pmode_t::audiobook     :
+                                                                               request->arg("sc_mode1"            ) == "Audio play range / Rango audio" ? pmode_t::audio_play_range :
                                                                                request->arg("sc_mode1"            ) == "Album von bis"    ? pmode_t::album_vb     :
                                                                                request->arg("sc_mode1"            ) == "Party von bis"    ? pmode_t::party_vb     :
-                                                                               request->arg("sc_mode1"            ) == "Hörbuch einzel"   ? pmode_t::hoerbuch_1   :
+                                                                               request->arg("sc_mode1"            ) == "Audiobook / Audiolibro single_track"   ? pmode_t::audiobook_single   :
                                                                                request->arg("sc_mode1"            ) == "Wiederhole"       ? pmode_t::repeat_last  :
                                                                                request->arg("sc_mode1"            ) == "Quiz Spiel"       ? pmode_t::quiz_game    :
                                                                                request->arg("sc_mode1"            ) == "Memory Spiel"     ? pmode_t::memory_game  :
 #ifdef BT_MODULE
                                                                                request->arg("sc_mode1"            ) == "Bluetooth ein/aus"? pmode_t::switch_bt    :
 #endif
-                                                                               request->arg("sc_mode1"            ) == "Teekesselchen Spiel"? pmode_t::teapot_game:
-                                                                               request->arg("sc_mode1"            ) == "Hörbuch von bis"  ? pmode_t::hoerbuch_vb  :
+                                                                               request->arg("sc_mode1"            ) == "teapot game"? pmode_t::teapot_game:
+                                                                               request->arg("sc_mode1"            ) == "Audiobook range / Rango audiolibro"  ? pmode_t::audiobook_range  :
                                                                                                                                             pmode_t::none         ;
   if (request->hasArg("sc_folder1"          )) settings.shortCuts[0].folder  = request->arg("sc_folder1"          ).toInt();
   if (request->hasArg("sc_special11"        )) settings.shortCuts[0].special = request->arg("sc_special11"        ).toInt();
   if (request->hasArg("sc_Special21"        )) settings.shortCuts[0].special2= request->arg("sc_special21"        ).toInt();
 
   if (request->hasArg("sc_mode2"            )) settings.shortCuts[1].mode    = request->arg("sc_mode2"            ) == "--------"         ? pmode_t::none         :
-                                                                               request->arg("sc_mode2"            ) == "Hörspiel"         ? pmode_t::hoerspiel    :
+                                                                               request->arg("sc_mode2"            ) == "Audio play / Audio"         ? pmode_t::audio_play    :
                                                                                request->arg("sc_mode2"            ) == "Album"            ? pmode_t::album        :
                                                                                request->arg("sc_mode2"            ) == "Party"            ? pmode_t::party        :
-                                                                               request->arg("sc_mode2"            ) == "Einzel"           ? pmode_t::einzel       :
-                                                                               request->arg("sc_mode2"            ) == "Hörbuch"          ? pmode_t::hoerbuch     :
-                                                                               request->arg("sc_mode2"            ) == "Hörspiel von bis" ? pmode_t::hoerspiel_vb :
+                                                                               request->arg("sc_mode2"            ) == "Single track / Pista unica"           ? pmode_t::single_track       :
+                                                                               request->arg("sc_mode2"            ) == "Audiobook / Audiolibro"          ? pmode_t::audiobook     :
+                                                                               request->arg("sc_mode2"            ) == "Audio play range / Rango audio" ? pmode_t::audio_play_range :
                                                                                request->arg("sc_mode2"            ) == "Album von bis"    ? pmode_t::album_vb     :
                                                                                request->arg("sc_mode2"            ) == "Party von bis"    ? pmode_t::party_vb     :
-                                                                               request->arg("sc_mode2"            ) == "Hörbuch einzel"   ? pmode_t::hoerbuch_1   :
+                                                                               request->arg("sc_mode2"            ) == "Audiobook / Audiolibro single_track"   ? pmode_t::audiobook_single   :
                                                                                request->arg("sc_mode2"            ) == "Wiederhole"       ? pmode_t::repeat_last  :
                                                                                request->arg("sc_mode2"            ) == "Quiz Spiel"       ? pmode_t::quiz_game    :
                                                                                request->arg("sc_mode2"            ) == "Memory Spiel"     ? pmode_t::memory_game  :
 #ifdef BT_MODULE
                                                                                request->arg("sc_mode2"            ) == "Bluetooth ein/aus"? pmode_t::switch_bt    :
 #endif
-                                                                               request->arg("sc_mode2"            ) == "Teekesselchen Spiel"? pmode_t::teapot_game:
-                                                                               request->arg("sc_mode2"            ) == "Hörbuch von bis"  ? pmode_t::hoerbuch_vb  :
+                                                                               request->arg("sc_mode2"            ) == "teapot game"? pmode_t::teapot_game:
+                                                                               request->arg("sc_mode2"            ) == "Audiobook range / Rango audiolibro"  ? pmode_t::audiobook_range  :
                                                                                                                                             pmode_t::none         ;
   if (request->hasArg("sc_folder2"          )) settings.shortCuts[1].folder  = request->arg("sc_folder2"          ).toInt();
   if (request->hasArg("sc_special12"        )) settings.shortCuts[1].special = request->arg("sc_special12"        ).toInt();
   if (request->hasArg("sc_Special22"        )) settings.shortCuts[1].special2= request->arg("sc_special22"        ).toInt();
 
   if (request->hasArg("sc_mode3"            )) settings.shortCuts[2].mode    = request->arg("sc_mode3"            ) == "--------"         ? pmode_t::none         :
-                                                                               request->arg("sc_mode3"            ) == "Hörspiel"         ? pmode_t::hoerspiel    :
+                                                                               request->arg("sc_mode3"            ) == "Audio play / Audio"         ? pmode_t::audio_play    :
                                                                                request->arg("sc_mode3"            ) == "Album"            ? pmode_t::album        :
                                                                                request->arg("sc_mode3"            ) == "Party"            ? pmode_t::party        :
-                                                                               request->arg("sc_mode3"            ) == "Einzel"           ? pmode_t::einzel       :
-                                                                               request->arg("sc_mode3"            ) == "Hörbuch"          ? pmode_t::hoerbuch     :
-                                                                               request->arg("sc_mode3"            ) == "Hörspiel von bis" ? pmode_t::hoerspiel_vb :
+                                                                               request->arg("sc_mode3"            ) == "Single track / Pista unica"           ? pmode_t::single_track       :
+                                                                               request->arg("sc_mode3"            ) == "Audiobook / Audiolibro"          ? pmode_t::audiobook     :
+                                                                               request->arg("sc_mode3"            ) == "Audio play range / Rango audio" ? pmode_t::audio_play_range :
                                                                                request->arg("sc_mode3"            ) == "Album von bis"    ? pmode_t::album_vb     :
                                                                                request->arg("sc_mode3"            ) == "Party von bis"    ? pmode_t::party_vb     :
-                                                                               request->arg("sc_mode3"            ) == "Hörbuch einzel"   ? pmode_t::hoerbuch_1   :
+                                                                               request->arg("sc_mode3"            ) == "Audiobook / Audiolibro single_track"   ? pmode_t::audiobook_single   :
                                                                                request->arg("sc_mode3"            ) == "Wiederhole"       ? pmode_t::repeat_last  :
                                                                                request->arg("sc_mode3"            ) == "Quiz Spiel"       ? pmode_t::quiz_game    :
                                                                                request->arg("sc_mode3"            ) == "Memory Spiel"     ? pmode_t::memory_game  :
 #ifdef BT_MODULE
                                                                                request->arg("sc_mode3"            ) == "Bluetooth ein/aus"? pmode_t::switch_bt    :
 #endif
-                                                                               request->arg("sc_mode3"            ) == "Teekesselchen Spiel"? pmode_t::teapot_game:
+                                                                               request->arg("sc_mode3"            ) == "teapot game"? pmode_t::teapot_game:
                                                                                                                                             pmode_t::none         ;
   if (request->hasArg("sc_folder3"          )) settings.shortCuts[2].folder  = request->arg("sc_folder3"          ).toInt();
   if (request->hasArg("sc_special13"        )) settings.shortCuts[2].special = request->arg("sc_special13"        ).toInt();
   if (request->hasArg("sc_Special23"        )) settings.shortCuts[2].special2= request->arg("sc_special23"        ).toInt();
 
   if (request->hasArg("sc_mode4"            )) settings.shortCuts[3].mode    = request->arg("sc_mode4"            ) == "--------"         ? pmode_t::none         :
-                                                                               request->arg("sc_mode4"            ) == "Hörspiel"         ? pmode_t::hoerspiel    :
+                                                                               request->arg("sc_mode4"            ) == "Audio play / Audio"         ? pmode_t::audio_play    :
                                                                                request->arg("sc_mode4"            ) == "Album"            ? pmode_t::album        :
                                                                                request->arg("sc_mode4"            ) == "Party"            ? pmode_t::party        :
-                                                                               request->arg("sc_mode4"            ) == "Einzel"           ? pmode_t::einzel       :
-                                                                               request->arg("sc_mode4"            ) == "Hörbuch"          ? pmode_t::hoerbuch     :
-                                                                               request->arg("sc_mode4"            ) == "Hörspiel von bis" ? pmode_t::hoerspiel_vb :
+                                                                               request->arg("sc_mode4"            ) == "Single track / Pista unica"           ? pmode_t::single_track       :
+                                                                               request->arg("sc_mode4"            ) == "Audiobook / Audiolibro"          ? pmode_t::audiobook     :
+                                                                               request->arg("sc_mode4"            ) == "Audio play range / Rango audio" ? pmode_t::audio_play_range :
                                                                                request->arg("sc_mode4"            ) == "Album von bis"    ? pmode_t::album_vb     :
                                                                                request->arg("sc_mode4"            ) == "Party von bis"    ? pmode_t::party_vb     :
-                                                                               request->arg("sc_mode4"            ) == "Hörbuch einzel"   ? pmode_t::hoerbuch_1   :
+                                                                               request->arg("sc_mode4"            ) == "Audiobook / Audiolibro single_track"   ? pmode_t::audiobook_single   :
                                                                                request->arg("sc_mode4"            ) == "Wiederhole"       ? pmode_t::repeat_last  :
                                                                                request->arg("sc_mode4"            ) == "Quiz Spiel"       ? pmode_t::quiz_game    :
                                                                                request->arg("sc_mode4"            ) == "Memory Spiel"     ? pmode_t::memory_game  :
 #ifdef BT_MODULE
                                                                                request->arg("sc_mode4"            ) == "Bluetooth ein/aus"? pmode_t::switch_bt    :
 #endif
-                                                                               request->arg("sc_mode4"            ) == "Teekesselchen Spiel"? pmode_t::teapot_game:
-                                                                               request->arg("sc_mode4"            ) == "Hörbuch von bis"  ? pmode_t::hoerbuch_vb  :
+                                                                               request->arg("sc_mode4"            ) == "teapot game"? pmode_t::teapot_game:
+                                                                               request->arg("sc_mode4"            ) == "Audiobook range / Rango audiolibro"  ? pmode_t::audiobook_range  :
                                                                                                                                             pmode_t::none         ;
   if (request->hasArg("sc_folder4"          )) settings.shortCuts[3].folder  = request->arg("sc_folder4"          ).toInt();
   if (request->hasArg("sc_special14"        )) settings.shortCuts[3].special = request->arg("sc_special14"        ).toInt();
@@ -435,8 +435,8 @@ void Webservice::get_settings(AsyncWebServerRequest *request) {
                                 settings.eq==6 ? "Bass"   : "?";
   doc["standbyTimer"        ] = String(settings.standbyTimer        );
   doc["invertVolumeButtons" ] = String(settings.invertVolumeButtons );
-  doc["adminMenuLocked"     ] = settings.adminMenuLocked==0 ? "kein Lock":
-                                settings.adminMenuLocked==1 ? "nur Karte":
+  doc["adminMenuLocked"     ] = settings.adminMenuLocked==0 ? "no lock":
+                                settings.adminMenuLocked==1 ? "card only":
                                 settings.adminMenuLocked==2 ? "Pin"      : "?";
   doc["adminMenuPin1"       ] = String(settings.adminMenuPin[0]     );
   doc["adminMenuPin2"       ] = String(settings.adminMenuPin[1]     );
@@ -446,23 +446,23 @@ void Webservice::get_settings(AsyncWebServerRequest *request) {
 
   for (uint8_t i = 1; i <= 4; ++i) {
     doc["sc_mode"+String(i)   ] = settings.shortCuts[i-1].mode == pmode_t::none         ? "--------"         :
-                                  settings.shortCuts[i-1].mode == pmode_t::hoerspiel    ? "Hörspiel"         :
+                                  settings.shortCuts[i-1].mode == pmode_t::audio_play    ? "Audio play / Audio"         :
                                   settings.shortCuts[i-1].mode == pmode_t::album        ? "Album"            :
                                   settings.shortCuts[i-1].mode == pmode_t::party        ? "Party"            :
-                                  settings.shortCuts[i-1].mode == pmode_t::einzel       ? "Einzel"           :
-                                  settings.shortCuts[i-1].mode == pmode_t::hoerbuch     ? "Hörbuch"          :
-                                  settings.shortCuts[i-1].mode == pmode_t::hoerspiel_vb ? "Hörspiel von bis" :
+                                  settings.shortCuts[i-1].mode == pmode_t::single_track       ? "Single track / Pista unica"           :
+                                  settings.shortCuts[i-1].mode == pmode_t::audiobook     ? "Audiobook / Audiolibro"          :
+                                  settings.shortCuts[i-1].mode == pmode_t::audio_play_range ? "Audio play range / Rango audio" :
                                   settings.shortCuts[i-1].mode == pmode_t::album_vb     ? "Album von bis"    :
                                   settings.shortCuts[i-1].mode == pmode_t::party_vb     ? "Party von bis"    :
-                                  settings.shortCuts[i-1].mode == pmode_t::hoerbuch_1   ? "Hörbuch einzel"   :
+                                  settings.shortCuts[i-1].mode == pmode_t::audiobook_single   ? "Audiobook / Audiolibro single_track"   :
                                   settings.shortCuts[i-1].mode == pmode_t::repeat_last  ? "Wiederhole"       :
                                   settings.shortCuts[i-1].mode == pmode_t::quiz_game    ? "Quiz Spiel"       :
                                   settings.shortCuts[i-1].mode == pmode_t::memory_game  ? "Memory Spiel"     :
 #ifdef BT_MODULE
                                   settings.shortCuts[i-1].mode == pmode_t::switch_bt    ? "Bluetooth ein/aus":
 #endif
-                                  settings.shortCuts[i-1].mode == pmode_t::teapot_game  ? "Teekesselchen Spiel":
-                                  settings.shortCuts[i-1].mode == pmode_t::hoerbuch_vb  ? "Hörbuch von bis"  :
+                                  settings.shortCuts[i-1].mode == pmode_t::teapot_game  ? "teapot game":
+                                  settings.shortCuts[i-1].mode == pmode_t::audiobook_range  ? "Audiobook range / Rango audiolibro"  :
                                                                                           "--------"         ;
 
     doc["sc_folder"+String(i)  ] = String(settings.shortCuts[i-1].folder  );
@@ -501,10 +501,10 @@ void Webservice::service(AsyncWebServerRequest *request) {
   }
   if (request->hasArg("command")) {
     if      (request->arg("command") == "shutdown" ) {
-      if (SM_tonuino::is_in_state<Play>())
+      if (SM_trovaLibre::is_in_state<Play>())
         cmd = commandRaw::pause;
       delay(2*cycleTime);
-      tonuino.set_shutdown();
+      trovaLibre.set_shutdown();
     }
   }
   request->send(200);
@@ -523,15 +523,15 @@ void Webservice::modifier(AsyncWebServerRequest *request) {
   mod.folder   = 0;
   mod.special2 = 0;
   mod.mode     = request->arg("mod_mode") == "Sleep-Timer"           ? pmode_t::sleep_timer   :
-                 request->arg("mod_mode") == "Stopptanz"             ? pmode_t::freeze_dance  :
-                 request->arg("mod_mode") == "Feuer-Wasser-Luft"     ? pmode_t::fi_wa_ai      :
-                 request->arg("mod_mode") == "Gesperrt"              ? pmode_t::toddler       :
-                 request->arg("mod_mode") == "Kita Modus"            ? pmode_t::kindergarden  :
-                 request->arg("mod_mode") == "Wiederhole Track"      ? pmode_t::repeat_single :
+                 request->arg("mod_mode") == "Freeze dance / Baile congelado"             ? pmode_t::freeze_dance  :
+                 request->arg("mod_mode") == "Fire-Water-Air / Fuego-Agua-Aire"     ? pmode_t::fi_wa_ai      :
+                 request->arg("mod_mode") == "Locked / Bloqueado"              ? pmode_t::toddler       :
+                 request->arg("mod_mode") == "Daycare mode / Modo guarderia"            ? pmode_t::kindergarden  :
+                 request->arg("mod_mode") == "Repeat track / Repetir pista"      ? pmode_t::repeat_single :
 #ifdef MODIFICATION_CARD_JUKEBOX
                  request->arg("mod_mode") == "Jukebox"               ? pmode_t::jukebox       :
 #endif
-                 request->arg("mod_mode") == "Pause nach jedem Track"? pmode_t::pause_aft_tr  :
+                 request->arg("mod_mode") == "Pause after each track / Pausa tras cada pista"? pmode_t::pause_aft_tr  :
                  request->arg("mod_mode") == "Standby Timer Off"     ? pmode_t::stdb_timer_sw :
                                                                        pmode_t::none          ;
   int special  = request->arg("mod_special").toInt();
@@ -547,7 +547,7 @@ void Webservice::modifier(AsyncWebServerRequest *request) {
 
   if (request->arg("mod_action") == "activate") {
     LOG(webserv_log, s_info, "activate modifier mode: ", static_cast<uint8_t>(mod.mode), " special: ", mod.special);
-    tonuino.specialCard(mod);
+    trovaLibre.specialCard(mod);
   }
   else if (request->arg("mod_action") == "write") {
     LOG(webserv_log, s_info, "write modifier mode: ", static_cast<uint8_t>(mod.mode), " special: ", mod.special);
@@ -572,23 +572,23 @@ void Webservice::card(AsyncWebServerRequest *request) {
   card.folder   = request->arg("folder").toInt();;
   card.special  = request->arg("special1").toInt();
   card.special2 = request->arg("special2").toInt();
-  card.mode     = request->arg("mode") == "Hörspiel"         ? pmode_t::hoerspiel    :
+  card.mode     = request->arg("mode") == "Audio play / Audio"         ? pmode_t::audio_play    :
                   request->arg("mode") == "Album"            ? pmode_t::album        :
                   request->arg("mode") == "Party"            ? pmode_t::party        :
-                  request->arg("mode") == "Einzel"           ? pmode_t::einzel       :
-                  request->arg("mode") == "Hörbuch"          ? pmode_t::hoerbuch     :
-                  request->arg("mode") == "Hörspiel von bis" ? pmode_t::hoerspiel_vb :
+                  request->arg("mode") == "Single track / Pista unica"           ? pmode_t::single_track       :
+                  request->arg("mode") == "Audiobook / Audiolibro"          ? pmode_t::audiobook     :
+                  request->arg("mode") == "Audio play range / Rango audio" ? pmode_t::audio_play_range :
                   request->arg("mode") == "Album von bis"    ? pmode_t::album_vb     :
                   request->arg("mode") == "Party von bis"    ? pmode_t::party_vb     :
-                  request->arg("mode") == "Hörbuch einzel"   ? pmode_t::hoerbuch_1   :
+                  request->arg("mode") == "Audiobook / Audiolibro single_track"   ? pmode_t::audiobook_single   :
                   request->arg("mode") == "Wiederhole"       ? pmode_t::repeat_last  :
                   request->arg("mode") == "Quiz Spiel"       ? pmode_t::quiz_game    :
                   request->arg("mode") == "Memory Spiel"     ? pmode_t::memory_game  :
 #ifdef BT_MODULE
                   request->arg("mode") == "Bluetooth ein/aus"? pmode_t::switch_bt    :
 #endif
-                  request->arg("mode") == "Teekesselchen Spiel"? pmode_t::teapot_game:
-                  request->arg("mode") == "Hörbuch von bis"  ? pmode_t::hoerbuch_vb  :
+                  request->arg("mode") == "teapot game"? pmode_t::teapot_game:
+                  request->arg("mode") == "Audiobook range / Rango audiolibro"  ? pmode_t::audiobook_range  :
                                                                pmode_t::none         ;
 #ifdef BT_MODULE
   if (card.mode == pmode_t::switch_bt) card.folder = 0xff;
@@ -601,11 +601,11 @@ void Webservice::card(AsyncWebServerRequest *request) {
 
   uint16_t track_count = 255;
 
-  if ((tonuino.getActiveModifier().getActive() != pmode_t::jukebox) &&
+  if ((trovaLibre.getActiveModifier().getActive() != pmode_t::jukebox) &&
       (card.mode != pmode_t::repeat_last) &&
       (card.mode != pmode_t::switch_bt)){
 
-    if (SM_tonuino::is_in_state<Play>())
+    if (SM_trovaLibre::is_in_state<Play>())
       cmd = commandRaw::pause;
     delay(2*cycleTime);
 
@@ -618,17 +618,17 @@ void Webservice::card(AsyncWebServerRequest *request) {
   }
   String message;
   switch (card.mode) {
-  case pmode_t::einzel       :
+  case pmode_t::single_track       :
     if (card.special < 1)
       message += "\nDer Parameter Special1 muss mindestens 1 sein";
     if (card.special > track_count)
       message += String("\nDer Parameter Special1 muss kleiner oder gleich der Anzahl der Tracks im Folder sein (") + String(track_count) + ")";
     card.special2 = 0;
     break;
-  case pmode_t::hoerspiel_vb :
+  case pmode_t::audio_play_range :
   case pmode_t::album_vb     :
   case pmode_t::party_vb     :
-  case pmode_t::hoerbuch_vb  :
+  case pmode_t::audiobook_range  :
     if (card.special < 1)
       message += "\nDer Parameter Special1 muss mindestens 1 sein";
     if (card.special > card.special2)
@@ -636,7 +636,7 @@ void Webservice::card(AsyncWebServerRequest *request) {
     if (card.special2 > track_count)
       message += String("\nDer Parameter Special2 muss kleiner oder gleich der Anzahl der Tracks im Folder sein (") + String(track_count) + ")";
     break;
-  case pmode_t::hoerbuch_1   :
+  case pmode_t::audiobook_single   :
     if (card.special >= 30)
       message += "\nDer Parameter Special1 muss kleiner als 30 sein";
     card.special2 = 0;
@@ -709,28 +709,28 @@ String Webservice::get_status() {
   String status;
 
 #ifdef BAT_VOLTAGE_MEASUREMENT
-  status += String("Batterie Spannung: ") + String(tonuino.getBatVoltage().getVoltage());
-  if (tonuino.getBatVoltage().isLow())
+  status += String("Batterie Spannung: ") + String(trovaLibre.getBatVoltage().getVoltage());
+  if (trovaLibre.getBatVoltage().isLow())
     status += String(" Low");
   status += "<br>";
 #endif
 
-  status += String("State: ") + SM_tonuino::state_str;
+  status += String("State: ") + SM_trovaLibre::state_str;
   if (mp3.isPlayingFolder()) {
-    String mode = (tonuino.getMyFolder().mode == pmode_t::hoerspiel   ) ? String("Hörspiel"        ) :
-                  (tonuino.getMyFolder().mode == pmode_t::album       ) ? String("Album"           ) :
-                  (tonuino.getMyFolder().mode == pmode_t::party       ) ? String("Party"           ) :
-                  (tonuino.getMyFolder().mode == pmode_t::einzel      ) ? String("Einzel"          ) :
-                  (tonuino.getMyFolder().mode == pmode_t::hoerbuch    ) ? String("Hörbuch"         ) :
-                  (tonuino.getMyFolder().mode == pmode_t::hoerspiel_vb) ? String("Hörspiel von bis") :
-                  (tonuino.getMyFolder().mode == pmode_t::album_vb    ) ? String("Album von bis"   ) :
-                  (tonuino.getMyFolder().mode == pmode_t::party_vb    ) ? String("Party von bis"   ) :
-                  (tonuino.getMyFolder().mode == pmode_t::hoerbuch_1  ) ? String("Hörbuch einzel"  ) :
-                  (tonuino.getMyFolder().mode == pmode_t::repeat_last ) ? String("Wiederhole"      ) :
-                  (tonuino.getMyFolder().mode == pmode_t::quiz_game   ) ? String("Quiz Spiel"      ) :
-                  (tonuino.getMyFolder().mode == pmode_t::memory_game ) ? String("Memory Spiel"    ) :
-                  (tonuino.getMyFolder().mode == pmode_t::teapot_game ) ? String("Teekesselchen Spiel") :
-                  (tonuino.getMyFolder().mode == pmode_t::hoerbuch_vb ) ? String("Hörbuch von bis" ) : String("?");
+    String mode = (trovaLibre.getMyFolder().mode == pmode_t::audio_play   ) ? String("Audio play / Audio"        ) :
+                  (trovaLibre.getMyFolder().mode == pmode_t::album       ) ? String("Album"           ) :
+                  (trovaLibre.getMyFolder().mode == pmode_t::party       ) ? String("Party"           ) :
+                  (trovaLibre.getMyFolder().mode == pmode_t::single_track      ) ? String("Single track / Pista unica"          ) :
+                  (trovaLibre.getMyFolder().mode == pmode_t::audiobook    ) ? String("Audiobook / Audiolibro"         ) :
+                  (trovaLibre.getMyFolder().mode == pmode_t::audio_play_range) ? String("Audio play range / Rango audio") :
+                  (trovaLibre.getMyFolder().mode == pmode_t::album_vb    ) ? String("Album von bis"   ) :
+                  (trovaLibre.getMyFolder().mode == pmode_t::party_vb    ) ? String("Party von bis"   ) :
+                  (trovaLibre.getMyFolder().mode == pmode_t::audiobook_single  ) ? String("Audiobook / Audiolibro single_track"  ) :
+                  (trovaLibre.getMyFolder().mode == pmode_t::repeat_last ) ? String("Wiederhole"      ) :
+                  (trovaLibre.getMyFolder().mode == pmode_t::quiz_game   ) ? String("Quiz Spiel"      ) :
+                  (trovaLibre.getMyFolder().mode == pmode_t::memory_game ) ? String("Memory Spiel"    ) :
+                  (trovaLibre.getMyFolder().mode == pmode_t::teapot_game ) ? String("teapot game") :
+                  (trovaLibre.getMyFolder().mode == pmode_t::audiobook_range ) ? String("Audiobook range / Rango audiolibro" ) : String("?");
     status += String(" (Mode: ") + mode + String(", Folder: ") + String(mp3.getCurrentFolder()) + String(")");
   }
 
@@ -738,19 +738,19 @@ String Webservice::get_status() {
 
   status += String("<br>Volume: ") + String(mp3.getVolume());
 #ifdef HPJACKDETECT
-  status += mp3.isHeadphoneJackDetect() ? String(" (Kopfhörer)") : String(" (Lautsprecher)");
+  status += mp3.isHeadphoneJackDetect() ? String(" (Headphones / Auriculares)") : String(" (Speaker)");
 #endif
-  if (tonuino.getActiveModifier().getActive() != pmode_t::none) {
-    status += String("<br>Modifier: ") + tonuino.getActiveModifier().getDescription();
+  if (trovaLibre.getActiveModifier().getActive() != pmode_t::none) {
+    status += String("<br>Modifier: ") + trovaLibre.getActiveModifier().getDescription();
   }
-  if (tonuino.isStandbyTimerOff()) {
+  if (trovaLibre.isStandbyTimerOff()) {
     status += String("<br>Modifier: Standby Timer Off");
   }
-  if (tonuino.getRemainingStandbyTimer() < 60 * 60 * 1000ul) {
-    unsigned long remaining = tonuino.getRemainingStandbyTimer()/1000;
+  if (trovaLibre.getRemainingStandbyTimer() < 60 * 60 * 1000ul) {
+    unsigned long remaining = trovaLibre.getRemainingStandbyTimer()/1000;
     char buffer[20];
     sprintf(buffer, "%ld:%02ld", remaining/60, remaining%60);
-    status += String("<br>Standby: ") + buffer + " Min. übrig";
+    status += String("<br>Standby: ") + buffer + " min. remaining";
   }
 
   return status;
@@ -1073,13 +1073,13 @@ String Webservice::getInfoData(const String& id){
     p = temperatureRead();
   }
   else if(id==F("aboutver")){
-    p = TONUINO_TNG_VERSION();
+    p = TROVALIBRE_VERSION();
   }
   else if(id==F("aboutconfig")){
-    #if  TonUINO_Esp32 == 100
+    #if  TROVALIBRE_ESP32 == 100
       p = "ESP32 Nano, ";
     #endif
-    #if  TonUINO_Esp32 == 200
+    #if  TROVALIBRE_ESP32 == 200
       p = "ESP32 Wroom, ";
     #endif
     #ifdef THREEBUTTONS
@@ -1170,7 +1170,7 @@ String Webservice::getInfoData(const String& id){
     #endif
 
     #ifdef STORE_LAST_CARD
-      p += "<br>Speichere letzte Karte";
+      p += "<br>Saving last card";
     #endif
     #ifdef SPECIAL_START_SHORTCUT
       p += "<br>Start Shortcut via GPIO";
@@ -1209,7 +1209,7 @@ String Webservice::getInfoData(const String& id){
     #endif
 
     #ifdef MODIFICATION_CARD_PAUSE_AFTER_TRACK
-      p += "<br>Pause nach jedem Track";
+      p += "<br>Pause after each track / Pausa tras cada pista";
     #endif
 
       p += "<br>OTA possible: ";

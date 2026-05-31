@@ -7,7 +7,7 @@
 #include "mp3.hpp"
 #include "timer.hpp"
 
-class Tonuino;
+class TrovaLibre;
 
 // ----------------------------------------------------------------------------
 // Event Declarations
@@ -31,7 +31,7 @@ class finished_abort_writeCard;
 class Idle                    ;
 
 enum class SM_type: uint8_t {
-  tonuino,
+  trovaLibre,
   setupCard,
   writeCard,
 };
@@ -67,18 +67,18 @@ protected:
   static bool           waitForPlayFinish; // with this it needs 66 Byte lesser program code ;-)
 };
 
-using SM_tonuino   = SM<SM_type::tonuino  >;
+using SM_trovaLibre   = SM<SM_type::trovaLibre  >;
 using SM_setupCard = SM<SM_type::setupCard>;
 using SM_writeCard = SM<SM_type::writeCard>;
 
-class Base: public SM_tonuino
+class Base: public SM_trovaLibre
 {
 protected:
   bool readCard();
   bool handleShortcut(uint8_t shortCut);
   void handleReadCard();
   bool checkForShortcutAndShutdown(command cmd);
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   bool checkForWritingCard(command cmd, command_e const &cmd_e);
   bool writingCard{};
 #endif
@@ -219,7 +219,7 @@ protected:
   static bool      previewStarted   ;
 };
 
-using VoiceMenu_tonuino   = VoiceMenu<SM_type::tonuino  >;
+using VoiceMenu_trovaLibre   = VoiceMenu<SM_type::trovaLibre  >;
 using VoiceMenu_setupCard = VoiceMenu<SM_type::setupCard>;
 
 class ChMode : public VoiceMenu_setupCard
@@ -286,18 +286,18 @@ private:
   subState current_subState{};
 };
 
-class Admin_BaseSetting: public VoiceMenu_tonuino
+class Admin_BaseSetting: public VoiceMenu_trovaLibre
 {
 protected:
   void saveAndTransit();
 };
 
-class Amin_BaseWriteCard: public VoiceMenu_tonuino {
+class Amin_BaseWriteCard: public VoiceMenu_trovaLibre {
 protected:
   bool handleWriteCard(command_e const &cmd_e, bool return_to_idle = false);
 };
 
-class Admin_Allow: public VoiceMenu_tonuino
+class Admin_Allow: public VoiceMenu_trovaLibre
 {
 public:
   void entry() final;
@@ -321,7 +321,7 @@ private:
 //  uint8_t         av{}, bv{}, cv{};
 };
 
-class Admin_Entry: public VoiceMenu_tonuino
+class Admin_Entry: public VoiceMenu_trovaLibre
 {
 public:
   void entry() final;
@@ -427,7 +427,7 @@ public:
   void react(command_e const &) final;
 };
 
-class Admin_ResetEeprom: public SM_tonuino
+class Admin_ResetEeprom: public SM_trovaLibre
 {
 public:
   void entry() final;

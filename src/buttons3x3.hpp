@@ -10,13 +10,13 @@
 class Buttons3x3: public CommandSource {
 public:
   static constexpr uint16_t numLevels = 9;
-#ifdef TonUINO_Classic
+#ifdef TROVALIBRE_CLASSIC
   static constexpr int16_t maxLevel =  900; // 1023
 #endif
-#ifdef TonUINO_Every
+#ifdef TROVALIBRE_EVERY
   static constexpr int16_t maxLevel =  900; // 1023
 #endif
-#ifdef TonUINO_Every_4808
+#ifdef TROVALIBRE_EVERY_4808
   static constexpr int16_t maxLevel =  900; // 1023
 #endif
 #ifdef ALLinONE
@@ -25,7 +25,7 @@ public:
 #ifdef ALLinONE_Plus
   static constexpr int16_t maxLevel =  900; // 1023;
 #endif
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   static constexpr int16_t maxLevel = 2900; // 4095;
 #endif
 

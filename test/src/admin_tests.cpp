@@ -1,14 +1,14 @@
 
 #include <gtest/gtest.h>
 
-#include <tonuino.hpp>
+#include <trovalibre.hpp>
 #include <state_machine.hpp>
 #include <chip_card.hpp>
 #include <commands.hpp>
 
-#include "tonuino_fixture.hpp"
+#include "trovalibre_fixture.hpp"
 
-class admin_test_fixture: public tonuino_fixture {
+class admin_test_fixture: public trovalibre_fixture {
 public:
   enum class Admin_Entry_menu_items: uint16_t {
     Admin_NewCard                  = 1,
@@ -47,19 +47,19 @@ public:
 
   void check_state(Admin_Entry_menu_items menu_item) {
     switch (menu_item) {
-    case Admin_Entry_menu_items::Admin_NewCard                 : EXPECT_TRUE(SM_tonuino::is_in_state<Admin_NewCard           >()); break;
-    case Admin_Entry_menu_items::Admin_SimpleSetting_maxVolume : EXPECT_TRUE(SM_tonuino::is_in_state<Admin_SimpleSetting     >()); break;
-    case Admin_Entry_menu_items::Admin_SimpleSetting_minVolume : EXPECT_TRUE(SM_tonuino::is_in_state<Admin_SimpleSetting     >()); break;
-    case Admin_Entry_menu_items::Admin_SimpleSetting_initVolume: EXPECT_TRUE(SM_tonuino::is_in_state<Admin_SimpleSetting     >()); break;
-    case Admin_Entry_menu_items::Admin_SimpleSetting_eq        : EXPECT_TRUE(SM_tonuino::is_in_state<Admin_SimpleSetting     >()); break;
-    case Admin_Entry_menu_items::Admin_ModCard                 : EXPECT_TRUE(SM_tonuino::is_in_state<Admin_ModCard           >()); break;
-    case Admin_Entry_menu_items::Admin_ShortCut                : EXPECT_TRUE(SM_tonuino::is_in_state<Admin_ShortCut          >()); break;
-    case Admin_Entry_menu_items::Admin_StandbyTimer            : EXPECT_TRUE(SM_tonuino::is_in_state<Admin_StandbyTimer      >()); break;
-    case Admin_Entry_menu_items::Admin_CardsForFolder          : EXPECT_TRUE(SM_tonuino::is_in_state<Admin_CardsForFolder    >()); break;
-    case Admin_Entry_menu_items::Admin_InvButtons              : EXPECT_TRUE(SM_tonuino::is_in_state<Admin_InvButtons        >()); break;
-    case Admin_Entry_menu_items::Admin_ResetEeprom             : EXPECT_TRUE(SM_tonuino::is_in_state<Admin_ResetEeprom       >()); break;
-    case Admin_Entry_menu_items::Admin_LockAdmin               : EXPECT_TRUE(SM_tonuino::is_in_state<Admin_LockAdmin         >()); break;
-    case Admin_Entry_menu_items::Admin_PauseIfCardRemoved      : EXPECT_TRUE(SM_tonuino::is_in_state<Admin_PauseIfCardRemoved>()); break;
+    case Admin_Entry_menu_items::Admin_NewCard                 : EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_NewCard           >()); break;
+    case Admin_Entry_menu_items::Admin_SimpleSetting_maxVolume : EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_SimpleSetting     >()); break;
+    case Admin_Entry_menu_items::Admin_SimpleSetting_minVolume : EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_SimpleSetting     >()); break;
+    case Admin_Entry_menu_items::Admin_SimpleSetting_initVolume: EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_SimpleSetting     >()); break;
+    case Admin_Entry_menu_items::Admin_SimpleSetting_eq        : EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_SimpleSetting     >()); break;
+    case Admin_Entry_menu_items::Admin_ModCard                 : EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_ModCard           >()); break;
+    case Admin_Entry_menu_items::Admin_ShortCut                : EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_ShortCut          >()); break;
+    case Admin_Entry_menu_items::Admin_StandbyTimer            : EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_StandbyTimer      >()); break;
+    case Admin_Entry_menu_items::Admin_CardsForFolder          : EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_CardsForFolder    >()); break;
+    case Admin_Entry_menu_items::Admin_InvButtons              : EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_InvButtons        >()); break;
+    case Admin_Entry_menu_items::Admin_ResetEeprom             : EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_ResetEeprom       >()); break;
+    case Admin_Entry_menu_items::Admin_LockAdmin               : EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_LockAdmin         >()); break;
+    case Admin_Entry_menu_items::Admin_PauseIfCardRemoved      : EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_PauseIfCardRemoved>()); break;
     }
   }
   void goto_Admin_Entry() {
@@ -67,21 +67,21 @@ public:
 
     // button admin
     button_for_command(command::admin, state_for_command::idle_pause);
-    EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Allow>());
+    EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Allow>());
     execute_cycle(); // select_method
     execute_cycle(); // allow
-    EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+    EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
 
     // play t_900_admin
     execute_cycle_for_ms(time_check_play);
-    EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+    EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
     EXPECT_TRUE(getMp3().is_playing_mp3());
     EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_900_admin));
 
     // end t_900_admin
     getMp3().end_track();
     execute_cycle();
-    EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+    EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
     EXPECT_TRUE(getMp3().is_stopped());
   }
 
@@ -93,7 +93,7 @@ public:
     for (uint16_t track = start_track; track <= menu_item_track; ++track) {
       // button up --> play t_900++
       button_for_command(command::next, state_for_command::admin);
-      EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+      EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
       execute_cycle_for_ms(time_check_play);
       EXPECT_TRUE(getMp3().is_playing_mp3());
       EXPECT_EQ(getMp3().df_mp3_track, track);
@@ -110,7 +110,7 @@ public:
     getMp3().end_track();
     execute_cycle();
     if (menu_item == Admin_Entry_menu_items::Admin_ResetEeprom) {
-      EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+      EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
       // end t_919_continue_admin
       getMp3().end_track();
       execute_cycle();
@@ -169,28 +169,28 @@ public:
     }
     // button select --> select folder
     button_for_command(command::select, state_for_command::admin);
-    if (card.mode == pmode_t::hoerspiel || card.mode == pmode_t::album    ||
-        card.mode == pmode_t::party     || card.mode == pmode_t::hoerbuch   ) {
+    if (card.mode == pmode_t::audio_play || card.mode == pmode_t::album    ||
+        card.mode == pmode_t::party     || card.mode == pmode_t::audiobook   ) {
       EXPECT_TRUE(SM_setupCard::is_in_state<finished_setupCard>());
       ASSERT_EQ(SM_setupCard::folder, card);
       return;
     }
-    if (card.mode == pmode_t::einzel)
+    if (card.mode == pmode_t::single_track)
       EXPECT_TRUE(SM_setupCard::is_in_state<ChTrack>());
-    else if (card.mode == pmode_t::hoerbuch_1)
+    else if (card.mode == pmode_t::audiobook_single)
       EXPECT_TRUE(SM_setupCard::is_in_state<ChNumTracks>());
     else
       EXPECT_TRUE(SM_setupCard::is_in_state<ChFirstTrack>());
     execute_cycle_for_ms(time_check_play);
     EXPECT_TRUE(getMp3().is_playing_mp3());
-    if (card.mode == pmode_t::einzel)
+    if (card.mode == pmode_t::single_track)
       EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_327_select_file));
-    else if (card.mode == pmode_t::hoerbuch_1)
+    else if (card.mode == pmode_t::audiobook_single)
       EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_340_num_tracks));
     else
       EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_328_select_first_file));
 
-    if (card.mode == pmode_t::hoerbuch_1) {
+    if (card.mode == pmode_t::audiobook_single) {
       // ===== select number of tracks
       for (uint8_t num = 1; num <= card.special+1; ++num) {
         // button up --> play track number and track
@@ -212,7 +212,7 @@ public:
     for (uint8_t track = 1; track <= card.special; ++track) {
       // button up --> play track number and track
       button_for_command(command::next, state_for_command::admin);
-      if (card.mode == pmode_t::einzel)
+      if (card.mode == pmode_t::single_track)
         EXPECT_TRUE(SM_setupCard::is_in_state<ChTrack>());
       else
         EXPECT_TRUE(SM_setupCard::is_in_state<ChFirstTrack>());
@@ -230,7 +230,7 @@ public:
     }
     // button select --> select last track
     button_for_command(command::select, state_for_command::admin);
-    if (card.mode == pmode_t::einzel) {
+    if (card.mode == pmode_t::single_track) {
       EXPECT_TRUE(SM_setupCard::is_in_state<finished_setupCard>());
       ASSERT_EQ(SM_setupCard::folder, card);
       return;
@@ -265,7 +265,7 @@ public:
 
     ASSERT_TRUE(SM_writeCard::is_in_state<WriteCard>());
 
-    execute_cycle(); // --> run_writeCard (in SM_tonuino)
+    execute_cycle(); // --> run_writeCard (in SM_trovaLibre)
     if (not with_card_already_in) {
       execute_cycle_for_ms(time_check_play);
       EXPECT_TRUE(getMp3().is_playing_mp3());
@@ -299,20 +299,20 @@ public:
 
 TEST_F(admin_test_fixture, sunny_day_adm) {
 
-  EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Idle>());
   Print::clear_output();
   goto_idle();
 
   // button admin
   button_for_command(command::admin, state_for_command::idle_pause);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Allow>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Allow>());
   execute_cycle(); // select_method
   execute_cycle(); // allow
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
 
   // play t_900_admin
   execute_cycle();
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
   execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_900_admin));
@@ -320,7 +320,7 @@ TEST_F(admin_test_fixture, sunny_day_adm) {
   // end t_900_admin
   getMp3().end_track();
   execute_cycle();
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
   EXPECT_TRUE(getMp3().is_stopped());
 
   uint16_t start_track = static_cast<uint16_t>(mp3Tracks::t_900_admin)+1;
@@ -328,7 +328,7 @@ TEST_F(admin_test_fixture, sunny_day_adm) {
   for (uint16_t track = start_track; track < end_track; ++track) {
     // button up --> play t_900++
     button_for_command(command::next, state_for_command::admin);
-    EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+    EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
     execute_cycle_for_ms(time_check_play);
     EXPECT_TRUE(getMp3().is_playing_mp3());
     EXPECT_EQ(getMp3().df_mp3_track, track);
@@ -336,12 +336,12 @@ TEST_F(admin_test_fixture, sunny_day_adm) {
     // end t_900++
     getMp3().end_track();
     execute_cycle();
-    EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+    EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
     EXPECT_TRUE(getMp3().is_stopped());
   }
   // button down --> play t_912_admin_lock
   button_for_command(command::previous, state_for_command::admin);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
   execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_912_admin_lock));
@@ -349,12 +349,12 @@ TEST_F(admin_test_fixture, sunny_day_adm) {
   // end t_912_admin_lock
   getMp3().end_track();
   execute_cycle();
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
   EXPECT_TRUE(getMp3().is_stopped());
 
   // button select --> play t_980_admin_lock_intro
   button_for_command(command::select, state_for_command::admin);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_LockAdmin>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_LockAdmin>());
   execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_985_admin_lock_intro));
@@ -362,12 +362,12 @@ TEST_F(admin_test_fixture, sunny_day_adm) {
   // end t_980_admin_lock_intro
   getMp3().end_track();
   execute_cycle();
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_LockAdmin>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_LockAdmin>());
   EXPECT_TRUE(getMp3().is_stopped());
 
   // button up --> play t_981_admin_lock_disabled
   button_for_command(command::next, state_for_command::admin);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_LockAdmin>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_LockAdmin>());
   execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_986_admin_lock_disabled));
@@ -375,12 +375,12 @@ TEST_F(admin_test_fixture, sunny_day_adm) {
   // end t_981_admin_lock_disabled
   getMp3().end_track();
   execute_cycle();
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_LockAdmin>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_LockAdmin>());
   EXPECT_TRUE(getMp3().is_stopped());
 
   // button select --> play t_402_ok_settings
   button_for_command(command::select, state_for_command::admin);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_LockAdmin>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_LockAdmin>());
   execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_402_ok_settings));
@@ -389,7 +389,7 @@ TEST_F(admin_test_fixture, sunny_day_adm) {
   getMp3().end_track();
   execute_cycle();
   execute_cycle();
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
   execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_919_continue_admin));
@@ -397,12 +397,12 @@ TEST_F(admin_test_fixture, sunny_day_adm) {
   // end t_919_continue_admin
   getMp3().end_track();
   execute_cycle();
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
   EXPECT_TRUE(getMp3().is_stopped());
 
   // button up --> play t_913_pause_on_card_removed
   button_for_command(command::next, state_for_command::admin);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
   execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_913_pause_on_card_removed));
@@ -410,13 +410,13 @@ TEST_F(admin_test_fixture, sunny_day_adm) {
   // end t_913_pause_on_card_removed
   getMp3().end_track();
   execute_cycle();
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
   EXPECT_TRUE(getMp3().is_stopped());
 
   // button admin_end --> play t_802_reset_aborted
   button_for_command(command::adm_end, state_for_command::admin);
   execute_cycle();
-  EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Idle>());
   execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_802_reset_aborted));
@@ -424,7 +424,7 @@ TEST_F(admin_test_fixture, sunny_day_adm) {
   // end t_802_reset_aborted
   getMp3().end_track();
   execute_cycle();
-  EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Idle>());
   EXPECT_TRUE(getMp3().is_stopped());
 }
 
@@ -463,16 +463,16 @@ TEST_F(admin_test_fixture, Admin_NewCard) {
   folderSettings cards[] = {
       { 0, pmode_t::admin       , 0, 0 },
       { 0, pmode_t::repeat_last , 0, 0 },
-      { 1, pmode_t::hoerspiel   , 0, 0 },
+      { 1, pmode_t::audio_play   , 0, 0 },
       { 2, pmode_t::album       , 0, 0 },
       { 3, pmode_t::party       , 0, 0 },
-      { 4, pmode_t::einzel      , 1, 0 },
-      { 5, pmode_t::hoerbuch    , 0, 0 },
-      { 6, pmode_t::hoerspiel_vb, 1, 2 },
+      { 4, pmode_t::single_track      , 1, 0 },
+      { 5, pmode_t::audiobook    , 0, 0 },
+      { 6, pmode_t::audio_play_range, 1, 2 },
       { 7, pmode_t::album_vb    , 2, 3 },
       { 8, pmode_t::party_vb    , 4, 5 },
-      { 9, pmode_t::hoerbuch_1  , 4, 0 },
-      {10, pmode_t::hoerbuch_vb , 3, 7 }
+      { 9, pmode_t::audiobook_single  , 4, 0 },
+      {10, pmode_t::audiobook_range , 3, 7 }
   };
 
   Print::clear_output();
@@ -482,7 +482,7 @@ TEST_F(admin_test_fixture, Admin_NewCard) {
     getMp3().set_folder_track_count(card.folder, 10);
 
     goto_Admin_Entry_menu_item(Admin_Entry_menu_items::Admin_NewCard);
-    ASSERT_TRUE(SM_tonuino::is_in_state<Admin_NewCard>());
+    ASSERT_TRUE(SM_trovaLibre::is_in_state<Admin_NewCard>());
 
     admin_setup_card(card);
     execute_cycle(); // --> end_setupCard
@@ -518,7 +518,7 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_maxVolume) {
   const uint8_t maxVolume = 21;
 
   goto_Admin_Entry_menu_item(Admin_Entry_menu_items::Admin_SimpleSetting_maxVolume);
-  ASSERT_TRUE(SM_tonuino::is_in_state<Admin_SimpleSetting>());
+  ASSERT_TRUE(SM_trovaLibre::is_in_state<Admin_SimpleSetting>());
 
   // ===== select volume
   for (uint8_t volume = getSettings().spkMaxVolume+1; volume <= maxVolume; ++volume) {
@@ -530,7 +530,7 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_maxVolume) {
   }
   // button select --> select volume
   button_for_command(command::select, state_for_command::admin);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
   execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_402_ok_settings));
@@ -565,7 +565,7 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_minVolume) {
   const uint8_t minVolume = 16;
 
   goto_Admin_Entry_menu_item(Admin_Entry_menu_items::Admin_SimpleSetting_minVolume);
-  ASSERT_TRUE(SM_tonuino::is_in_state<Admin_SimpleSetting>());
+  ASSERT_TRUE(SM_trovaLibre::is_in_state<Admin_SimpleSetting>());
 
   // ===== select volume
   for (uint8_t volume = getSettings().spkMinVolume+1; volume <= minVolume; ++volume) {
@@ -577,7 +577,7 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_minVolume) {
   }
   // button select --> select volume
   button_for_command(command::select, state_for_command::admin);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
   execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_402_ok_settings));
@@ -612,7 +612,7 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_initVolume) {
   const uint8_t initVolume = 16;
 
   goto_Admin_Entry_menu_item(Admin_Entry_menu_items::Admin_SimpleSetting_initVolume);
-  ASSERT_TRUE(SM_tonuino::is_in_state<Admin_SimpleSetting>());
+  ASSERT_TRUE(SM_trovaLibre::is_in_state<Admin_SimpleSetting>());
 
   // ===== select volume
   for (uint8_t volume = getSettings().spkInitVolume+1; volume <= initVolume; ++volume) {
@@ -624,7 +624,7 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_initVolume) {
   }
   // button select --> select volume
   button_for_command(command::select, state_for_command::admin);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
   execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_402_ok_settings));
@@ -659,7 +659,7 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_eq) {
   const uint8_t eq_set = 6; // bass
 
   goto_Admin_Entry_menu_item(Admin_Entry_menu_items::Admin_SimpleSetting_eq);
-  ASSERT_TRUE(SM_tonuino::is_in_state<Admin_SimpleSetting>());
+  ASSERT_TRUE(SM_trovaLibre::is_in_state<Admin_SimpleSetting>());
 
   // ===== select volume
   for (uint8_t eq = getSettings().eq+1; eq <= eq_set; ++eq) {
@@ -671,7 +671,7 @@ TEST_F(admin_test_fixture, Admin_SimpleSetting_eq) {
   }
   // button select --> select eq
   button_for_command(command::select, state_for_command::admin);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
   execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_402_ok_settings));
@@ -717,7 +717,7 @@ TEST_F(admin_test_fixture, Admin_ModCard) {
 
   for (pmode_t mode : modes) {
     goto_Admin_Entry_menu_item(Admin_Entry_menu_items::Admin_ModCard);
-    ASSERT_TRUE(SM_tonuino::is_in_state<Admin_ModCard>());
+    ASSERT_TRUE(SM_trovaLibre::is_in_state<Admin_ModCard>());
 
     // ===== select mode
     for (uint8_t m = 1; m <= static_cast<uint8_t>(mode); ++m) {
@@ -801,16 +801,16 @@ TEST_F(admin_test_fixture, Admin_ShortCut) {
   folderSettings cards[] = {
       { 0, pmode_t::admin       , 0, 0 },
       { 0, pmode_t::repeat_last , 0, 0 },
-      { 1, pmode_t::hoerspiel   , 0, 0 },
+      { 1, pmode_t::audio_play   , 0, 0 },
       { 2, pmode_t::album       , 0, 0 },
       { 3, pmode_t::party       , 0, 0 },
-      { 4, pmode_t::einzel      , 1, 0 },
-      { 5, pmode_t::hoerbuch    , 0, 0 },
-      { 6, pmode_t::hoerspiel_vb, 1, 2 },
+      { 4, pmode_t::single_track      , 1, 0 },
+      { 5, pmode_t::audiobook    , 0, 0 },
+      { 6, pmode_t::audio_play_range, 1, 2 },
       { 7, pmode_t::album_vb    , 2, 3 },
       { 8, pmode_t::party_vb    , 4, 5 },
-      { 9, pmode_t::hoerbuch_1  , 4, 0 },
-      {10, pmode_t::hoerbuch_vb , 3, 7 }
+      { 9, pmode_t::audiobook_single  , 4, 0 },
+      {10, pmode_t::audiobook_range , 3, 7 }
   };
 
   Print::clear_output();
@@ -821,7 +821,7 @@ TEST_F(admin_test_fixture, Admin_ShortCut) {
       getMp3().set_folder_track_count(card.folder, 10);
 
       goto_Admin_Entry_menu_item(Admin_Entry_menu_items::Admin_ShortCut);
-      ASSERT_TRUE(SM_tonuino::is_in_state<Admin_ShortCut>());
+      ASSERT_TRUE(SM_trovaLibre::is_in_state<Admin_ShortCut>());
 
       for (uint8_t s = 1; s <= shortcut; ++s) {
         // button up --> select shortcut
@@ -861,16 +861,16 @@ TEST_F(admin_test_fixture, Admin_ShortCut_extButtons) {
   folderSettings cards[] = {
       { 0, pmode_t::admin       , 0, 0 },
       { 0, pmode_t::repeat_last , 0, 0 },
-      { 1, pmode_t::hoerspiel   , 0, 0 },
+      { 1, pmode_t::audio_play   , 0, 0 },
       { 2, pmode_t::album       , 0, 0 },
       { 3, pmode_t::party       , 0, 0 },
-      { 4, pmode_t::einzel      , 1, 0 },
-      { 5, pmode_t::hoerbuch    , 0, 0 },
-      { 6, pmode_t::hoerspiel_vb, 1, 2 },
+      { 4, pmode_t::single_track      , 1, 0 },
+      { 5, pmode_t::audiobook    , 0, 0 },
+      { 6, pmode_t::audio_play_range, 1, 2 },
       { 7, pmode_t::album_vb    , 2, 3 },
       { 8, pmode_t::party_vb    , 4, 5 },
-      { 9, pmode_t::hoerbuch_1  , 4, 0 },
-      {10, pmode_t::hoerbuch_vb , 3, 7 }
+      { 9, pmode_t::audiobook_single  , 4, 0 },
+      {10, pmode_t::audiobook_range , 3, 7 }
   };
 
   Print::clear_output();
@@ -887,7 +887,7 @@ TEST_F(admin_test_fixture, Admin_ShortCut_extButtons) {
       getMp3().set_folder_track_count(card.folder, 10);
 
       goto_Admin_Entry_menu_item(Admin_Entry_menu_items::Admin_ShortCut);
-      ASSERT_TRUE(SM_tonuino::is_in_state<Admin_ShortCut>());
+      ASSERT_TRUE(SM_trovaLibre::is_in_state<Admin_ShortCut>());
 
       // ext shortcut
       set_value_for_3x3(index);
@@ -925,16 +925,16 @@ TEST_F(admin_test_fixture, Admin_ShortCut_extButtons_longPress) {
   folderSettings cards[] = {
       { 0, pmode_t::admin       , 0, 0 },
       { 0, pmode_t::repeat_last , 0, 0 },
-      { 1, pmode_t::hoerspiel   , 0, 0 },
+      { 1, pmode_t::audio_play   , 0, 0 },
       { 2, pmode_t::album       , 0, 0 },
       { 3, pmode_t::party       , 0, 0 },
-      { 4, pmode_t::einzel      , 1, 0 },
-      { 5, pmode_t::hoerbuch    , 0, 0 },
-      { 6, pmode_t::hoerspiel_vb, 1, 2 },
+      { 4, pmode_t::single_track      , 1, 0 },
+      { 5, pmode_t::audiobook    , 0, 0 },
+      { 6, pmode_t::audio_play_range, 1, 2 },
       { 7, pmode_t::album_vb    , 2, 3 },
       { 8, pmode_t::party_vb    , 4, 5 },
-      { 9, pmode_t::hoerbuch_1  , 4, 0 },
-      {10, pmode_t::hoerbuch_vb , 3, 7 }
+      { 9, pmode_t::audiobook_single  , 4, 0 },
+      {10, pmode_t::audiobook_range , 3, 7 }
   };
 
   Print::clear_output();
@@ -949,7 +949,7 @@ TEST_F(admin_test_fixture, Admin_ShortCut_extButtons_longPress) {
       getMp3().set_folder_track_count(card.folder, 10);
 
       goto_Admin_Entry_menu_item(Admin_Entry_menu_items::Admin_ShortCut);
-      ASSERT_TRUE(SM_tonuino::is_in_state<Admin_ShortCut>());
+      ASSERT_TRUE(SM_trovaLibre::is_in_state<Admin_ShortCut>());
 
       // ext shortcut long press
       set_value_for_3x3(index);
@@ -994,16 +994,16 @@ TEST_F(admin_test_fixture, New_Card) {
   folderSettings cards[] = {
       { 0, pmode_t::admin       , 0, 0 },
       { 0, pmode_t::repeat_last , 0, 0 },
-      { 1, pmode_t::hoerspiel   , 0, 0 },
+      { 1, pmode_t::audio_play   , 0, 0 },
       { 2, pmode_t::album       , 0, 0 },
       { 3, pmode_t::party       , 0, 0 },
-      { 4, pmode_t::einzel      , 1, 0 },
-      { 5, pmode_t::hoerbuch    , 0, 0 },
-      { 6, pmode_t::hoerspiel_vb, 1, 2 },
+      { 4, pmode_t::single_track      , 1, 0 },
+      { 5, pmode_t::audiobook    , 0, 0 },
+      { 6, pmode_t::audio_play_range, 1, 2 },
       { 7, pmode_t::album_vb    , 2, 3 },
       { 8, pmode_t::party_vb    , 4, 5 },
-      { 9, pmode_t::hoerbuch_1  , 4, 0 },
-      {10, pmode_t::hoerbuch_vb , 3, 7 }
+      { 9, pmode_t::audiobook_single  , 4, 0 },
+      {10, pmode_t::audiobook_range , 3, 7 }
   };
 
   Print::clear_output();
@@ -1016,7 +1016,7 @@ TEST_F(admin_test_fixture, New_Card) {
 
     card_in(0, 0, 0, 0, 0, 0);
 
-    ASSERT_TRUE(SM_tonuino::is_in_state<Admin_NewCard>());
+    ASSERT_TRUE(SM_trovaLibre::is_in_state<Admin_NewCard>());
 
     execute_cycle_for_ms(time_check_play);
     EXPECT_TRUE(getMp3().is_playing_mp3());
@@ -1044,7 +1044,7 @@ TEST_F(admin_test_fixture, New_Card) {
 
     EXPECT_EQ(card_expected, card_decode());
 
-    EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
+    EXPECT_TRUE(SM_trovaLibre::is_in_state<Idle>());
     ASSERT_TRUE(getMp3().is_stopped());
   }
 //  EXPECT_TRUE(false) << "log: " << Print::get_output();
@@ -1065,7 +1065,7 @@ TEST_F(admin_test_fixture, Admin_StandbyTimer) {
   const long    standbyTimer_expect = 30;
 
   goto_Admin_Entry_menu_item(Admin_Entry_menu_items::Admin_StandbyTimer);
-  ASSERT_TRUE(SM_tonuino::is_in_state<Admin_StandbyTimer>());
+  ASSERT_TRUE(SM_trovaLibre::is_in_state<Admin_StandbyTimer>());
 
   // ===== select standbyTimer
   for (uint8_t s = 1; s <= standbyTimer; ++s) {
@@ -1077,7 +1077,7 @@ TEST_F(admin_test_fixture, Admin_StandbyTimer) {
   }
   // button select --> select standbyTimer
   button_for_command(command::select, state_for_command::admin);
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
   execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_402_ok_settings));
@@ -1114,7 +1114,7 @@ TEST_F(admin_test_fixture, Admin_CardsForFolder) {
   getMp3().set_folder_track_count(folder, last+1);
 
   goto_Admin_Entry_menu_item(Admin_Entry_menu_items::Admin_CardsForFolder);
-  ASSERT_TRUE(SM_tonuino::is_in_state<Admin_CardsForFolder>());
+  ASSERT_TRUE(SM_trovaLibre::is_in_state<Admin_CardsForFolder>());
 
   // ===== select folder
   for (uint8_t f = 1; f <= folder; ++f) {
@@ -1201,7 +1201,7 @@ TEST_F(admin_test_fixture, Admin_CardsForFolder) {
 
     write_card();
 
-    folderSettings card_expected = { folder, pmode_t::einzel , track, 0 };
+    folderSettings card_expected = { folder, pmode_t::single_track , track, 0 };
     EXPECT_EQ(card_expected, card_decode());
   }
 
@@ -1221,7 +1221,7 @@ TEST_F(admin_test_fixture, Admin_InvButtons) {
   for (bool on : { false, true }) {
 
     goto_Admin_Entry_menu_item(Admin_Entry_menu_items::Admin_InvButtons);
-    ASSERT_TRUE(SM_tonuino::is_in_state<Admin_InvButtons>());
+    ASSERT_TRUE(SM_trovaLibre::is_in_state<Admin_InvButtons>());
 
     // ===== select off/on
     for (uint8_t s = 1; s <= (on?2:1); ++s) {
@@ -1233,7 +1233,7 @@ TEST_F(admin_test_fixture, Admin_InvButtons) {
     }
     // button select --> select off/on
     button_for_command(command::select, state_for_command::admin);
-    EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+    EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
     execute_cycle_for_ms(time_check_play);
     EXPECT_TRUE(getMp3().is_playing_mp3());
     EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_402_ok_settings));
@@ -1324,7 +1324,7 @@ TEST_F(admin_test_fixture, Admin_ResetEeprom) {
       {{
           { 1, pmode_t::album   , 0, 0 },
           { 2, pmode_t::album_vb, 1, 2 },
-          { 3, pmode_t::hoerbuch, 0, 0 },
+          { 3, pmode_t::audiobook, 0, 0 },
           { 4, pmode_t::party   , 0, 0 }
       }}            ,//shortCuts_t shortCuts;
       0             ,//uint8_t     adminMenuLocked;
@@ -1344,7 +1344,7 @@ TEST_F(admin_test_fixture, Admin_ResetEeprom) {
 
   goto_Admin_Entry_menu_item(Admin_Entry_menu_items::Admin_ResetEeprom);
 
-  EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+  EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
 
   EXPECT_EQ(getSettings(), default_settings);
   getSettings().loadSettingsFromFlash();
@@ -1370,7 +1370,7 @@ TEST_F(admin_test_fixture, Admin_LockAdmin) {
   for (uint8_t mode : { 1, 2, 3 }) {
 
     goto_Admin_Entry_menu_item(Admin_Entry_menu_items::Admin_LockAdmin);
-    ASSERT_TRUE(SM_tonuino::is_in_state<Admin_LockAdmin>());
+    ASSERT_TRUE(SM_trovaLibre::is_in_state<Admin_LockAdmin>());
 
     // ===== select off/on
     for (uint8_t m = 1; m <= mode; ++m) {
@@ -1392,7 +1392,7 @@ TEST_F(admin_test_fixture, Admin_LockAdmin) {
       }
     }
     execute_cycle();
-    EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+    EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
     execute_cycle_for_ms(time_check_play);
     EXPECT_TRUE(getMp3().is_playing_mp3());
     EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_402_ok_settings));
@@ -1431,7 +1431,7 @@ TEST_F(admin_test_fixture, Admin_PauseIfCardRemoved) {
   for (bool on : { false, true }) {
 
     goto_Admin_Entry_menu_item(Admin_Entry_menu_items::Admin_PauseIfCardRemoved);
-    ASSERT_TRUE(SM_tonuino::is_in_state<Admin_PauseIfCardRemoved>());
+    ASSERT_TRUE(SM_trovaLibre::is_in_state<Admin_PauseIfCardRemoved>());
 
     // ===== select off/on
     for (uint8_t s = 1; s <= (on?2:1); ++s) {
@@ -1443,7 +1443,7 @@ TEST_F(admin_test_fixture, Admin_PauseIfCardRemoved) {
     }
     // button select --> select off/on
     button_for_command(command::select, state_for_command::admin);
-    EXPECT_TRUE(SM_tonuino::is_in_state<Admin_Entry>());
+    EXPECT_TRUE(SM_trovaLibre::is_in_state<Admin_Entry>());
     execute_cycle_for_ms(time_check_play);
     EXPECT_TRUE(getMp3().is_playing_mp3());
     EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_402_ok_settings));

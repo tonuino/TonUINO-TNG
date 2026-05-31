@@ -1,0 +1,256 @@
+#Numeros (van en /advert y en /mp3)
+num/001.mp3|Uno
+num/002.mp3|Dos
+num/003.mp3|Tres
+num/004.mp3|Cuatro
+num/005.mp3|Cinco
+num/006.mp3|Seis
+num/007.mp3|Siete
+num/008.mp3|Ocho
+num/009.mp3|Nueve
+num/010.mp3|Diez
+num/011.mp3|Once
+num/012.mp3|Doce
+num/013.mp3|Trece
+num/014.mp3|Catorce
+num/015.mp3|Quince
+num/016.mp3|Dieciséis
+num/017.mp3|Diecisiete
+num/018.mp3|Dieciocho
+num/019.mp3|Diecinueve
+num/020.mp3|Veinte
+num/021.mp3|Veintiuno
+num/022.mp3|Veintidos
+num/023.mp3|Veintitres
+num/024.mp3|Veinticuatro
+num/025.mp3|Veinticinco
+num/026.mp3|Veintiseis
+num/027.mp3|Veintisiete
+num/028.mp3|Veintiocho
+num/029.mp3|Veintinueve
+num/030.mp3|Treinta
+num/031.mp3|Treinta y uno
+num/032.mp3|Treinta y dos
+num/033.mp3|Treinta y tres
+num/034.mp3|Treinta y cuatro
+num/035.mp3|Treinta y cinco
+num/036.mp3|Treinta y seis
+num/037.mp3|Treinta y siete
+num/038.mp3|Treinta y ocho
+num/039.mp3|Treinta y nueve
+num/040.mp3|Cuarenta
+num/041.mp3|Cuarenta y uno
+num/042.mp3|Cuarenta y dos
+num/043.mp3|Cuarenta y tres
+num/044.mp3|Cuarenta y cuatro
+num/045.mp3|Cuarenta y cinco
+num/046.mp3|Cuarenta y seis
+num/047.mp3|Cuarenta y siete
+num/048.mp3|Cuarenta y ocho
+num/049.mp3|Cuarenta y nueve
+num/050.mp3|Cincuenta
+num/051.mp3|Cincuenta y uno
+num/052.mp3|Cincuenta y dos
+num/053.mp3|Cincuenta y tres
+num/054.mp3|Cincuenta y cuatro
+num/055.mp3|Cincuenta y cinco
+num/056.mp3|Cincuenta y seis
+num/057.mp3|Cincuenta y siete
+num/058.mp3|Cincuenta y ocho
+num/059.mp3|Cincuenta y nueve
+num/060.mp3|Sesenta
+num/061.mp3|Sesenta y uno
+num/062.mp3|Sesenta y dos
+num/063.mp3|Sesenta y tres
+num/064.mp3|Sesenta y cuatro
+num/065.mp3|Sesenta y cinco
+num/066.mp3|Sesenta y seis
+num/067.mp3|Sesenta y siete
+num/068.mp3|Sesenta y ocho
+num/069.mp3|Sesenta y nueve
+num/070.mp3|Setenta
+num/071.mp3|Setenta y uno
+num/072.mp3|Setenta y dos
+num/073.mp3|Setenta y tres
+num/074.mp3|Setenta y cuatro
+num/075.mp3|Setenta y cinco
+num/076.mp3|Setenta y seis
+num/077.mp3|Setenta y siete
+num/078.mp3|Setenta y ocho
+num/079.mp3|Setenta y nueve
+num/080.mp3|Ochenta
+num/081.mp3|Ochenta y uno
+num/082.mp3|Ochenta y dos
+num/083.mp3|Ochenta y tres
+num/084.mp3|Ochenta y cuatro
+num/085.mp3|Ochenta y cinco
+num/086.mp3|Ochenta y seis
+num/087.mp3|Ochenta y siete
+num/088.mp3|Ochenta y ocho
+num/089.mp3|Ochenta y nueve
+num/090.mp3|Noventa
+num/091.mp3|Noventa y uno
+num/092.mp3|Noventa y dos
+num/093.mp3|Noventa y tres
+num/094.mp3|Noventa y cuatro
+num/095.mp3|Noventa y cinco
+num/096.mp3|Noventa y seis
+num/097.mp3|Noventa y siete
+num/098.mp3|Noventa y ocho
+num/099.mp3|Noventa y nueve
+num/100.mp3|Cien
+num/101.mp3|Ciento uno
+num/102.mp3|Ciento dos
+num/103.mp3|Ciento tres
+num/104.mp3|Ciento cuatro
+num/105.mp3|Ciento cinco
+num/106.mp3|Ciento seis
+num/107.mp3|Ciento siete
+num/108.mp3|Ciento ocho
+num/109.mp3|Ciento nueve
+num/110.mp3|Ciento diez
+num/111.mp3|Ciento once
+num/112.mp3|Ciento doce
+num/113.mp3|Ciento trece
+num/114.mp3|Ciento catorce
+num/115.mp3|Ciento quince
+num/116.mp3|Ciento dieciséis
+num/117.mp3|Ciento diecisiete
+num/118.mp3|Ciento dieciocho
+num/119.mp3|Ciento diecinueve
+num/120.mp3|Ciento veinte
+num/121.mp3|Ciento veintiuno
+num/122.mp3|Ciento veintidós
+num/123.mp3|Ciento veintitrés
+num/124.mp3|Ciento veinticuatro
+num/125.mp3|Ciento veinticinco
+num/126.mp3|Ciento veintiséis
+num/127.mp3|Ciento veintisiete
+num/128.mp3|Ciento veintiocho
+num/129.mp3|Ciento veintinueve
+num/130.mp3|Ciento treinta
+num/131.mp3|Ciento treinta y uno
+num/132.mp3|Ciento treinta y dos
+num/133.mp3|Ciento treinta y tres
+num/134.mp3|Ciento treinta y cuatro
+num/135.mp3|Ciento treinta y cinco
+num/136.mp3|Ciento treinta y seis
+num/137.mp3|Ciento treinta y siete
+num/138.mp3|Ciento treinta y ocho
+num/139.mp3|Ciento treinta y nueve
+num/140.mp3|Ciento cuarenta
+num/141.mp3|Ciento cuarenta y uno
+num/142.mp3|Ciento cuarenta y dos
+num/143.mp3|Ciento cuarenta y tres
+num/144.mp3|Ciento cuarenta y cuatro
+num/145.mp3|Ciento cuarenta y cinco
+num/146.mp3|Ciento cuarenta y seis
+num/147.mp3|Ciento cuarenta y siete
+num/148.mp3|Ciento cuarenta y ocho
+num/149.mp3|Ciento cuarenta y nueve
+num/150.mp3|Ciento cincuenta
+num/151.mp3|Ciento cincuenta y uno
+num/152.mp3|Ciento cincuenta y dos
+num/153.mp3|Ciento cincuenta y tres
+num/154.mp3|Ciento cincuenta y cuatro
+num/155.mp3|Ciento cincuenta y cinco
+num/156.mp3|Ciento cincuenta y seis
+num/157.mp3|Ciento cincuenta y siete
+num/158.mp3|Ciento cincuenta y ocho
+num/159.mp3|Ciento cincuenta y nueve
+num/160.mp3|Ciento sesenta
+num/161.mp3|Ciento sesenta y uno
+num/162.mp3|Ciento sesenta y dos
+num/163.mp3|Ciento sesenta y tres
+num/164.mp3|Ciento sesenta y cuatro
+num/165.mp3|Ciento sesenta y cinco
+num/166.mp3|Ciento sesenta y seis
+num/167.mp3|Ciento sesenta y siete
+num/168.mp3|Ciento sesenta y ocho
+num/169.mp3|Ciento sesenta y nueve
+num/170.mp3|Ciento setenta
+num/171.mp3|Ciento setenta y uno
+num/172.mp3|Ciento setenta y dos
+num/173.mp3|Ciento setenta y tres
+num/174.mp3|Ciento setenta y cuatro
+num/175.mp3|Ciento setenta y cinco
+num/176.mp3|Ciento setenta y seis
+num/177.mp3|Ciento setenta y siete
+num/178.mp3|Ciento setenta y ocho
+num/179.mp3|Ciento setenta y nueve
+num/180.mp3|Ciento ochenta
+num/181.mp3|Ciento ochenta y uno
+num/182.mp3|Ciento ochenta y dos
+num/183.mp3|Ciento ochenta y tres
+num/184.mp3|Ciento ochenta y cuatro
+num/185.mp3|Ciento ochenta y cinco
+num/186.mp3|Ciento ochenta y seis
+num/187.mp3|Ciento ochenta y siete
+num/188.mp3|Ciento ochenta y ocho
+num/189.mp3|Ciento ochenta y nueve
+num/190.mp3|Ciento noventa
+num/191.mp3|Ciento noventa y uno
+num/192.mp3|Ciento noventa y dos
+num/193.mp3|Ciento noventa y tres
+num/194.mp3|Ciento noventa y cuatro
+num/195.mp3|Ciento noventa y cinco
+num/196.mp3|Ciento noventa y seis
+num/197.mp3|Ciento noventa y siete
+num/198.mp3|Ciento noventa y ocho
+num/199.mp3|Ciento noventa y nueve
+num/200.mp3|Doscientos
+num/201.mp3|Doscientos uno
+num/202.mp3|Doscientos dos
+num/203.mp3|Doscientos tres
+num/204.mp3|Doscientos cuatro
+num/205.mp3|Doscientos cinco
+num/206.mp3|Doscientos seis
+num/207.mp3|Doscientos siete
+num/208.mp3|Doscientos ocho
+num/209.mp3|Doscientos nueve
+num/210.mp3|Doscientos diez
+num/211.mp3|Doscientos once
+num/212.mp3|Doscientos doce
+num/213.mp3|Doscientos trece
+num/214.mp3|Doscientos catorce
+num/215.mp3|Doscientos quince
+num/216.mp3|Doscientos dieciséis
+num/217.mp3|Doscientos diecisiete
+num/218.mp3|Doscientos dieciocho
+num/219.mp3|Doscientos diecinueve
+num/220.mp3|Doscientos veinte
+num/221.mp3|Doscientos veintiuno
+num/222.mp3|Doscientos veintidós
+num/223.mp3|Doscientos veintitrés
+num/224.mp3|Doscientos veinticuatro
+num/225.mp3|Doscientos veinticinco
+num/226.mp3|Doscientos veintiséis
+num/227.mp3|Doscientos veintisiete
+num/228.mp3|Doscientos veintiocho
+num/229.mp3|Doscientos veintinueve
+num/230.mp3|Doscientos treinta
+num/231.mp3|Doscientos treinta y uno
+num/232.mp3|Doscientos treinta y dos
+num/233.mp3|Doscientos treinta y tres
+num/234.mp3|Doscientos treinta y cuatro
+num/235.mp3|Doscientos treinta y cinco
+num/236.mp3|Doscientos treinta y seis
+num/237.mp3|Doscientos treinta y siete
+num/238.mp3|Doscientos treinta y ocho
+num/239.mp3|Doscientos treinta y nueve
+num/240.mp3|Doscientos cuarenta
+num/241.mp3|Doscientos cuarenta y uno
+num/242.mp3|Doscientos cuarenta y dos
+num/243.mp3|Doscientos cuarenta y tres
+num/244.mp3|Doscientos cuarenta y cuatro
+num/245.mp3|Doscientos cuarenta y cinco
+num/246.mp3|Doscientos cuarenta y seis
+num/247.mp3|Doscientos cuarenta y siete
+num/248.mp3|Doscientos cuarenta y ocho
+num/249.mp3|Doscientos cuarenta y nueve
+num/250.mp3|Doscientos cincuenta
+num/251.mp3|Doscientos cincuenta y uno
+num/252.mp3|Doscientos cincuenta y dos
+num/253.mp3|Doscientos cincuenta y tres
+num/254.mp3|Doscientos cincuenta y cuatro
+num/255.mp3|Doscientos cincuenta y cinco

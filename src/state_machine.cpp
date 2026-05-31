@@ -1,6 +1,6 @@
 #include "state_machine.hpp"
 
-#include "tonuino.hpp"
+#include "trovalibre.hpp"
 #include "logger.hpp"
 
 class Admin_Entry;
@@ -10,11 +10,11 @@ using Admin_End = Admin_Entry; // use this if you want continue admin menu after
 
 namespace {
 
-Tonuino        &tonuino   = Tonuino::getTonuino();
-Mp3            &mp3       = tonuino.getMp3();
-Commands       &commands  = tonuino.getCommands();
-Settings       &settings  = tonuino.getSettings();
-Chip_card      &chip_card = tonuino.getChipCard();
+TrovaLibre        &trovaLibre   = TrovaLibre::getInstance();
+Mp3            &mp3       = trovaLibre.getMp3();
+Commands       &commands  = trovaLibre.getCommands();
+Settings       &settings  = trovaLibre.getSettings();
+Chip_card      &chip_card = trovaLibre.getChipCard();
 
 const __FlashStringHelper* str_ChMode                  () { return F("ChMode") ; }
 const __FlashStringHelper* str_ChFolder                () { return F("ChFold") ; }
@@ -124,7 +124,7 @@ void VoiceMenu<SMT>::react(command cmd) {
 
 #ifdef SerialInputAsCommand
   case command::menu_jump:
-    currentValue = min(max(tonuino.getMenuJump(), static_cast<uint8_t>(1)),numberOfOptions);
+    currentValue = min(max(trovaLibre.getMenuJump(), static_cast<uint8_t>(1)),numberOfOptions);
     playCurrentValue();
     break;
 #endif
@@ -232,18 +232,18 @@ void ChFolder::react(command_e const &cmd_e) {
       return;
     }
 #endif
-    if (folder.mode == pmode_t::einzel) {
+    if (folder.mode == pmode_t::single_track) {
       transit<ChTrack>();
       return;
     }
-    if (folder.mode == pmode_t::hoerbuch_1) {
+    if (folder.mode == pmode_t::audiobook_single) {
       transit<ChNumTracks>();
       return;
     }
-    if (  ( folder.mode == pmode_t::hoerspiel_vb)
+    if (  ( folder.mode == pmode_t::audio_play_range)
         ||( folder.mode == pmode_t::album_vb    )
         ||( folder.mode == pmode_t::party_vb    )
-        ||( folder.mode == pmode_t::hoerbuch_vb )) {
+        ||( folder.mode == pmode_t::audiobook_range )) {
       transit<ChFirstTrack>();
       return;
     }
@@ -490,7 +490,7 @@ bool Base::readCard() {
   case Chip_card::readCardEvent::known:
 #ifdef BT_MODULE
     if (lastCardRead.mode == pmode_t::switch_bt) {
-      tonuino.switchBtModuleOnOff();
+      trovaLibre.switchBtModuleOnOff();
       return false;
     }
 #endif
@@ -502,7 +502,7 @@ bool Base::readCard() {
         return false;
       }
 
-      if (tonuino.specialCard(lastCardRead))
+      if (trovaLibre.specialCard(lastCardRead))
         return false;
     }
     break;
@@ -516,7 +516,7 @@ bool Base::readCard() {
     return false;
   }
 
-  if (tonuino.getActiveModifier().handleRFID(lastCardRead))
+  if (trovaLibre.getActiveModifier().handleRFID(lastCardRead))
     return false;
 
   if (lastCardRead.folder != 0) {
@@ -532,29 +532,29 @@ bool Base::handleShortcut(uint8_t shortCut) {
     LOG(state_log, s_debug, F("shortcut, folder: "), sc_folderSettings.folder, F(", mode: "), static_cast<uint8_t>(sc_folderSettings.mode));
 #ifdef BT_MODULE
     if (sc_folderSettings.mode == pmode_t::switch_bt) {
-      tonuino.switchBtModuleOnOff();
+      trovaLibre.switchBtModuleOnOff();
       return false; // do not end the current play
     }
 #endif // BT_MODULE
     if (sc_folderSettings.mode != pmode_t::repeat_last)
-      tonuino.setMyFolder(sc_folderSettings, false /*myFolderIsCard*/);
-    if (tonuino.getFolder() != 0) {
+      trovaLibre.setMyFolder(sc_folderSettings, false /*myFolderIsCard*/);
+    if (trovaLibre.getFolder() != 0) {
 #ifdef QUIZ_GAME
-      if (tonuino.getMyFolder().mode == pmode_t::quiz_game) {
+      if (trovaLibre.getMyFolder().mode == pmode_t::quiz_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
         transit<StartPlay<Quiz>>();
         return true;
       }
 #endif // QUIZ_GAME
 #ifdef MEMORY_GAME
-      if (tonuino.getMyFolder().mode == pmode_t::memory_game) {
+      if (trovaLibre.getMyFolder().mode == pmode_t::memory_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Memory());
         transit<StartPlay<Memory>>();
         return true;
       }
 #endif // MEMORY_GAME
 #ifdef TEAPOT_GAME
-      if (tonuino.getMyFolder().mode == pmode_t::teapot_game) {
+      if (trovaLibre.getMyFolder().mode == pmode_t::teapot_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Teapot());
         transit<StartPlay<Teapot>>();
         return true;
@@ -570,25 +570,25 @@ bool Base::handleShortcut(uint8_t shortCut) {
 
 void Base::handleReadCard() {
   if (lastCardRead.mode != pmode_t::repeat_last)
-    tonuino.setMyFolder(lastCardRead, true /*myFolderIsCard*/);
-  if (tonuino.getFolder() != 0) {
-    LOG(state_log, s_debug, F("mode: "), static_cast<int>(tonuino.getMyFolder().mode));
+    trovaLibre.setMyFolder(lastCardRead, true /*myFolderIsCard*/);
+  if (trovaLibre.getFolder() != 0) {
+    LOG(state_log, s_debug, F("mode: "), static_cast<int>(trovaLibre.getMyFolder().mode));
 #ifdef QUIZ_GAME
-    if (tonuino.getMyFolder().mode == pmode_t::quiz_game) {
+    if (trovaLibre.getMyFolder().mode == pmode_t::quiz_game) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
       transit<StartPlay<Quiz>>();
       return;
     }
 #endif // QUIZ_GAME
 #ifdef MEMORY_GAME
-      if (tonuino.getMyFolder().mode == pmode_t::memory_game) {
+      if (trovaLibre.getMyFolder().mode == pmode_t::memory_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Memory());
         transit<StartPlay<Memory>>();
         return;
       }
 #endif // MEMORY_GAME
 #ifdef TEAPOT_GAME
-    if (tonuino.getMyFolder().mode == pmode_t::teapot_game) {
+    if (trovaLibre.getMyFolder().mode == pmode_t::teapot_game) {
       LOG(state_log, s_debug, str_Base(), str_to(), str_Teapot());
       transit<StartPlay<Teapot>>();
       return;
@@ -606,16 +606,16 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
   case command::shortcut2    : shortCut = 2      ; break;
   case command::shortcut3    : shortCut = 3      ; break;
   case command::start        : shortCut = 4      ; break;
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   case command::card_from_web: shortCut = 0      ; break;
 #endif
 #ifndef DISABLE_SHUTDOWN_VIA_BUTTON
-  case command::shutdown : if (tonuino.getActiveModifier().handleButton(command::shutdown))
+  case command::shutdown : if (trovaLibre.getActiveModifier().handleButton(command::shutdown))
                              return false;
                            mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
                            mp3.loop();
                            delay(1000);
-                           tonuino.shutdown();
+                           trovaLibre.shutdown();
                                                break;
 #endif
   default                :                     break;
@@ -625,7 +625,7 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
     shortCut = static_cast<uint8_t>(cmd);
 #endif
   if (shortCut != 0xff) {
-    if (tonuino.getActiveModifier().handleButton(cmd))
+    if (trovaLibre.getActiveModifier().handleButton(cmd))
       return false;
     if (handleShortcut(shortCut))
       return true;
@@ -635,7 +635,7 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
   return false;
 }
 
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
 bool Base::checkForWritingCard(command cmd, command_e const &cmd_e) {
 
   if (cmd == command::write_card_from_web) {
@@ -660,8 +660,8 @@ bool Base::checkForWritingCard(command cmd, command_e const &cmd_e) {
 #ifdef NEO_RING
 void Base::handleBrightness(command cmd) {
   switch (cmd) {
-  case command::bright_up  : tonuino.getRing().brightness_up  (); break;
-  case command::bright_down: tonuino.getRing().brightness_down(); break;
+  case command::bright_up  : trovaLibre.getRing().brightness_up  (); break;
+  case command::bright_down: trovaLibre.getRing().brightness_down(); break;
   default                  :                                      break;
   }
 }
@@ -673,7 +673,7 @@ void Base::handleBrightness(command cmd) {
 void Idle::entry() {
   LOG(state_log, s_info, str_enter(), str_Idle());
   state_str = str_Idle();
-  tonuino.setStandbyTimer();
+  trovaLibre.setStandbyTimer();
 }
 
 void Idle::react(command_e const &cmd_e) {
@@ -683,13 +683,13 @@ void Idle::react(command_e const &cmd_e) {
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::idle_pause);
 
-  if (tonuino.getActiveModifier().handleButton(cmd))
+  if (trovaLibre.getActiveModifier().handleButton(cmd))
     return;
 
   if (checkForShortcutAndShutdown(cmd))
     return;
 
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   if (checkForWritingCard(cmd, cmd_e))
     return;
 #endif
@@ -705,23 +705,23 @@ void Idle::react(command_e const &cmd_e) {
     return;
 #ifdef REPLAY_ON_PLAY_BUTTON
   case command::pause:
-    if (tonuino.getFolder() != 0) {
+    if (trovaLibre.getFolder() != 0) {
 #ifdef QUIZ_GAME
-      if (tonuino.getMyFolder().mode == pmode_t::quiz_game) {
+      if (trovaLibre.getMyFolder().mode == pmode_t::quiz_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Quiz());
         transit<StartPlay<Quiz>>();
         return;
       }
 #endif // QUIZ_GAME
 #ifdef MEMORY_GAME
-      if (tonuino.getMyFolder().mode == pmode_t::memory_game) {
+      if (trovaLibre.getMyFolder().mode == pmode_t::memory_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Memory());
         transit<StartPlay<Memory>>();
         return;
       }
 #endif // MEMORY_GAME
 #ifdef TEAPOT_GAME
-      if (tonuino.getMyFolder().mode == pmode_t::teapot_game) {
+      if (trovaLibre.getMyFolder().mode == pmode_t::teapot_game) {
         LOG(state_log, s_debug, str_Base(), str_to(), str_Teapot());
         transit<StartPlay<Teapot>>();
         return;
@@ -735,7 +735,7 @@ void Idle::react(command_e const &cmd_e) {
 #endif
 #ifdef SPECIAL_START_SHORTCUT
     case command::specialStart:
-      tonuino.setMyFolder({specialStartShortcutFolder, pmode_t::einzel, specialStartShortcutTrack, 0}, true /*myFolderIsCard*/);
+      trovaLibre.setMyFolder({specialStartShortcutFolder, pmode_t::single_track, specialStartShortcutTrack, 0}, true /*myFolderIsCard*/);
       LOG(state_log, s_debug, str_Idle(), str_to(), str_StartPlay());
       transit<StartPlay<Play>>();
       break;
@@ -749,7 +749,7 @@ void Idle::react(card_e const &c_e) {
   if (c_e.card_ev != cardEvent::none) {
     LOG(state_log, s_debug, str_Idle(), F("::react(c) "), static_cast<int>(c_e.card_ev));
   }
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   if (writingCard)
     return;
 #endif
@@ -770,7 +770,7 @@ void Idle::react(card_e const &c_e) {
 void Play::entry() {
   LOG(state_log, s_info, str_enter(), str_Play());
   state_str = str_Play();
-  tonuino.disableStandbyTimer();
+  trovaLibre.disableStandbyTimer();
   mp3.start();
 }
 
@@ -781,7 +781,7 @@ void Play::react(command_e const &cmd_e) {
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
 
-  if (tonuino.getActiveModifier().handleButton(cmd))
+  if (trovaLibre.getActiveModifier().handleButton(cmd))
     return;
 
   if (checkForShortcutAndShutdown(cmd))
@@ -795,38 +795,38 @@ void Play::react(command_e const &cmd_e) {
     }
     return;
   case command::pause:
-    LOG(state_log, s_debug, F("Pause Taste"));
+    LOG(state_log, s_debug, F("Pause button"));
     LOG(state_log, s_debug, str_Play(), str_to(), str_Pause());
     transit<Pause>();
     return;
   case command::track:
 #ifdef BT_MODULE
-    if (tonuino.isBtModuleOn())
-      tonuino.btModulePairing();
+    if (trovaLibre.isBtModuleOn())
+      trovaLibre.btModulePairing();
     else
 #endif
-    tonuino.playTrackNumber();
+    trovaLibre.playTrackNumber();
     break;
   case command::volume_up:
     mp3.increaseVolume();
     break;
   case command::next:
-    tonuino.nextTrack();
+    trovaLibre.nextTrack();
     break;
   case command::next10:
-    tonuino.nextTrack(10);
+    trovaLibre.nextTrack(10);
     break;
   case command::volume_down:
     mp3.decreaseVolume();
     break;
   case command::previous:
-    tonuino.previousTrack();
+    trovaLibre.previousTrack();
     break;
   case command::previous10:
-    tonuino.previousTrack(10);
+    trovaLibre.previousTrack(10);
     break;
   case command::to_first:
-    tonuino.previousTrack(0xff);
+    trovaLibre.previousTrack(0xff);
     break;
   default:
     break;
@@ -846,7 +846,7 @@ void Play::react(card_e const &c_e) {
   case cardEvent::inserted:
     if (readCard()) {
 #ifdef DONT_ACCEPT_SAME_RFID_TWICE
-      if (not (tonuino.getMyFolder() == lastCardRead))
+      if (not (trovaLibre.getMyFolder() == lastCardRead))
 #endif
         handleReadCard();
     }
@@ -857,7 +857,7 @@ void Play::react(card_e const &c_e) {
     }
     return;
   case cardEvent::removed:
-    if ((settings.pauseWhenCardRemoved==1) && not tonuino.getActiveModifier().handleButton(command::pause)) {
+    if ((settings.pauseWhenCardRemoved==1) && not trovaLibre.getActiveModifier().handleButton(command::pause)) {
       transit<Pause>();
       return;
     }
@@ -872,7 +872,7 @@ void Play::react(card_e const &c_e) {
 void Pause::entry() {
   LOG(state_log, s_info, str_enter(), str_Pause());
   state_str = str_Pause();
-  tonuino.setStandbyTimer();
+  trovaLibre.setStandbyTimer();
   mp3.pause();
 }
 
@@ -883,13 +883,13 @@ void Pause::react(command_e const &cmd_e) {
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::idle_pause);
 
-  if (tonuino.getActiveModifier().handleButton(cmd))
+  if (trovaLibre.getActiveModifier().handleButton(cmd))
     return;
 
   if (checkForShortcutAndShutdown(cmd))
     return;
 
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   if (checkForWritingCard(cmd, cmd_e))
     return;
 #endif
@@ -922,7 +922,7 @@ void Pause::react(card_e const &c_e) {
   if (c_e.card_ev != cardEvent::none) {
     LOG(state_log, s_debug, str_Pause(), F("::react(c) "), static_cast<int>(c_e.card_ev));
   }
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   if (writingCard)
     return;
 #endif
@@ -935,7 +935,7 @@ void Pause::react(card_e const &c_e) {
 #endif
                             false;
 
-      if (resume_on_card && tonuino.getMyFolder() == lastCardRead && not tonuino.getActiveModifier().handleButton(command::pause)) {
+      if (resume_on_card && trovaLibre.getMyFolder() == lastCardRead && not trovaLibre.getActiveModifier().handleButton(command::pause)) {
         transit<Play>();
         return;
       }
@@ -970,7 +970,7 @@ template<class P> void StartPlay<P>::react(command_e const &cmd_e) {
   if (timer.isActive()) {
     if (timer.isExpired()) {
       LOG(state_log, s_debug, str_StartPlay(), str_to(), str_Play());
-      if (is_same_type<P, Play>::value && (settings.pauseWhenCardRemoved==1) && chip_card.isCardRemoved() && tonuino.playingCard())
+      if (is_same_type<P, Play>::value && (settings.pauseWhenCardRemoved==1) && chip_card.isCardRemoved() && trovaLibre.playingCard())
         transit<Pause>();
       else
         transit<P>();
@@ -978,7 +978,7 @@ template<class P> void StartPlay<P>::react(command_e const &cmd_e) {
     }
   }
   else if (not mp3.isPlayingMp3()) {
-    tonuino.playFolder();
+    trovaLibre.playFolder();
     timer.start(dfPlayer_timeUntilStarts);
   }
 }
@@ -988,10 +988,10 @@ template<class P> void StartPlay<P>::react(command_e const &cmd_e) {
 void Quiz::entry() {
   LOG(state_log, s_info, str_enter(), str_Quiz());
   state_str = str_Quiz();
-  tonuino.disableStandbyTimer();
-  tonuino.resetActiveModifier();
-  numAnswer   = tonuino.getMyFolder().special;
-  numSolution = tonuino.getMyFolder().special2;
+  trovaLibre.disableStandbyTimer();
+  trovaLibre.resetActiveModifier();
+  numAnswer   = trovaLibre.getMyFolder().special;
+  numSolution = trovaLibre.getMyFolder().special2;
   if (numAnswer != 0 and numAnswer != 2 and numAnswer != 4) {
     LOG(state_log, s_error, F("numA: "), numAnswer);
     finish();
@@ -1003,7 +1003,7 @@ void Quiz::entry() {
     return;
   }
   quizState = QuizState::playQuestion;
-  numQuestion = tonuino.getNumTracksInFolder()/(numAnswer+numSolution+1);
+  numQuestion = trovaLibre.getNumTracksInFolder()/(numAnswer+numSolution+1);
 
   a.clear();
   if (numAnswer >= 2) {
@@ -1033,7 +1033,7 @@ void Quiz::react(command_e const &cmd_e) {
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
 
-  if (tonuino.getActiveModifier().handleButton(cmd))
+  if (trovaLibre.getActiveModifier().handleButton(cmd))
     return;
 
   if (checkForShortcutAndShutdown(cmd))
@@ -1044,7 +1044,7 @@ void Quiz::react(command_e const &cmd_e) {
     quizState = QuizState::playQuestion;
   }
   if (quizState == QuizState::playSolution && not mp3.isPlayingMp3()) {
-    mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+numAnswer+1);
+    mp3.enqueueTrack(trovaLibre.getFolder(), trackQuestion+numAnswer+1);
     quizState = QuizState::playWeiter;
   }
 
@@ -1056,7 +1056,7 @@ void Quiz::react(command_e const &cmd_e) {
     }
     return;
   case command::pause:
-    LOG(state_log, s_debug, F("Pause Taste"));
+    LOG(state_log, s_debug, F("Pause button"));
 
     switch (quizState) {
     case QuizState::playQuestion:
@@ -1091,7 +1091,7 @@ void Quiz::react(command_e const &cmd_e) {
 
       trackQuestion = question*(numAnswer+numSolution+1)+1;
       a.shuffle();
-      mp3.enqueueTrack(tonuino.getFolder(), trackQuestion);
+      mp3.enqueueTrack(trovaLibre.getFolder(), trackQuestion);
       quizState = QuizState::playAnswer;
       actAnswer = 0xff;
       break;
@@ -1100,11 +1100,11 @@ void Quiz::react(command_e const &cmd_e) {
         // nothing
       }
       else if (actAnswer == 0) {
-        LOG(state_log, s_debug, F("richtig"));
+        LOG(state_log, s_debug, F("correct"));
         mp3.enqueueMp3FolderTrack(mp3Tracks::t_501_quiz_game_ok+numSolution*2);
       }
       else {
-        LOG(state_log, s_debug, F("falsch"));
+        LOG(state_log, s_debug, F("wrong"));
         mp3.enqueueMp3FolderTrack(mp3Tracks::t_502_quiz_game_bad+numSolution*2);
       }
       if (numSolution == 1)
@@ -1116,7 +1116,7 @@ void Quiz::react(command_e const &cmd_e) {
     break;
   case command::track:
     if (quizState == QuizState::playAnswer) {
-      mp3.enqueueTrack(tonuino.getFolder(), trackQuestion);
+      mp3.enqueueTrack(trovaLibre.getFolder(), trackQuestion);
     }
     break;
   case command::volume_up:
@@ -1130,7 +1130,7 @@ void Quiz::react(command_e const &cmd_e) {
       }
       else {
         actAnswer = a.get(0);
-        mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+actAnswer+1);
+        mp3.enqueueTrack(trovaLibre.getFolder(), trackQuestion+actAnswer+1);
       }
     }
     else {
@@ -1148,7 +1148,7 @@ void Quiz::react(command_e const &cmd_e) {
       }
       else {
         actAnswer = a.get(1);
-        mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+actAnswer+1);
+        mp3.enqueueTrack(trovaLibre.getFolder(), trackQuestion+actAnswer+1);
       }
     }
     break;
@@ -1163,7 +1163,7 @@ void Quiz::react(command_e const &cmd_e) {
       }
       else {
         actAnswer = a.get(2%numAnswer);
-        mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+actAnswer+1);
+        mp3.enqueueTrack(trovaLibre.getFolder(), trackQuestion+actAnswer+1);
       }
     }
     else {
@@ -1181,7 +1181,7 @@ void Quiz::react(command_e const &cmd_e) {
       }
       else {
         actAnswer = a.get(3%numAnswer);
-        mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+actAnswer+1);
+        mp3.enqueueTrack(trovaLibre.getFolder(), trackQuestion+actAnswer+1);
       }
     }
     break;
@@ -1191,7 +1191,7 @@ void Quiz::react(command_e const &cmd_e) {
   default:
     break;
   }
-  if (not tonuino.isStandbyTimerOff() && timer.isExpired()) {
+  if (not trovaLibre.isStandbyTimerOff() && timer.isExpired()) {
     finish();
     return;
   }
@@ -1205,7 +1205,7 @@ void Quiz::react(card_e const &c_e) {
   case cardEvent::inserted:
     if (readCard()) {
 #ifdef DONT_ACCEPT_SAME_RFID_TWICE
-      if (not (tonuino.getMyFolder() == lastCardRead))
+      if (not (trovaLibre.getMyFolder() == lastCardRead))
 #endif
         handleReadCard();
     }
@@ -1230,8 +1230,8 @@ void Quiz::finish() {
 void Memory::entry() {
   LOG(state_log, s_info, str_enter(), str_Memory());
   state_str = str_Memory();
-  tonuino.disableStandbyTimer();
-  tonuino.resetActiveModifier();
+  trovaLibre.disableStandbyTimer();
+  trovaLibre.resetActiveModifier();
   first  = 0;
   second = 0;
 
@@ -1248,7 +1248,7 @@ void Memory::react(command_e const &cmd_e) {
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
 
-  if (tonuino.getActiveModifier().handleButton(cmd))
+  if (trovaLibre.getActiveModifier().handleButton(cmd))
     return;
 
   if (checkForShortcutAndShutdown(cmd))
@@ -1262,7 +1262,7 @@ void Memory::react(command_e const &cmd_e) {
     }
     return;
   case command::pause:
-    LOG(state_log, s_debug, F("Pause Taste"));
+    LOG(state_log, s_debug, F("Pause button"));
     if (first == 0) {
       mp3.enqueueMp3FolderTrack(mp3Tracks::t_523_memory_game_1);
     }
@@ -1286,9 +1286,9 @@ void Memory::react(command_e const &cmd_e) {
 
   case command::track:
     if (second != 0)
-      mp3.enqueueTrack(tonuino.getFolder(), second);
+      mp3.enqueueTrack(trovaLibre.getFolder(), second);
     else if (first != 0)
-      mp3.enqueueTrack(tonuino.getFolder(), first);
+      mp3.enqueueTrack(trovaLibre.getFolder(), first);
     else
       mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
     break;
@@ -1307,7 +1307,7 @@ void Memory::react(command_e const &cmd_e) {
 
   }
 
-  if (not tonuino.isStandbyTimerOff() && timer.isExpired()) {
+  if (not trovaLibre.isStandbyTimerOff() && timer.isExpired()) {
     finish();
     return;
   }
@@ -1322,19 +1322,19 @@ void Memory::react(card_e const &c_e) {
   case cardEvent::inserted:
     if (readCard()) {
 #ifdef DONT_ACCEPT_SAME_RFID_TWICE
-      if (not (tonuino.getMyFolder() == lastCardRead))
+      if (not (trovaLibre.getMyFolder() == lastCardRead))
 #endif
         handleReadCard();
     }
     else if (lastCardRead.mode == pmode_t::memory_game && lastCardRead.folder == 0) {
       if (first == 0) {
         first = lastCardRead.special;
-        mp3.enqueueTrack(tonuino.getFolder(), lastCardRead.special);
+        mp3.enqueueTrack(trovaLibre.getFolder(), lastCardRead.special);
       }
       else if (second == 0) {
         if (first != lastCardRead.special) {
           second = lastCardRead.special;
-          mp3.enqueueTrack(tonuino.getFolder(), lastCardRead.special);
+          mp3.enqueueTrack(trovaLibre.getFolder(), lastCardRead.special);
         }
       }
       else {
@@ -1362,9 +1362,9 @@ void Memory::finish() {
 void Teapot::entry() {
   LOG(state_log, s_info, str_enter(), str_Teapot());
   state_str = str_Teapot();
-  tonuino.disableStandbyTimer();
-  tonuino.resetActiveModifier();
-  //numDescriptions   = tonuino.getMyFolder().special;
+  trovaLibre.disableStandbyTimer();
+  trovaLibre.resetActiveModifier();
+  //numDescriptions   = trovaLibre.getMyFolder().special;
   //if (numDescriptions == 0)
   numDescriptions = 4;
 //  if (numDescriptions != 2 and numDescriptions != 4) {
@@ -1373,7 +1373,7 @@ void Teapot::entry() {
 //    return;
 //  }
   playState = PlayState::startNext;
-  numQuestion = tonuino.getNumTracksInFolder()/(numDescriptions+2);
+  numQuestion = trovaLibre.getNumTracksInFolder()/(numDescriptions+2);
   trackQuestion = 0;
 
   remainingQuestions = numQuestion;
@@ -1392,7 +1392,7 @@ void Teapot::react(command_e const &cmd_e) {
 
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
 
-  if (tonuino.getActiveModifier().handleButton(cmd))
+  if (trovaLibre.getActiveModifier().handleButton(cmd))
     return;
 
   if (checkForShortcutAndShutdown(cmd))
@@ -1403,7 +1403,7 @@ void Teapot::react(command_e const &cmd_e) {
     playState = PlayState::startNext;
   }
   if (playState == PlayState::playSolution && not mp3.isPlayingMp3()) {
-    mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+numDescriptions+1);
+    mp3.enqueueTrack(trovaLibre.getFolder(), trackQuestion+numDescriptions+1);
     playState = PlayState::playContinue;
   }
 
@@ -1415,13 +1415,13 @@ void Teapot::react(command_e const &cmd_e) {
     }
     return;
   case command::track:
-    LOG(state_log, s_debug, F("Track Taste"));
+    LOG(state_log, s_debug, F("Track button"));
 
     switch (playState) {
     case PlayState::startNext:
       trackQuestion = getNextQuestion()*(numDescriptions+2)+1;
 
-      mp3.enqueueTrack(tonuino.getFolder(), trackQuestion);
+      mp3.enqueueTrack(trovaLibre.getFolder(), trackQuestion);
 
       playState = PlayState::playDescriptions;
       break;
@@ -1435,12 +1435,12 @@ void Teapot::react(command_e const &cmd_e) {
     break;
   case command::pause:
     if ((trackQuestion != 0) && not mp3.isPlayingFolder()) {
-      mp3.enqueueTrack(tonuino.getFolder(), (playState == PlayState::playDescriptions)? trackQuestion : trackQuestion+numDescriptions+1);
+      mp3.enqueueTrack(trovaLibre.getFolder(), (playState == PlayState::playDescriptions)? trackQuestion : trackQuestion+numDescriptions+1);
     }
     break;
   case command::volume_up:
     if ((trackQuestion != 0) && not mp3.isPlayingFolder()) {
-      mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+0+1);
+      mp3.enqueueTrack(trovaLibre.getFolder(), trackQuestion+0+1);
     }
     else {
       mp3.increaseVolume();
@@ -1448,12 +1448,12 @@ void Teapot::react(command_e const &cmd_e) {
     break;
   case command::next:
     if ((trackQuestion != 0) && not mp3.isPlayingFolder()) {
-      mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+1+1);
+      mp3.enqueueTrack(trovaLibre.getFolder(), trackQuestion+1+1);
     }
     break;
   case command::volume_down:
     if ((trackQuestion != 0) && not mp3.isPlayingFolder()) {
-      mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+2+1);
+      mp3.enqueueTrack(trovaLibre.getFolder(), trackQuestion+2+1);
     }
     else {
       mp3.decreaseVolume();
@@ -1461,7 +1461,7 @@ void Teapot::react(command_e const &cmd_e) {
     break;
   case command::previous:
     if ((trackQuestion != 0) && not mp3.isPlayingFolder()) {
-      mp3.enqueueTrack(tonuino.getFolder(), trackQuestion+3+1);
+      mp3.enqueueTrack(trovaLibre.getFolder(), trackQuestion+3+1);
     }
     break;
   case command::to_first:
@@ -1470,7 +1470,7 @@ void Teapot::react(command_e const &cmd_e) {
   default:
     break;
   }
-  if (not tonuino.isStandbyTimerOff() && timer.isExpired()) {
+  if (not trovaLibre.isStandbyTimerOff() && timer.isExpired()) {
     finish();
     return;
   }
@@ -1484,7 +1484,7 @@ void Teapot::react(card_e const &c_e) {
   case cardEvent::inserted:
     if (readCard()) {
 #ifdef DONT_ACCEPT_SAME_RFID_TWICE
-      if (not (tonuino.getMyFolder() == lastCardRead))
+      if (not (trovaLibre.getMyFolder() == lastCardRead))
 #endif
         handleReadCard();
     }
@@ -1564,7 +1564,7 @@ void Admin_Allow::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_Allow());
   state_str = str_Admin_Allow();
   current_subState = select_method;
-  tonuino.resetActiveModifier();
+  trovaLibre.resetActiveModifier();
 }
 
 void Admin_Allow::react(command_e const &cmd_e) {
@@ -1681,8 +1681,8 @@ void Admin_Allow::react(command_e const &cmd_e) {
 void Admin_Entry::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_Entry());
   state_str = str_Admin_Entry();
-  tonuino.disableStandbyTimer();
-  tonuino.resetActiveModifier();
+  trovaLibre.disableStandbyTimer();
+  trovaLibre.resetActiveModifier();
 
   numberOfOptions   = 14;
   startMessage      = lastCurrentValue == 0 ? mp3Tracks::t_900_admin : mp3Tracks::t_919_continue_admin;
@@ -1774,11 +1774,11 @@ void Admin_Entry::react(command_e const &cmd_e) {
              LOG(state_log, s_debug, str_Admin_Entry(), str_to(), str_Admin_LockAdmin());
              transit<Admin_LockAdmin>();
              return;
-    case 13: // Pause, wenn Karte entfernt wird
+    case 13: // EN: Pause when card is removed. // ES: Pausar al retirar la tarjeta.
              LOG(state_log, s_debug, str_Admin_Entry(), str_to(), str_Admin_PauseIfCardRemoved());
              transit<Admin_PauseIfCardRemoved>();
              return;
-    case 14: // Memory Spiel Karten
+    case 14: // EN: Memory game cards. // ES: Tarjetas del juego de memoria.
 //#ifdef MEMORY_GAME
              LOG(state_log, s_debug, str_Admin_Entry(), str_to(), str_Admin_MemoryGameCards());
              transit<Admin_MemoryGameCards>();
@@ -2122,7 +2122,7 @@ void Admin_CardsForFolder::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_CardsForFolder());
   state_str = str_Admin_CardsForFolder();
 
-  folder.mode = pmode_t::einzel;
+  folder.mode = pmode_t::single_track;
 
   current_subState = start_setupCard;
 }
@@ -2173,7 +2173,7 @@ void Admin_CardsForFolder::react(command_e const &cmd_e) {
       folder.special = special;
       mp3.enqueueMp3FolderTrack(special, true/*playAfter*/);
       timer.start(dfPlayer_timeUntilStarts);
-      LOG(card_log, s_info, special, F("-te Karte auflegen"));
+      LOG(card_log, s_info, special, F("place card number "));
       current_subState = start_writeCard;
     }
     break;
@@ -2418,7 +2418,7 @@ void Admin_MemoryGameCards::react(command_e const &cmd_e) {
       }
       mp3.enqueueMp3FolderTrack(folder.special, true/*playAfter*/);
       timer.start(dfPlayer_timeUntilStarts);
-      LOG(card_log, s_info, folder.special, F("-te Karte auflegen"));
+      LOG(card_log, s_info, folder.special, F("place card number "));
       current_subState = start_writeCard;
     }
     break;
@@ -2451,7 +2451,7 @@ void Admin_MemoryGameCards::react(command_e const &cmd_e) {
 
 FSM_INITIAL_STATE(SM_setupCard, ChMode)
 FSM_INITIAL_STATE(SM_writeCard, WriteCard)
-FSM_INITIAL_STATE(SM_tonuino  , Idle)
+FSM_INITIAL_STATE(SM_trovaLibre  , Idle)
 
 template<SM_type SMT>
 folderSettings  SM<SMT>::folder{};

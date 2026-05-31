@@ -1,27 +1,27 @@
 
 #include <gtest/gtest.h>
 
-#include <tonuino.hpp>
+#include <trovalibre.hpp>
 #include <mp3.hpp>
 
 class mp3_test_fixture: public ::testing::Test {
 public:
   mp3_test_fixture()
-  : tonuino(Tonuino::getTonuino())
-  , mp3(tonuino.getMp3())
+  : trovaLibre(TrovaLibre::getInstance())
+  , mp3(trovaLibre.getMp3())
   {
     mp3.reset_to_initial_state();
     mp3.clearAllQueue();
     folderSettings card = { 1, pmode_t::album, 0, 0 };
-    tonuino.setMyFolder(card, true);
+    trovaLibre.setMyFolder(card, true);
   }
 
   void execute_cycle() {
     mp3.loop();
   }
 
-  // because mp3::OnPlayFinished() uses Tonuino::nextTrack() we have to use mp3 from Tonuino
-  Tonuino& tonuino;
+  // because mp3::OnPlayFinished() uses TrovaLibre::nextTrack() we have to use mp3 from TrovaLibre
+  TrovaLibre& trovaLibre;
   Mp3&     mp3;
 };
 

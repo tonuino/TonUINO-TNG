@@ -27,7 +27,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# TonUINO
+# TrovaLibre
 /tools/*.pyc
 /Release/
 /sc-card_priv/
@@ -48,3 +48,8 @@ Temporary Items
 .pio
 .vscode
 release.sh
+
+# Windows
+desktop.ini
+.vs/
+

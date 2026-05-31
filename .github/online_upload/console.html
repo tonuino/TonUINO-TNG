@@ -1,161 +1,212 @@
-<style>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrovaLibre — Serial Console</title>
+  <link rel="stylesheet" type="text/css" href="trovalibre.css" media="all">
+  <style>
     * {
-        background-color: #81DAF5;
-        font-family: monospace;
-        color: #000000;
-        padding: 0px;
+      font-family: monospace;
+      padding: 0;
+      box-sizing: border-box;
     }
-
-    button,
-    datalist {
-        background-color: #DEDEDE;
+    body {
+      background-color: #81DAF5;
+      color: #000;
+      padding: 10px;
     }
-
+    button, datalist {
+      background-color: #DEDEDE;
+      cursor: pointer;
+    }
     input[type=text] {
-        color: #000000;
-        background-color: #FFFFFF;
-        border: 1px solid;
+      color: #000;
+      background-color: #FFF;
+      border: 1px solid #999;
     }
-
     #serialResults {
-        font-family: monospace;
-        white-space: pre;
-        height: calc(100% - 120px);
-        width: calc(100% - 20px);
-        border-style: solid;
-        overflow: scroll;
-        background-color: #BBEEFF;
-        padding: 10px;
-        margin: 0px;
+      font-family: monospace;
+      white-space: pre;
+      height: calc(100vh - 160px);
+      width: calc(100% - 0px);
+      border: 1px solid #999;
+      overflow: scroll;
+      background-color: #BBEEFF;
+      padding: 10px;
+      margin-top: 8px;
     }
-</style>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TonUINO - Die DIY Musikbox (nicht nur) fuer Kinder</title>
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .send-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .send-row input {
+      flex: 1;
+    }
+    .options-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 4px;
+      align-items: center;
+    }
+    .status {
+      font-size: 0.85em;
+      color: #333;
+    }
+    a { color: #00008B; }
+  </style>
+</head>
+<body>
 
-<button onclick="connectSerial()">Verbinden</button>
-Baud:
-<input type="text" id="baud" list="baudList" style="width: 10ch;" onclick="this.value = ''"
-    onchange="localStorage.baud = this.value">
-<datalist id="baudList">
-    <option value="110">110</option>
-    <option value="300">300</option>
-    <option value="600">600</option>
-    <option value="1200">1200</option>
-    <option value="2400">2400</option>
-    <option value="4800">4800</option>
-    <option value="9600">9600</option>
-    <option value="14400">14400</option>
-    <option value="19200">19200</option>
-    <option value="38400">38400</option>
-    <option value="57600">57600</option>
-    <option value="115200">115200</option>
-    <option value="128000">128000</option>
-    <option value="256000">256000</option>
-</datalist>
-<button onclick="serialResultsDiv.innerHTML = '';">Loeschen</button>
+  <div class="toolbar">
+    <strong>TrovaLibre — Serial Console</strong>
+    &nbsp;
+    <button onclick="connectSerial()">&#128279; Connect / Conectar</button>
+    <button onclick="disconnectSerial()">&#128280; Disconnect / Desconectar</button>
+    <label for="baud">Baud:</label>
+    <input type="text" id="baud" list="baudList" style="width:10ch"
+           onclick="this.value=''"
+           onchange="localStorage.baud = this.value">
+    <datalist id="baudList">
+      <option value="9600">9600</option>
+      <option value="38400">38400</option>
+      <option value="57600">57600</option>
+      <option value="115200">115200</option>
+      <option value="128000">128000</option>
+      <option value="256000">256000</option>
+    </datalist>
+    <button onclick="serialResultsDiv.innerHTML = '';">&#128465; Clear / Limpiar</button>
+    <span class="status" id="connStatus">&#9899; Not connected / Sin conexion</span>
+  </div>
 
-<br>
-<input type="text" id="lineToSend" style="width:calc(100% - 175px)">
-<button onclick="sendSerialLine()" style="width:55px">Senden</button>
-<button onclick="sendCharacterNumber()" style="width:100px">Char Senden</button>
-<br>
+  <div class="send-row">
+    <input type="text" id="lineToSend" placeholder="Type command / Escribe un comando">
+    <button onclick="sendSerialLine()" style="width:70px">Send &#9166;</button>
+    <button onclick="sendCharacterNumber()" style="width:110px" title="Convert field value to its ASCII character">Send char</button>
+  </div>
 
-<input type="checkbox" id="addLine" onclick="localStorage.addLine = this.checked;" checked>
-<label for="addLine">Mit \r\n Senden</label>
+  <div class="options-row">
+    <label>
+      <input type="checkbox" id="addLine" onclick="localStorage.addLine = this.checked;" checked>
+      Send with &#92;r&#92;n / Enviar con &#92;r&#92;n
+    </label>
+    <label>
+      <input type="checkbox" id="echoOn" onclick="localStorage.echoOn = this.checked;" checked>
+      Local echo / Eco local
+    </label>
+  </div>
 
-<input type="checkbox" id="echoOn" onclick="localStorage.echoOn = this.checked;" checked>
-<label for="echoOn">Lokales Echo</label>
+  <div id="serialResults"></div>
 
-<br>
-<div id="serialResults">
-</div>
+  <br>
+  <small>
+    &#9888;&#65039; Requires a Chromium-based browser (Chrome / Edge) — Web Serial API.<br>
+    &#9888;&#65039; Requiere un navegador basado en Chromium (Chrome / Edge) — Web Serial API.<br>
+    Powered by <a href="https://github.com/mmiscool/serialTerminal.com" target="_blank">serialTerminal.com</a> (Mike Molinaris).
+  </small>
 
 <script>
-    var port, textEncoder, writableStreamClosed, writer, historyIndex = -1;
-    const lineHistory = [];
+  var port, textEncoder, writableStreamClosed, writer, historyIndex = -1;
+  const lineHistory = [];
+  const statusEl = document.getElementById("connStatus");
 
-    async function connectSerial() {
-        try {
-            // Prompt user to select any serial port.
-            port = await navigator.serial.requestPort();
-            await port.open({ baudRate: document.getElementById("baud").value });
-            listenToPort();
+  function setStatus(connected) {
+    statusEl.innerHTML = connected
+      ? "&#9899; Connected / Conectado"
+      : "&#9899; Not connected / Sin conexion";
+    statusEl.style.color = connected ? "green" : "#333";
+  }
 
-            textEncoder = new TextEncoderStream();
-            writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
-
-            writer = textEncoder.writable.getWriter();
-        } catch {
-            alert("Serial Connection Failed");
-        }
+  async function connectSerial() {
+    if (!("serial" in navigator)) {
+      alert("Web Serial API not supported.\nUse Chrome or Edge.\n\nLa API Web Serial no esta disponible.\nUsa Chrome o Edge.");
+      return;
     }
+    try {
+      port = await navigator.serial.requestPort();
+      await port.open({ baudRate: parseInt(document.getElementById("baud").value) || 115200 });
+      setStatus(true);
+      listenToPort();
 
-    async function sendCharacterNumber(){
-       document.getElementById("lineToSend").value = String.fromCharCode(document.getElementById("lineToSend").value);
+      textEncoder = new TextEncoderStream();
+      writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+      writer = textEncoder.writable.getWriter();
+    } catch (e) {
+      setStatus(false);
+      if (e.name !== "NotFoundError") {
+        alert("Serial connection failed / Fallo la conexion serie: " + e.message);
+      }
     }
-   
-    async function sendSerialLine() {
-        dataToSend = document.getElementById("lineToSend").value;
-        lineHistory.unshift(dataToSend);
-        historyIndex = -1; // No history entry selected
-        if (document.getElementById("addLine").checked == true) dataToSend = dataToSend + "\r\n";
-        if (document.getElementById("echoOn").checked == true) appendToTerminal("> " + dataToSend);
-        await writer.write(dataToSend);
-        document.getElementById("lineToSend").value = "";
-        //await writer.releaseLock();
-    }
+  }
 
-    async function listenToPort() {
-        const textDecoder = new TextDecoderStream();
-        const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
-        const reader = textDecoder.readable.getReader();
+  async function disconnectSerial() {
+    try {
+      if (writer)  { await writer.close(); }
+      if (port)    { await port.close(); }
+    } catch (_) {}
+    setStatus(false);
+  }
 
-        // Listen to data coming from the serial device.
-        while (true) {
-            const { value, done } = await reader.read();
-            if (done) {
-                // Allow the serial port to be closed later.
-                //reader.releaseLock();
-                break;
-            }
-            // value is a string.
-            appendToTerminal(value);
-        }
-    }
+  async function sendCharacterNumber() {
+    const el = document.getElementById("lineToSend");
+    el.value = String.fromCharCode(el.value);
+  }
 
-    const serialResultsDiv = document.getElementById("serialResults");
+  async function sendSerialLine() {
+    if (!writer) { alert("Not connected / Sin conexion"); return; }
+    let dataToSend = document.getElementById("lineToSend").value;
+    lineHistory.unshift(dataToSend);
+    historyIndex = -1;
+    if (document.getElementById("addLine").checked) dataToSend += "\r\n";
+    if (document.getElementById("echoOn").checked)  appendToTerminal("> " + dataToSend);
+    await writer.write(dataToSend);
+    document.getElementById("lineToSend").value = "";
+  }
 
-    async function appendToTerminal(newStuff) {
-        serialResultsDiv.innerHTML += newStuff;
-        if (serialResultsDiv.innerHTML.length > 3000) serialResultsDiv.innerHTML = serialResultsDiv.innerHTML.slice(serialResultsDiv.innerHTML.length - 3000);
+  async function listenToPort() {
+    const textDecoder = new TextDecoderStream();
+    const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+    const reader = textDecoder.readable.getReader();
+    try {
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        appendToTerminal(value);
+      }
+    } catch (_) { setStatus(false); }
+  }
 
-        //scroll down to bottom of div
-        serialResultsDiv.scrollTop = serialResultsDiv.scrollHeight;
-    }
+  const serialResultsDiv = document.getElementById("serialResults");
 
-    function scrollHistory(direction) {
-        // Clamp the value between -1 and history length
-        historyIndex = Math.max(Math.min(historyIndex + direction, lineHistory.length - 1), -1);
-        if (historyIndex >= 0) {
-            document.getElementById("lineToSend").value = lineHistory[historyIndex];
-        } else {
-            document.getElementById("lineToSend").value = "";
-        }
-    }
+  function appendToTerminal(text) {
+    serialResultsDiv.innerHTML += text;
+    if (serialResultsDiv.innerHTML.length > 5000)
+      serialResultsDiv.innerHTML = serialResultsDiv.innerHTML.slice(serialResultsDiv.innerHTML.length - 5000);
+    serialResultsDiv.scrollTop = serialResultsDiv.scrollHeight;
+  }
 
-    document.getElementById("lineToSend").addEventListener("keyup", async function (event) {
-        if (event.keyCode === 13) {
-            sendSerialLine();
-        } else if (event.keyCode === 38) { // Key up
-            scrollHistory(1);
-        } else if (event.keyCode === 40) { // Key down
-            scrollHistory(-1);
-        }
-    })
+  function scrollHistory(direction) {
+    historyIndex = Math.max(Math.min(historyIndex + direction, lineHistory.length - 1), -1);
+    document.getElementById("lineToSend").value = historyIndex >= 0 ? lineHistory[historyIndex] : "";
+  }
 
-    document.getElementById("baud").value = (localStorage.baud == undefined ? 115200 : localStorage.baud);
-    document.getElementById("addLine").checked = (localStorage.addLine == "false" ? false : true);
-    document.getElementById("echoOn").checked = (localStorage.echoOn == "false" ? false : true);
+  document.getElementById("lineToSend").addEventListener("keyup", function (e) {
+    if      (e.key === "Enter"    ) sendSerialLine();
+    else if (e.key === "ArrowUp"  ) scrollHistory(1);
+    else if (e.key === "ArrowDown") scrollHistory(-1);
+  });
 
+  document.getElementById("baud").value   = localStorage.baud    || 115200;
+  document.getElementById("addLine").checked = localStorage.addLine !== "false";
+  document.getElementById("echoOn").checked  = localStorage.echoOn  !== "false";
 </script>
-<br>powered by Mike Molinaris' <a href="https://github.com/mmiscool/serialTerminal.com">serialTerminal.com</a>
+</body>
+</html>

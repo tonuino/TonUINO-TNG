@@ -1,18 +1,18 @@
 #include "modifier.hpp"
 
 #include "mp3.hpp"
-#include "tonuino.hpp"
+#include "trovalibre.hpp"
 #include "logger.hpp"
 #include "state_machine.hpp"
 
 namespace {
 
-Tonuino        &tonuino   = Tonuino::getTonuino();
-Mp3            &mp3       = tonuino.getMp3();
+TrovaLibre        &trovaLibre   = TrovaLibre::getInstance();
+Mp3            &mp3       = trovaLibre.getMp3();
 
 const __FlashStringHelper* str_SleepTimer             () { return F("SleepTimer")  ; }
 const __FlashStringHelper* str_danceGame              () { return F("DanceGame")   ; }
-const __FlashStringHelper* str_KindergardenMode       () { return F("Kita")        ; }
+const __FlashStringHelper* str_KindergardenMode       () { return F("Daycare")        ; }
 const __FlashStringHelper* str_RepeatSingleModifier   () { return F("RepeatSingle"); }
 #ifdef MODIFICATION_CARD_PAUSE_AFTER_TRACK
 const __FlashStringHelper* str_PauseAfterTrack        () { return F("PauseAftTr")  ; }
@@ -25,15 +25,15 @@ const __FlashStringHelper* str_JukeboxModifier        () { return F("Jukebox")  
 
 void SleepTimer::loop() {
   if (fired)
-    tonuino.shutdown();
+    trovaLibre.shutdown();
   if (sleepTimer.isActive() && sleepTimer.isExpired()) {
     LOG(modifier_log, s_debug, str_SleepTimer(), F(" -> expired"));
     if (not stopAfterTrackFinished || stopAfterTrackFinished_active) {
       LOG(modifier_log, s_debug, str_SleepTimer(), F(" -> SLEEP!"));
-      if (SM_tonuino::is_in_state<Play>())
-        SM_tonuino::dispatch(command_e(commandRaw::pause));
+      if (SM_trovaLibre::is_in_state<Play>())
+        SM_trovaLibre::dispatch(command_e(commandRaw::pause));
       fired = true;
-      //tonuino.resetActiveModifier();
+      //trovaLibre.resetActiveModifier();
     }
     else {
       stopAfterTrackFinished_active = true;
@@ -48,7 +48,7 @@ bool SleepTimer::handleNext() {
     stopAfterTrackFinished_active = false;
     sleepTimer.stop();
     fired = true;
-    //tonuino.resetActiveModifier();
+    //trovaLibre.resetActiveModifier();
   }
   return false;
 }
@@ -83,7 +83,7 @@ bool SleepTimer::handleRFID(const folderSettings &/*newCard*/) {
   return false;
 }
 
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
 String SleepTimer::getDescription() {
   long remaining = sleepTimer.remainingTime();
   String sign;
@@ -100,7 +100,7 @@ String SleepTimer::getDescription() {
     descr += "Track wird beendet, ";
   char buffer[20];
   sprintf(buffer, "%ld:%02ld", remaining/60, remaining%60);
-  descr += String("übrig: ") + sign + buffer + " Min.)";
+  descr += String("remaining: ") + sign + buffer + " Min.)";
   return descr;
 }
 #endif
@@ -116,7 +116,7 @@ void DanceGame::init(pmode_t a_mode, uint8_t a_t) {
 
 
 void DanceGame::loop() {
-  if (SM_tonuino::is_in_state<Play>()) {
+  if (SM_trovaLibre::is_in_state<Play>()) {
     if (not stopTimer.isActive()) {
       setNextStop(false /*addAdvTime*/);
     }
@@ -156,12 +156,12 @@ void DanceGame::setNextStop(bool addAdvTime) {
   stopTimer.start(seconds * 1000);
 }
 
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
 String DanceGame::getDescription() {
-  String descr = mode == pmode_t::freeze_dance ? "Stopptanz"         :
-                 mode == pmode_t::fi_wa_ai     ? "Feuer-Wasser-Luft" :
+  String descr = mode == pmode_t::freeze_dance ? "Freeze dance / Baile congelado"         :
+                 mode == pmode_t::fi_wa_ai     ? "Fire-Water-Air / Fuego-Agua-Aire" :
                                                  "?"                 ;
-  descr += " (Pausen: " + String(minSecondsBetweenStops[t]) + " - " + String(maxSecondsBetweenStops[t]) + ")";
+  descr += " (pauses: " + String(minSecondsBetweenStops[t]) + " - " + String(maxSecondsBetweenStops[t]) + ")";
   return descr;
 }
 #endif
@@ -171,9 +171,9 @@ bool KindergardenMode::handleNext() {
     LOG(modifier_log, s_debug, str_KindergardenMode(), F(" -> NEXT"));
     cardQueued = false;
 
-    tonuino.setMyFolder(nextCard, true /*myFolderIsCard*/);
+    trovaLibre.setMyFolder(nextCard, true /*myFolderIsCard*/);
     LOG(modifier_log, s_debug, F("Folder: "), nextCard.folder, F(" Mode: "), static_cast<uint8_t>(nextCard.mode));
-    tonuino.playFolder();
+    trovaLibre.playFolder();
     mp3.loop(); // to start the new queue now and not going to Idle
     return true;
   }
@@ -226,8 +226,8 @@ bool PauseAfterTrack::handleNext() {
   mp3.waitForTrackToStart();
   LOG(modifier_log, s_debug, "after waitForTrackToStart");
 #endif
-  if (SM_tonuino::is_in_state<Play>())
-    SM_tonuino::dispatch(command_e(commandRaw::pause));
+  if (SM_trovaLibre::is_in_state<Play>())
+    SM_trovaLibre::dispatch(command_e(commandRaw::pause));
   LOG(modifier_log, s_debug, "after dispatch pause");
   return true;
 }
@@ -239,9 +239,9 @@ bool JukeboxModifier::handleNext() {
     LOG(modifier_log, s_debug, str_JukeboxModifier(), F(" -> NEXT"));
     folderSettings nextCard = cards.pop();
 
-    tonuino.setMyFolder(nextCard, true /*myFolderIsCard*/);
+    trovaLibre.setMyFolder(nextCard, true /*myFolderIsCard*/);
     LOG(modifier_log, s_debug, F("Folder: "), nextCard.folder, F(" Mode: "), static_cast<uint8_t>(nextCard.mode));
-    tonuino.playFolder();
+    trovaLibre.playFolder();
     mp3.setEndless(false);
     mp3.loop(); // to start the new queue now and not going to Idle
     return true;
@@ -249,7 +249,7 @@ bool JukeboxModifier::handleNext() {
   return false;
 }
 bool JukeboxModifier::handleRFID(const folderSettings &newCard) {
-  if (SM_tonuino::is_in_state<Idle>())
+  if (SM_trovaLibre::is_in_state<Idle>())
     return false;
 
   if (cards.size() == jukebox_max_cards) {
@@ -264,7 +264,7 @@ bool JukeboxModifier::handleRFID(const folderSettings &newCard) {
   return true;
 }
 bool JukeboxModifier::handleButton(command cmd) {
-  if (SM_tonuino::is_in_state<Idle>())
+  if (SM_trovaLibre::is_in_state<Idle>())
     return false;
 
   uint8_t shortCut = 0;
@@ -273,13 +273,13 @@ bool JukeboxModifier::handleButton(command cmd) {
   case command::shortcut2    : shortCut = 2      ; break;
   case command::shortcut3    : shortCut = 3      ; break;
   case command::start        : shortCut = 4      ; break;
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   case command::card_from_web: shortCut = 0      ; break;
 #endif
   default                    : return false;
   }
 
-  folderSettings newCard = tonuino.getSettings().getShortCut(shortCut);
+  folderSettings newCard = trovaLibre.getSettings().getShortCut(shortCut);
   if (newCard.mode == pmode_t::switch_bt)
     return false;
 
@@ -294,10 +294,10 @@ bool JukeboxModifier::handleButton(command cmd) {
   mp3.setEndless(false);
   return true;
 }
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
 String JukeboxModifier::getDescription() {
   String descr = "Jukebox";
-  descr += " (" + String(cards.size()) + " Karten in der Queue)";
+  descr += " (" + String(cards.size()) + " cards in queue)";
   return descr;
 }
 #endif

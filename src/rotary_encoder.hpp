@@ -10,12 +10,12 @@
 #include "commands.hpp"
 #include "timer.hpp"
 
-#if not defined(ALLinONE_Plus) and not defined(TonUINO_Every) and not defined(TonUINO_Every_4808) and not defined(TonUINO_Esp32)
+#if not defined(ALLinONE_Plus) and not defined(TROVALIBRE_EVERY) and not defined(TROVALIBRE_EVERY_4808) and not defined(TROVALIBRE_ESP32)
 #define USE_TIMER
 #define ROTARY_ENCODER_USES_TIMER
 #endif
 
-#ifndef TonUINO_Esp32
+#ifndef TROVALIBRE_ESP32
 #define IRAM_ATTR
 #endif
 

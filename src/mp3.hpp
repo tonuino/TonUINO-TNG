@@ -7,7 +7,7 @@
 
 #include "constants.hpp"
 
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
 #include <mutex>
 #endif
 
@@ -276,12 +276,12 @@ public:
   void setTempSpkOn         () { tempSpkOn = 2; }
 #endif
 
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   String getQueue();
 #endif
 
 private:
-  friend class tonuino_fixture;
+  friend class trovalibre_fixture;
 
   void logVolume();
   void refreshIsPlaying();
@@ -310,7 +310,7 @@ private:
   uint8_t              current_folder{};
   uint16_t             current_track{};
   bool                 endless{false};
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   std::mutex           q_mtx{};
 #endif
 

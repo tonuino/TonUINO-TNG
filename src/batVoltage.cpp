@@ -8,7 +8,7 @@
 
 namespace {
 
-#ifndef TonUINO_Classic
+#ifndef TROVALIBRE_CLASSIC
 inline constexpr uint16_t voltageMeasurementRefVoltage = 2500; // reference voltage mV
 #endif
 inline constexpr int16_t voltageMeasurementMaxLevel    = 1023;
@@ -17,7 +17,7 @@ inline constexpr int16_t voltageMeasurementEmptyLevel  = batVoltageEmpty/voltage
 inline constexpr unsigned long batLowMessageIntervall  = 30*1000; // 30 seconds
 inline constexpr unsigned long batEmptyTimer           = 10*1000; // 10 seconds
 
-#ifdef TonUINO_Classic
+#ifdef TROVALIBRE_CLASSIC
 long readVcc() {
   long result;
   // Read 1.1V reference against AVcc
@@ -41,7 +41,7 @@ BatVoltage::BatVoltage(Mp3& mp3)
 }
 
 bool BatVoltage::check() {
-#ifdef TonUINO_Classic
+#ifdef TROVALIBRE_CLASSIC
   const uint16_t voltageMeasurementRefVoltage = readVcc();
 #endif
   const int16_t value = analogRead(voltageMeasurementPin)*static_cast<long>(voltageMeasurementRefVoltage)/1000;

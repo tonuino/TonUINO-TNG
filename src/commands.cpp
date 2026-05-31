@@ -53,7 +53,7 @@ const command cmd_table[][4] PROGMEM = {
 #else
 /* 19 menu_jump ,     */ ,{ command::none      , command::none       , command::none       , command::none        }
 #endif
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
 /* 20 card_from_web,  */ ,{ command::none , command::card_from_web, command::card_from_web , command::card_from_web}
 /* 21 w_card_from_web,*/ ,{ command::none , command::write_card_from_web, command::none    , command::none}
 #else
@@ -138,7 +138,7 @@ const __FlashStringHelper* Commands::getCommandRawStr(commandRaw cmd) {
   case commandRaw::fiveLong      : return(F("fiveLong"      )); break;
   case commandRaw::fiveLongRepeat: return(F("fiveLongRepeat")); break;
 #endif
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   case commandRaw::card_from_web : return(F("card_from_web" )); break;
 #endif
   default                        : return(F(""              )); break;
@@ -170,7 +170,7 @@ const __FlashStringHelper* Commands::getCommandStr   (command    cmd) {
   case command::menu_jump          : return(F("menu_jump"          )); break;
 #endif
   case command::adm_end            : return(F("adm_end"            )); break;
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   case command::card_from_web      : return(F("card_from_web"      )); break;
   case command::write_card_from_web: return(F("write_card_from_web")); break;
 #endif

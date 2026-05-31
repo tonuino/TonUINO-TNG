@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Creates the audio messages needed by TonUINO.
+# Creates the audio messages needed by TrovaLibre.
 
 
 import argparse, os, re, shutil, sys, text_to_speech
@@ -10,7 +10,7 @@ if __name__ == '__main__':
     argFormatter = lambda prog: argparse.RawDescriptionHelpFormatter(prog, max_help_position=30, width=100)
     argparser = text_to_speech.PatchedArgumentParser(
         description=
-            'Creates the audio messages needed by TonUINO.\n\n' +
+            'Creates the audio messages needed by TrovaLibre.\n\n' +
             text_to_speech.textToSpeechDescription,
         usage='%(prog)s [optional arguments...]',
         formatter_class=argFormatter)

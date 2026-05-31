@@ -1,6 +1,6 @@
 #include "mp3.hpp"
 
-#include "tonuino.hpp"
+#include "trovalibre.hpp"
 #include "constants.hpp"
 
 namespace {
@@ -16,10 +16,10 @@ void Mp3Notify::OnError(DfMp3&, uint16_t errorCode) {
   LOG(mp3_log, s_error, F("DfPl Err: "), errorCode);
 }
 void Mp3Notify::OnPlaySourceOnline  (DfMp3&, DfMp3_PlaySources source) { PrintlnSourceAction(source, F("online"  )); }
-void Mp3Notify::OnPlaySourceInserted(DfMp3&, DfMp3_PlaySources source) { PrintlnSourceAction(source, F("bereit"  )); }
-void Mp3Notify::OnPlaySourceRemoved (DfMp3&, DfMp3_PlaySources source) { PrintlnSourceAction(source, F("entfernt")); }
+void Mp3Notify::OnPlaySourceInserted(DfMp3&, DfMp3_PlaySources source) { PrintlnSourceAction(source, F("ready"  )); }
+void Mp3Notify::OnPlaySourceRemoved (DfMp3&, DfMp3_PlaySources source) { PrintlnSourceAction(source, F("removed")); }
 void Mp3Notify::PrintlnSourceAction(DfMp3_PlaySources source, const __FlashStringHelper* action) {
-  if (source & DfMp3_PlaySources_Sd   ) LOG(mp3_log, s_debug, F("SD Karte "), action);
+  if (source & DfMp3_PlaySources_Sd   ) LOG(mp3_log, s_debug, F("SD card "), action);
   if (source & DfMp3_PlaySources_Usb  ) LOG(mp3_log, s_debug, F("USB "     ), action);
   if (source & DfMp3_PlaySources_Flash) LOG(mp3_log, s_debug, F("Flash "   ), action);
 }
@@ -31,11 +31,11 @@ void Mp3Notify::OnPlayFinished(DfMp3&, DfMp3_PlaySources /*source*/, uint16_t tr
   else
     lastTrackFinished = track;
 #ifdef DFMiniMp3_IGNORE_ONPLAYFINISHED_FOR_ADV
-  if (Tonuino::getTonuino().getMp3().resetPlayingAdv())
+  if (TrovaLibre::getInstance().getMp3().resetPlayingAdv())
     return;
 #endif
   delay(1);
-  Tonuino::getTonuino().nextTrack(1/*tracks*/, true/*fromOnPlayFinished*/);
+  TrovaLibre::getInstance().nextTrack(1/*tracks*/, true/*fromOnPlayFinished*/);
 }
 
 #ifndef DFPlayerUsesHardwareSerial
@@ -183,7 +183,7 @@ void Mp3::clearMp3Queue() {
   mp3_track_next = 0;
 }
 void Mp3::enqueueTrack(uint8_t folder, uint8_t firstTrack, uint8_t lastTrack, uint8_t currentTrack) {
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   std::lock_guard<std::mutex> lck(q_mtx);
 #endif
 #ifdef HPJACKDETECT
@@ -207,7 +207,7 @@ void Mp3::enqueueTrack(uint8_t folder, uint8_t track) {
   enqueueTrack(folder, track, track);
 }
 void Mp3::shuffleQueue() {
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   std::lock_guard<std::mutex> lck(q_mtx);
 #endif
   q.shuffle();
@@ -408,7 +408,7 @@ void Mp3::hpjackdetect() {
 }
 #endif
 
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   String Mp3::getQueue() {
     std::lock_guard<std::mutex> lck(q_mtx);
     String res;
@@ -456,7 +456,7 @@ void Mp3::loop() {
   }
   if (missingOnPlayFinishedTimer.isActive() && missingOnPlayFinishedTimer.isExpired()) {
     LOG(mp3_log, s_info, F("missing OnPlayFinished"));
-    Tonuino::getTonuino().nextTrack(1/*tracks*/, true/*fromOnPlayFinished*/);
+    TrovaLibre::getInstance().nextTrack(1/*tracks*/, true/*fromOnPlayFinished*/);
   }
   else
   if (playing == play_none && (current_folder != 0 || mp3_track != 0)) {

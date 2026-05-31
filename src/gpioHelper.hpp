@@ -28,7 +28,7 @@ inline void pin_set_inactive(uint8_t pin, levelType pin_type) { digitalWrite(pin
 inline void pin_set_level   (uint8_t pin, levelType pin_type, level l) { digitalWrite(pin, level2int(pin_type, l)); };
 
 
-#if not defined(TonUINO_Esp32) and not defined(D0)
+#if not defined(TROVALIBRE_ESP32) and not defined(D0)
 #define D0   0
 #define D1   1
 #define D2   2

@@ -61,15 +61,15 @@ TEST_F(chip_card_test_fixture, initial_state) {
 
 TEST_F(chip_card_test_fixture, read_card_works) {
   folderSettings test_data[] = {
-      { 1, pmode_t::hoerspiel    , 0, 0 },
+      { 1, pmode_t::audio_play    , 0, 0 },
       { 1, pmode_t::album        , 0, 0 },
       { 1, pmode_t::party        , 0, 0 },
-      { 1, pmode_t::einzel       , 1, 0 },
-      { 1, pmode_t::hoerbuch     , 0, 0 },
-      { 1, pmode_t::hoerspiel_vb , 1, 3 },
+      { 1, pmode_t::single_track       , 1, 0 },
+      { 1, pmode_t::audiobook     , 0, 0 },
+      { 1, pmode_t::audio_play_range , 1, 3 },
       { 1, pmode_t::album_vb     , 2, 4 },
       { 1, pmode_t::party_vb     , 5, 9 },
-      { 1, pmode_t::hoerbuch_1   , 0, 0 },
+      { 1, pmode_t::audiobook_single   , 0, 0 },
   };
 
   for (folderSettings card: test_data) {
@@ -156,15 +156,15 @@ TEST_F(chip_card_test_fixture, read_card_with_bad_cookie) {
 
 TEST_F(chip_card_test_fixture, write_card_works) {
   folderSettings test_data[] = {
-      { 1, pmode_t::hoerspiel    , 0, 0 },
+      { 1, pmode_t::audio_play    , 0, 0 },
       { 1, pmode_t::album        , 0, 0 },
       { 1, pmode_t::party        , 0, 0 },
-      { 1, pmode_t::einzel       , 1, 0 },
-      { 1, pmode_t::hoerbuch     , 0, 0 },
-      { 1, pmode_t::hoerspiel_vb , 1, 3 },
+      { 1, pmode_t::single_track       , 1, 0 },
+      { 1, pmode_t::audiobook     , 0, 0 },
+      { 1, pmode_t::audio_play_range , 1, 3 },
       { 1, pmode_t::album_vb     , 2, 4 },
       { 1, pmode_t::party_vb     , 5, 9 },
-      { 1, pmode_t::hoerbuch_1   , 0, 0 },
+      { 1, pmode_t::audiobook_single   , 0, 0 },
   };
 
   for (folderSettings card: test_data) {

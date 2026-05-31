@@ -1,6 +1,6 @@
 #include "log.hpp"
 
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
 Webserial  webserial{};
 bool logger::printTimestamp = true;
 #endif

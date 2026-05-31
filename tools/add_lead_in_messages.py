@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Adds a lead-in message to each mp3 file of a directory storing the result in another directory.
-# So - when played e.g. on a TonUINO - you first will hear the title of the track, then the track itself.
+# So - when played e.g. on a TrovaLibre - you first will hear the title of the track, then the track itself.
 
 
 import argparse, base64, json, os, re, subprocess, sys, text_to_speech
@@ -11,7 +11,7 @@ argFormatter = lambda prog: argparse.RawDescriptionHelpFormatter(prog, max_help_
 argparser = text_to_speech.PatchedArgumentParser(
     description=
         'Adds a lead-in message to each mp3 file of a directory storing the result in another directory.\n' +
-        'So - when played e.g. on a TonUINO - you first will hear the title of the track, then the track itself.\n\n' +
+        'So - when played e.g. on a TrovaLibre - you first will hear the title of the track, then the track itself.\n\n' +
         text_to_speech.textToSpeechDescription,
     usage='%(prog)s -i my/source/dir -o my/output/dir [optional arguments...]',
     formatter_class=argFormatter)

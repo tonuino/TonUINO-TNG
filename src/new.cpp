@@ -1,5 +1,5 @@
 #include "constants.hpp"
-#if defined(TonUINO_Every) and defined(ARDUINO_AVR_NANO_EVERY)
+#if defined(TROVALIBRE_EVERY) and defined(ARDUINO_AVR_NANO_EVERY)
 
 #include <stdlib.h>
 
@@ -18,4 +18,4 @@ void operator delete[](void * ptr, size_t)
 
 #endif // End language is C++14 or greater
 
-#endif // TonUINO_Every
+#endif // TROVALIBRE_EVERY

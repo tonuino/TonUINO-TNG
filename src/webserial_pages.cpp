@@ -1,5 +1,5 @@
 #include "constants.hpp"
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
 
 #include <Arduino.h>
 
@@ -92,7 +92,7 @@ body{
 const char webserial_page[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html><head>
-  <title>TonUINO Log</title>
+  <title>TrovaLibre Log</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="webserial_style.css">
@@ -103,7 +103,7 @@ const char webserial_page[] PROGMEM = R"rawliteral(
   <div class="app">
     %TOPNAV%
 
-    <h2>TonUINO Log</h2>
+    <h2>TrovaLibre Log</h2>
 
     <div class="content"></div>
     <footer>

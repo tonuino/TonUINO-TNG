@@ -6,7 +6,7 @@
 #include "constants.hpp"
 #include "type_traits.hpp"
 
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
 #include "webserial.hpp"
 extern Webserial  webserial;
 #endif
@@ -46,7 +46,7 @@ public:
   static void log(lineFeed lf = lf_yes) {
     if (lf == lf_yes) {
       Serial.println();
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
       printTimestamp = true;
       webserial.println();
 #endif
@@ -55,7 +55,7 @@ public:
   template<typename T, typename ... Types>
   static void log(T t, Types ... types) {
     Serial.print(t);
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
     webserial.print(t);
 #endif
     log(types...);
@@ -69,7 +69,7 @@ public:
 //    Serial.print(F("-"));
 //    Serial.print(logname);
 //    Serial.print(F(": "));
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
     if (printTimestamp) {
       int64_t mseconds = esp_timer_get_time()  / 1000ULL;
       int64_t seconds = mseconds  / 1000ULL;
@@ -87,7 +87,7 @@ public:
     log(types...);
   }
 private:
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   static bool printTimestamp;
 #endif
 

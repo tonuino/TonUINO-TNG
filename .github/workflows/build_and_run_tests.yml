@@ -53,17 +53,17 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: TonUINO_firmware
+          name: TrovaLibre_firmware
           path: |
             .pio/build/**/firmware.hex
             .pio/build/**/firmware.bin
       - uses: actions/upload-artifact@v4
         with:
-          name: TonUINO_sd_card
+          name: TrovaLibre_sd_card
           path: sd-card.zip
       - uses: actions/upload-artifact@v4
         with:
-          name: TonUINO_online_upload
+          name: TrovaLibre_online_upload
           path: .github/online_upload
 
   deploy:
@@ -83,19 +83,19 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: TonUINO_firmware
+          name: TrovaLibre_firmware
           path: deploy
       
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: TonUINO_sd_card
+          name: TrovaLibre_sd_card
           path: deploy
       
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: TonUINO_online_upload
+          name: TrovaLibre_online_upload
           path: deploy
       
       - name: Upload Pages artifact

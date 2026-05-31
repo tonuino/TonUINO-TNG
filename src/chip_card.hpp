@@ -11,22 +11,22 @@ enum class pmode_t: uint8_t {
   none          =   0,
 
   // folder modes
-  hoerspiel     =   1,
+  audio_play     =   1,
   album         =   2,
   party         =   3,
-  einzel        =   4,
-  hoerbuch      =   5,
+  single_track        =   4,
+  audiobook      =   5,
   admin         =   6,
-  hoerspiel_vb  =   7,
+  audio_play_range  =   7,
   album_vb      =   8,
   party_vb      =   9,
-  hoerbuch_1    =  10,
+  audiobook_single    =  10,
   repeat_last   =  11,
   quiz_game     =  12,
   memory_game   =  13,
   switch_bt     =  14,
-  teapot_game   =  15,
-  hoerbuch_vb   =  16,
+  teapot_game   =  15,  // EN: public name in docs: "palabra_secreta" (inherited from TonUINO "Teekesselchen") / ES: nombre público en docs: "palabra_secreta" (heredado de TonUINO "Teekesselchen")
+  audiobook_range   =  16,
 
   // modifier modes
   sleep_timer   =   1,
@@ -96,7 +96,7 @@ public:
   bool isCardRemoved     () { return cardRemoved; }
 
 private:
-  friend class tonuino_fixture;
+  friend class trovalibre_fixture;
   friend class chip_card_test_fixture;
 
   void stopCrypto1();

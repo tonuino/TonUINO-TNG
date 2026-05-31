@@ -7,7 +7,8 @@ namespace {
 
 //  ############### EEPROM ################################
 //  Address       Usage
-//    0- 99       Folder Settings (Hoerbuch Fortschritt)
+//    0- 99       EN: Folder settings (audiobook progress).
+//    0- 99       ES: Ajustes de carpeta (progreso de audiolibro).
 //  100-140       AdminSettings (41 Byte)
 //  141-155       reserved (15 Byte)
 //  156-255       extra Shortcuts (100 Byte, max. 25 Shortcuts)
@@ -30,14 +31,14 @@ static_assert(buttonExtSC_buttons < maxExtraShortcuts, "Too many ExtraShortCuts"
 }
 
 void Settings::init() {
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   bool res = EEPROM.begin(endAddress);
   LOG(settings_log, s_info, F("EEPROM begin: "), res);
 #endif
 }
 
 void Settings::commit() {
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   bool res = EEPROM.commit();
   LOG(settings_log, s_info, F("EEPROM commit: "), res);
 #endif
@@ -137,7 +138,7 @@ void Settings::readExtShortCutFromFlash(uint8_t shortCut,       folderSettings& 
 
 
 folderSettings Settings::getShortCut(uint8_t shortCut) {
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   if (shortCut == 0)
     return cardFromWeb;
 #endif
@@ -155,7 +156,7 @@ folderSettings Settings::getShortCut(uint8_t shortCut) {
 }
 
 void Settings::setShortCut(uint8_t shortCut, const folderSettings& value) {
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   if (shortCut == 0)
     cardFromWeb = value;
 #endif

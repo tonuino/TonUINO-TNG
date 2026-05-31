@@ -99,7 +99,7 @@ enum class command: uint8_t {
   menu_jump   = 19,
 #endif
   adm_end     = 20,
-#ifdef TonUINO_Esp32
+#ifdef TROVALIBRE_ESP32
   card_from_web       = 21,
   write_card_from_web = 22,
 #endif
