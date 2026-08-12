@@ -33,13 +33,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: |
             ~/.cache/pip
             ~/.platformio/.cache
           key: ${{ runner.os }}-pio
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.9'
       - name: Install PlatformIO Core
@@ -51,17 +51,17 @@ jobs:
       - name: Zip sd_card
         run: zip -r sd-card.zip sd-card
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: TonUINO_firmware
           path: |
             .pio/build/**/firmware.hex
             .pio/build/**/firmware.bin
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: TonUINO_sd_card
           path: sd-card.zip
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: TonUINO_online_upload
           path: .github/online_upload
@@ -81,19 +81,19 @@ jobs:
         run: mkdir deploy
       
       - name: Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: TonUINO_firmware
           path: deploy
       
       - name: Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: TonUINO_sd_card
           path: deploy
       
       - name: Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: TonUINO_online_upload
           path: deploy
@@ -105,4 +105,4 @@ jobs:
       
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

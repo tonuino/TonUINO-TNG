@@ -160,6 +160,7 @@ static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (Ton
  * GD3200B:     bad behavior of getFolderTrackCount() - ignores the parameter folder
  *              bad behavior of callback OnPlayFinished - it is also called on advertise tracks
  * MH2024K16SS: no checksums
+ *              bad behavior of callback OnPlayFinished - it is also called on advertise tracks
  * LISP3:       bad behavior of callback OnPlayFinished - it is also called on advertise tracks
  * MP3-TF-16P V3.0 with MH2024K24SS:
  *              very slow
