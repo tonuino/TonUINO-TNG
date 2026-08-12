@@ -32,7 +32,7 @@ class Mp3Notify;
 #define DFMiniMp3_T_CHIP_VARIANT Mp3ChipIncongruousNoAck
 #endif
 
-#if defined(DFMiniMp3_T_CHIP_GD3200B) or defined(DFMiniMp3_T_CHIP_LISP3) or defined(DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0)
+#if defined(DFMiniMp3_T_CHIP_GD3200B) or defined(DFMiniMp3_T_CHIP_MH2024K16SS) or defined(DFMiniMp3_T_CHIP_LISP3) or defined(DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0)
 #define DFMiniMp3_IGNORE_ONPLAYFINISHED_FOR_ADV
 #endif
 
