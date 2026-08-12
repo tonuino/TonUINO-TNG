@@ -109,7 +109,8 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.3 (12.08.2026)
+## Version 3.3.3 (13.08.2026)
+- [Issue 334](https://github.com/tonuino/TonUINO-TNG/issues/334): Change "Arduino" to "Arduino ESP Board Package" in the webinterface
 - [Issue 336](https://github.com/tonuino/TonUINO-TNG/issues/336): DF Player MH2024K16SS: ignore onplayerfinished for adv tracks
 - [Issue 328](https://github.com/tonuino/TonUINO-TNG/issues/328): New modifier card "endless"
 - [Issue 319](https://github.com/tonuino/TonUINO-TNG/issues/319): Hoerbuch mode "random folder"
