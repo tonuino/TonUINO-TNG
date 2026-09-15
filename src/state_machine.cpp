@@ -662,7 +662,9 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
                              return false;
                            mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
                            mp3.loop();
-                           delay(1000);
+                           for (uint8_t i = 0; i < 100 && not tonuino.getButtons().isNoButton(); ++i){ // wait max 10 seconds
+                             delay(100);
+                           }
                            tonuino.shutdown();
                                                break;
 #endif
