@@ -76,7 +76,7 @@ void Mp3::init() {
     LOG(init_log, s_error, F("Com to DFPlayer broken"));
 
   setEq(static_cast<DfMp3_Eq>(settings.eq - 1));
-  delay(100);
+  delay(500);
   loop();
 
   startTrackTimer.start(6000); // 6 seconds
