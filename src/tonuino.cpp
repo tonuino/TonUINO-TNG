@@ -542,7 +542,7 @@ void Tonuino::shutdown() {
   delay(500);
 
 #if defined(USE_POLOLU_SHUTDOWN) or defined(USE_TRAEGER_PLATINE_SHUTDOWN)
-  return;
+  while (true) delay(500);
 #endif
 
   // http://discourse.voss.earth/t/intenso-s10000-powerbank-automatische-abschaltung-software-only/805
