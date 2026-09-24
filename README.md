@@ -38,7 +38,8 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
 
 - Für die AiOplus HW Variante sind keine Änderungen notwendig  
 
-- Die HW Variante (TonUINO_*, ALLinONE oder ALLinONE_Plus) sowie die Button Konfiguration (THREEBUTTONS, FIVEBUTTONS oder BUTTONS3X3) muss in der Datei constants.hpp durch Entfernen des entsprechenden Kommentars angegeben werden. (nur wenn die Arduino IDE verwendet wird) 
+- Die HW Variante (TonUINO_*, ALLinONE oder ALLinONE_Plus) sowie die Button Konfiguration (THREEBUTTONS, FIVEBUTTONS oder BUTTONS3X3) muss in der Datei constants.hpp durch Entfernen des entsprechenden Kommentars angegeben werden. (nur wenn die Arduino IDE verwendet wird). Alternative kann auch eine Datei config.hpp im root Verzeichnis erstellt werden, in der sich alle 
+defines befinden. 
 
 **Libraries**
 - Es müssen folgende Versionen der Libraries verwendet werden:  
@@ -109,7 +110,8 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.3 (17.09.2026)
+## Version 3.3.3 (24.09.2026)
+- [Issue 342](https://github.com/tonuino/TonUINO-TNG/issues/342): Improve constants.hpp and configuration handling
 - [Issue 327](https://github.com/tonuino/TonUINO-TNG/issues/327): AiO+: Fehler "missing OnPlayFinished" nach Update
 - [Issue 339](https://github.com/tonuino/TonUINO-TNG/issues/339): Shutdown via Longpress-Play does not work stable
 - [Issue 334](https://github.com/tonuino/TonUINO-TNG/issues/334): Change "Arduino" to "Arduino ESP Board Package" in the webinterface
