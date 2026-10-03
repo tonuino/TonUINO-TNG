@@ -7,6 +7,18 @@
 # include "../config.hpp"
 #endif
 
+/*
+ * Anstelle diese Datei zu editieren, um die Konfiguration festzulegen, kann auch eine Datei "config.hpp" im root
+ * Verzeichnis angelegt werden, die nur die #defines enthält. Dies ist übersichtlicher und hat den Vorteil,
+ * dass diese Datei bei einem Softwareupgrade nicht überschrieben wird und somit die Konfiguration erhalten bleibt.
+ * Im root Verzeichnis sind bereits 2 Vorlagen "config_all_undef.hpp" und "config_all_tle_traeger.hpp".
+ *
+ * Instead of editing this file to set the configuration, you can also create a file named “config.hpp” in
+ * the root directory that contains only the #defines. This is clearer and has the advantage that
+ * this file will not be overwritten during a software upgrade, thus preserving the configuration.
+ * There are already two templates in the root directory: “config_all_undef.hpp” and “config_all_tle_traeger.hpp”.
+ */
+
 // ######################################################################
 // ####### default pins #################################################
 // ######################################################################
@@ -533,7 +545,7 @@ inline constexpr unsigned long led_short_blink     = 400; // ms
 //#define POWER_HOLD_READY
 
 #ifdef POWER_HOLD_READY
-inline constexpr uint8_t power_hold_ready_pin        = D2;
+inline constexpr uint8_t power_hold_ready_pin        = A6;
 inline constexpr levelType power_hold_ready_pin_type = levelType::activeHigh;
 #endif
 
