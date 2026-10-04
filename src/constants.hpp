@@ -17,6 +17,13 @@
  * the root directory that contains only the #defines. This is clearer and has the advantage that
  * this file will not be overwritten during a software upgrade, thus preserving the configuration.
  * There are already two templates in the root directory: “config_all_undef.hpp” and “config_all_tle_traeger.hpp”.
+ *
+ * ===============================================================================================================
+ * Achtung: Wenn man die Datei config.hpp zur Konfiguration verwendet, sollte man nicht gleichzeitig diese Datei
+ * verändern!
+ *
+ * Warning: If you are using the config.hpp file for configuration, do not modify this file at the same time!
+ * ===============================================================================================================
  */
 
 // ######################################################################
