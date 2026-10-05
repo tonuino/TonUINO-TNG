@@ -685,7 +685,7 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
   return false;
 }
 
-#if defined(TonUINO_Esp32) || defined(SerialInputAsCommand)
+#if defined(TonUINO_Esp32) || defined(SerialWriteCard)
 bool Base::checkForWritingCard(command cmd, command_e const &cmd_e) {
 
 #ifdef TonUINO_Esp32
@@ -698,7 +698,7 @@ bool Base::checkForWritingCard(command cmd, command_e const &cmd_e) {
     }
   }
 #endif
-#ifdef SerialInputAsCommand
+#ifdef SerialWriteCard
   if (cmd_e.cmd_raw == commandRaw::write_card_from_serial) {
     if (chip_card.isCardRemoved()) {
       SM_writeCard::folder = tonuino.getSerialWriteCard();
@@ -713,7 +713,7 @@ bool Base::checkForWritingCard(command cmd, command_e const &cmd_e) {
       SM_writeCard::dispatch(command_e{commandRaw::pauseLong}); // löst isAbort() aus, siehe SM<SMT>::isAbort()
     }
     else {
-      Serial.println(F("WRITECARD: kein Schreibvorgang aktiv, nichts abzubrechen"));
+      Serial.println(F("WRITECARD: ERR"));
     }
     return true;
   }
@@ -724,17 +724,10 @@ bool Base::checkForWritingCard(command cmd, command_e const &cmd_e) {
     const bool finished_abort = SM_writeCard::is_in_state<finished_abort_writeCard>();
     if (finished or finished_abort) {
       writingCard = false;
-#ifdef SerialInputAsCommand
+#ifdef SerialWriteCard
       if (writingCardFromSerial) {
         writingCardFromSerial = false;
-        if (finished) {
-          Serial.println(F("WRITECARD: OK"));
-          Serial.println(F("WRITECARD: Karte erfolgreich beschrieben"));
-        }
-        else {
-          Serial.println(F("WRITECARD: ERROR"));
-          Serial.println(F("WRITECARD: Schreiben fehlgeschlagen"));
-        }
+        Serial.println(finished ? F("WRITECARD: OK") : F("WRITECARD: ERR"));
       }
 #endif
     }
@@ -776,7 +769,7 @@ void Idle::react(command_e const &cmd_e) {
   if (checkForShortcutAndShutdown(cmd))
     return;
 
-#if defined(TonUINO_Esp32) || defined(SerialInputAsCommand)
+#if defined(TonUINO_Esp32) || defined(SerialWriteCard)
   if (checkForWritingCard(cmd, cmd_e))
     return;
 #endif
@@ -836,7 +829,7 @@ void Idle::react(card_e const &c_e) {
   if (c_e.card_ev != cardEvent::none) {
     LOG(state_log, s_debug, str_Idle(), F("::react(c) "), static_cast<int>(c_e.card_ev));
   }
-#if defined(TonUINO_Esp32) || defined(SerialInputAsCommand)
+#if defined(TonUINO_Esp32) || defined(SerialWriteCard)
   if (writingCard)
     return;
 #endif
@@ -976,7 +969,7 @@ void Pause::react(command_e const &cmd_e) {
   if (checkForShortcutAndShutdown(cmd))
     return;
 
-#if defined(TonUINO_Esp32) || defined(SerialInputAsCommand)
+#if defined(TonUINO_Esp32) || defined(SerialWriteCard)
   if (checkForWritingCard(cmd, cmd_e))
     return;
 #endif
@@ -1009,7 +1002,7 @@ void Pause::react(card_e const &c_e) {
   if (c_e.card_ev != cardEvent::none) {
     LOG(state_log, s_debug, str_Pause(), F("::react(c) "), static_cast<int>(c_e.card_ev));
   }
-#if defined(TonUINO_Esp32) || defined(SerialInputAsCommand)
+#if defined(TonUINO_Esp32) || defined(SerialWriteCard)
   if (writingCard)
     return;
 #endif

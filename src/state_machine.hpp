@@ -79,11 +79,11 @@ protected:
   bool handleShortcut(uint8_t shortCut);
   void handleReadCard();
   bool checkForShortcutAndShutdown(command cmd);
-#if defined(TonUINO_Esp32) || defined(SerialInputAsCommand)
+#if defined(TonUINO_Esp32) || defined(SerialWriteCard)
   bool checkForWritingCard(command cmd, command_e const &cmd_e);
   bool writingCard{};
 #endif
-#ifdef SerialInputAsCommand
+#ifdef SerialWriteCard
   bool writingCardFromSerial{};
 #endif
 #ifdef NEO_RING

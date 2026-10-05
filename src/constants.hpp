@@ -171,6 +171,8 @@ static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (Ton
  *   WRITECARD CANCEL
  */
 //#define SerialInputAsCommand
+// nur serielle Konsole mit WRITECARD, ohne Button-Emulation (z.B. Nano)
+//#define SerialWriteCard
 
 // ######################################################################
 
