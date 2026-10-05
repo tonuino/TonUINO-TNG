@@ -5,22 +5,21 @@
 #include "constants.hpp"
 #include "logger.hpp"
 
-#ifdef SerialInputAsCommand
+#if defined(SerialInputAsCommand) || defined(SerialWriteCard)
 SerialInput::SerialInput()
 : CommandSource()
 {
 }
 
+#ifdef SerialWriteCard
 bool SerialInput::validateWriteCard(folderSettings &card) {
   if (card.mode == pmode_t::none) {
-    Serial.println(F("WRITECARD: ungueltiger mode"));
     return false;
   }
 
   switch (card.mode) {
   case pmode_t::einzel:
     if (card.special < 1) {
-      Serial.println(F("WRITECARD: special muss mindestens 1 sein"));
       return false;
     }
     break;
@@ -29,20 +28,17 @@ bool SerialInput::validateWriteCard(folderSettings &card) {
   case pmode_t::party_vb:
   case pmode_t::hoerbuch_vb:
     if (card.special < 1 || card.special > card.special2) {
-      Serial.println(F("WRITECARD: es muss gelten 1 <= special <= special2"));
       return false;
     }
     break;
   case pmode_t::hoerbuch_1:
     if (card.special >= 30) {
-      Serial.println(F("WRITECARD: special muss kleiner als 30 sein"));
       return false;
     }
     break;
   case pmode_t::quiz_game:
     if ((card.special != 0 && card.special != 2 && card.special != 4) ||
         (card.special2 != 0 && card.special2 != 1)) {
-      Serial.println(F("WRITECARD: special muss 0, 2 oder 4 sein; special2 muss 0 oder 1 sein"));
       return false;
     }
     break;
@@ -55,10 +51,12 @@ bool SerialInput::validateWriteCard(folderSettings &card) {
   }
   return true;
 }
+#endif
 
 commandRaw SerialInput::getCommandRaw() {
   commandRaw ret = commandRaw::none;
   if (Serial.available() > 0) {
+#ifdef SerialWriteCard
     if (isAlpha(Serial.peek())) {
       char cmdWord[12];
       uint8_t len = 0;
@@ -107,9 +105,12 @@ commandRaw SerialInput::getCommandRaw() {
           writeCard = card;
           return commandRaw::write_card_from_serial;
         }
+        Serial.println(F("WRITECARD: ERR"));
       }
       return commandRaw::none;
     }
+#endif
+#ifdef SerialInputAsCommand
     long optionSerial = Serial.parseInt();
     switch (optionSerial) {
     case -2: ret = commandRaw::down      ; break;
@@ -127,6 +128,9 @@ commandRaw SerialInput::getCommandRaw() {
       }
       break;
     }
+#else
+    Serial.read();
+#endif
   }
   return ret;
 }
