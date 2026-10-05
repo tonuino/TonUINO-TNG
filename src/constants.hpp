@@ -274,7 +274,7 @@ inline constexpr uint8_t   potiPin    = A3 ; // AiO/Classic A3
  * um den Neo Ring zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
  * um weitere Features einzuschalten, auch den Kommentar für NEO_RING_EXT entfernen
  */
-//#define NEO_RING
+//#define NEO_RING <numPixel>
 //#define NEO_RING_EXT
 //#define NEO_RING_2
 
@@ -289,7 +289,7 @@ inline constexpr uint8_t neoPixelRingPin =  2; // GPIO02 (D2) on ESP32 Wroom 32
 inline constexpr uint8_t neoPixelRingPin = D5; // D5 on AiO/Classic
 #endif // ALLinONE_Plus
 
-inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
+inline constexpr uint8_t neoPixelNumber  = NEO_RING; // Total Number of Pixels
 
 #ifdef NEO_RING_2
 #ifdef ALLinONE_Plus
