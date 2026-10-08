@@ -54,8 +54,10 @@ const __FlashStringHelper* str_VoiceMenu               () { return F("VMenu") ; 
 const __FlashStringHelper* str_to                      () { return F(" -> ") ; }
 const __FlashStringHelper* str_enter                   () { return F("enter ") ; }
 const __FlashStringHelper* str_abort                   () { return F(" abort") ; }
-
 }
+const __FlashStringHelper* str_WRITECARD               () { return F("WRITECARD: ") ; }
+const __FlashStringHelper* str_ERR                     () { return F("ERR") ; }
+const __FlashStringHelper* str_OK                      () { return F("OK") ; }
 
 // #######################################################
 
@@ -699,7 +701,7 @@ bool Base::checkForWritingCard(command cmd, command_e const &cmd_e) {
   }
 #endif
 #ifdef SerialWriteCard
-  if (cmd_e.cmd_raw == commandRaw::write_card_from_serial) {
+  if (cmd == command::write_card_from_serial) {
     if (chip_card.isCardRemoved()) {
       SM_writeCard::folder = tonuino.getSerialWriteCard();
       SM_writeCard::start();
@@ -708,12 +710,12 @@ bool Base::checkForWritingCard(command cmd, command_e const &cmd_e) {
       return true;
     }
   }
-  if (cmd_e.cmd_raw == commandRaw::write_card_cancel_from_serial) {
+  if (cmd == command::write_card_cancel_from_serial) {
     if (writingCard && writingCardFromSerial) {
       SM_writeCard::dispatch(command_e{commandRaw::pauseLong}); // löst isAbort() aus, siehe SM<SMT>::isAbort()
     }
     else {
-      Serial.println(F("WRITECARD: ERR"));
+      LOG(state_log, s_important, str_WRITECARD(), str_ERR());
     }
     return true;
   }
@@ -727,7 +729,7 @@ bool Base::checkForWritingCard(command cmd, command_e const &cmd_e) {
 #ifdef SerialWriteCard
       if (writingCardFromSerial) {
         writingCardFromSerial = false;
-        Serial.println(finished ? F("WRITECARD: OK") : F("WRITECARD: ERR"));
+        LOG(state_log, s_important, str_WRITECARD(), (finished ? str_OK() : str_ERR()));
       }
 #endif
     }

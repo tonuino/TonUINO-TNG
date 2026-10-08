@@ -1,9 +1,10 @@
 #include "serial_input.hpp"
 
-#include <string.h>
-
 #include "constants.hpp"
 #include "logger.hpp"
+
+extern const __FlashStringHelper* str_WRITECARD();
+extern const __FlashStringHelper* str_ERR();
 
 #if defined(SerialInputAsCommand) || defined(SerialWriteCard)
 SerialInput::SerialInput()
@@ -58,20 +59,12 @@ commandRaw SerialInput::getCommandRaw() {
   if (Serial.available() > 0) {
 #ifdef SerialWriteCard
     if (isAlpha(Serial.peek())) {
-      char cmdWord[12];
-      uint8_t len = 0;
-      while (isAlpha(Serial.peek()) && len < sizeof(cmdWord) - 1) {
-        cmdWord[len++] = Serial.read();
-      }
-      cmdWord[len] = '\0';
+      char cmdWord[10]; cmdWord[9] = 0;
+      Serial.readBytesUntil(' ', cmdWord, 9);
       if (strcmp(cmdWord, "WRITECARD") == 0 && Serial.read() == ' ') {
         if (isAlpha(Serial.peek())) {
-          char subWord[8];
-          uint8_t subLen = 0;
-          while (isAlpha(Serial.peek()) && subLen < sizeof(subWord) - 1) {
-            subWord[subLen++] = Serial.read();
-          }
-          subWord[subLen] = '\0';
+          char subWord[7]; subWord[6] = 0;
+          Serial.readBytesUntil(' ', subWord, 6);
           if (strcmp(subWord, "CANCEL") == 0) {
             return commandRaw::write_card_cancel_from_serial;
           }
@@ -105,7 +98,7 @@ commandRaw SerialInput::getCommandRaw() {
           writeCard = card;
           return commandRaw::write_card_from_serial;
         }
-        Serial.println(F("WRITECARD: ERR"));
+        LOG(button_log, s_important, str_WRITECARD(), str_ERR());
       }
       return commandRaw::none;
     }
