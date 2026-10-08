@@ -3,15 +3,107 @@
 #include "constants.hpp"
 #include "logger.hpp"
 
-#ifdef SerialInputAsCommand
+extern const __FlashStringHelper* str_WRITECARD();
+extern const __FlashStringHelper* str_ERR();
+
+#if defined(SerialInputAsCommand) || defined(SerialWriteCard)
 SerialInput::SerialInput()
 : CommandSource()
 {
 }
 
+#ifdef SerialWriteCard
+bool SerialInput::validateWriteCard(folderSettings &card) {
+  if (card.mode == pmode_t::none) {
+    return false;
+  }
+
+  switch (card.mode) {
+  case pmode_t::einzel:
+    if (card.special < 1) {
+      return false;
+    }
+    break;
+  case pmode_t::hoerspiel_vb:
+  case pmode_t::album_vb:
+  case pmode_t::party_vb:
+  case pmode_t::hoerbuch_vb:
+    if (card.special < 1 || card.special > card.special2) {
+      return false;
+    }
+    break;
+  case pmode_t::hoerbuch_1:
+    if (card.special >= 30) {
+      return false;
+    }
+    break;
+  case pmode_t::quiz_game:
+    if ((card.special != 0 && card.special != 2 && card.special != 4) ||
+        (card.special2 != 0 && card.special2 != 1)) {
+      return false;
+    }
+    break;
+  case pmode_t::repeat_last:
+  case pmode_t::switch_bt:
+    card.folder = 0xff; // dummy Wert, damit readCard() true liefert
+    break;
+  default:
+    break;
+  }
+  return true;
+}
+#endif
+
 commandRaw SerialInput::getCommandRaw() {
   commandRaw ret = commandRaw::none;
   if (Serial.available() > 0) {
+#ifdef SerialWriteCard
+    if (isAlpha(Serial.peek())) {
+      char cmdWord[10]; cmdWord[9] = 0;
+      Serial.readBytesUntil(' ', cmdWord, 9);
+      if (strcmp(cmdWord, "WRITECARD") == 0 && Serial.read() == ' ') {
+        if (isAlpha(Serial.peek())) {
+          char subWord[7]; subWord[6] = 0;
+          Serial.readBytesUntil(' ', subWord, 6);
+          if (strcmp(subWord, "CANCEL") == 0) {
+            return commandRaw::write_card_cancel_from_serial;
+          }
+          return commandRaw::none;
+        }
+        folderSettings card{};
+        card.mode = static_cast<pmode_t>(Serial.parseInt());
+        switch (card.mode) {
+        case pmode_t::repeat_last:
+        case pmode_t::switch_bt:
+          break; // folder/special/special2 haben hier keine Funktion
+        case pmode_t::einzel:
+        case pmode_t::hoerbuch_1:
+          card.folder  = Serial.parseInt();
+          card.special = Serial.parseInt();
+          break;
+        case pmode_t::hoerspiel_vb:
+        case pmode_t::album_vb:
+        case pmode_t::party_vb:
+        case pmode_t::hoerbuch_vb:
+        case pmode_t::quiz_game:
+          card.folder   = Serial.parseInt();
+          card.special  = Serial.parseInt();
+          card.special2 = Serial.parseInt();
+          break;
+        default:
+          card.folder = Serial.parseInt();
+          break;
+        }
+        if (validateWriteCard(card)) {
+          writeCard = card;
+          return commandRaw::write_card_from_serial;
+        }
+        LOG(button_log, s_important, str_WRITECARD(), str_ERR());
+      }
+      return commandRaw::none;
+    }
+#endif
+#ifdef SerialInputAsCommand
     long optionSerial = Serial.parseInt();
     switch (optionSerial) {
     case -2: ret = commandRaw::down      ; break;
@@ -29,6 +121,9 @@ commandRaw SerialInput::getCommandRaw() {
       }
       break;
     }
+#else
+    Serial.read();
+#endif
   }
   return ret;
 }
