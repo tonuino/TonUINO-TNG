@@ -77,6 +77,9 @@ public:
 #ifdef SerialInputAsCommand
   uint8_t getMenuJump() const { return serialInput.get_menu_jump(); }
 #endif
+#ifdef SerialWriteCard
+  const folderSettings& getSerialWriteCard() const { return serialInput.get_write_card(); }
+#endif
 
   void shutdown();
 
@@ -110,7 +113,7 @@ private:
 #ifdef BAT_VOLTAGE_MEASUREMENT
        BatVoltage      batVoltage          {mp3};
 #endif
-#ifdef SerialInputAsCommand
+#if defined(SerialInputAsCommand) || defined(SerialWriteCard)
   SerialInput          serialInput         {};
 #endif
 #ifdef BUTTONS3X3
@@ -128,7 +131,7 @@ private:
   Commands             commands            {
                                             settings
                                           , &buttons
-#ifdef SerialInputAsCommand
+#if defined(SerialInputAsCommand) || defined(SerialWriteCard)
                                           , &serialInput
 #endif
 #ifdef BUTTONS3X3

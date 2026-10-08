@@ -67,6 +67,10 @@ enum class commandRaw: uint8_t {
   mod_from_web        = 21,
   write_card_from_web = 22,
   cmd_end        = 22,
+#ifdef SerialWriteCard
+  write_card_from_serial        = 23,
+  write_card_cancel_from_serial = 24,
+#endif
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
   ext_end   = ext_begin +  buttonExtSC_buttons,

@@ -1114,6 +1114,9 @@ String Webservice::getInfoData(const String& id){
     #ifdef SerialInputAsCommand
       p += "<br>Serial Input als Command";
     #endif
+    #ifdef SerialWriteCard
+      p += "<br>Serial WRITECARD";
+    #endif
 
     #ifdef DFMiniMp3_T_CHIP_GD3200B
       p += "<br>DF-Player Chip GD3200B";

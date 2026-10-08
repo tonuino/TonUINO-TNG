@@ -149,8 +149,30 @@ static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (Ton
  * -4: allLong     -5: pause      -6: pauseLong
  * -1: up/downLong -2: down       -3: downLong
  * number n > 0: Springe im Voice Menü zum n-ten Eintrag und selektiere ihn
+ *
+ * additionally, a placed RFID card can be written directly with a single parameterized command
+ * (Leerzeichen nach WRITECARD ist zwingend erforderlich). Es müssen nur die Parameter angegeben
+ * werden, die für den gewählten mode auch eine Funktion haben, mode steht dabei immer zuerst:
+ *   WRITECARD <mode>                                (mode 11, 14)
+ *   WRITECARD <mode>,<folder>                       (mode 1, 2, 3, 5, 6, 13, 15)
+ *   WRITECARD <mode>,<folder>,<special>             (mode 4, 10)
+ *   WRITECARD <mode>,<folder>,<special>,<special2>  (mode 7, 8, 9, 12, 16)
+ * example / Beispiel: WRITECARD 1,3   (Hörspiel, Ordner 3)
+ *
+ * mode values / mode Werte:
+ *    1: Hörspiel        2: Album           3: Party           4: Einzel
+ *    5: Hörbuch         6: Admin           7: Hörspiel von bis 8: Album von bis
+ *    9: Party von bis  10: Hörbuch einzel 11: Wiederhole      12: Quiz Spiel
+ *   13: Memory Spiel   14: Bluetooth an/aus (BT_MODULE)      15: Teekesselchen Spiel
+ *   16: Hörbuch von bis
+ *
+ * es gibt keinen Timeout beim Warten auf das Auflegen der Karte. Mit dem folgenden Befehl kann ein
+ * per WRITECARD gestarteter, noch laufender Schreibvorgang abgebrochen werden:
+ *   WRITECARD CANCEL
  */
 //#define SerialInputAsCommand
+// nur serielle Konsole mit WRITECARD, ohne Button-Emulation (z.B. Nano)
+//#define SerialWriteCard
 
 // ######################################################################
 
