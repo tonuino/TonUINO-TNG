@@ -941,6 +941,42 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_out_early) {
 //  EXPECT_TRUE(false) << "log: " << Print::get_output();
 }
 
+// =================== card swapped to other card in StartPlay
+TEST_F(tonuino_test_fixture, pause_if_card_removed_card_swapped_in_start_play) {
+  folderSettings card1 = { 1, pmode_t::album, 0, 0 };
+  folderSettings card2 = { 2, pmode_t::album, 0, 0 };
+  uint16_t track_count = 10;
+
+  goto_idle();
+  getSettings().pauseWhenCardRemoved = 1;
+  Print::clear_output();
+
+  card_in(card1, track_count);
+  EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay<Play>>());
+
+  // swap card while t_262_pling is playing
+  execute_cycle_for_ms(time_check_play);
+  card_out();
+  card_in(card2, track_count);
+  EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay<Play>>());
+
+  getMp3().end_track();
+  execute_cycle();
+  execute_cycle_for_ms(dfPlayer_timeUntilStarts);
+  execute_cycle();
+  EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
+
+  // play 2-1
+  execute_cycle_for_ms(time_check_play);
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, card2.folder);
+  EXPECT_EQ(getMp3().df_folder_track, 1);
+
+  card_out();
+
+//  EXPECT_TRUE(false) << "log: " << Print::get_output();
+}
+
 // =================== card in with other card
 struct card_data_2 {
   folderSettings card1;
