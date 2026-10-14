@@ -173,6 +173,13 @@ static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (Ton
 //#define DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
 #define DFMiniMp3_T_CHIP_Mp3ChipIncongruousNoAck
 
+/* uncomment the below line if the DfPlayer never sends OnPlayFinished (the log shows "missing OnPlayFinished" after each track)
+ * the end of a track is then detected via the busy pin without additional waiting time
+ * wenn der DfPlayer kein OnPlayFinished sendet (im Log steht nach jedem Track "missing OnPlayFinished"), bitte in der nächste Zeile den Kommentar entfernen
+ * das Ende eines Tracks wird dann ohne zusätzliche Wartezeit über den Busy Pin erkannt
+ */
+//#define DFPlayerNoOnPlayFinished
+
 // ######################################################################
 
 /* uncomment the below line to disable shutdown via button (long press play/pause)

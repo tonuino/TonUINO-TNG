@@ -255,7 +255,11 @@ public:
   uint8_t getCurrentFolder() { return current_folder; }
   bool isLastTrack() { return current_track+1 >= q.size(); }
 
+#ifdef DFPlayerNoOnPlayFinished
+  void start() { if (isPause) { isPause = false; Base::start(); startTrack(); } }
+#else
   void start() { if (isPause) { isPause = false; Base::start();} }
+#endif
   void stop () { isPause = false; Base::stop (); }
   void pause() { isPause = true ; Base::pause(); }
 
@@ -289,6 +293,7 @@ private:
 
   void logVolume();
   void refreshIsPlaying();
+  void startTrack() { startTrackTimer.start(dfPlayer_timeUntilStarts); trackStarted = false; }
 
   typedef queue<uint8_t, maxTracksInFolder> track_queue;
 
@@ -332,6 +337,7 @@ private:
   };
   play_type            playing{play_none};
   Timer                startTrackTimer{};
+  bool                 trackStarted{}; // busy pin became active after the last play command
   Timer                missingOnPlayFinishedTimer{};
   bool                 isPause{};
 #ifdef DFMiniMp3_IGNORE_ONPLAYFINISHED_FOR_ADV
