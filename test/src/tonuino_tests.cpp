@@ -977,6 +977,40 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_swapped_in_start_play) {
 //  EXPECT_TRUE(false) << "log: " << Print::get_output();
 }
 
+// =================== card swapped to other card faster than card remove is detected
+TEST_F(tonuino_test_fixture, pause_if_card_removed_card_swapped_fast) {
+  folderSettings card1 = { 1, pmode_t::album, 0, 0 };
+  folderSettings card2 = { 2, pmode_t::album, 0, 0 };
+  uint16_t track_count = 10;
+
+  goto_idle();
+  getSettings().pauseWhenCardRemoved = 1;
+  Print::clear_output();
+
+  card_in(card1, track_count);
+  leave_start_play();
+
+  // play 1-1
+  execute_cycle_for_ms(time_check_play);
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, card1.folder);
+
+  // swap card without a detected card out
+  card_in(card2, track_count);
+  EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay<Play>>());
+  leave_start_play();
+
+  // play 2-1
+  execute_cycle_for_ms(time_check_play);
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, card2.folder);
+  EXPECT_EQ(getMp3().df_folder_track, 1);
+
+  card_out();
+
+//  EXPECT_TRUE(false) << "log: " << Print::get_output();
+}
+
 // =================== card in with other card
 struct card_data_2 {
   folderSettings card1;
