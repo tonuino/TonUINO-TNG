@@ -1033,6 +1033,17 @@ template<class P> void StartPlay<P>::react(command_e const &cmd_e) {
   }
 }
 
+template<class P> void StartPlay<P>::react(card_e const &c_e) {
+  if (c_e.card_ev != cardEvent::none) {
+    LOG(state_log, s_debug, str_StartPlay(), F("::react(c) "), static_cast<int>(c_e.card_ev));
+  }
+  // card swapped while starting: play the new card instead of losing the event
+  if (is_same_type<P, Play>::value && c_e.card_ev == cardEvent::inserted) {
+    if (readCard() && not (tonuino.getMyFolder() == lastCardRead))
+      handleReadCard();
+  }
+}
+
 // #######################################################
 
 void Quiz::entry() {

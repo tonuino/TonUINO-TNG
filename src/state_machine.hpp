@@ -104,6 +104,7 @@ template<class P> class StartPlay: public Base
 public:
   void entry() override;
   void react(command_e const &) override;
+  void react(card_e    const &) override;
 };
 
 class Play: public Base

@@ -306,7 +306,7 @@ public:
 	    called_PICC_RequestA = false;
 	    uid.size = 4;
 	    for (uint8_t i = 0; i < uid.size; ++i)
-	      uid.uidByte[i] = i+1;
+	      uid.uidByte[i] = t_buffer[i+5]; // folder, mode, special, special2: different cards have different uids
 	    uid.sak = 0x08; // todo: implement other card types
 	    return true;
 	  }
