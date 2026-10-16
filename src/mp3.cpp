@@ -128,6 +128,9 @@ void Mp3::playAdvertisement(uint16_t track, bool onlyIfIsPlaying) {
   if (isPlaying()) {
     LOG(mp3_log, s_info, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
+#ifdef DFPlayerNoOnPlayFinished
+    trackStarted = false; // busy pin drops between advertisement and origin track
+#endif
     delay(500); // to prevent missingOnPlayerFinish
     LOG(mp3_log, s_debug, F("after delay"));
   }
@@ -262,7 +265,7 @@ void Mp3::playCurrent() {
       LOG(mp3_log, s_debug, F("playMp3FolderTrack: "), mp3_track);
       Base::playMp3FolderTrack(mp3_track);
       isPause = false;
-      startTrackTimer.start(dfPlayer_timeUntilStarts);
+      startTrack();
       playing = play_mp3;
       mp3_track = 0;
       swap(mp3_track, mp3_track_next);
@@ -274,7 +277,7 @@ void Mp3::playCurrent() {
       LOG(mp3_log, s_info, F("play "), current_folder, F("-"), t);
       Base::playFolderTrack(current_folder, t);
       isPause = false;
-      startTrackTimer.start(dfPlayer_timeUntilStarts);
+      startTrack();
       playing = play_folder;
     }
   }
@@ -461,7 +464,14 @@ void Mp3::hpjackdetect() {
 
 void Mp3::loop() {
 
+#ifdef DFPlayerNoOnPlayFinished
+  const bool wasPlaying = is_playing_cache;
+#endif
   refreshIsPlaying();
+#ifdef DFPlayerNoOnPlayFinished
+  if (not wasPlaying && isPlaying())
+    trackStarted = true;
+#endif
   static bool is_playing = false;
   LOG_CODE(mp3_log, s_info, {
     if (is_playing != is_playing_cache) {
@@ -470,9 +480,13 @@ void Mp3::loop() {
     }
   } );
 
-  if (not isPause && playing != play_none && startTrackTimer.isExpired() && not isPlaying()) {
+  if (not isPause && playing != play_none && (startTrackTimer.isExpired() || trackStarted) && not isPlaying()) {
     if (not missingOnPlayFinishedTimer.isActive())
+#ifdef DFPlayerNoOnPlayFinished
+      missingOnPlayFinishedTimer.start(trackStarted ? 100 : dfPlayer_timeUntilStarts); // after a track start only debounce the busy pin
+#else
       missingOnPlayFinishedTimer.start(dfPlayer_timeUntilStarts);
+#endif
   }
   else {
     missingOnPlayFinishedTimer.stop();
