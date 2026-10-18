@@ -26,7 +26,7 @@ DEFINE_LOGGER(standby_log   , s_warning, tonuino_log);
 DEFINE_LOGGER(state_log     , s_info   , tonuino_log);
 DEFINE_LOGGER(button_log    , s_info   , tonuino_log);
 DEFINE_LOGGER(modifier_log  , s_info   , tonuino_log);
-DEFINE_LOGGER(mp3_log       , s_info   , tonuino_log);
+DEFINE_LOGGER(mp3_log       , s_warning, tonuino_log);
 DEFINE_LOGGER(settings_log  , s_info   , tonuino_log);
 DEFINE_LOGGER(batvol_log    , s_none   , tonuino_log);
 DEFINE_LOGGER(ledManager_log, s_info   , tonuino_log);

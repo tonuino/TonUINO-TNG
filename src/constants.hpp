@@ -159,13 +159,18 @@ static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (Ton
  *
  * GD3200B:     bad behavior of getFolderTrackCount() - ignores the parameter folder
  *              bad behavior of callback OnPlayFinished - it is also called on advertise tracks
+ *
  * MH2024K16SS: no checksums
  *              bad behavior of callback OnPlayFinished - it is also called on advertise tracks
+ *
  * LISP3:       bad behavior of callback OnPlayFinished - it is also called on advertise tracks
+ *
  * MP3-TF-16P V3.0 with MH2024K24SS:
  *              very slow
  *              bad behavior of callback OnPlayFinished - it is also called on advertise tracks
+ *
  * LKP Player:  no ACK for requests (use Mp3ChipIncongruousNoAck for them)
+ *
  */
 //#define DFMiniMp3_T_CHIP_GD3200B
 //#define DFMiniMp3_T_CHIP_MH2024K16SS
@@ -542,6 +547,10 @@ inline constexpr uint8_t buttonExtSC_buttons =  18; // <= lastSortCut
 inline constexpr uint32_t  buttonLongPress       = 1000; // timeout for long press button in ms
 inline constexpr uint32_t  buttonLongPressRepeat =  200; // timeout for long press button repeat in ms
 
+// ####### DFPlayer #####################################
+
+inline constexpr unsigned long dfPlayer_timeUntilStarts = 5000;
+
 /***************************************************************************
  ** Classic ****************************************************************
  ***************************************************************************/
@@ -589,13 +598,6 @@ inline constexpr uint8_t       dfPlayer_transmitPin     = 3;
 inline constexpr uint8_t       maxTracksInFolder        = 255;
 inline constexpr uint8_t       dfPlayer_busyPin         = 4;
 inline constexpr levelType     dfPlayer_busyPinType     = levelType::activeLow;
-#if defined(DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0)
-inline constexpr unsigned long dfPlayer_timeUntilStarts = 2500;
-#elif defined(DFMiniMp3_T_CHIP_GD3200B)
-inline constexpr unsigned long dfPlayer_timeUntilStarts = 2500;
-#else
-inline constexpr unsigned long dfPlayer_timeUntilStarts = 1200;
-#endif
 
 // ####### tonuino #####################################
 
@@ -659,7 +661,6 @@ inline constexpr HardwareSerial &dfPlayer_serial         = Serial3;
 inline constexpr uint8_t        maxTracksInFolder        = 255;
 inline constexpr uint8_t        dfPlayer_busyPin         = 13;
 inline constexpr levelType      dfPlayer_busyPinType     = levelType::activeLow;
-inline constexpr unsigned long  dfPlayer_timeUntilStarts = 1200;
 inline constexpr uint8_t        dfPlayer_noHeadphoneJackDetect     = 21;
 inline constexpr levelType      dfPlayer_noHeadphoneJackDetectType = levelType::activeLow;
 
@@ -725,7 +726,6 @@ inline constexpr uint8_t       dfPlayer_transmitPin     = 3;
 inline constexpr uint8_t       maxTracksInFolder        = 255;
 inline constexpr uint8_t       dfPlayer_busyPin         = 4;
 inline constexpr levelType     dfPlayer_busyPinType     = levelType::activeLow;
-inline constexpr unsigned long dfPlayer_timeUntilStarts = 1200;
 
 // ####### tonuino #####################################
 
@@ -792,13 +792,6 @@ inline constexpr uint8_t       dfPlayer_transmitPin     = D3;
 inline constexpr uint8_t       maxTracksInFolder        = 255;
 inline constexpr uint8_t       dfPlayer_busyPin         = D4;
 inline constexpr levelType     dfPlayer_busyPinType     = levelType::activeLow;
-#if defined(DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0)
-inline constexpr unsigned long dfPlayer_timeUntilStarts = 2500;
-#elif defined(DFMiniMp3_T_CHIP_GD3200B)
-inline constexpr unsigned long dfPlayer_timeUntilStarts = 2500;
-#else
-inline constexpr unsigned long dfPlayer_timeUntilStarts = 1200;
-#endif
 
 // ####### tonuino #####################################
 
@@ -859,13 +852,6 @@ inline constexpr uint8_t       dfPlayer_transmitPin     =  17; // (TX2)
 inline constexpr uint8_t       maxTracksInFolder        = 255;
 inline constexpr uint8_t       dfPlayer_busyPin         =   4; // (D4)
 inline constexpr levelType     dfPlayer_busyPinType     = levelType::activeLow;
-#if defined(DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0)
-inline constexpr unsigned long dfPlayer_timeUntilStarts = 2500;
-#elif defined(DFMiniMp3_T_CHIP_GD3200B)
-inline constexpr unsigned long dfPlayer_timeUntilStarts = 2500;
-#else
-inline constexpr unsigned long dfPlayer_timeUntilStarts = 1200;
-#endif
 
 // ####### tonuino #####################################
 

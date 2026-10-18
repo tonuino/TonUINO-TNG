@@ -36,8 +36,11 @@ TEST_F(tonuino_test_fixture, SleepTimer_in_play) {
 
   execute_cycle_for_ms(1000);
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
+  EXPECT_TRUE(getMp3().is_playing_folder());
+  EXPECT_EQ(getMp3().df_folder, 2);
+  EXPECT_EQ(getMp3().df_folder_track, 1);
 
-  execute_cycle_for_ms(timeout_ms - (current_time - start_time));
+  execute_cycle_for_ms(timeout_ms - (current_time - start_time)-cycleTime);
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
 
   execute_cycle();
@@ -109,7 +112,10 @@ TEST_F(tonuino_test_fixture, FreezeDance) {
   EXPECT_TRUE(getMp3().is_playing_adv());
   EXPECT_EQ(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_300_freeze_into));
   card_out();
+
+  execute_cycle_for_ms(1000);
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
+
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, 2);
   EXPECT_EQ(getMp3().df_folder_track, 1);
@@ -121,9 +127,7 @@ TEST_F(tonuino_test_fixture, FreezeDance) {
   EXPECT_TRUE(getMp3().is_playing_adv());
   EXPECT_EQ(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_301_freeze_freeze));
 
-  execute_cycle();
-  execute_cycle();
-  execute_cycle();
+  execute_cycle_for_ms(1000);
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, 2);
@@ -154,6 +158,8 @@ TEST_F(tonuino_test_fixture, FiWaAi) {
   EXPECT_TRUE(getMp3().is_playing_adv());
   EXPECT_EQ(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_303_fi_wa_ai));
   card_out();
+  execute_cycle_for_ms(1000);
+
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, 2);
@@ -167,9 +173,7 @@ TEST_F(tonuino_test_fixture, FiWaAi) {
   EXPECT_GE(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_306_fire));
   EXPECT_LE(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_308_air));
 
-  execute_cycle();
-  execute_cycle();
-  execute_cycle();
+  execute_cycle_for_ms(1000);
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, 2);
@@ -245,6 +249,8 @@ TEST_F(tonuino_test_fixture, ToddlerMode_in_play) {
   EXPECT_TRUE(getMp3().is_playing_adv());
   EXPECT_EQ(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_304_buttonslocked));
   card_out();
+  execute_cycle_for_ms(1000);
+
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, 2);
@@ -324,6 +330,8 @@ TEST_F(tonuino_test_fixture, KindergardenMode) {
   EXPECT_TRUE(getMp3().is_playing_adv());
   EXPECT_EQ(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_305_kindergarden));
   card_out();
+  execute_cycle_for_ms(1000);
+
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, 2);
@@ -411,6 +419,8 @@ TEST_F(tonuino_test_fixture, RepeatSingleModifier) {
   EXPECT_TRUE(getMp3().is_playing_adv());
   EXPECT_EQ(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_260_activate_mod_card));
   card_out();
+  execute_cycle_for_ms(1000);
+
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, 2);
