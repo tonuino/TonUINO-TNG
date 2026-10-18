@@ -252,7 +252,7 @@ public:
       if (df_playing) {
         df_playing_adv = true;
         df_adv_track = track;
-        df_playing_adv_counter = 3;
+        df_playing_adv_counter = 10;
       }
     }
 

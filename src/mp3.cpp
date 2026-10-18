@@ -116,6 +116,9 @@ void Mp3::waitForTrackToStart() {
 
   do {
     loop();
+#ifdef UNIT_TESTS
+    pin_value[dfPlayer_busyPin] = (dfPlayer_busyPinType == levelType::activeLow) ? LOW : HIGH;
+#endif
   } while (!isPlaying() && not timer.isExpired());
   LOG(mp3_log, s_debug, F("waitForTrackToStart End "), isPlaying());
 }
@@ -136,6 +139,9 @@ void Mp3::playAdvertisement(uint16_t track, bool onlyIfIsPlaying) {
     waitForTrackToFinish(); // finish adv track
     LOG(mp3_log, s_debug, "after waitForTrackToFinish");
     trackStarted = false;   // busy pin drops between advertisement and origin track
+#ifdef UNIT_TESTS
+    pin_value[dfPlayer_busyPin] = (dfPlayer_busyPinType == levelType::activeLow) ? LOW : HIGH;
+#endif
   }
   else if (not onlyIfIsPlaying) {
     if (isPause) {

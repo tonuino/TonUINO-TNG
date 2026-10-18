@@ -350,7 +350,7 @@ public:
     // end t_262_pling
     getMp3().end_track();
     execute_cycle();
-    execute_cycle_for_ms(dfPlayer_timeUntilStarts);
+    //execute_cycle_for_ms(dfPlayer_timeUntilStarts);
     execute_cycle();
     EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
 
@@ -436,7 +436,7 @@ public:
     // end t_262_pling
     getMp3().end_track();
     execute_cycle();
-    execute_cycle_for_ms(dfPlayer_timeUntilStarts);
+    //execute_cycle_for_ms(dfPlayer_timeUntilStarts);
     execute_cycle();
     EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   }

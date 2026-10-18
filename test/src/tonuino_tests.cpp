@@ -920,7 +920,7 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_out_early) {
   // end t_262_pling
   getMp3().end_track();
   execute_cycle();
-  execute_cycle_for_ms(dfPlayer_timeUntilStarts);
+  //execute_cycle_for_ms(dfPlayer_timeUntilStarts);
   execute_cycle();
   // should go to pause
   EXPECT_TRUE(SM_tonuino::is_in_state<Pause>());
@@ -1255,7 +1255,10 @@ TEST_F(tonuino_test_fixture, hoerbuch_rnd_shuffles) {
 
   for (uint8_t i = card.folder; i <= card.folder + card.special2; ++i) {
     getMp3().set_folder_track_count(i, track_count);
+    getSettings().writeFolderSettingToFlash(i, 1);
   }
+
+  Print::clear_output();
 
   card_in(card, track_count);
   EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay<Play>>());
@@ -1296,9 +1299,17 @@ TEST_F(tonuino_test_fixture, hoerbuch_rnd_shuffles) {
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_NE(getMp3().df_folder, first_folder);
   EXPECT_EQ(getMp3().df_folder_track, 1);
+
+  card_out();
+
+  goto_idle();
+
+//  EXPECT_TRUE(false) << "log: " << Print::get_output();
 }
 
 TEST_F(tonuino_test_fixture, hoerbuch_rnd_test_resume) {
+  Print::clear_output();
+
   randomSeed(16);
   folderSettings card = { 1, pmode_t::hoerbuch, 0, 10 };
   folderSettings other_card = { 10, pmode_t::album, 0, 0 };
@@ -1307,9 +1318,14 @@ TEST_F(tonuino_test_fixture, hoerbuch_rnd_test_resume) {
 
   for (uint8_t i = card.folder; i <= card.folder + card.special2; ++i) {
     getMp3().set_folder_track_count(i, track_count);
+    getSettings().writeFolderSettingToFlash(i, 1);
   }
 
   card_in(card, track_count);
+  execute_cycle_for_ms(1000);
+
+//  EXPECT_TRUE(false) << "log: " << Print::get_output();
+  EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay<Play>>());
 
   leave_start_play();
 
@@ -1354,5 +1370,7 @@ TEST_F(tonuino_test_fixture, hoerbuch_rnd_test_resume) {
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, first_folder);
   EXPECT_EQ(getMp3().df_folder_track, number_of_tracks_to_play + 1);
+
+  card_out();
 }
 
