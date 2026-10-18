@@ -79,13 +79,13 @@ void Mp3::init() {
   delay(500);
   loop();
 
-  startTrackTimer.start(6000); // 6 seconds
-  while (not startTrackTimer.isExpired() && (getTotalTrackCount() == 0)) {
+  timer.start(6000); // 6 seconds
+  while (not timer.isExpired() && (getTotalTrackCount() == 0)) {
     LOG(init_log, s_debug, F("retry getTotalTrackCount"));
     delay(1000);
     loop();
   }
-  startTrackTimer.stop();
+  timer.stop();
 
   LOG(mp3_log, s_info, F("track_count: "), getTotalTrackCount());
   delay(1000);
@@ -112,7 +112,7 @@ void Mp3::waitForTrackToFinish() {
 void Mp3::waitForTrackToStart() {
   LOG(mp3_log, s_debug, F("waitForTrackToStart "), isPlaying());
   Timer timer;
-  timer.start(2*dfPlayer_timeUntilStarts);
+  timer.start(dfPlayer_timeUntilStarts);
 
   do {
     loop();
@@ -128,11 +128,14 @@ void Mp3::playAdvertisement(uint16_t track, bool onlyIfIsPlaying) {
   if (isPlaying()) {
     LOG(mp3_log, s_info, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
-#ifdef DFPlayerNoOnPlayFinished
-    trackStarted = false; // busy pin drops between advertisement and origin track
-#endif
-    delay(500); // to prevent missingOnPlayerFinish
-    LOG(mp3_log, s_debug, F("after delay"));
+    waitForTrackToFinish(); // break original track
+    LOG(mp3_log, s_debug, "after waitForTrackToFinish");
+    trackStarted = false;   // busy pin drops between origin track and advertisement
+    waitForTrackToStart();  // start adv track
+    LOG(mp3_log, s_debug, "after waitForTrackToStart");
+    waitForTrackToFinish(); // finish adv track
+    LOG(mp3_log, s_debug, "after waitForTrackToFinish");
+    trackStarted = false;   // busy pin drops between advertisement and origin track
   }
   else if (not onlyIfIsPlaying) {
     if (isPause) {
@@ -146,7 +149,7 @@ void Mp3::playAdvertisement(uint16_t track, bool onlyIfIsPlaying) {
     else {
       // should not be in playing
       waitForTrackToFinish();
-      LOG(modifier_log, s_debug, "no track is playing");
+      LOG(mp3_log, s_debug, "no track is playing");
 
       Base::playFolderTrack(1, 1);
       LOG(mp3_log, s_info, F("playFolderTrack(1,1)"));
@@ -166,20 +169,13 @@ void Mp3::playAdvertisement(uint16_t track, bool onlyIfIsPlaying) {
     Base::playAdvertisement(track);
 
     waitForTrackToFinish(); // origin track pauses
-    LOG(modifier_log, s_debug, F("origin track pauses"));
+    LOG(mp3_log, s_debug, F("origin track pauses"));
 
     waitForTrackToStart();  // adv track starts
     LOG(mp3_log, s_debug, F("adv track started"));
 
     waitForTrackToFinish(); // adv track finished
-    LOG(modifier_log, s_debug, F("adv track finished"));
-
-//#ifdef DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
-//    waitForTrackToStart();
-//    LOG(modifier_log, s_debug, F("MH2024K24SS_MP3_TF_16P_V3_0: additional busy"));
-//    waitForTrackToFinish();
-//    LOG(modifier_log, s_debug, F("MH2024K24SS_MP3_TF_16P_V3_0: additional busy finished"));
-//#endif
+    LOG(mp3_log, s_debug, F("adv track finished"));
 
     waitForTrackToStart();  // origin track starts again
     LOG(mp3_log, s_debug, F("origin track started (again)"));
@@ -376,18 +372,18 @@ void Mp3::decreaseVolume() {
 
 bool Mp3::setVolume() {
   LOG(mp3_log, s_debug, F("setVolume: "), *volume);
-  startTrackTimer.start(6000); // 6 seconds
-  while(not startTrackTimer.isExpired() && (Base::getVolume() != *volume)) {
+  timer.start(6000); // 6 seconds
+  while(not timer.isExpired() && (Base::getVolume() != *volume)) {
     delay(200);
     loop();
     Base::setVolume(*volume);
     delay(200);
     loop();
   }
-  if (not startTrackTimer.isActive()) {
+  if (not timer.isActive()) {
     return false;
   } else {
-    startTrackTimer.stop();
+    timer.stop();
   }
   logVolume();
   return true;
@@ -464,35 +460,31 @@ void Mp3::hpjackdetect() {
 
 void Mp3::loop() {
 
-#ifdef DFPlayerNoOnPlayFinished
-  const bool wasPlaying = is_playing_cache;
-#endif
   refreshIsPlaying();
-#ifdef DFPlayerNoOnPlayFinished
-  if (not wasPlaying && isPlaying())
-    trackStarted = true;
-#endif
-  static bool is_playing = false;
-  LOG_CODE(mp3_log, s_info, {
-    if (is_playing != is_playing_cache) {
-      is_playing = is_playing_cache;
-      LOG(mp3_log, s_info, F("isPlaying: "), is_playing);
-    }
-  } );
 
-  if (not isPause && playing != play_none && (startTrackTimer.isExpired() || trackStarted) && not isPlaying()) {
+  if (is_playing_old != isPlaying()) {
+    is_playing_old = isPlaying();
+    LOG(mp3_log, s_info, F("isPlaying: "), isPlaying());
+    if (isPlaying()) {
+      trackStarted = true;
+      timer.stop();
+    }
+  }
+
+  if (not trackStarted && timer.isActive() && timer.isExpired()) {
+    LOG(mp3_log, s_warning, F("track not started"));
+    Tonuino::getTonuino().nextTrack(1/*tracks*/, true/*fromOnPlayFinished*/);
+  }
+
+  if (not isPause && playing != play_none && trackStarted && not isPlaying()) {
     if (not missingOnPlayFinishedTimer.isActive())
-#ifdef DFPlayerNoOnPlayFinished
-      missingOnPlayFinishedTimer.start(trackStarted ? 100 : dfPlayer_timeUntilStarts); // after a track start only debounce the busy pin
-#else
-      missingOnPlayFinishedTimer.start(dfPlayer_timeUntilStarts);
-#endif
+      missingOnPlayFinishedTimer.start(100); // after a track start only debounce the busy pin
   }
   else {
     missingOnPlayFinishedTimer.stop();
   }
   if (missingOnPlayFinishedTimer.isActive() && missingOnPlayFinishedTimer.isExpired()) {
-    LOG(mp3_log, s_info, F("missing OnPlayFinished"));
+    LOG(mp3_log, s_warning, F("missing OnPlayFinished"));
     Tonuino::getTonuino().nextTrack(1/*tracks*/, true/*fromOnPlayFinished*/);
   }
   else
