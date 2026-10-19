@@ -3,11 +3,11 @@
 // ##############################################################################################################################
 
 // -------------------------------------------------------------------------------------------------------------------------------
-//            Auswahl des verwendeten Ptozessor-Boards
+//            Auswahl des verwendeten Prozessor-Boards
 // -------------------------------------------------------------------------------------------------------------------------------
 //#define TonUINO_Classic               // Basisversion mit Arduino Nano V3
 //#define TonUINO_Every                 // Arduino Nano Every (Original)
-//#define TonUINO_Every_4808            // Arduino Nano Evers (Klon)
+//#define TonUINO_Every_4808            // Arduino Nano Every (Klon)
 //#define ALLinONE                      // AllInOne Platine
 //#define ALLinONE_Plus                 // AllInOne Plus Platine
 //#define TonUINO_Esp32 100             // Arduino Nano ESP32
@@ -19,7 +19,7 @@
 //#define THREEBUTTONS                  // 3 Tasten mit Doppelfunktion
 //#define FIVEBUTTONS                   // 5 Tasten
 //#define FIVEBUTTONS_SWITCHED          // Zurück- / Vor-Tasten werden mit Leiser / Lauter Tasten getauscht
-//#define BUTTONS3X3                    // 3 Tasten mit Doppelfungtion + 9 Tasten für Shortcuts
+//#define BUTTONS3X3                    // 3 Tasten mit Doppelfunktion + 9 Tasten für Shortcuts
 
 // -------------------------------------------------------------------------------------------------------------------------------
 //            Befehlseingabe über serielle Schnittstelle
@@ -27,12 +27,12 @@
 //#define SerialInputAsCommand          // Befehlseingabe möglich über Konsole und TonUINO Manager
 
 // -------------------------------------------------------------------------------------------------------------------------------
-//            Verwendung der HW serielle Schnittstelle zum DF.Player
+//            Verwendung der HW-seriellen Schnittstelle zum DF.Player
 // -------------------------------------------------------------------------------------------------------------------------------
 //#define DFPlayerUsesHardwareSerial    // nicht möglich für Arduino Nano V3
 
 // -------------------------------------------------------------------------------------------------------------------------------
-//            Auswahl / Anpassung des Decoder Cips vom DF.Player
+//             Auswahl / Anpassung des Decoder Chips vom DF.Player
 // -------------------------------------------------------------------------------------------------------------------------------
 //#define DFMiniMp3_T_CHIP_GD3200B
 //#define DFMiniMp3_T_CHIP_MH2024K16SS
@@ -56,7 +56,7 @@
 // -------------------------------------------------------------------------------------------------------------------------------
 //            Aktivierung der Steuerung über Drehencoder - Kombination mit Potenziometer nicht möglich (HW erforderlich)
 // -------------------------------------------------------------------------------------------------------------------------------
-//#define ROTARY_ENCODER                // einfache Steuerung der Lautstärke, Vor- / Zurück-Tasen erforderlich
+//#define ROTARY_ENCODER                // einfache Steuerung der Lautstärke, Vor- / Zurück-Tasten erforderlich
 //#define ROTARY_ENCODER_LONGPRESS      // Steuerung mit Doppelbelegung des Drehencoders, keine zusätzlichen Tasten notwendig
 
 // -------------------------------------------------------------------------------------------------------------------------------
@@ -69,7 +69,7 @@
 // -------------------------------------------------------------------------------------------------------------------------------
 //#define NEO_RING <numPixel>           // Anzeige von Betriebszuständen / Wiedergabe
 //#define NEO_RING_EXT                  // zusätzliche Anzeige bei Änderung der Lautstärke
-//#define NEO_RING_2                    // gegenläufige Ansteuerung einer 2-ten Neopixel Gruppe
+//#define NEO_RING_2 <numPixel>         // gegenläufige Ansteuerung einer 2-ten Neopixel Gruppe
 
 // -------------------------------------------------------------------------------------------------------------------------------
 //            Stummschaltung Lautsprecher während Einschalten (HW erforderlich)
@@ -96,7 +96,7 @@
 //#define TEAPOT_GAME                   // Teekesselchenspiel mit 5 Hinweistexten
 
 // -------------------------------------------------------------------------------------------------------------------------------
-//            Speicherung des zuletzt gehörten Tracks, kann nach Neustart erneut abgespielt, ohne Karte aufzulegen
+//            Speicherung des zuletzt gehörten Tracks, kann nach Neustart erneut abgespielt werden ohne Karte aufzulegen
 // -------------------------------------------------------------------------------------------------------------------------------
 //#define STORE_LAST_CARD
 
@@ -106,7 +106,7 @@
 //#define SPECIAL_START_SHORTCUT
 
 // -------------------------------------------------------------------------------------------------------------------------------
-//            Bluetoothmodul über RFID-Karte steuern
+//            Bluetoothmodul einbinden
 // -------------------------------------------------------------------------------------------------------------------------------
 //#define BT_MODULE
 

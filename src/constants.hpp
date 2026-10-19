@@ -8,10 +8,10 @@
 #endif
 
 /*
- * Anstelle diese Datei zu editieren, um die Konfiguration festzulegen, kann auch eine Datei "config.hpp" im root
+ * Anstatt diese Datei zu editieren um die Konfiguration festzulegen, kann auch eine Datei "config.hpp" im root
  * Verzeichnis angelegt werden, die nur die #defines enthält. Dies ist übersichtlicher und hat den Vorteil,
  * dass diese Datei bei einem Softwareupgrade nicht überschrieben wird und somit die Konfiguration erhalten bleibt.
- * Im root Verzeichnis sind bereits 2 Vorlagen "config_all_undef.hpp" und "config_all_tle_traeger.hpp".
+ * Im root Verzeichnis sind bereits 2 Vorlagen "config_all_undef.hpp" und "config_all_tle_traeger.hpp" vorhanden.
  *
  * Instead of editing this file to set the configuration, you can also create a file named “config.hpp” in
  * the root directory that contains only the #defines. This is clearer and has the advantage that
@@ -115,7 +115,7 @@
 // ######################################################################
 
 /* Select the right PCB by uncommenting one of the following lines
- * Bitte die passende Platine durch entfernen der Kommentare in einer der folgenden Zeilen auswählen
+ * Bitte die passende Platine durch Entfernen der Kommentare in einer der folgenden Zeilen auswählen
  */
 //#define TonUINO_Classic
 //#define TonUINO_Every
@@ -162,25 +162,27 @@ static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (Ton
 // ###### Serial Monitor with Commands ##################################
 
 /* uncomment the below line to enable serial input as additional command source
- * um den Serial Monitor als zusätzliche Kommandoquelle zu haben bitte in der nächste Zeile den Kommentar entfernen
+ * um den Serial Monitor als zusätzliche Kommandoquelle zu haben, bitte in der nächsten Zeile den Kommentar entfernen
+ *
+ * Commands for serialInput
  * -7:             -8: up         -9: upLong
  * -4: allLong     -5: pause      -6: pauseLong
  * -1: up/downLong -2: down       -3: downLong
- * number n > 0: Springe im Voice Menü zum n-ten Eintrag und selektiere ihn
+ *  number n > 0: Springe im Voice Menü zum n-ten Eintrag und selektiere ihn
  */
 //#define SerialInputAsCommand
 
 // ###### DF Player Serial Connection ###################################
 
 /* If using Nano Every with connected DfPlayer Rx/Tx to D0/D1 uncomment the following lines
- * Wenn der Nano Every verwendet wird und Rx/Tx vom DfPlayer mit D0/D1 verbunden ist, den Kommentare der folgenden Zeile entfernen
+ * Wenn der Nano Every verwendet wird und Rx/Tx vom DfPlayer mit D0/D1 verbunden ist, den Kommentar der folgenden Zeile entfernen
  */
 //#define DFPlayerUsesHardwareSerial
 
 // ###### DF Player HW ##################################################
 
 /* uncomment one of the below lines to support a special chip on the DfMiniMp3 player
- * um einen speziellen Chip auf dem DfMiniMp3 Player zu ünterstützen bitte in eine der nächste Zeilen den Kommentar entfernen
+ * um einen speziellen Chip auf dem DfMiniMp3 Player zu ünterstützen, bitte in einer der nächsten Zeilen den Kommentar entfernen
  *
  * GD3200B:     bad behavior of getFolderTrackCount() - ignores the parameter folder
  *              bad behavior of callback OnPlayFinished - it is also called on advertise tracks
@@ -204,24 +206,24 @@ static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (Ton
 // ###### Shutdown ######################################################
 
 /* uncomment the below line to disable shutdown via button (long press play/pause)
- * um ein Shutdown via Taste (long press Play/Pause) zu unterdrücken bitte in der nächste Zeile den Kommentar entfernen
+ * um ein Shutdown via Taste (long press Play/Pause) zu unterdrücken, bitte in der nächsten Zeile den Kommentar entfernen
  */
 //#define DISABLE_SHUTDOWN_VIA_BUTTON
 
-/* uncomment the below lines if you use Pololu Powerswitch or Traeger Platine for shutdown
- * wenn der Pololu Powerswitch oder die Traeger Platine für das Shutdown verwendet wird, in den nächsten Zeile den Kommentar entfernen
+/* uncomment one of the below lines if you use Pololu Powerswitch or Traeger Platine for shutdown
+ * wenn der Pololu Powerswitch oder die Träger-Platine für das Shutdown verwendet wird, in einer der nächsten Zeilen den Kommentar entfernen
  */
 //#define USE_POLOLU_SHUTDOWN           // HIGH --> Shutdown
 //#define USE_TRAEGER_PLATINE_SHUTDOWN  // LOW  --> Shutdown
 
 // ###### Rotary Encoder ################################################
 
-/* uncomment the below line to enable the rotary encoder for volume setting
- * um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
+/* uncomment the below line to enable the rotary encoder for volume settings
+ * um den Drehgeber zu unterstützen, bitte in der nächsten Zeile den Kommentar entfernen
  */
 //#define ROTARY_ENCODER
 /* uncomment the below line to enable the rotary encoder also for next and previous (only one click in one second)
- * um den Drehgeber auch für vor und zurück zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
+ * um den Drehgeber auch für vor und zurück zu unterstützen, bitte in der nächsten Zeile den Kommentar entfernen
  */
 //#define ROTARY_ENCODER_LONGPRESS
 
@@ -250,8 +252,8 @@ inline constexpr bool      rotaryEncoderPullUp    = false;
 
 // ###### Poti ##########################################################
 
-/* uncomment the below line to enable the poti for volume setting
- * um den Poti zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
+/* uncomment the below line to enable the poti for volume settings
+ * um das Poti zu unterstützen, bitte in der nächsten Zeile den Kommentar entfernen
  */
 //#define POTI
 
@@ -270,13 +272,13 @@ inline constexpr uint8_t   potiPin    = A3 ; // AiO/Classic A3
 // ###### LED Neo Ring ##################################################
 
 /* uncomment the below line to enable the neo ring
- * To have more features (show volume setting) uncomment also NEO_RING_EXT
- * um den Neo Ring zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
+ * To have more features (show volume settings) uncomment also NEO_RING_EXT
+ * um den Neo Ring zu unterstützen, bitte in der nächsten Zeile den Kommentar entfernen
  * um weitere Features einzuschalten, auch den Kommentar für NEO_RING_EXT entfernen
  */
 //#define NEO_RING <numPixel>
 //#define NEO_RING_EXT
-//#define NEO_RING_2
+//#define NEO_RING_2 <numPixel>
 
 #ifdef NEO_RING
 #ifdef ALLinONE_Plus
@@ -298,7 +300,7 @@ inline constexpr uint8_t neoPixelRingPin2= 14; // PC0 on AiOplus (Erweiterungsle
 #else
 inline constexpr uint8_t neoPixelRingPin2= D2; // D2 on AiO/Classic (only Every)
 #endif // ALLinONE_Plus
-inline constexpr uint8_t neoPixelNumber2 = 24; // Total Number of Pixels
+inline constexpr uint8_t neoPixelNumber2 = NEO_RING_2; // Total Number of Pixels
 #endif // NEO_RING_2
 
 #endif // NEO_RING
@@ -307,8 +309,8 @@ inline constexpr uint8_t neoPixelNumber2 = 24; // Total Number of Pixels
 
 /* uncomment the below line to enable the Speaker on/off for Classic to suppress noise
  * on startup and shutdown (automatically enabled on AiO and AiOplus)
- * um den Lautsprecher ein/aus Schalter für die Classic Variante zu unterstützen bitte
- * in der nächste Zeile den Kommentar entfernen (zur Unterdrückung der Ein- und Ausschaltgeräusche)
+ * um den Lautsprecher ein/aus-Schalter für die Classic Variante zu unterstützen, bitte
+ * in der nächsten Zeile den Kommentar entfernen (zur Unterdrückung der Ein- und Ausschaltgeräusche)
  * (automatisch eingeschaltet für AiO und AiOplus)
  */
 //#define SPKONOFF
@@ -327,7 +329,7 @@ inline constexpr levelType     ampEnablePinType = levelType::activeLow;
 // ###### Headphone Jackdetect ##########################################
 
 /* uncomment the below line to enable the Headphone Jack detection (automatically enabled on AiOplus)
- * um die Kopfhörer Erkennung einzuschalten bitte in der nächste Zeile den Kommentar entfernen
+ * um die Kopfhörer Erkennung einzuschalten, bitte in der nächsten Zeile den Kommentar entfernen
  * (automatisch eingeschaltet für AiOplus)
  */
 //#define HPJACKDETECT
@@ -346,41 +348,41 @@ inline constexpr levelType      dfPlayer_noHeadphoneJackDetectType = levelType::
 // ###### Functions and Features ########################################
 
 /* uncomment the below line to ignore the RFID if it is already playing
- * um die selbe RFID zu ignorieren, wenn die bereits spielt, in der nächste
+ * um dieselbe RFID zu ignorieren, wenn sie bereits spielt, in der nächsten
  * Zeile den Kommentar entfernen
  */
 //#define DONT_ACCEPT_SAME_RFID_TWICE
 
 /* uncomment the below line to resume playback if the RFID that started the
  * playback is detected again
- * um die Wiedergabe fortzusetzen, wenn die selbe RFID erkannt wird, die bereits
- * abgespielt wird, in der nächste Zeile den Kommentar entfernen
+ * um die Wiedergabe fortzusetzen, wenn dieselbe RFID erkannt wird, die bereits
+ * abgespielt wird, in der nächsten Zeile den Kommentar entfernen
  */
 //#define RESUME_ON_SAME_RFID
 
-/* uncomment the below line to replay the last card or short cut if pressed play/pause
+/* uncomment the below line to replay the last card or shortcut if pressed play/pause
  * in Idle state
- * um die letzte Karte oder den letzten Short Cut wieder abzuspielen, wenn die Play/Pause Taste
- * im Idle State gedrückt wird, in der nächste Zeile den Kommentar entfernen
+ * um die letzte Karte oder den letzten Shortcut wieder abzuspielen, wenn die Play/Pause Taste
+ * im Idle State gedrückt wird, in der nächsten Zeile den Kommentar entfernen
  */
 //#define REPLAY_ON_PLAY_BUTTON
 
-/* uncomment the below line(s) to enable the quiz, memory teapot game
- * um das Quiz, Memory oder Teekesselchen Spiel zu aktivieren, in der nächste Zeile(n) den Kommentar entfernen
+/* uncomment the below line(s) to enable the quiz, memory and/or teapot game
+ * um das Quiz-, Memory- oder Teekesselchen-Spiel zu aktivieren, in der(den) nächsten Zeile(n) den(die) Kommentar(e) entfernen
  */
 //#define QUIZ_GAME
 //#define MEMORY_GAME
 //#define TEAPOT_GAME
 
 /* uncomment the below line to store the last played card in EEPROM
- * um die letzte Karte im EEPROM zu speichern, in der nächste Zeile den Kommentar entfernen
+ * um die letzte Karte im EEPROM zu speichern, in der nächsten Zeile den Kommentar entfernen
  */
 //#define STORE_LAST_CARD
 
 // ###### Start Shortcut via HW Pin #####################################
 
 /* uncomment the below line to enable special shortcut on startup via GPIO
- * um den spezial Shortcut beim Start via GPIO zu aktivieren, in der nächste Zeile den Kommentar entfernen
+ * um den spezial Shortcut beim Start via GPIO zu aktivieren, in der nächsten Zeile den Kommentar entfernen
  */
 //#define SPECIAL_START_SHORTCUT
 
@@ -403,7 +405,7 @@ inline constexpr uint8_t   specialStartShortcutTrack   = 1;
 // ###### Bluetooth Module ##############################################
 
 /* uncomment the below line to enable support for BT module
- * um die Unterstützung des BT Modules zu aktivieren, in der nächste Zeile den Kommentar entfernen
+ * um die Unterstützung des BT Moduls zu aktivieren, in der nächsten Zeile den Kommentar entfernen
  */
 //#define BT_MODULE
 
@@ -425,7 +427,7 @@ inline constexpr unsigned long btModulePairingPulse    = 500;
 // ###### Battery Voltage Measurement ###################################
 
 /* uncomment the below line to enable battery voltage measurement (not for ALLinONE, not recommended for TonUINO_Classic)
- * um die Batterie Spannungsmessung zu aktivieren, in der nächste Zeile den Kommentar entfernen
+ * um die Batteriespannungsmessung zu aktivieren, in der nächsten Zeile den Kommentar entfernen
  * (nicht für ALLinONE, nicht empfohlen für TonUINO_Classic)
  */
 //#define BAT_VOLTAGE_MEASUREMENT
@@ -475,7 +477,7 @@ inline constexpr float   batVoltageEmpty               = 2.90;
 // ###### Gain for RFID Antenna #########################################
 
 /* uncomment one of the below lines if you want to change the antenna gain of the MFRC522 module
- * wenn die Antennenverstärkung des MFRC522 Modules verändert werden soll, in der nächsten Zeilen einen Kommentar entfernen
+ * wenn die Antennenverstärkung des MFRC522 Modules verändert werden soll, in einer der nächsten Zeilen den Kommentar entfernen
  */
 //#define MRFC522_RX_GAIN RxGain_18dB
 //#define MRFC522_RX_GAIN RxGain_23dB
@@ -489,8 +491,8 @@ inline constexpr float   batVoltageEmpty               = 2.90;
 
 // ###### Modification Cards ############################################
 
-/* uncomment the below lines if you want to have the Jukebox modification card
- * wenn du die Jukebox haben willst, in den nächsten Zeile den Kommentar entfernen
+/* uncomment the below line if you want to have the Jukebox modification card
+ * wenn du die Jukebox haben willst, in der nächsten Zeile den Kommentar entfernen
  */
 //#define MODIFICATION_CARD_JUKEBOX
 
@@ -498,8 +500,8 @@ inline constexpr float   batVoltageEmpty               = 2.90;
 inline constexpr uint8_t jukebox_max_cards  = 10;
 #endif
 
-/* uncomment the below lines if you want to have the Pause after Track modification card
- * wenn du die Pause nach jedem Track Modifikationskarte haben willst, in den nächsten Zeile den Kommentar entfernen
+/* uncomment the below line if you want to have the Pause after Track modification card
+ * wenn du die Pause-nach-jedem-Track Modifikationskarte haben willst, in der nächsten Zeile den Kommentar entfernen
  */
 //#define MODIFICATION_CARD_PAUSE_AFTER_TRACK
 
@@ -545,9 +547,9 @@ inline constexpr unsigned long led_short_blink     = 400; // ms
 
 // ###### Pin for Power ready ###########################################
 
-/* uncomment the below line to enable a pin that signals that the power-on logic is ready (Play Button can be released)
- * um ein Pin zur Signalisierung der Power-on Logic zu aktivieren (die Play Taste kann losgelassen werden), in der
- * nächste Zeile den Kommentar entfernen
+/* uncomment the below line to enable a pin that signals the power-on logic is ready (Play Button can be released)
+ * um einen Pin zur Signalisierung der Power-on Logik zu aktivieren (die Play Taste kann losgelassen werden), in der
+ * nächsten Zeile den Kommentar entfernen
  */
 //#define POWER_HOLD_READY
 
@@ -559,9 +561,9 @@ inline constexpr levelType power_hold_ready_pin_type = levelType::activeHigh;
 // ###### Folder Queue for Hoerbuch #####################################
 
 /* uncomment the below line to enable a queue of Hoerbuecher. If one Hoerbuch is finished, a next will be
- * arbitrary selected from the queue.
- * um die Hoerbuch Queue zu aktivieren, in der nächste Zeile den Kommentar entfernen. Wenn ein Hoerbuch
- * beendet wurde, wird ein neues zufällig aus der Queue ausgewählt.
+ * arbitrary selected from the queue
+ * um die Hörbuch-Queue zu aktivieren, in der nächsten Zeile den Kommentar entfernen. Wenn ein Hörbuch
+ * beendet wurde, wird ein neues zufällig aus der Queue ausgewählt
  */
 //#define FOLDER_QUEUE_HOERBUCH
 
