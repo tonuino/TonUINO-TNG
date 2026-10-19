@@ -3,6 +3,29 @@
 
 #include <Arduino.h>
 
+#if __has_include("../config.hpp")
+# include "../config.hpp"
+#endif
+
+/*
+ * Anstatt diese Datei zu editieren um die Konfiguration festzulegen, kann auch eine Datei "config.hpp" im root
+ * Verzeichnis angelegt werden, die nur die #defines enthält. Dies ist übersichtlicher und hat den Vorteil,
+ * dass diese Datei bei einem Softwareupgrade nicht überschrieben wird und somit die Konfiguration erhalten bleibt.
+ * Im root Verzeichnis sind bereits 2 Vorlagen "config_all_undef.hpp" und "config_all_tle_traeger.hpp" vorhanden.
+ *
+ * Instead of editing this file to set the configuration, you can also create a file named “config.hpp” in
+ * the root directory that contains only the #defines. This is clearer and has the advantage that
+ * this file will not be overwritten during a software upgrade, thus preserving the configuration.
+ * There are already two templates in the root directory: “config_all_undef.hpp” and “config_all_tle_traeger.hpp”.
+ *
+ * ===============================================================================================================
+ * Achtung: Wenn man die Datei config.hpp zur Konfiguration verwendet, sollte man nicht gleichzeitig diese Datei
+ * verändern!
+ *
+ * Warning: If you are using the config.hpp file for configuration, do not modify this file at the same time!
+ * ===============================================================================================================
+ */
+
 // ######################################################################
 // ####### default pins #################################################
 // ######################################################################
@@ -13,6 +36,7 @@
  * Com to DF Player        |   |   |   |   |   |   |   |   |RX*|TX*| RX| TX|   |   |   |   |
  * 3 Button                | P | U | D |   |   |   |   |   |   |   |   |   |   |   |   |   |
  * 5 Button                | P | V+| V-| U | D |   |   |   |   |   |   |   |   |   |   |   |
+ * 5 Button-switched       | P | U | D | V+| V-|   |   |   |   |   |   |   |   |   |   |   |
  * 3x3 Button Board        | P | U | D | A |   |   |   |   |   |   |   |   |   |   |   |   |
  * Open pin for random     |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |
  * Rotary encoder          |   |   |   |CLK| DT|   |   |   |   |   |   |   |   |   |   |   |
@@ -91,7 +115,7 @@
 // ######################################################################
 
 /* Select the right PCB by uncommenting one of the following lines
- * Bitte die passende Platine durch entfernen der Kommentare in einer der folgenden Zeilen auswählen
+ * Bitte die passende Platine durch Entfernen der Kommentare in einer der folgenden Zeilen auswählen
  */
 //#define TonUINO_Classic
 //#define TonUINO_Every
@@ -123,7 +147,7 @@ DECL_PCB(6)
 #endif
 static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (TonUINO_Classic, TonUINO_Every, etc.). Bitte genau eine der Zeilen zur Definition einer Platine einkommentieren (TonUINO_Classic, TonUINO_Every, etc.).");
 
-// ######################################################################
+// ###### Buttons #######################################################
 
 /* uncomment one of the below lines to enable special button support
  * um die Tasten zu konfigurieren, bitte eine der nächsten Zeilen auskommentieren
@@ -132,30 +156,33 @@ static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (Ton
  */
 //#define THREEBUTTONS
 //#define FIVEBUTTONS
+//#define FIVEBUTTONS_SWITCHED
 //#define BUTTONS3X3
 
-// ######################################################################
-
-/* If using Nano Every with connected DfPlayer Rx/Tx to D0/D1 uncomment the following lines
- * Wenn der Nano Every verwendet wird und Rx/Tx vom DfPlayer mit D0/D1 verbunden ist, den Kommentare der folgenden Zeile entfernen
- */
-//#define DFPlayerUsesHardwareSerial
-
-// ######################################################################
+// ###### Serial Monitor with Commands ##################################
 
 /* uncomment the below line to enable serial input as additional command source
- * um den Serial Monitor als zusätzliche Kommandoquelle zu haben bitte in der nächste Zeile den Kommentar entfernen
+ * um den Serial Monitor als zusätzliche Kommandoquelle zu haben, bitte in der nächsten Zeile den Kommentar entfernen
+ *
+ * Commands for serialInput
  * -7:             -8: up         -9: upLong
  * -4: allLong     -5: pause      -6: pauseLong
  * -1: up/downLong -2: down       -3: downLong
- * number n > 0: Springe im Voice Menü zum n-ten Eintrag und selektiere ihn
+ *  number n > 0: Springe im Voice Menü zum n-ten Eintrag und selektiere ihn
  */
 //#define SerialInputAsCommand
 
-// ######################################################################
+// ###### DF Player Serial Connection ###################################
+
+/* If using Nano Every with connected DfPlayer Rx/Tx to D0/D1 uncomment the following lines
+ * Wenn der Nano Every verwendet wird und Rx/Tx vom DfPlayer mit D0/D1 verbunden ist, den Kommentar der folgenden Zeile entfernen
+ */
+//#define DFPlayerUsesHardwareSerial
+
+// ###### DF Player HW ##################################################
 
 /* uncomment one of the below lines to support a special chip on the DfMiniMp3 player
- * um einen speziellen Chip auf dem DfMiniMp3 Player zu ünterstützen bitte in eine der nächste Zeilen den Kommentar entfernen
+ * um einen speziellen Chip auf dem DfMiniMp3 Player zu ünterstützen, bitte in einer der nächsten Zeilen den Kommentar entfernen
  *
  * GD3200B:     bad behavior of getFolderTrackCount() - ignores the parameter folder
  *              bad behavior of callback OnPlayFinished - it is also called on advertise tracks
@@ -171,23 +198,32 @@ static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (Ton
 //#define DFMiniMp3_T_CHIP_MH2024K16SS
 //#define DFMiniMp3_T_CHIP_LISP3
 //#define DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
-#define DFMiniMp3_T_CHIP_Mp3ChipIncongruousNoAck
+//#define DFMiniMp3_T_CHIP_Original
+#if not defined(DFMiniMp3_T_CHIP_GD3200B) and not defined(DFMiniMp3_T_CHIP_MH2024K16SS) and not defined(DFMiniMp3_T_CHIP_LISP3) and not defined(DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0) and not defined(DFMiniMp3_T_CHIP_Mp3ChipIncongruousNoAck) and not defined(DFMiniMp3_T_CHIP_Original)
+# define DFMiniMp3_T_CHIP_Mp3ChipIncongruousNoAck
+#endif
 
-// ######################################################################
+// ###### Shutdown ######################################################
 
 /* uncomment the below line to disable shutdown via button (long press play/pause)
- * um ein Shutdown via Taste (long press Play/Pause) zu unterdrücken bitte in der nächste Zeile den Kommentar entfernen
+ * um ein Shutdown via Taste (long press Play/Pause) zu unterdrücken, bitte in der nächsten Zeile den Kommentar entfernen
  */
 //#define DISABLE_SHUTDOWN_VIA_BUTTON
 
-// ######################################################################
+/* uncomment one of the below lines if you use Pololu Powerswitch or Traeger Platine for shutdown
+ * wenn der Pololu Powerswitch oder die Träger-Platine für das Shutdown verwendet wird, in einer der nächsten Zeilen den Kommentar entfernen
+ */
+//#define USE_POLOLU_SHUTDOWN           // HIGH --> Shutdown
+//#define USE_TRAEGER_PLATINE_SHUTDOWN  // LOW  --> Shutdown
 
-/* uncomment the below line to enable the rotary encoder for volume setting
- * um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
+// ###### Rotary Encoder ################################################
+
+/* uncomment the below line to enable the rotary encoder for volume settings
+ * um den Drehgeber zu unterstützen, bitte in der nächsten Zeile den Kommentar entfernen
  */
 //#define ROTARY_ENCODER
 /* uncomment the below line to enable the rotary encoder also for next and previous (only one click in one second)
- * um den Drehgeber auch für vor und zurück zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
+ * um den Drehgeber auch für vor und zurück zu unterstützen, bitte in der nächsten Zeile den Kommentar entfernen
  */
 //#define ROTARY_ENCODER_LONGPRESS
 
@@ -214,10 +250,10 @@ inline constexpr uint8_t   rotaryEncoderDebounce  = 75; // ms
 inline constexpr bool      rotaryEncoderPullUp    = false;
 #endif // ROTARY_ENCODER
 
-// ######################################################################
+// ###### Poti ##########################################################
 
-/* uncomment the below line to enable the poti for volume setting
- * um den Poti zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
+/* uncomment the below line to enable the poti for volume settings
+ * um das Poti zu unterstützen, bitte in der nächsten Zeile den Kommentar entfernen
  */
 //#define POTI
 
@@ -233,16 +269,16 @@ inline constexpr uint8_t   potiPin    = A3 ; // AiO/Classic A3
 #endif // ALLinONE_Plus
 #endif // POTI
 
-// ######################################################################
+// ###### LED Neo Ring ##################################################
 
 /* uncomment the below line to enable the neo ring
- * To have more features (show volume setting) uncomment also NEO_RING_EXT
- * um den Neo Ring zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
+ * To have more features (show volume settings) uncomment also NEO_RING_EXT
+ * um den Neo Ring zu unterstützen, bitte in der nächsten Zeile den Kommentar entfernen
  * um weitere Features einzuschalten, auch den Kommentar für NEO_RING_EXT entfernen
  */
-//#define NEO_RING
+//#define NEO_RING <numPixel>
 //#define NEO_RING_EXT
-//#define NEO_RING_2
+//#define NEO_RING_2 <numPixel>
 
 #ifdef NEO_RING
 #ifdef ALLinONE_Plus
@@ -255,7 +291,7 @@ inline constexpr uint8_t neoPixelRingPin =  2; // GPIO02 (D2) on ESP32 Wroom 32
 inline constexpr uint8_t neoPixelRingPin = D5; // D5 on AiO/Classic
 #endif // ALLinONE_Plus
 
-inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
+inline constexpr uint8_t neoPixelNumber  = NEO_RING; // Total Number of Pixels
 
 #ifdef NEO_RING_2
 #ifdef ALLinONE_Plus
@@ -264,17 +300,17 @@ inline constexpr uint8_t neoPixelRingPin2= 14; // PC0 on AiOplus (Erweiterungsle
 #else
 inline constexpr uint8_t neoPixelRingPin2= D2; // D2 on AiO/Classic (only Every)
 #endif // ALLinONE_Plus
-inline constexpr uint8_t neoPixelNumber2 = 24; // Total Number of Pixels
+inline constexpr uint8_t neoPixelNumber2 = NEO_RING_2; // Total Number of Pixels
 #endif // NEO_RING_2
 
 #endif // NEO_RING
 
-// ######################################################################
+// ###### Speaker off Logic #############################################
 
 /* uncomment the below line to enable the Speaker on/off for Classic to suppress noise
  * on startup and shutdown (automatically enabled on AiO and AiOplus)
- * um den Lautsprecher ein/aus Schalter für die Classic Variante zu unterstützen bitte
- * in der nächste Zeile den Kommentar entfernen (zur Unterdrückung der Ein- und Ausschaltgeräusche)
+ * um den Lautsprecher ein/aus-Schalter für die Classic Variante zu unterstützen, bitte
+ * in der nächsten Zeile den Kommentar entfernen (zur Unterdrückung der Ein- und Ausschaltgeräusche)
  * (automatisch eingeschaltet für AiO und AiOplus)
  */
 //#define SPKONOFF
@@ -290,10 +326,10 @@ inline constexpr levelType     ampEnablePinType = levelType::activeLow;
 #endif
 #endif // SPKONOFF
 
-// ######################################################################
+// ###### Headphone Jackdetect ##########################################
 
 /* uncomment the below line to enable the Headphone Jack detection (automatically enabled on AiOplus)
- * um die Kopfhörer Erkennung einzuschalten bitte in der nächste Zeile den Kommentar entfernen
+ * um die Kopfhörer Erkennung einzuschalten, bitte in der nächsten Zeile den Kommentar entfernen
  * (automatisch eingeschaltet für AiOplus)
  */
 //#define HPJACKDETECT
@@ -309,48 +345,44 @@ inline constexpr levelType      dfPlayer_noHeadphoneJackDetectType = levelType::
 #endif
 #endif // HPJACKDETECT
 
-// ######################################################################
+// ###### Functions and Features ########################################
 
 /* uncomment the below line to ignore the RFID if it is already playing
- * um die selbe RFID zu ignorieren, wenn die bereits spielt, in der nächste
+ * um dieselbe RFID zu ignorieren, wenn sie bereits spielt, in der nächsten
  * Zeile den Kommentar entfernen
  */
 //#define DONT_ACCEPT_SAME_RFID_TWICE
 
 /* uncomment the below line to resume playback if the RFID that started the
  * playback is detected again
- * um die Wiedergabe fortzusetzen, wenn die selbe RFID erkannt wird, die bereits
- * abgespielt wird, in der nächste Zeile den Kommentar entfernen
+ * um die Wiedergabe fortzusetzen, wenn dieselbe RFID erkannt wird, die bereits
+ * abgespielt wird, in der nächsten Zeile den Kommentar entfernen
  */
 //#define RESUME_ON_SAME_RFID
 
-/* uncomment the below line to replay the last card or short cut if pressed play/pause
+/* uncomment the below line to replay the last card or shortcut if pressed play/pause
  * in Idle state
- * um die letzte Karte oder den letzten Short Cut wieder abzuspielen, wenn die Play/Pause Taste
- * im Idle State gedrückt wird, in der nächste Zeile den Kommentar entfernen
+ * um die letzte Karte oder den letzten Shortcut wieder abzuspielen, wenn die Play/Pause Taste
+ * im Idle State gedrückt wird, in der nächsten Zeile den Kommentar entfernen
  */
 //#define REPLAY_ON_PLAY_BUTTON
 
-// ######################################################################
-
-/* uncomment the below line(s) to enable the quiz, memory teapot game
- * um das Quiz, Memory oder Teekesselchen Spiel zu aktivieren, in der nächste Zeile(n) den Kommentar entfernen
+/* uncomment the below line(s) to enable the quiz, memory and/or teapot game
+ * um das Quiz-, Memory- oder Teekesselchen-Spiel zu aktivieren, in der(den) nächsten Zeile(n) den(die) Kommentar(e) entfernen
  */
 //#define QUIZ_GAME
 //#define MEMORY_GAME
 //#define TEAPOT_GAME
 
-// ######################################################################
-
 /* uncomment the below line to store the last played card in EEPROM
- * um die letzte Karte im EEPROM zu speichern, in der nächste Zeile den Kommentar entfernen
+ * um die letzte Karte im EEPROM zu speichern, in der nächsten Zeile den Kommentar entfernen
  */
 //#define STORE_LAST_CARD
 
-// ######################################################################
+// ###### Start Shortcut via HW Pin #####################################
 
 /* uncomment the below line to enable special shortcut on startup via GPIO
- * um den spezial Shortcut beim Start via GPIO zu aktivieren, in der nächste Zeile den Kommentar entfernen
+ * um den spezial Shortcut beim Start via GPIO zu aktivieren, in der nächsten Zeile den Kommentar entfernen
  */
 //#define SPECIAL_START_SHORTCUT
 
@@ -370,10 +402,10 @@ inline constexpr uint8_t   specialStartShortcutFolder  = 1;
 inline constexpr uint8_t   specialStartShortcutTrack   = 1;
 #endif // SPECIAL_START_SHORTCUT
 
-// ######################################################################
+// ###### Bluetooth Module ##############################################
 
 /* uncomment the below line to enable support for BT module
- * um die Unterstützung des BT Modules zu aktivieren, in der nächste Zeile den Kommentar entfernen
+ * um die Unterstützung des BT Moduls zu aktivieren, in der nächsten Zeile den Kommentar entfernen
  */
 //#define BT_MODULE
 
@@ -392,13 +424,20 @@ inline constexpr levelType btModulePairingPinType      = levelType::activeHigh;
 inline constexpr unsigned long btModulePairingPulse    = 500;
 #endif // BT_MODULE
 
-// ######################################################################
+// ###### Battery Voltage Measurement ###################################
 
 /* uncomment the below line to enable battery voltage measurement (not for ALLinONE, not recommended for TonUINO_Classic)
- * um die Batterie Spannungsmessung zu aktivieren, in der nächste Zeile den Kommentar entfernen
+ * um die Batteriespannungsmessung zu aktivieren, in der nächsten Zeile den Kommentar entfernen
  * (nicht für ALLinONE, nicht empfohlen für TonUINO_Classic)
  */
 //#define BAT_VOLTAGE_MEASUREMENT
+
+// ********* Type of Battery-Cell *****************
+// **** for LFP (LiFePO4) Cell ****** (3,2V)
+//#define LFP
+// **** for Li-Po or LithIon Cell *** (3,6V or 3,7V)
+//#define LiPo
+
 
 #ifdef BAT_VOLTAGE_MEASUREMENT
 #if not defined(ALLinONE_Plus) and not defined(ALLinONE) and not (TonUINO_Esp32 == 200)
@@ -421,29 +460,24 @@ inline constexpr float   voltageMeasurementCorrection  = 2.007; // Spannungsteil
 inline constexpr float   voltageMeasurementCorrection  = 2.007; // Spannungsteiler 100k/100k
 #endif
 #ifdef TonUINO_Esp32
-inline constexpr float   voltageMeasurementCorrection  = 0.710; // Spannungsteiler 100k/100k
+inline constexpr float   voltageMeasurementCorrection  = 0.800; // Spannungsteiler 100k/100k
 #endif
 
-// for Li-Ion
+#ifdef LFP
 inline constexpr float   batVoltageLow                 = 2.95;
+inline constexpr float   batVoltageEmpty               = 2.50;
+#endif
+#ifdef LiPo
+inline constexpr float   batVoltageLow                 = 3.15;
 inline constexpr float   batVoltageEmpty               = 2.90;
-// for Li-PO
-//inline constexpr float   batVoltageLow                 = 3.40;
-//inline constexpr float   batVoltageEmpty               = 3.20;
+#endif
+
 #endif // BAT_VOLTAGE_MEASUREMENT
 
-// ######################################################################
-
-/* uncomment the below lines if you use Pololu Powerswitch or Traeger Platine for shutdown
- * wenn der Pololu Powerswitch oder die Traeger Platine für das Shutdown verwendet wird, in den nächsten Zeile den Kommentar entfernen
- */
-//#define USE_POLOLU_SHUTDOWN
-//#define USE_TRAEGER_PLATINE_SHUTDOWN
-
-// ######################################################################
+// ###### Gain for RFID Antenna #########################################
 
 /* uncomment one of the below lines if you want to change the antenna gain of the MFRC522 module
- * wenn die Antennenverstärkung des MFRC522 Modules verändert werden soll, in der nächsten Zeilen einen Kommentar entfernen
+ * wenn die Antennenverstärkung des MFRC522 Modules verändert werden soll, in einer der nächsten Zeilen den Kommentar entfernen
  */
 //#define MRFC522_RX_GAIN RxGain_18dB
 //#define MRFC522_RX_GAIN RxGain_23dB
@@ -455,10 +489,10 @@ inline constexpr float   batVoltageEmpty               = 2.90;
 //#define MRFC522_RX_GAIN RxGain_avg  // 33dB
 //#define MRFC522_RX_GAIN RxGain_max  // 48dB
 
-// ######################################################################
+// ###### Modification Cards ############################################
 
-/* uncomment the below lines if you want to have the Jukebox modification card
- * wenn du die Jukebox haben willst, in den nächsten Zeile den Kommentar entfernen
+/* uncomment the below line if you want to have the Jukebox modification card
+ * wenn du die Jukebox haben willst, in der nächsten Zeile den Kommentar entfernen
  */
 //#define MODIFICATION_CARD_JUKEBOX
 
@@ -466,14 +500,12 @@ inline constexpr float   batVoltageEmpty               = 2.90;
 inline constexpr uint8_t jukebox_max_cards  = 10;
 #endif
 
-// ######################################################################
-
-/* uncomment the below lines if you want to have the Pause after Track modification card
- * wenn du die Pause nach jedem Track Modifikationskarte haben willst, in den nächsten Zeile den Kommentar entfernen
+/* uncomment the below line if you want to have the Pause after Track modification card
+ * wenn du die Pause-nach-jedem-Track Modifikationskarte haben willst, in der nächsten Zeile den Kommentar entfernen
  */
 //#define MODIFICATION_CARD_PAUSE_AFTER_TRACK
 
-// ######################################################################
+// ###### LED Buttons ###################################################
 
 /* Enable this definition to activate animated LED button support via the LedManager.
  *
@@ -513,13 +545,26 @@ inline constexpr unsigned long led_update_interval = 800; // ms
 inline constexpr unsigned long led_short_blink     = 400; // ms
 #endif // USE_LED_BUTTONS
 
+// ###### Pin for Power ready ###########################################
+
+/* uncomment the below line to enable a pin that signals the power-on logic is ready (Play Button can be released)
+ * um einen Pin zur Signalisierung der Power-on Logik zu aktivieren (die Play Taste kann losgelassen werden), in der
+ * nächsten Zeile den Kommentar entfernen
+ */
 //#define POWER_HOLD_READY
 
 #ifdef POWER_HOLD_READY
-inline constexpr uint8_t power_hold_ready_pin        = D2;
+inline constexpr uint8_t power_hold_ready_pin        = A6;
 inline constexpr levelType power_hold_ready_pin_type = levelType::activeHigh;
 #endif
 
+// ###### Folder Queue for Hoerbuch #####################################
+
+/* uncomment the below line to enable a queue of Hoerbuecher. If one Hoerbuch is finished, a next will be
+ * arbitrary selected from the queue
+ * um die Hörbuch-Queue zu aktivieren, in der nächsten Zeile den Kommentar entfernen. Wenn ein Hörbuch
+ * beendet wurde, wird ein neues zufällig aus der Queue ausgewählt
+ */
 //#define FOLDER_QUEUE_HOERBUCH
 
 /* #################################################################################################
@@ -532,7 +577,7 @@ inline constexpr levelType power_hold_ready_pin_type = levelType::activeHigh;
 
 inline constexpr uint8_t lastSortCut         =  24;
 #ifdef BUTTONS3X3
-#ifdef FIVEBUTTONS
+#if defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
 static_assert(false, "The 3x3 Button board doesn't have 5 Buttons");
 #endif
 inline constexpr uint8_t buttonExtSC_begin   = 101;
@@ -561,6 +606,11 @@ inline constexpr uint8_t   buttonUpPin     = A3;
 inline constexpr uint8_t   buttonDownPin   = A4;
 inline constexpr uint8_t   buttonFourPin   = A1;
 inline constexpr uint8_t   buttonFivePin   = A2;
+#elif defined(FIVEBUTTONS_SWITCHED)
+inline constexpr uint8_t   buttonUpPin     = A1;
+inline constexpr uint8_t   buttonDownPin   = A2;
+inline constexpr uint8_t   buttonFourPin   = A3;
+inline constexpr uint8_t   buttonFivePin   = A4;
 #else
 inline constexpr uint8_t   buttonUpPin     = A1;
 inline constexpr uint8_t   buttonDownPin   = A2;
@@ -764,6 +814,11 @@ inline constexpr uint8_t   buttonUpPin     = A3;
 inline constexpr uint8_t   buttonDownPin   = A4;
 inline constexpr uint8_t   buttonFourPin   = A1;
 inline constexpr uint8_t   buttonFivePin   = A2;
+#elif defined(FIVEBUTTONS_SWITCHED)
+inline constexpr uint8_t   buttonUpPin     = A1;
+inline constexpr uint8_t   buttonDownPin   = A2;
+inline constexpr uint8_t   buttonFourPin   = A3;
+inline constexpr uint8_t   buttonFivePin   = A4;
 #else
 inline constexpr uint8_t   buttonUpPin     = A1;
 inline constexpr uint8_t   buttonDownPin   = A2;
@@ -831,6 +886,11 @@ inline constexpr uint8_t   buttonUpPin     = 27; // (D27)
 inline constexpr uint8_t   buttonDownPin   = 14; // (D14)
 inline constexpr uint8_t   buttonFourPin   = 25; // (D25)
 inline constexpr uint8_t   buttonFivePin   = 26; // (D26)
+#elif defined(FIVEBUTTONS_SWITCHED)
+inline constexpr uint8_t   buttonUpPin     = 25;
+inline constexpr uint8_t   buttonDownPin   = 26;
+inline constexpr uint8_t   buttonFourPin   = 27;
+inline constexpr uint8_t   buttonFivePin   = 14;
 #else
 inline constexpr uint8_t   buttonUpPin     = 25; // (D25)
 inline constexpr uint8_t   buttonDownPin   = 26; // (D26)
