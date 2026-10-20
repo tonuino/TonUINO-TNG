@@ -790,6 +790,12 @@ void Idle::react(command_e const &cmd_e) {
       transitToStartPlay<Play>();
       break;
 #endif
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+  case command::bat_volt_corr:
+    tonuino.getBatVoltage().setVoltageMeasurementCorrection(tonuino.getBatVoltCorr());
+    LOG(state_log, s_info, F("Bat Volt Corr set: "), tonuino.getBatVoltCorr());
+    return;
+#endif
   default:
     break;
   }
@@ -963,6 +969,12 @@ void Pause::react(command_e const &cmd_e) {
       transit<Play>();
     }
     return;
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+  case command::bat_volt_corr:
+    tonuino.getBatVoltage().setVoltageMeasurementCorrection(tonuino.getBatVoltCorr());
+    LOG(state_log, s_info, F("Bat Volt Corr set: "), tonuino.getBatVoltCorr());
+    return;
+#endif
   default:
     break;
   }

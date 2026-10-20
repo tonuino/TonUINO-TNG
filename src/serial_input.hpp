@@ -12,9 +12,20 @@ public:
 
   commandRaw getCommandRaw() override;
 
+#ifdef SerialInputAsCommand
   uint8_t get_menu_jump() const { return menu_jump; }
+#endif
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+  const uint16_t& getBatVoltCorr() const { return batVoltCorr; }
+#endif
+
 private:
+#ifdef SerialInputAsCommand
   uint8_t menu_jump{};
+#endif
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+  uint16_t batVoltCorr{};
+#endif
 };
 
 #endif /* SRC_SERIAL_INPUT_HPP_ */

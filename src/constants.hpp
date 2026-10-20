@@ -431,6 +431,7 @@ inline constexpr unsigned long btModulePairingPulse    = 500;
  * (nicht für ALLinONE, nicht empfohlen für TonUINO_Classic)
  */
 //#define BAT_VOLTAGE_MEASUREMENT
+//#define BAT_VOLTAGE_MEASUREMENT_CALIBRATION  // enable only temporary to see voltage in serial log
 
 // ********* Type of Battery-Cell *****************
 // **** for LFP (LiFePO4) Cell ****** (3,2V)
@@ -448,28 +449,28 @@ inline constexpr uint8_t voltageMeasurementPin         = 35; // (D35)
 #endif // ALLinONE_Plus
 
 #ifdef ALLinONE_Plus
-inline constexpr float   voltageMeasurementCorrection  = 2.075; // Spannungsteiler 100k/100k
+inline constexpr uint16_t voltageMeasurementCorrection = 2075; // Spannungsteiler 100k/100k
 #endif
 #ifdef TonUINO_Classic
-inline constexpr float   voltageMeasurementCorrection  = 1.960; // Spannungsteiler 100k/100k
+inline constexpr uint16_t voltageMeasurementCorrection = 1960; // Spannungsteiler 100k/100k
 #endif
 #ifdef TonUINO_Every
-inline constexpr float   voltageMeasurementCorrection  = 2.007; // Spannungsteiler 100k/100k
+inline constexpr uint16_t voltageMeasurementCorrection = 2007; // Spannungsteiler 100k/100k
 #endif
 #ifdef TonUINO_Every_4808
-inline constexpr float   voltageMeasurementCorrection  = 2.007; // Spannungsteiler 100k/100k
+inline constexpr uint16_t voltageMeasurementCorrection = 2007; // Spannungsteiler 100k/100k
 #endif
 #ifdef TonUINO_Esp32
-inline constexpr float   voltageMeasurementCorrection  = 0.800; // Spannungsteiler 100k/100k
+inline constexpr uint16_t voltageMeasurementCorrection =  800; // Spannungsteiler 100k/100k
 #endif
 
 #ifdef LFP
-inline constexpr float   batVoltageLow                 = 2.95;
-inline constexpr float   batVoltageEmpty               = 2.50;
+inline constexpr uint16_t   batVoltageLow              = 2950;
+inline constexpr uint16_t   batVoltageEmpty            = 2500;
 #endif
 #ifdef LiPo
-inline constexpr float   batVoltageLow                 = 3.15;
-inline constexpr float   batVoltageEmpty               = 2.90;
+inline constexpr uint16_t   batVoltageLow              = 3150;
+inline constexpr uint16_t   batVoltageEmpty            = 2900;
 #endif
 
 #endif // BAT_VOLTAGE_MEASUREMENT

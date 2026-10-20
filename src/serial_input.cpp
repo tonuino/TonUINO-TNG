@@ -3,7 +3,7 @@
 #include "constants.hpp"
 #include "logger.hpp"
 
-#ifdef SerialInputAsCommand
+#if defined(SerialInputAsCommand) or defined(BAT_VOLTAGE_MEASUREMENT_CALIBRATION)
 SerialInput::SerialInput()
 : CommandSource()
 {
@@ -12,6 +12,20 @@ SerialInput::SerialInput()
 commandRaw SerialInput::getCommandRaw() {
   commandRaw ret = commandRaw::none;
   if (Serial.available() > 0) {
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+    if (isAlpha(Serial.peek())) {
+      char cmdWord[5]; cmdWord[4] = 0;
+      Serial.readBytesUntil(' ', cmdWord, 4);
+      if (strcmp(cmdWord, "BAT") == 0) {
+        batVoltCorr = Serial.parseInt();
+        if (batVoltCorr != 0 && batVoltCorr < 10000) {
+          return commandRaw::bat_volt_corr;
+        }
+      }
+      return commandRaw::none;
+    }
+#endif
+#ifdef SerialInputAsCommand
     long optionSerial = Serial.parseInt();
     switch (optionSerial) {
     case -2: ret = commandRaw::down      ; break;
@@ -29,6 +43,9 @@ commandRaw SerialInput::getCommandRaw() {
       }
       break;
     }
+#else
+    Serial.read();
+#endif
   }
   return ret;
 }

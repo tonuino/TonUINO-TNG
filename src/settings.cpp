@@ -8,7 +8,7 @@ namespace {
 //  ############### EEPROM ################################
 //  Address       Usage
 //    0- 99       Folder Settings (Hoerbuch Fortschritt)
-//  100-140       AdminSettings (41 Byte)
+//  100-140       AdminSettings (41 Byte, 44 with bat voltage measurement)
 //  141-155       reserved (15 Byte)
 //  156-255       extra Shortcuts (100 Byte, max. 25 Shortcuts)
 
@@ -28,6 +28,10 @@ constexpr uint16_t maxExtraShortcuts = (endAddress - startAddressExtraShortcuts)
 static_assert(buttonExtSC_buttons < maxExtraShortcuts, "Too many ExtraShortCuts");
 #endif
 }
+
+#ifdef TonUINO_Esp32
+  folderSettings Settings::cardFromWeb{};
+#endif
 
 void Settings::init() {
 #ifdef TonUINO_Esp32
@@ -81,6 +85,9 @@ void Settings::resetSettings() {
   hpMaxVolume          = 25;
   hpMinVolume          =  5;
   hpInitVolume         = 15;
+#ifdef BAT_VOLTAGE_MEASUREMENT
+  voltMeasCorrection   =  0;
+#endif
 
   writeSettingsToFlash();
 }
@@ -103,6 +110,13 @@ void Settings::loadSettingsFromFlash() {
     writeSettingsToFlash();
   }
 
+#ifdef BAT_VOLTAGE_MEASUREMENT
+  if (voltMeasCorrection == 0 || voltMeasCorrection > 10000) {
+    voltMeasCorrection = voltageMeasurementCorrection;
+    writeSettingsToFlash();
+  }
+#endif
+
   LOG(settings_log, s_info, F("Ver:"), version);
   LOG(settings_log, s_info, F("Vol:"), spkMaxVolume, F(" "), spkMinVolume, F(" "), spkInitVolume, F(" "), hpMaxVolume, F(" "), hpMinVolume, F(" "), hpInitVolume);
   LOG(settings_log, s_info, F("EQ:" ), eq);
@@ -111,6 +125,9 @@ void Settings::loadSettingsFromFlash() {
   LOG(settings_log, s_info, F("AL:" ), adminMenuLocked);
   LOG(settings_log, s_info, F("AP:" ), adminMenuPin[0], adminMenuPin[1], adminMenuPin[2], adminMenuPin[3]);
   LOG(settings_log, s_info, F("PCR:"), pauseWhenCardRemoved);
+#ifdef BAT_VOLTAGE_MEASUREMENT
+  LOG(settings_log, s_info, F("BV:" ), voltMeasCorrection);
+#endif
 }
 
 void Settings::writeFolderSettingToFlash(uint8_t folder, uint8_t track) {
