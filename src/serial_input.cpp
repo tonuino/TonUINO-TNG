@@ -17,8 +17,8 @@ commandRaw SerialInput::getCommandRaw() {
       char cmdWord[5]; cmdWord[4] = 0;
       Serial.readBytesUntil(' ', cmdWord, 4);
       if (strcmp(cmdWord, "BAT") == 0) {
-        batVoltCorr = Serial.parseInt();
-        if (batVoltCorr != 0 && batVoltCorr < 10000) {
+        batVolt = Serial.parseInt();
+        if (batVolt != 0 && batVolt < 10000) {
           return commandRaw::bat_volt_corr;
         }
       }

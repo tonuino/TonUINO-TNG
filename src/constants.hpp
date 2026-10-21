@@ -431,7 +431,8 @@ inline constexpr unsigned long btModulePairingPulse    = 500;
  * (nicht für ALLinONE, nicht empfohlen für TonUINO_Classic)
  */
 //#define BAT_VOLTAGE_MEASUREMENT
-//#define BAT_VOLTAGE_MEASUREMENT_CALIBRATION  // enable only temporary to see voltage in serial log
+//#define BAT_VOLTAGE_MEASUREMENT_CALIBRATION       // enable calibration via serial console
+//#define BAT_VOLTAGE_MEASUREMENT_CALIBRATION_NANO  // old method for Nano, enable voltage log on console
 
 // ********* Type of Battery-Cell *****************
 // **** for LFP (LiFePO4) Cell ****** (3,2V)
@@ -461,7 +462,7 @@ inline constexpr uint16_t voltageMeasurementCorrection = 2007; // Spannungsteile
 inline constexpr uint16_t voltageMeasurementCorrection = 2007; // Spannungsteiler 100k/100k
 #endif
 #ifdef TonUINO_Esp32
-inline constexpr uint16_t voltageMeasurementCorrection =  800; // Spannungsteiler 100k/100k
+inline constexpr uint16_t voltageMeasurementCorrection = 2100; // Spannungsteiler 100k/100k
 #endif
 
 #ifdef LFP

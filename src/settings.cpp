@@ -116,6 +116,9 @@ void Settings::loadSettingsFromFlash() {
     writeSettingsToFlash();
   }
 #endif
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION_NANO
+  voltMeasCorrection = voltageMeasurementCorrection;
+#endif
 
   LOG(settings_log, s_info, F("Ver:"), version);
   LOG(settings_log, s_info, F("Vol:"), spkMaxVolume, F(" "), spkMinVolume, F(" "), spkInitVolume, F(" "), hpMaxVolume, F(" "), hpMinVolume, F(" "), hpInitVolume);

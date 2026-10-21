@@ -4,6 +4,8 @@
 #include <Arduino.h>
 
 #include "constants.hpp"
+
+#ifdef BAT_VOLTAGE_MEASUREMENT
 #include "timer.hpp"
 
 class Mp3;
@@ -19,14 +21,14 @@ public:
   bool     isLow     () { return low; }
 
 #ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
-  void setVoltageMeasurementCorrection(uint16_t newVoltageMeasurementCorrection);
+  void setVoltageMeasurementCorrection(uint16_t voltageMeasurement);
 #endif
 
 
 private:
   void lowMessage();
 
-  uint16_t  voltage{};
+  uint16_t  voltage{batVoltageLow};
   bool      low{};
 
   Timer     logTimer{};
@@ -36,4 +38,5 @@ private:
   Settings& settings;
 };
 
+#endif // BAT_VOLTAGE_MEASUREMENT
 #endif /* SRC_BATVOLTAGE_HPP_ */

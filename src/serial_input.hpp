@@ -16,7 +16,7 @@ public:
   uint8_t get_menu_jump() const { return menu_jump; }
 #endif
 #ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
-  const uint16_t& getBatVoltCorr() const { return batVoltCorr; }
+  const uint16_t& getBatVoltageFromInput() const { return batVolt; }
 #endif
 
 private:
@@ -24,7 +24,7 @@ private:
   uint8_t menu_jump{};
 #endif
 #ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
-  uint16_t batVoltCorr{};
+  uint16_t batVolt{};
 #endif
 };
 

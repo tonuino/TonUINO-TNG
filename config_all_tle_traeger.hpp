@@ -114,7 +114,8 @@
 //            Überwachung der Batteriespannung, Warnton bei Schwellwert (HW erforderlich, Spannungsteiler)
 // -------------------------------------------------------------------------------------------------------------------------------
 #define BAT_VOLTAGE_MEASUREMENT
-//#define BAT_VOLTAGE_MEASUREMENT_CALIBRATION  // enable only temporary to see voltage in serial log
+//#define BAT_VOLTAGE_MEASUREMENT_CALIBRATION       // enable calibration via serial console
+//#define BAT_VOLTAGE_MEASUREMENT_CALIBRATION_NANO  // old method for Nano, enable voltage log on console
 
 //#define LFP                           //  Schwellwert für LiFePO4 Akku einstellen
 #define LiPo                          //  Schwellwert für LiPo Akku einstellen

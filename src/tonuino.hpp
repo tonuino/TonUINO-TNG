@@ -79,7 +79,7 @@ public:
 #endif
 
 #ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
-  uint16_t getBatVoltCorr() const { return serialInput.getBatVoltCorr(); }
+  uint16_t getBatVoltageFromInput() const { return serialInput.getBatVoltageFromInput(); }
 #endif
 
   void shutdown();

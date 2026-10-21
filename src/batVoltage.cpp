@@ -46,12 +46,15 @@ bool BatVoltage::check() {
 #ifdef TonUINO_Classic
   const uint16_t voltageMeasurementRefVoltage = readVcc();
 #endif
-  const int16_t value = analogRead(voltageMeasurementPin)*static_cast<long>(voltageMeasurementRefVoltage)/1000;
-
   if (logTimer.isExpired()) {
     logTimer.start(2000);
-    voltage = value*settings.voltMeasCorrection/voltageMeasurementMaxLevel;
-#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+#ifdef TonUINO_Esp32
+    voltage = (voltage*4+analogReadMilliVolts(voltageMeasurementPin)*settings.voltMeasCorrection/1000)/5;
+#else
+    const int16_t value = analogRead(voltageMeasurementPin)*static_cast<long>(voltageMeasurementRefVoltage)/1000;
+    voltage = (voltage*4+value*settings.voltMeasCorrection/voltageMeasurementMaxLevel)/5;
+#endif
+#if defined(BAT_VOLTAGE_MEASUREMENT_CALIBRATION) or defined(BAT_VOLTAGE_MEASUREMENT_CALIBRATION_NANO)
     LOG(batvol_log, s_error, F("BatVoltage: "), voltage);
 #endif
   }
@@ -93,10 +96,10 @@ bool BatVoltage::check() {
 }
 
 #ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
-  void BatVoltage::setVoltageMeasurementCorrection(uint16_t newVoltageMeasurementCorrection) {
-    settings.voltMeasCorrection = newVoltageMeasurementCorrection;
-    settings.writeSettingsToFlash();
-  }
+ void BatVoltage::setVoltageMeasurementCorrection(uint16_t voltageMeasurement) {
+  settings.voltMeasCorrection = settings.voltMeasCorrection * voltageMeasurement / voltage;
+  settings.writeSettingsToFlash();
+}
 #endif
 
 void BatVoltage::lowMessage() {
