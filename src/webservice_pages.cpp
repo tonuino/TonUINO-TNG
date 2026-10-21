@@ -420,6 +420,9 @@ const char settings_html[] PROGMEM = R"rawliteral(
     <br>
     <br><label for="pauseWhenCardRemoved">Pause w. Kart. entf.:</label><input type="checkbox" name="pauseWhenCardRemoved" id="pauseWhenCardRemoved">
     <br>
+    <br><label for="voltMeasCorrection"  >Bat volt corr.:</label><div class="tooltip"><input type="number" name="voltMeasCorrection"        id="voltMeasCorrection" style="width: 5ch;">
+                                                                    <span class="tooltiptext">Korrekturfaktor für die Spannungsmessung*1000</span></div>
+    <br>
 
     </div>
 
@@ -512,6 +515,8 @@ const char settings_html[] PROGMEM = R"rawliteral(
         document.getElementById( "sc_folder4"           ).value = json.sc_folder4;
         document.getElementById( "sc_special14"         ).value = json.sc_special14;
         document.getElementById( "sc_special24"         ).value = json.sc_special24;
+
+        document.getElementById( "voltMeasCorrection"   ).value = json.voltMeasCorrection;
       }
     };
     xhttp.open("GET", "/get_settings", true);  // true => async, false => synchronous
