@@ -603,16 +603,11 @@ inline constexpr uint8_t   button3x3Pin    = A3;
 inline constexpr uint8_t   buttonUpPin     = A1;
 inline constexpr uint8_t   buttonDownPin   = A2;
 inline constexpr uint32_t  button3x3DbTime = 50; // Debounce time in milliseconds (default 50ms)
-#elif defined(FIVEBUTTONS)
+#elif defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
 inline constexpr uint8_t   buttonUpPin     = A3;
 inline constexpr uint8_t   buttonDownPin   = A4;
 inline constexpr uint8_t   buttonFourPin   = A1;
 inline constexpr uint8_t   buttonFivePin   = A2;
-#elif defined(FIVEBUTTONS_SWITCHED)
-inline constexpr uint8_t   buttonUpPin     = A1;
-inline constexpr uint8_t   buttonDownPin   = A2;
-inline constexpr uint8_t   buttonFourPin   = A3;
-inline constexpr uint8_t   buttonFivePin   = A4;
 #else
 inline constexpr uint8_t   buttonUpPin     = A1;
 inline constexpr uint8_t   buttonDownPin   = A2;
@@ -687,7 +682,7 @@ inline constexpr uint8_t   buttonUpPin     = A2;
 inline constexpr uint8_t   buttonDownPin   = A1;
 #endif
 
-#ifdef FIVEBUTTONS
+#if defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
 inline constexpr uint8_t   buttonFourPin   = A4;
 inline constexpr uint8_t   buttonFivePin   = A3;
 #endif
@@ -753,7 +748,7 @@ inline constexpr uint8_t   buttonUpPin     = A2;
 inline constexpr uint8_t   buttonDownPin   = A1;
 #endif
 
-#ifdef FIVEBUTTONS
+#if defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
 inline constexpr uint8_t   buttonFourPin   = A4;
 inline constexpr uint8_t   buttonFivePin   = A3;
 #endif
@@ -811,16 +806,11 @@ inline constexpr uint8_t   button3x3Pin    = A3;
 inline constexpr uint8_t   buttonUpPin     = A1;
 inline constexpr uint8_t   buttonDownPin   = A2;
 inline constexpr uint32_t  button3x3DbTime = 50; // Debounce time in milliseconds (default 50ms)
-#elif defined(FIVEBUTTONS)
+#elif defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
 inline constexpr uint8_t   buttonUpPin     = A3;
 inline constexpr uint8_t   buttonDownPin   = A4;
 inline constexpr uint8_t   buttonFourPin   = A1;
 inline constexpr uint8_t   buttonFivePin   = A2;
-#elif defined(FIVEBUTTONS_SWITCHED)
-inline constexpr uint8_t   buttonUpPin     = A1;
-inline constexpr uint8_t   buttonDownPin   = A2;
-inline constexpr uint8_t   buttonFourPin   = A3;
-inline constexpr uint8_t   buttonFivePin   = A4;
 #else
 inline constexpr uint8_t   buttonUpPin     = A1;
 inline constexpr uint8_t   buttonDownPin   = A2;
@@ -883,16 +873,11 @@ inline constexpr uint8_t   button3x3Pin    = 27; // ADC2_7(D27)
 inline constexpr uint8_t   buttonUpPin     = 25; // (D25)
 inline constexpr uint8_t   buttonDownPin   = 26; // (D26)
 inline constexpr uint32_t  button3x3DbTime = 50; // Debounce time in milliseconds (default 50ms)
-#elif defined(FIVEBUTTONS)
+#elif defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
 inline constexpr uint8_t   buttonUpPin     = 27; // (D27)
 inline constexpr uint8_t   buttonDownPin   = 14; // (D14)
 inline constexpr uint8_t   buttonFourPin   = 25; // (D25)
 inline constexpr uint8_t   buttonFivePin   = 26; // (D26)
-#elif defined(FIVEBUTTONS_SWITCHED)
-inline constexpr uint8_t   buttonUpPin     = 25;
-inline constexpr uint8_t   buttonDownPin   = 26;
-inline constexpr uint8_t   buttonFourPin   = 27;
-inline constexpr uint8_t   buttonFivePin   = 14;
 #else
 inline constexpr uint8_t   buttonUpPin     = 25; // (D25)
 inline constexpr uint8_t   buttonDownPin   = 26; // (D26)

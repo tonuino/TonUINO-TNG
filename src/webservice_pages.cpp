@@ -148,6 +148,29 @@ const char service_button_5_html[] PROGMEM = R"rawliteral(
 
 )rawliteral";
 
+const char service_button_5_inv_html[] PROGMEM = R"rawliteral(
+
+<form class="service_button_5" id="service">
+    normal:
+    <br>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'down') ;">Vol-</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'five') ;">Prev</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'pause');">Pause</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'four') ;">Next</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'up')   ;">Vol+</button>
+    <br>
+    lang:
+    <br>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'down_long') ;">Vol-</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'five_long') ;">Prev</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'pause_long');">Pause</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'four_long') ;">Next</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'up_long')   ;">Vol+</button>
+</form>
+<br>
+
+)rawliteral";
+
 const char service_button_3_html[] PROGMEM = R"rawliteral(
 
 <form class="service_button_3" id="service">

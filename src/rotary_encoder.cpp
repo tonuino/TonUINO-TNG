@@ -104,7 +104,7 @@ commandRaw RotaryEncoder::getCommandRaw() {
 commandRaw RotaryEncoder::getCommandRawFromCommand(const command& cmd) {
   switch(cmd) {
 
-#ifdef FIVEBUTTONS
+#if defined(FIVEBUTTONS)
 
   case command::next:
     return commandRaw::up;
@@ -114,6 +114,17 @@ commandRaw RotaryEncoder::getCommandRawFromCommand(const command& cmd) {
     return commandRaw::four;
   case command::volume_down:
     return commandRaw::five;
+
+#elif defined(FIVEBUTTONS_SWITCHED)
+
+  case command::next:
+    return commandRaw::four;
+  case command::previous:
+    return commandRaw::five;
+  case command::volume_up:
+    return commandRaw::up;
+  case command::volume_down:
+    return commandRaw::down;
 
 #else
 

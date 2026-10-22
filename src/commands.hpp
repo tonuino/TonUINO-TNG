@@ -53,7 +53,7 @@ enum class commandRaw: uint8_t {
   downLong       =  9,
   downLongRepeat = 10,
   updownLong     = 11,
-#ifdef FIVEBUTTONS
+#if defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
   four           = 12,
   fourLong       = 13,
   fourLongRepeat = 14,

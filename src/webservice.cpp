@@ -503,7 +503,7 @@ void Webservice::service(AsyncWebServerRequest *request) {
     else if (request->arg("button") == "down_long" ) cmd = commandRaw::downLong;
     else if (request->arg("button") == "pause_long") cmd = commandRaw::pauseLong;
     else if (request->arg("button") == "up_long"   ) cmd = commandRaw::upLong;
-#ifdef FIVEBUTTONS
+#if defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
     else if (request->arg("button") == "five"      ) cmd = commandRaw::five;
     else if (request->arg("button") == "four"      ) cmd = commandRaw::four;
     else if (request->arg("button") == "five_long" ) cmd = commandRaw::fiveLong;
@@ -971,8 +971,10 @@ String Webservice::process_page(const String& var) {
   else if (var == "TOPNAV")
     return topnav_html;
   else if (var == "SERVICE") {
-#ifdef FIVEBUTTONS
+#if defined(FIVEBUTTONS)
     return service_button_5_html;
+#elif defined(FIVEBUTTONS_SWITCHED)
+    return service_button_5_inv_html;
 #else
     if (settings.invertVolumeButtons)
       return service_button_3_inv_html;
@@ -1114,6 +1116,9 @@ String Webservice::getInfoData(const String& id){
     #endif
     #ifdef FIVEBUTTONS
       p += "5 Tasten";
+    #endif
+    #ifdef FIVEBUTTONS_SWITCHED
+      p += "5 Tasten invert";
     #endif
     #ifdef BUTTONS3X3
       p += "3 x 3 Button Board";
