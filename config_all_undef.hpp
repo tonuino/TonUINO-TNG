@@ -18,8 +18,7 @@
 // -------------------------------------------------------------------------------------------------------------------------------
 //#define THREEBUTTONS                  // 3 Tasten mit Doppelfunktion
 //#define FIVEBUTTONS                   // 5 Tasten
-//#define FIVEBUTTONS_SWITCHED          // Zurück- / Vor-Tasten werden mit Leiser / Lauter Tasten getauscht
-//#define BUTTONS3X3                    // 3 Tasten mit Doppelfunktion + 9 Tasten für Shortcuts
+//#define BUTTONS3X3                    // 9 Tasten für Shortcuts
 
 // -------------------------------------------------------------------------------------------------------------------------------
 //            Befehlseingabe über serielle Schnittstelle

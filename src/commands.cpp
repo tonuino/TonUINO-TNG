@@ -14,35 +14,21 @@ const command cmd_table[][4] PROGMEM = {
 #else
 /*  4 pauseLong,      */ ,{ command::adm_end   , command::shortcut1  , command::track      , command::track       }
 #endif
-#if defined(FIVEBUTTONS)
-/*  5 up,             */ ,{ command::next      , command::bright_up  , command::next       , command::none        }
-/*  6 upLong,         */ ,{ command::next10    , command::shortcut2  , command::next10     , command::none        }
-/*  7 upLongRepeat,   */ ,{ command::none      , command::none       , command::none       , command::none        }
-/*  8 down,           */ ,{ command::previous  , command::bright_down, command::previous   , command::none        }
-/*  9 downLong,       */ ,{ command::previous10, command::shortcut3  , command::previous10 , command::none        }
-/* 10 downLongRepeat, */ ,{ command::none      , command::none       , command::none       , command::none        }
-/* 11 updownLong,     */ ,{ command::none      , command::shortcut1  , command::to_first   , command::none        }
-/* 12 four,           */ ,{ command::next      , command::bright_up  , command::volume_up  , command::none        }
-/* 13 fourLong,       */ ,{ command::next10    , command::none       , command::volume_up  , command::none        }
+#ifdef FIVEBUTTONS
+/*  5 up,             */ ,{ command::next      , command::bright_up  , command::next       , command::volume_up   }
+/*  6 upLong,         */ ,{ command::next10    , command::shortcut2  , command::next10     , command::volume_up   }
+/*  7 upLongRepeat,   */ ,{ command::none      , command::none       , command::none       , command::volume_up   }
+/*  8 down,           */ ,{ command::previous  , command::bright_down, command::previous   , command::volume_down }
+/*  9 downLong,       */ ,{ command::previous10, command::shortcut3  , command::previous10 , command::volume_down }
+/* 10 downLongRepeat, */ ,{ command::none      , command::none       , command::none       , command::volume_down }
+/* 11 updownLong,     */ ,{ command::none      , command::shortcut1  , command::to_first   , command::to_first    }
+/* 12 four,           */ ,{ command::next      , command::bright_up  , command::volume_up  , command::next        }
+/* 13 fourLong,       */ ,{ command::next10    , command::none       , command::volume_up  , command::next10      }
 /* 14 fourLongRepeat, */ ,{ command::none      , command::none       , command::volume_up  , command::none        }
-/* 15 five,           */ ,{ command::previous  , command::bright_down, command::volume_down, command::none        }
-/* 16 fiveLong,       */ ,{ command::previous10, command::none       , command::volume_down, command::none        }
+/* 15 five,           */ ,{ command::previous  , command::bright_down, command::volume_down, command::previous    }
+/* 16 fiveLong,       */ ,{ command::previous10, command::none       , command::volume_down, command::previous10  }
 /* 17 fiveLongRepeat, */ ,{ command::none      , command::none       , command::volume_down, command::none        }
-#elif defined(FIVEBUTTONS_SWITCHED)
-/*  5 up,             */ ,{ command::next      , command::bright_up  , command::volume_up  , command::none        }
-/*  6 upLong,         */ ,{ command::next10    , command::none       , command::volume_up  , command::none        }
-/*  7 upLongRepeat,   */ ,{ command::none      , command::none       , command::volume_up  , command::none        }
-/*  8 down,           */ ,{ command::previous  , command::bright_down, command::volume_down, command::none        }
-/*  9 downLong,       */ ,{ command::previous10, command::none       , command::volume_down, command::none        }
-/* 10 downLongRepeat, */ ,{ command::none      , command::none       , command::volume_down, command::none        }
-/* 11 updownLong,     */ ,{ command::none      , command::shortcut1  , command::to_first   , command::none        }
-/* 12 four,           */ ,{ command::next      , command::bright_up  , command::next       , command::none        }
-/* 13 fourLong,       */ ,{ command::next10    , command::shortcut2  , command::next10     , command::none        }
-/* 14 fourLongRepeat, */ ,{ command::none      , command::none       , command::none       , command::none        }
-/* 15 five,           */ ,{ command::previous  , command::bright_down, command::previous   , command::none        }
-/* 16 fiveLong,       */ ,{ command::previous10, command::shortcut3  , command::previous10 , command::none        }
-/* 17 fiveLongRepeat, */ ,{ command::none      , command::none       , command::none       , command::none        }
-#else // Three Button                            command::shortcut1  , command::to_first   , command::none
+#else // Three Button
 /*  5 up,             */ ,{ command::next      , command::bright_up  , command::next       , command::volume_up   }
 /*  6 upLong,         */ ,{ command::next10    , command::shortcut2  , command::volume_up  , command::next        }
 /*  7 upLongRepeat,   */ ,{ command::none      , command::none       , command::volume_up  , command::none        }
@@ -111,10 +97,8 @@ command Commands::getCommand(commandRaw b, state_for_command s) {
     ret =  static_cast<command>(b);
 #endif
 
-#if not defined(FIVEBUTTONS) and not defined(FIVEBUTTONS_SWITCHED)
   if (s == state_for_command::play && (settings.invertVolumeButtons==1))
     s = state_for_command::play_invert;
-#endif
 
   if (b < commandRaw::cmd_end) {
     PROGMEM_read(&cmd_table[static_cast<int>(b)][static_cast<int>(s)], ret);
@@ -151,7 +135,7 @@ const __FlashStringHelper* Commands::getCommandRawStr(commandRaw cmd) {
   case commandRaw::downLong      : return(F("downLong"      )); break;
   case commandRaw::downLongRepeat: return(F("downLongRepeat")); break;
   case commandRaw::updownLong    : return(F("updownLong"    )); break;
-#if defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
+#ifdef FIVEBUTTONS
   case commandRaw::four          : return(F("four"          )); break;
   case commandRaw::fourLong      : return(F("fourLong"      )); break;
   case commandRaw::fourLongRepeat: return(F("fourLongRepeat")); break;

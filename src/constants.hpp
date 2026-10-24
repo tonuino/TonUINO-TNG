@@ -34,10 +34,8 @@
  *                         | A0| A1| A2| A3| A4| A5| A6| A7| D0| D1| D2| D3| D5| D6| D7| D8|
  * ------------------------+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
  * Com to DF Player        |   |   |   |   |   |   |   |   |RX*|TX*| RX| TX|   |   |   |   |
- * 3 Button                | P | U | D |   |   |   |   |   |   |   |   |   |   |   |   |   |
- * 5 Button                | P | V+| V-| U | D |   |   |   |   |   |   |   |   |   |   |   |
- * 5 Button-switched       | P | U | D | V+| V-|   |   |   |   |   |   |   |   |   |   |   |
- * 3x3 Button Board        | P | U | D | A |   |   |   |   |   |   |   |   |   |   |   |   |
+ * 3 Button                | P | U | D |3x3|   |   |   |   |   |   |   |   |   |   |   |   |
+ * 5 Button                | P | V+| V-| U | D |   |3x3|   |   |   |   |   |   |   |   |   |
  * Open pin for random     |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |
  * Rotary encoder          |   |   |   |CLK| DT|   |   |   |   |   |   |   |   |   |   |   |
  * Poti                    |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |   |
@@ -56,38 +54,38 @@
  */
 
 /* ### AiOplus #########################################################################################
- *                         | A0| A1| A2| A3| A4| A5| A6| A7|D10|D14|D19|D21|D27|D31|D32|D33|D36|D37|A14|
- *                         |   |   |   |   |   |   |   |   |PB2|PC0|PC5|PC7|PD5|PE1|PE2|PE3|PF2|PF3|PF4|
+ *                         | A0| A1| A2| A3| A4| A6| A7|D10|D14|D19|D21|D27|D31|D32|D33|D36|D37|A14|A15|
+ *                         |   |   |   |   |   |   |   |PB2|PC0|PC5|PC7|PD5|PE1|PE2|PE3|PF2|PF3|PF4|PF5|
  * ------------------------+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
  * 3 Button                | P | D | U |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
- * 5 Button                | P | D | U | V-| V+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |
- * 3x3 Button Board        | P |   | A | D | U |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
- * Open pin for random     |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |
- * Rotary encoder          |   |   |   |   |   |   |   |   |   |   |   |   |   |CLK| DT|   |CLK| DT|   |
- * Poti                    |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |
- * Neo Ring/LED animat.    |   |   |   |   |   |   |   |   | x |(x)|   |   |   |   |   |   |   |   |   |
- * Speaker off             |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |
- * Shutdown                |   |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |
- * headphone jack detection|   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |
- * special start shortcut  |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |
- * bat voltage measurement |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |   |
+ * 5 Button                | P | D | U | V-| V+|   |   |   |   |   |   |   |   |   |   |   |   |   |3x3|
+ * 3x3 Button Board        | P |   |3x3| D | U |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+ * Open pin for random     |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |   |
+ * Rotary encoder          |   |   |   |   |   |   |   |   |   |   |   |   |CLK| DT|   |CLK| DT|   |   |
+ * Poti                    |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x | x |
+ * Neo Ring/LED animat.    |   |   |   |   |   |   |   | x |(x)|   |   |   |   |   |   |   |   |   |   |
+ * Speaker off             |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |
+ * Shutdown                |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |
+ * headphone jack detection|   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |
+ * special start shortcut  |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |
+ * bat voltage measurement |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |   |   |
  * #####################################################################################################
  */
 
-/* ### AiO #################################################################
- *                         | A0| A1| A2| A3| A4| A5| A6| A7| D5| D6| D7| D8|
- * ------------------------+---+---+---+---+---+---+---+---+---+---+---+---+
- * 3 Button                | P | D | U |   |   |   |   |   |   |   |   |   |
- * 5 Button                | P | D | U | V-| V+|   |   |   |   |   |   |   |
- * 3x3 Button Board        | P |   | A | D | U |   |   |   |   |   |   |   |
- * Open pin for random     |   |   |   |   |   |   |   | x |   |   |   |   |
- * Rotary encoder          |   |   |   |CLK| DT|   |   |   |   |   |   |   |
- * Poti                    |   |   |   | x |   |   |   |   |   |   |   |   |
- * Neo Ring/LED animat.    |   |   |   |   |   |   |   |   | x |   |   |   |
- * Speaker off             |   |   |   |   |   |   |   |   |   |   |   | x |
- * Shutdown                |   |   |   |   |   |   |   |   |   |   | x |   |
- * special start shortcut  |   |   |   |   |   |   | x |   |   |   |   |   |
- * #########################################################################
+/* ### AiO #############################################################
+ *                         | A0| A1| A2| A3| A4| A6| A7| D5| D6| D7| D8|
+ * ------------------------+---+---+---+---+---+---+---+---+---+---+---+
+ * 3 Button                | P | D | U |   |   |   |   |   |   |   |   |
+ * 5 Button                | P | D | U | V-| V+|   |   |   |   |   |   |
+ * 3x3 Button Board        | P |   | A | D | U |   |   |   |   |   |   |
+ * Open pin for random     |   |   |   |   |   |   | x |   |   |   |   |
+ * Rotary encoder          |   |   |   |CLK| DT|   |   |   |   |   |   |
+ * Poti                    |   |   |   | x |   |   |   |   |   |   |   |
+ * Neo Ring/LED animat.    |   |   |   |   |   |   |   | x |   |   |   |
+ * Speaker off             |   |   |   |   |   |   |   |   |   |   | x |
+ * Shutdown                |   |   |   |   |   |   |   |   |   | x |   |
+ * special start shortcut  |   |   |   |   |   | x |   |   |   |   |   |
+ * #####################################################################
  */
 
 /* #### Esp32-Wroom32 ##############################################################
@@ -95,9 +93,8 @@
  * Pin                     |D33|D25|D26|D27|D14|D35|D12| VN|RX2|TX2| D2|D15|D13|D34|
  * ------------------------+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
  * Com to DF Player        |   |   |   |   |   |   |   |   | RX| TX|   |   |   |   |
- * 3 Button                | P | U | D |   |   |   |   |   |   |   |   |   |   |   |
- * 5 Button                | P | V+| V-| U | D |   |   |   |   |   |   |   |   |   |
- * 3x3 Button Board        | P | U | D | A |   |   |   |   |   |   |   |   |   |   |
+ * 3 Button                | P | U | D |3x3|   |   |   |   |   |   |   |   |   |   |   |   |
+ * 5 Button                | P | V+| V-| U | D |   |3x3|   |   |   |   |   |   |   |   |   |
  * Open pin for random     |   |   |   |   |   |   |   | x |   |   |   |   |   |   |
  * Rotary encoder          |   |   |   |CLK| DT|   |   |   |   |   |   |   |   |   |
  * Poti                    |   |   |   | x |   |   |   |   |   |   |   |   |   |   |
@@ -156,7 +153,6 @@ static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (Ton
  */
 //#define THREEBUTTONS
 //#define FIVEBUTTONS
-//#define FIVEBUTTONS_SWITCHED
 //#define BUTTONS3X3
 
 // ###### Serial Monitor with Commands ##################################
@@ -579,8 +575,8 @@ inline constexpr levelType power_hold_ready_pin_type = levelType::activeHigh;
 
 inline constexpr uint8_t lastSortCut         =  24;
 #ifdef BUTTONS3X3
-#if defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
-static_assert(false, "The 3x3 Button board doesn't have 5 Buttons");
+#if not defined(FIVEBUTTONS) and not defined(THREEBUTTONS)
+#define THREEBUTTONS
 #endif
 inline constexpr uint8_t buttonExtSC_begin   = 101;
 inline constexpr uint8_t buttonExtSC_buttons =  18; // <= lastSortCut
@@ -598,19 +594,20 @@ inline constexpr uint32_t  buttonLongPressRepeat =  200; // timeout for long pre
 
 inline constexpr uint8_t   buttonPausePin  = A0;
 
-#if defined(BUTTONS3X3)
-inline constexpr uint8_t   button3x3Pin    = A3;
-inline constexpr uint8_t   buttonUpPin     = A1;
-inline constexpr uint8_t   buttonDownPin   = A2;
-inline constexpr uint32_t  button3x3DbTime = 50; // Debounce time in milliseconds (default 50ms)
-#elif defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
+#ifdef FIVEBUTTONS
 inline constexpr uint8_t   buttonUpPin     = A3;
 inline constexpr uint8_t   buttonDownPin   = A4;
 inline constexpr uint8_t   buttonFourPin   = A1;
 inline constexpr uint8_t   buttonFivePin   = A2;
-#else
+#ifdef BUTTONS3X3
+inline constexpr uint8_t   button3x3Pin    = A6;
+#endif
+#else // THREEBUTTONS
 inline constexpr uint8_t   buttonUpPin     = A1;
 inline constexpr uint8_t   buttonDownPin   = A2;
+#ifdef BUTTONS3X3
+inline constexpr uint8_t   button3x3Pin    = A3;
+#endif
 #endif
 
 inline constexpr levelType buttonPinType   = levelType::activeLow;
@@ -672,19 +669,25 @@ inline constexpr unsigned long cycleTime        = 50;
 
 inline constexpr uint8_t   buttonPausePin  = A0;
 
+#ifdef THREEBUTTONS
 #ifdef BUTTONS3X3
 inline constexpr uint8_t   button3x3Pin    = A2;
 inline constexpr uint8_t   buttonUpPin     = A4;
 inline constexpr uint8_t   buttonDownPin   = A3;
-inline constexpr uint32_t  button3x3DbTime = 50; // Debounce time in milliseconds (default 50ms)
 #else
 inline constexpr uint8_t   buttonUpPin     = A2;
 inline constexpr uint8_t   buttonDownPin   = A1;
 #endif
+#endif
 
-#if defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
+#ifdef FIVEBUTTONS
+inline constexpr uint8_t   buttonUpPin     = A2;
+inline constexpr uint8_t   buttonDownPin   = A1;
 inline constexpr uint8_t   buttonFourPin   = A4;
 inline constexpr uint8_t   buttonFivePin   = A3;
+#ifdef BUTTONS3X3
+inline constexpr uint8_t   button3x3Pin    = A15;
+#endif
 #endif
 
 inline constexpr levelType buttonPinType   = levelType::activeLow;
@@ -730,6 +733,10 @@ inline constexpr unsigned long cycleTime             = 50;
 #ifdef ALLinONE
 // ####### buttons #####################################
 
+#if defined(BUTTONS3X3) and defined(FIVEBUTTONS)
+static_assert(false, "You can not have the 3x3 Button board and 5 Buttons on AiO");
+#endif
+
 #if not defined(THREEBUTTONS) and not defined(BUTTONS3X3)
 #define FIVEBUTTONS
 #endif
@@ -742,13 +749,13 @@ inline constexpr uint8_t   buttonPausePin  = A0;
 inline constexpr uint8_t   button3x3Pin    = A2;
 inline constexpr uint8_t   buttonUpPin     = A4;
 inline constexpr uint8_t   buttonDownPin   = A3;
-inline constexpr uint32_t  button3x3DbTime = 50; // Debounce time in milliseconds (default 50ms)
+
 #else
 inline constexpr uint8_t   buttonUpPin     = A2;
 inline constexpr uint8_t   buttonDownPin   = A1;
 #endif
 
-#if defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
+#ifdef FIVEBUTTONS
 inline constexpr uint8_t   buttonFourPin   = A4;
 inline constexpr uint8_t   buttonFivePin   = A3;
 #endif
@@ -801,19 +808,20 @@ inline constexpr unsigned long cycleTime        = 50;
 
 inline constexpr uint8_t   buttonPausePin  = A0;
 
-#if defined(BUTTONS3X3)
-inline constexpr uint8_t   button3x3Pin    = A3;
-inline constexpr uint8_t   buttonUpPin     = A1;
-inline constexpr uint8_t   buttonDownPin   = A2;
-inline constexpr uint32_t  button3x3DbTime = 50; // Debounce time in milliseconds (default 50ms)
-#elif defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
+#ifdef FIVEBUTTONS
 inline constexpr uint8_t   buttonUpPin     = A3;
 inline constexpr uint8_t   buttonDownPin   = A4;
 inline constexpr uint8_t   buttonFourPin   = A1;
 inline constexpr uint8_t   buttonFivePin   = A2;
-#else
+#ifdef BUTTONS3X3
+inline constexpr uint8_t   button3x3Pin    = A6;
+#endif
+#else // THREEBUTTONS
 inline constexpr uint8_t   buttonUpPin     = A1;
 inline constexpr uint8_t   buttonDownPin   = A2;
+#ifdef BUTTONS3X3
+inline constexpr uint8_t   button3x3Pin    = A3;
+#endif
 #endif
 
 inline constexpr levelType buttonPinType   = levelType::activeLow;
@@ -868,19 +876,20 @@ inline constexpr unsigned long cycleTime        = 50;
 
 inline constexpr uint8_t   buttonPausePin  = 33; // (D33)
 
-#if defined(BUTTONS3X3)
+#ifdef FIVEBUTTONS
+inline constexpr uint8_t   buttonUpPin     = 27; // ACD2_7(D27)
+inline constexpr uint8_t   buttonDownPin   = 14; // ADC2_6(D14)
+inline constexpr uint8_t   buttonFourPin   = 25; // ADC2_8(D25)
+inline constexpr uint8_t   buttonFivePin   = 26; // ADC2_9(D26)
+#ifdef BUTTONS3X3
+inline constexpr uint8_t   button3x3Pin    = 12; // ADC2_5(D12)
+#endif
+#else // THREEBUTTONS
+inline constexpr uint8_t   buttonUpPin     = 25; // ADC2_8(D25)
+inline constexpr uint8_t   buttonDownPin   = 26; // ADC2_9(D26)
+#ifdef BUTTONS3X3
 inline constexpr uint8_t   button3x3Pin    = 27; // ADC2_7(D27)
-inline constexpr uint8_t   buttonUpPin     = 25; // (D25)
-inline constexpr uint8_t   buttonDownPin   = 26; // (D26)
-inline constexpr uint32_t  button3x3DbTime = 50; // Debounce time in milliseconds (default 50ms)
-#elif defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
-inline constexpr uint8_t   buttonUpPin     = 27; // (D27)
-inline constexpr uint8_t   buttonDownPin   = 14; // (D14)
-inline constexpr uint8_t   buttonFourPin   = 25; // (D25)
-inline constexpr uint8_t   buttonFivePin   = 26; // (D26)
-#else
-inline constexpr uint8_t   buttonUpPin     = 25; // (D25)
-inline constexpr uint8_t   buttonDownPin   = 26; // (D26)
+#endif
 #endif
 
 inline constexpr levelType buttonPinType   = levelType::activeLow;

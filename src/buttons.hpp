@@ -23,7 +23,7 @@ private:
   Button buttonPause;
   Button buttonUp   ;
   Button buttonDown ;
-#if defined(FIVEBUTTONS) or defined(FIVEBUTTONS_SWITCHED)
+#ifdef FIVEBUTTONS
   Button  buttonFour;
   Button  buttonFive;
 #endif

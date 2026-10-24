@@ -64,14 +64,18 @@ void Settings::writeSettingsToFlash() {
 void Settings::resetSettings() {
   LOG(settings_log, s_debug, F("resetSettings"));
   cookie               = cardCookie;
-  version              =  2;
+  version              =  3;
   spkMaxVolume         = 25;
   spkMinVolume         =  5;
   spkInitVolume        = 15;
   eq                   =  1;
   dummy                =  0;
   standbyTimer         =  0;
+#ifdef FIVEBUTTONS
+  invertVolumeButtons  =  0;
+#else
   invertVolumeButtons  =  1;
+#endif
   shortCuts[0]         =  { 0, pmode_t::none, 0, 0 };
   shortCuts[1]         =  { 0, pmode_t::none, 0, 0 };
   shortCuts[2]         =  { 0, pmode_t::none, 0, 0 };
@@ -86,7 +90,7 @@ void Settings::resetSettings() {
   hpMinVolume          =  5;
   hpInitVolume         = 15;
 #ifdef BAT_VOLTAGE_MEASUREMENT
-  voltMeasCorrection   =  0;
+  voltMeasCorrection   =  voltageMeasurementCorrection;
 #endif
 
   writeSettingsToFlash();
@@ -97,6 +101,17 @@ void Settings::loadSettingsFromFlash() {
   EEPROM_get(startAddressAdminSettings, *this);
   if (cookie != cardCookie)
     resetSettings();
+
+  if (version < 3) {
+    version = 3;
+#ifdef FIVEBUTTONS
+    invertVolumeButtons  =  0;
+#endif
+#ifdef BAT_VOLTAGE_MEASUREMENT
+    voltMeasCorrection = voltageMeasurementCorrection;
+#endif
+    writeSettingsToFlash();
+  }
 
   if (pauseWhenCardRemoved == 255) {
     pauseWhenCardRemoved = 0;
