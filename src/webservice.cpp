@@ -374,6 +374,9 @@ void Webservice::update_settings(AsyncWebServerRequest *request) {
   if (request->hasArg("sc_folder4"          )) settings.shortCuts[3].folder  = request->arg("sc_folder4"          ).toInt();
   if (request->hasArg("sc_special14"        )) settings.shortCuts[3].special = request->arg("sc_special14"        ).toInt();
   if (request->hasArg("sc_Special24"        )) settings.shortCuts[3].special2= request->arg("sc_special24"        ).toInt();
+#ifdef BAT_VOLTAGE_MEASUREMENT
+  if (request->hasArg("voltMeasCorrection"  )) settings.voltMeasCorrection   = request->arg("voltMeasCorrection"  ).toInt();
+#endif
 
   // check values
 #ifdef BT_MODULE
@@ -400,6 +403,11 @@ void Webservice::update_settings(AsyncWebServerRequest *request) {
   if (settings.hpMinVolume  > settings.hpMaxVolume) settings.hpMinVolume  = settings.hpMaxVolume;
   if (settings.hpInitVolume > settings.hpMaxVolume) settings.hpInitVolume = settings.hpMaxVolume;
   if (settings.hpInitVolume < settings.hpMinVolume) settings.hpInitVolume = settings.hpMinVolume;
+
+#ifdef BAT_VOLTAGE_MEASUREMENT
+  if (settings.voltMeasCorrection == 0 || settings.voltMeasCorrection > 10000)
+    settings.voltMeasCorrection = voltageMeasurementCorrection;
+#endif
 
   // update real values
   if (mp3.getVolume() > mp3.getMaxVolume()) mp3.setVolume(mp3.getMaxVolume());
@@ -469,6 +477,9 @@ void Webservice::get_settings(AsyncWebServerRequest *request) {
     doc["sc_special1"+String(i)] = String(settings.shortCuts[i-1].special );
     doc["sc_special2"+String(i)] = String(settings.shortCuts[i-1].special2);
   }
+#ifdef BAT_VOLTAGE_MEASUREMENT
+  doc["voltMeasCorrection"  ] = String(settings.voltMeasCorrection);
+#endif
 
   serializeJson(doc, jsonStr);
 
@@ -722,7 +733,7 @@ String Webservice::get_status() {
   String status;
 
 #ifdef BAT_VOLTAGE_MEASUREMENT
-  status += String("Batterie Spannung: ") + String(tonuino.getBatVoltage().getVoltage());
+  status += String("Batterie Spannung: ") + String(tonuino.getBatVoltage().getVoltage()) + String(" mV");
   if (tonuino.getBatVoltage().isLow())
     status += String(" Low");
   status += "<br>";
@@ -961,7 +972,10 @@ String Webservice::process_page(const String& var) {
     return topnav_html;
   else if (var == "SERVICE") {
 #ifdef FIVEBUTTONS
-    return service_button_5_html;
+    if (settings.invertVolumeButtons)
+      return service_button_5_inv_html;
+    else
+      return service_button_5_html;
 #else
     if (settings.invertVolumeButtons)
       return service_button_3_inv_html;

@@ -148,6 +148,29 @@ const char service_button_5_html[] PROGMEM = R"rawliteral(
 
 )rawliteral";
 
+const char service_button_5_inv_html[] PROGMEM = R"rawliteral(
+
+<form class="service_button_5" id="service">
+    normal:
+    <br>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'down') ;">Vol-</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'five') ;">Prev</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'pause');">Pause</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'four') ;">Next</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'up')   ;">Vol+</button>
+    <br>
+    lang:
+    <br>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'down_long') ;">Vol-</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'five_long') ;">Prev</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'pause_long');">Pause</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'four_long') ;">Next</button>
+    <button onclick="return submit_form(this, 'service', 'button'  , 'up_long')   ;">Vol+</button>
+</form>
+<br>
+
+)rawliteral";
+
 const char service_button_3_html[] PROGMEM = R"rawliteral(
 
 <form class="service_button_3" id="service">
@@ -420,6 +443,9 @@ const char settings_html[] PROGMEM = R"rawliteral(
     <br>
     <br><label for="pauseWhenCardRemoved">Pause w. Kart. entf.:</label><input type="checkbox" name="pauseWhenCardRemoved" id="pauseWhenCardRemoved">
     <br>
+    <br><label for="voltMeasCorrection"  >Bat volt corr.:</label><div class="tooltip"><input type="number" name="voltMeasCorrection"        id="voltMeasCorrection" style="width: 5ch;">
+                                                                    <span class="tooltiptext">Korrekturfaktor für die Spannungsmessung*1000</span></div>
+    <br>
 
     </div>
 
@@ -512,6 +538,8 @@ const char settings_html[] PROGMEM = R"rawliteral(
         document.getElementById( "sc_folder4"           ).value = json.sc_folder4;
         document.getElementById( "sc_special14"         ).value = json.sc_special14;
         document.getElementById( "sc_special24"         ).value = json.sc_special24;
+
+        document.getElementById( "voltMeasCorrection"   ).value = json.voltMeasCorrection;
       }
     };
     xhttp.open("GET", "/get_settings", true);  // true => async, false => synchronous

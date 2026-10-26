@@ -5,6 +5,7 @@
 #ifdef BAT_VOLTAGE_MEASUREMENT
 #include "logger.hpp"
 #include "mp3.hpp"
+#include "settings.hpp"
 
 namespace {
 
@@ -12,8 +13,6 @@ namespace {
 inline constexpr uint16_t voltageMeasurementRefVoltage = 2500; // reference voltage mV
 #endif
 inline constexpr int16_t voltageMeasurementMaxLevel    = 1023;
-inline constexpr int16_t voltageMeasurementLowLevel    = batVoltageLow  /voltageMeasurementCorrection*voltageMeasurementMaxLevel;
-inline constexpr int16_t voltageMeasurementEmptyLevel  = batVoltageEmpty/voltageMeasurementCorrection*voltageMeasurementMaxLevel;
 inline constexpr unsigned long batLowMessageIntervall  = 30*1000; // 30 seconds
 inline constexpr unsigned long batEmptyTimer           = 10*1000; // 10 seconds
 
@@ -33,26 +32,35 @@ long readVcc() {
 #endif
 }
 
-BatVoltage::BatVoltage(Mp3& mp3)
+BatVoltage::BatVoltage(Mp3& mp3, Settings& settings)
 : mp3(mp3)
+, settings(settings)
 {
   pinMode(voltageMeasurementPin, INPUT);
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
   logTimer.start(2000);
+#endif
 }
 
 bool BatVoltage::check() {
 #ifdef TonUINO_Classic
   const uint16_t voltageMeasurementRefVoltage = readVcc();
 #endif
-  const int16_t value = analogRead(voltageMeasurementPin)*static_cast<long>(voltageMeasurementRefVoltage)/1000;
-
   if (logTimer.isExpired()) {
     logTimer.start(2000);
-    voltage = value*voltageMeasurementCorrection/voltageMeasurementMaxLevel;
-    LOG(batvol_log, s_debug, F("BatVoltage: "), voltage);
+#ifdef TonUINO_Esp32
+    voltage = (voltage*4+analogReadMilliVolts(voltageMeasurementPin)*settings.voltMeasCorrection/1000)/5;
+#else
+    const int16_t value = analogRead(voltageMeasurementPin)*static_cast<long>(voltageMeasurementRefVoltage)/1000;
+    voltage = (voltage*4+value*settings.voltMeasCorrection/voltageMeasurementMaxLevel)/5;
+#endif
+#if defined(BAT_VOLTAGE_MEASUREMENT_CALIBRATION) or defined(BAT_VOLTAGE_MEASUREMENT_CALIBRATION_NANO)
+    LOG(batvol_log, s_error, F("BatVoltage: "), voltage);
+#endif
   }
 
-  if (value < voltageMeasurementEmptyLevel) {
+#ifndef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+  if (voltage < batVoltageEmpty) {
     if (emptyTimer.isActive()) {
       if (emptyTimer.isExpired()) {
         LOG(batvol_log, s_error, F("BatVoltage empty"));
@@ -67,7 +75,7 @@ bool BatVoltage::check() {
     emptyTimer.stop();
   }
 
-  if (value < voltageMeasurementLowLevel) {
+  if (voltage < batVoltageLow) {
     if (lowTimer.isActive()) {
       if (lowTimer.isExpired()) {
         low = true;
@@ -82,9 +90,17 @@ bool BatVoltage::check() {
     lowTimer.stop();
     low = false;
   }
+#endif
 
   return false;
 }
+
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+ void BatVoltage::setVoltageMeasurementCorrection(uint16_t voltageMeasurement) {
+  settings.voltMeasCorrection = settings.voltMeasCorrection * voltageMeasurement / voltage;
+  settings.writeSettingsToFlash();
+}
+#endif
 
 void BatVoltage::lowMessage() {
   mp3.playAdvertisement(advertTracks::t_262_pling, false /*onlyIfIsPlaying*/);
