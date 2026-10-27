@@ -51,7 +51,7 @@ bool BatVoltage::check() {
 #ifdef TonUINO_Esp32
     voltage = (voltage*4+analogReadMilliVolts(voltageMeasurementPin)*settings.voltMeasCorrection/1000)/5;
 #else
-    const int64_t value = analogRead(voltageMeasurementPin)*static_cast<int64_t>(voltageMeasurementRefVoltage)/1000;
+    const int32_t value = analogRead(voltageMeasurementPin)*static_cast<int32_t>(voltageMeasurementRefVoltage)/1000;
     voltage = (voltage*4+value*settings.voltMeasCorrection/voltageMeasurementMaxLevel)/5;
 #endif
 #if defined(BAT_VOLTAGE_MEASUREMENT_CALIBRATION) or defined(BAT_VOLTAGE_MEASUREMENT_CALIBRATION_NANO)
