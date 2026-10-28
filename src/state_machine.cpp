@@ -715,7 +715,7 @@ bool Base::checkForWritingCard(command cmd, command_e const &cmd_e) {
       SM_writeCard::dispatch(command_e{commandRaw::pauseLong}); // löst isAbort() aus, siehe SM<SMT>::isAbort()
     }
     else {
-      LOG(state_log, s_important, str_WRITECARD(), str_ERR());
+      LOG(state_log, s_always, str_WRITECARD(), str_ERR());
     }
     return true;
   }
@@ -729,7 +729,7 @@ bool Base::checkForWritingCard(command cmd, command_e const &cmd_e) {
 #ifdef SerialWriteCard
       if (writingCardFromSerial) {
         writingCardFromSerial = false;
-        LOG(state_log, s_important, str_WRITECARD(), (finished ? str_OK() : str_ERR()));
+        LOG(state_log, s_always, str_WRITECARD(), (finished ? str_OK() : str_ERR()));
       }
 #endif
     }

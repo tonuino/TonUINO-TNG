@@ -61,11 +61,11 @@ commandRaw SerialInput::getCommandRaw() {
     if (isAlpha(Serial.peek())) {
       char cmdWord[10]{};
       Serial.readBytesUntil(' ', cmdWord, 9);
-      LOG(button_log, s_info, F("got Alpha: "), cmdWord);
+      LOG(button_log, s_debug, F("got Alpha: "), cmdWord);
 #endif
 #ifdef SerialWriteCard
-      if (strcmp(cmdWord, "WRITECARD") == 0 && Serial.read() == ' ') {
-        LOG(button_log, s_info, F("got WRITECARD"));
+      if (strcmp(cmdWord, "WRITECARD") == 0) {
+        LOG(button_log, s_debug, F("got WRITECARD"));
         if (isAlpha(Serial.peek())) {
           char subWord[7]; subWord[6] = 0;
           Serial.readBytesUntil(' ', subWord, 6);
@@ -102,12 +102,12 @@ commandRaw SerialInput::getCommandRaw() {
           writeCard = card;
           return commandRaw::write_card_from_serial;
         }
-        LOG(button_log, s_important, str_WRITECARD(), str_ERR());
+        LOG(button_log, s_always, str_WRITECARD(), str_ERR());
       }
 #endif
 #ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
       if (strcmp(cmdWord, "BAT") == 0) {
-        LOG(button_log, s_info, F("got BAT"));
+        LOG(button_log, s_debug, F("got BAT"));
         batVolt = Serial.parseInt();
         if (batVolt != 0 && batVolt < 10000) {
           return commandRaw::bat_volt_corr;
