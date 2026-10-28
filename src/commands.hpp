@@ -66,7 +66,8 @@ enum class commandRaw: uint8_t {
   card_from_web       = 20,
   mod_from_web        = 21,
   write_card_from_web = 22,
-  cmd_end        = 22,
+  bat_volt_corr  = 23,
+  cmd_end        = 24,
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
   ext_end   = ext_begin +  buttonExtSC_buttons,
@@ -105,7 +106,10 @@ enum class command: uint8_t {
   mod_from_web        = 22,
   write_card_from_web = 23,
 #endif
-  last        = 23,
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+  bat_volt_corr  = 24,
+#endif
+  last        = 25,
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
   ext_end   = ext_begin +  buttonExtSC_buttons,

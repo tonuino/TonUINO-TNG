@@ -232,7 +232,11 @@ public:
         case command::track : button_for_raw_command(commandRaw::pauseLong); break;
         case command::next  :
   #ifdef FIVEBUTTONS
-                              button_for_raw_command(commandRaw::up       ); break;
+          if (getSettings().invertVolumeButtons)
+                              button_for_raw_command(commandRaw::four   );
+          else
+                              button_for_raw_command(commandRaw::up       );
+                                                                             break;
   #else
           if (getSettings().invertVolumeButtons)
                               button_for_raw_command(commandRaw::upLong   );
@@ -243,7 +247,11 @@ public:
 
         case command::previous:
   #ifdef FIVEBUTTONS
-                              button_for_raw_command(commandRaw::down     ); break;
+          if (getSettings().invertVolumeButtons)
+                              button_for_raw_command(commandRaw::five );
+          else
+                              button_for_raw_command(commandRaw::down     );
+                                                                             break;
   #else
           if (getSettings().invertVolumeButtons)
                               button_for_raw_command(commandRaw::downLong );
@@ -253,13 +261,27 @@ public:
   #endif
 
   #ifdef FIVEBUTTONS
-        case command::next10    :button_for_raw_command(commandRaw::upLong   ); break;
-        case command::previous10:button_for_raw_command(commandRaw::downLong ); break;
+        case command::next10    :
+          if (getSettings().invertVolumeButtons)
+            button_for_raw_command(commandRaw::fourLong );
+          else
+            button_for_raw_command(commandRaw::upLong   );
+                                                           break;
+        case command::previous10 :
+        if (getSettings().invertVolumeButtons)
+          button_for_raw_command(commandRaw::fiveLong   );
+        else
+          button_for_raw_command(commandRaw::downLong   );
+                                                           break;
   #endif
 
         case command::volume_up:
   #ifdef FIVEBUTTONS
-                              button_for_raw_command(commandRaw::four     ); break;
+          if (getSettings().invertVolumeButtons)
+                              button_for_raw_command(commandRaw::up       );
+          else
+                              button_for_raw_command(commandRaw::four     );
+                                                                              break;
   #else
           if (getSettings().invertVolumeButtons)
                               button_for_raw_command(commandRaw::up       );
@@ -270,7 +292,11 @@ public:
 
         case command::volume_down:
   #ifdef FIVEBUTTONS
-                              button_for_raw_command(commandRaw::five     ); break;
+          if (getSettings().invertVolumeButtons)
+                              button_for_raw_command(commandRaw::down     );
+          else
+                              button_for_raw_command(commandRaw::five     );
+                                                                            break;
   #else
           if (getSettings().invertVolumeButtons)
                               button_for_raw_command(commandRaw::down     );

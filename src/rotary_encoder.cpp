@@ -107,24 +107,24 @@ commandRaw RotaryEncoder::getCommandRawFromCommand(const command& cmd) {
 #ifdef FIVEBUTTONS
 
   case command::next:
-    return commandRaw::up;
+    return (settings.invertVolumeButtons==0)? commandRaw::up   : commandRaw::four;
   case command::previous:
-    return commandRaw::down;
+    return (settings.invertVolumeButtons==0)? commandRaw::down : commandRaw::five;
   case command::volume_up:
-    return commandRaw::four;
+    return (settings.invertVolumeButtons==0)? commandRaw::four : commandRaw::up;
   case command::volume_down:
-    return commandRaw::five;
+    return (settings.invertVolumeButtons==0)? commandRaw::five : commandRaw::down;
 
 #else
 
   case command::next:
-    return (settings.invertVolumeButtons==1)? commandRaw::upLong : commandRaw::up;
+    return (settings.invertVolumeButtons==1)? commandRaw::upLong   : commandRaw::up;
   case command::previous:
     return (settings.invertVolumeButtons==1)? commandRaw::downLong : commandRaw::down;
   case command::volume_up:
-    return (settings.invertVolumeButtons==1)? commandRaw::up : commandRaw::upLong;
+    return (settings.invertVolumeButtons==1)? commandRaw::up       : commandRaw::upLong;
   case command::volume_down:
-    return (settings.invertVolumeButtons==1)? commandRaw::down : commandRaw::downLong;
+    return (settings.invertVolumeButtons==1)? commandRaw::down     : commandRaw::downLong;
 
 #endif
   default: return commandRaw::none;

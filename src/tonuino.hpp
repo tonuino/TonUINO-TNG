@@ -78,6 +78,10 @@ public:
   uint8_t getMenuJump() const { return serialInput.get_menu_jump(); }
 #endif
 
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+  uint16_t getBatVoltageFromInput() const { return serialInput.getBatVoltageFromInput(); }
+#endif
+
   void shutdown();
 
   uint16_t getNumTracksInFolder() const {return numTracksInFolder; }
@@ -108,9 +112,9 @@ private:
   Mp3                  mp3                 {settings};
   Buttons              buttons             {};
 #ifdef BAT_VOLTAGE_MEASUREMENT
-       BatVoltage      batVoltage          {mp3};
+       BatVoltage      batVoltage          {mp3, settings};
 #endif
-#ifdef SerialInputAsCommand
+#if defined(SerialInputAsCommand) or defined(BAT_VOLTAGE_MEASUREMENT_CALIBRATION)
   SerialInput          serialInput         {};
 #endif
 #ifdef BUTTONS3X3
@@ -128,7 +132,7 @@ private:
   Commands             commands            {
                                             settings
                                           , &buttons
-#ifdef SerialInputAsCommand
+#if defined(SerialInputAsCommand) or defined(BAT_VOLTAGE_MEASUREMENT_CALIBRATION)
                                           , &serialInput
 #endif
 #ifdef BUTTONS3X3
