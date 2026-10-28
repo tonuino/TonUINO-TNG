@@ -15,18 +15,18 @@ const command cmd_table[][4] PROGMEM = {
 /*  4 pauseLong,      */ ,{ command::adm_end   , command::shortcut1  , command::track      , command::track       }
 #endif
 #ifdef FIVEBUTTONS
-/*  5 up,             */ ,{ command::next      , command::bright_up  , command::next       , command::none        }
-/*  6 upLong,         */ ,{ command::next10    , command::shortcut2  , command::next10     , command::none        }
-/*  7 upLongRepeat,   */ ,{ command::none      , command::none       , command::none       , command::none        }
-/*  8 down,           */ ,{ command::previous  , command::bright_down, command::previous   , command::none        }
-/*  9 downLong,       */ ,{ command::previous10, command::shortcut3  , command::previous10 , command::none        }
-/* 10 downLongRepeat, */ ,{ command::none      , command::none       , command::none       , command::none        }
-/* 11 updownLong,     */ ,{ command::none      , command::shortcut1  , command::to_first   , command::none        }
-/* 12 four,           */ ,{ command::next      , command::bright_up  , command::volume_up  , command::none        }
-/* 13 fourLong,       */ ,{ command::next10    , command::none       , command::volume_up  , command::none        }
+/*  5 up,             */ ,{ command::next      , command::bright_up  , command::next       , command::volume_up   }
+/*  6 upLong,         */ ,{ command::next10    , command::shortcut2  , command::next10     , command::volume_up   }
+/*  7 upLongRepeat,   */ ,{ command::none      , command::none       , command::none       , command::volume_up   }
+/*  8 down,           */ ,{ command::previous  , command::bright_down, command::previous   , command::volume_down }
+/*  9 downLong,       */ ,{ command::previous10, command::shortcut3  , command::previous10 , command::volume_down }
+/* 10 downLongRepeat, */ ,{ command::none      , command::none       , command::none       , command::volume_down }
+/* 11 updownLong,     */ ,{ command::none      , command::shortcut1  , command::to_first   , command::to_first    }
+/* 12 four,           */ ,{ command::next      , command::bright_up  , command::volume_up  , command::next        }
+/* 13 fourLong,       */ ,{ command::next10    , command::none       , command::volume_up  , command::next10      }
 /* 14 fourLongRepeat, */ ,{ command::none      , command::none       , command::volume_up  , command::none        }
-/* 15 five,           */ ,{ command::previous  , command::bright_down, command::volume_down, command::none        }
-/* 16 fiveLong,       */ ,{ command::previous10, command::none       , command::volume_down, command::none        }
+/* 15 five,           */ ,{ command::previous  , command::bright_down, command::volume_down, command::previous    }
+/* 16 fiveLong,       */ ,{ command::previous10, command::none       , command::volume_down, command::previous10  }
 /* 17 fiveLongRepeat, */ ,{ command::none      , command::none       , command::volume_down, command::none        }
 #else // Three Button
 /*  5 up,             */ ,{ command::next      , command::bright_up  , command::next       , command::volume_up   }
@@ -69,6 +69,11 @@ const command cmd_table[][4] PROGMEM = {
 /* 23 w_c_from_serial, */,{ command::none      , command::none       , command::none       , command::none        }
 /* 24 w_c_c_from_serial*/,{ command::none      , command::none       , command::none       , command::none        }
 #endif
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+/* 25 bat_volt_corr,  */ ,{ command::none , command::bat_volt_corr   , command::none       , command::none        }
+#else
+/* 25 bat_volt_corr,  */ ,{ command::none , command::none            , command::none       , command::none        }
+#endif
 };
 Commands::Commands(const Settings& settings, CommandSource* source1, CommandSource* source2, CommandSource* source3, CommandSource* source4)
 : settings(settings)
@@ -99,10 +104,8 @@ command Commands::getCommand(commandRaw b, state_for_command s) {
     ret =  static_cast<command>(b);
 #endif
 
-#ifndef FIVEBUTTONS
   if (s == state_for_command::play && (settings.invertVolumeButtons==1))
     s = state_for_command::play_invert;
-#endif
 
   if (b < commandRaw::cmd_end) {
     PROGMEM_read(&cmd_table[static_cast<int>(b)][static_cast<int>(s)], ret);
@@ -154,6 +157,9 @@ const __FlashStringHelper* Commands::getCommandRawStr(commandRaw cmd) {
   case commandRaw::write_card_from_serial:        return(F("w_c_ser"   )); break;
   case commandRaw::write_card_cancel_from_serial: return(F("w_c_c_ser" )); break;
 #endif
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+  case commandRaw::bat_volt_corr : return(F("bat_volt_corr" )); break;
+#endif
   default                        : return(F(""              )); break;
   }
 }
@@ -190,6 +196,9 @@ const __FlashStringHelper* Commands::getCommandStr   (command    cmd) {
 #ifdef SerialWriteCard
   case command::write_card_from_serial:        return(F("w_c_ser"   )); break;
   case command::write_card_cancel_from_serial: return(F("w_c_c_ser" )); break;
+#endif
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+  case command::bat_volt_corr      : return(F("bat_volt_corr"      )); break;
 #endif
   default                          : return(F(""                   )); break;
   }

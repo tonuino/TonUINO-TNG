@@ -19,6 +19,10 @@ public:
 #ifdef SerialWriteCard
   const folderSettings& get_write_card() const { return writeCard; }
 #endif
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+  const uint16_t& getBatVoltageFromInput() const { return batVolt; }
+#endif
+
 private:
 #ifdef SerialWriteCard
   bool validateWriteCard(folderSettings& card);
@@ -26,6 +30,9 @@ private:
 #endif
 #ifdef SerialInputAsCommand
   uint8_t menu_jump{};
+#endif
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+  uint16_t batVolt{};
 #endif
 };
 

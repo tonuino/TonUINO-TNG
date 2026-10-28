@@ -34,14 +34,18 @@ TEST_F(tonuino_test_fixture, initial_state) {
 #endif
 
   EXPECT_EQ(getSettings().cookie              ,  cardCookie);
-  EXPECT_EQ(getSettings().version             , cardVersion);
+  EXPECT_EQ(getSettings().version             ,           3);
   EXPECT_EQ(getSettings().spkMaxVolume        ,          25);
   EXPECT_EQ(getSettings().spkMinVolume        ,           5);
   EXPECT_EQ(getSettings().spkInitVolume       ,          15);
   EXPECT_EQ(getSettings().eq                  ,           1);
   EXPECT_EQ(getSettings().dummy               ,       false);
   EXPECT_EQ(getSettings().standbyTimer        ,           0);
+#ifdef FIVEBUTTONS
+  EXPECT_EQ(getSettings().invertVolumeButtons ,           0);
+#else
   EXPECT_EQ(getSettings().invertVolumeButtons ,           1);
+#endif
   EXPECT_EQ(getSettings().shortCuts[0].folder ,           0);
   EXPECT_EQ(getSettings().shortCuts[1].folder ,           0);
   EXPECT_EQ(getSettings().shortCuts[2].folder ,           0);
@@ -1250,6 +1254,7 @@ TEST_F(tonuino_test_fixture, end_play_after_2_track_hoerbuch_1) {
 // =================== hoerbuch random folder
 TEST_F(tonuino_test_fixture, hoerbuch_rnd_shuffles) {
   randomSeed(16);
+  getSettings().writeFolderSettingToFlash(5, 0);
   folderSettings card = { 5, pmode_t::hoerbuch, 0, 5 };
   uint8_t track_count = 10;
 
@@ -1296,10 +1301,13 @@ TEST_F(tonuino_test_fixture, hoerbuch_rnd_shuffles) {
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_NE(getMp3().df_folder, first_folder);
   EXPECT_EQ(getMp3().df_folder_track, 1);
+
+  card_out();
 }
 
 TEST_F(tonuino_test_fixture, hoerbuch_rnd_test_resume) {
   randomSeed(16);
+  getSettings().writeFolderSettingToFlash(1, 0);
   folderSettings card = { 1, pmode_t::hoerbuch, 0, 10 };
   folderSettings other_card = { 10, pmode_t::album, 0, 0 };
   uint8_t track_count = 10;

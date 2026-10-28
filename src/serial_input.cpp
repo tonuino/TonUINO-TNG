@@ -6,7 +6,7 @@
 extern const __FlashStringHelper* str_WRITECARD();
 extern const __FlashStringHelper* str_ERR();
 
-#if defined(SerialInputAsCommand) || defined(SerialWriteCard)
+#if defined(SerialInputAsCommand) or defined(SerialWriteCard) or defined(BAT_VOLTAGE_MEASUREMENT_CALIBRATION)
 SerialInput::SerialInput()
 : CommandSource()
 {
@@ -100,7 +100,18 @@ commandRaw SerialInput::getCommandRaw() {
         }
         LOG(button_log, s_important, str_WRITECARD(), str_ERR());
       }
-      return commandRaw::none;
+    }
+#endif
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+    if (isAlpha(Serial.peek())) {
+      char cmdWord[5]; cmdWord[4] = 0;
+      Serial.readBytesUntil(' ', cmdWord, 4);
+      if (strcmp(cmdWord, "BAT") == 0) {
+        batVolt = Serial.parseInt();
+        if (batVolt != 0 && batVolt < 10000) {
+          return commandRaw::bat_volt_corr;
+        }
+      }
     }
 #endif
 #ifdef SerialInputAsCommand

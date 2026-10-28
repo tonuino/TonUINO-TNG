@@ -81,6 +81,10 @@ public:
   const folderSettings& getSerialWriteCard() const { return serialInput.get_write_card(); }
 #endif
 
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+  uint16_t getBatVoltageFromInput() const { return serialInput.getBatVoltageFromInput(); }
+#endif
+
   void shutdown();
 
   uint16_t getNumTracksInFolder() const {return numTracksInFolder; }
@@ -111,9 +115,9 @@ private:
   Mp3                  mp3                 {settings};
   Buttons              buttons             {};
 #ifdef BAT_VOLTAGE_MEASUREMENT
-       BatVoltage      batVoltage          {mp3};
+       BatVoltage      batVoltage          {mp3, settings};
 #endif
-#if defined(SerialInputAsCommand) || defined(SerialWriteCard)
+#if defined(SerialInputAsCommand) or defined(SerialWriteCard) or defined(BAT_VOLTAGE_MEASUREMENT_CALIBRATION)
   SerialInput          serialInput         {};
 #endif
 #ifdef BUTTONS3X3
@@ -131,7 +135,7 @@ private:
   Commands             commands            {
                                             settings
                                           , &buttons
-#if defined(SerialInputAsCommand) || defined(SerialWriteCard)
+#if defined(SerialInputAsCommand) or defined(SerialWriteCard) or defined(BAT_VOLTAGE_MEASUREMENT_CALIBRATION)
                                           , &serialInput
 #endif
 #ifdef BUTTONS3X3
