@@ -28,7 +28,7 @@ enum severity: uint8_t {
   s_info   ,
   s_warning,
   s_error  ,
-  s_none   ,
+  s_always,
 };
 enum lineFeed: uint8_t {
   lf_yes,

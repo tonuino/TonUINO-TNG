@@ -5,6 +5,7 @@
 
 #include "commands.hpp"
 #include "constants.hpp"
+#include "chip_card.hpp"
 
 class SerialInput: public CommandSource {
 public:
@@ -15,11 +16,18 @@ public:
 #ifdef SerialInputAsCommand
   uint8_t get_menu_jump() const { return menu_jump; }
 #endif
+#ifdef SerialWriteCard
+  const folderSettings& get_write_card() const { return writeCard; }
+#endif
 #ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
   const uint16_t& getBatVoltageFromInput() const { return batVolt; }
 #endif
 
 private:
+#ifdef SerialWriteCard
+  bool validateWriteCard(folderSettings& card);
+  folderSettings writeCard{};
+#endif
 #ifdef SerialInputAsCommand
   uint8_t menu_jump{};
 #endif
