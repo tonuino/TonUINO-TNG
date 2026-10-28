@@ -57,11 +57,15 @@ bool SerialInput::validateWriteCard(folderSettings &card) {
 commandRaw SerialInput::getCommandRaw() {
   commandRaw ret = commandRaw::none;
   if (Serial.available() > 0) {
-#ifdef SerialWriteCard
+#if defined(SerialWriteCard) or defined(BAT_VOLTAGE_MEASUREMENT_CALIBRATION)
     if (isAlpha(Serial.peek())) {
-      char cmdWord[10]; cmdWord[9] = 0;
+      char cmdWord[10]{};
       Serial.readBytesUntil(' ', cmdWord, 9);
+      LOG(button_log, s_info, F("got Alpha: "), cmdWord);
+#endif
+#ifdef SerialWriteCard
       if (strcmp(cmdWord, "WRITECARD") == 0 && Serial.read() == ' ') {
+        LOG(button_log, s_info, F("got WRITECARD"));
         if (isAlpha(Serial.peek())) {
           char subWord[7]; subWord[6] = 0;
           Serial.readBytesUntil(' ', subWord, 6);
@@ -100,18 +104,17 @@ commandRaw SerialInput::getCommandRaw() {
         }
         LOG(button_log, s_important, str_WRITECARD(), str_ERR());
       }
-    }
 #endif
 #ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
-    if (isAlpha(Serial.peek())) {
-      char cmdWord[5]; cmdWord[4] = 0;
-      Serial.readBytesUntil(' ', cmdWord, 4);
       if (strcmp(cmdWord, "BAT") == 0) {
+        LOG(button_log, s_info, F("got BAT"));
         batVolt = Serial.parseInt();
         if (batVolt != 0 && batVolt < 10000) {
           return commandRaw::bat_volt_corr;
         }
       }
+#endif
+#if defined(SerialWriteCard) or defined(BAT_VOLTAGE_MEASUREMENT_CALIBRATION)
     }
 #endif
 #ifdef SerialInputAsCommand
