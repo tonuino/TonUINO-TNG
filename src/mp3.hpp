@@ -224,6 +224,9 @@ public:
 
   void init();
   bool isPlaying() const { return is_playing_cache; }
+#ifdef DFMiniMp3_T_CHIP_JL_WITHOUT_ONPLAYERFINISHED
+  void simulatePlayingOff() { is_playing_old = false; }
+#endif
   void waitForTrackToFinish();
   void waitForTrackToStart();
   void playAdvertisement(uint16_t     track, bool onlyIfIsPlaying = true);

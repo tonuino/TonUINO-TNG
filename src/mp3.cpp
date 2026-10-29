@@ -131,11 +131,13 @@ void Mp3::playAdvertisement(uint16_t track, bool onlyIfIsPlaying) {
   if (isPlaying()) {
     LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
+#ifndef DFMiniMp3_T_CHIP_JL_WITHOUT_ONPLAYERFINISHED
     waitForTrackToFinish(); // break original track
     LOG(mp3_log, s_debug, "after waitForTrackToFinish");
     trackStarted = false;   // busy pin drops between origin track and advertisement
     waitForTrackToStart();  // start adv track
     LOG(mp3_log, s_debug, "after waitForTrackToStart");
+#endif
     waitForTrackToFinish(); // finish adv track
     LOG(mp3_log, s_debug, "after waitForTrackToFinish");
     trackStarted = false;   // busy pin drops between advertisement and origin track
@@ -174,11 +176,13 @@ void Mp3::playAdvertisement(uint16_t track, bool onlyIfIsPlaying) {
     LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
 
+#ifndef DFMiniMp3_T_CHIP_JL_WITHOUT_ONPLAYERFINISHED
     waitForTrackToFinish(); // origin track pauses
     LOG(mp3_log, s_debug, F("origin track pauses"));
 
     waitForTrackToStart();  // adv track starts
     LOG(mp3_log, s_debug, F("adv track started"));
+#endif
 
     waitForTrackToFinish(); // adv track finished
     LOG(mp3_log, s_debug, F("adv track finished"));
@@ -277,6 +281,9 @@ void Mp3::playCurrent() {
     uint8_t t = q.get(current_track);
     if (t != 0) {
       LOG(mp3_log, s_info, F("play "), current_folder, F("-"), t);
+#ifdef DFMiniMp3_T_CHIP_JL_WITHOUT_ONPLAYERFINISHED
+      simulatePlayingOff();
+#endif
       Base::playFolderTrack(current_folder, t);
       isPause = false;
       startTrack();
