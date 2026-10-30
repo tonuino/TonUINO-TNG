@@ -36,6 +36,10 @@ class Mp3Notify;
 #define DFMiniMp3_IGNORE_ONPLAYFINISHED_FOR_ADV
 #endif
 
+#if defined(DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0)
+#define DFMiniMp3_DEBOUNCE_BUSY
+#endif
+
 // define a handy type using serial and our notify class
 #ifdef DFMiniMp3_T_CHIP_VARIANT
 using DfMp3 = DFMiniMp3<SerialType, Mp3Notify, DFMiniMp3_T_CHIP_VARIANT, 4000>;
@@ -223,7 +227,11 @@ public:
   Mp3(Settings& settings);
 
   void init();
-  bool isPlaying() const { return is_playing_cache; }
+  bool isPlaying()          const { return is_playing_cache; }
+  bool isPlayingDebounced() const { return is_playing_old; }
+#ifdef DFMiniMp3_T_CHIP_JL_WITHOUT_ONPLAYERFINISHED
+  void simulatePlayingOff() { is_playing_old = false; }
+#endif
   void waitForTrackToFinish();
   void waitForTrackToStart();
   void playAdvertisement(uint16_t     track, bool onlyIfIsPlaying = true);
@@ -255,7 +263,7 @@ public:
   uint8_t getCurrentFolder() { return current_folder; }
   bool isLastTrack() { return current_track+1 >= q.size(); }
 
-  void start() { if (isPause) { isPause = false; Base::start();} }
+  void start() { if (isPause) { isPause = false; Base::start(); startTrack(); } }
   void stop () { isPause = false; Base::stop (); }
   void pause() { isPause = true ; Base::pause(); }
 
@@ -289,6 +297,7 @@ private:
 
   void logVolume();
   void refreshIsPlaying();
+  void startTrack() { timer.start(dfPlayer_timeUntilStarts); trackStarted = false; }
 
   typedef queue<uint8_t, maxTracksInFolder> track_queue;
 
@@ -324,6 +333,7 @@ private:
   uint16_t             mp3_track_next{};
 
   bool                 is_playing_cache{};
+  bool                 is_playing_old{};
 
   enum play_type: uint8_t {
     play_none,
@@ -331,11 +341,16 @@ private:
     play_mp3,
   };
   play_type            playing{play_none};
-  Timer                startTrackTimer{};
+  Timer                timer{};
+  bool                 trackStarted{}; // busy pin became active after the last play command
   Timer                missingOnPlayFinishedTimer{};
   bool                 isPause{};
 #ifdef DFMiniMp3_IGNORE_ONPLAYFINISHED_FOR_ADV
   bool                 advPlaying{false};
+#endif
+
+#ifdef DFMiniMp3_DEBOUNCE_BUSY
+  Timer                debounceTimer{};
 #endif
 
 #ifdef HPJACKDETECT

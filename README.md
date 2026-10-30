@@ -109,7 +109,8 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.4.0 (27.10.2026)
+## Version 3.4.0 (29.10.2026)
+- [Issue 349](https://github.com/tonuino/TonUINO-TNG/issues/349): Slow song start with players that don't send OnPlayFinished
 - [Issue 342](https://github.com/tonuino/TonUINO-TNG/issues/342): Improve constants.hpp and configuration handling
 - [Issue 327](https://github.com/tonuino/TonUINO-TNG/issues/327): AiO+: Fehler "missing OnPlayFinished" nach Update
 - [Issue 339](https://github.com/tonuino/TonUINO-TNG/issues/339): Shutdown via Longpress-Play does not work stable

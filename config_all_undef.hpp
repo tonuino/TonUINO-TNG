@@ -37,6 +37,7 @@
 //#define DFMiniMp3_T_CHIP_MH2024K16SS
 //#define DFMiniMp3_T_CHIP_LISP3
 //#define DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
+//#define DFMiniMp3_T_CHIP_JL_WITHOUT_ONPLAYERFINISHED
 //#define DFMiniMp3_T_CHIP_Mp3ChipIncongruousNoAck // für LKP Player, AiO und AiOplus notwendig
 //#define DFMiniMp3_T_CHIP_Original                // für DF.Player, die voll kompatibel sind
 

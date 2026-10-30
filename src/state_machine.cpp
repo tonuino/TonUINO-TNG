@@ -512,7 +512,7 @@ void WriteCard::react(command_e const &cmd_e) {
     }
     break;
   case end_writeCard:
-    if (timer.isExpired() && not mp3.isPlaying())
+    if (timer.isExpired() || not mp3.isPlayingMp3())
       current_subState = run_waitCardRemoved;
     break;
   case run_waitCardRemoved:
@@ -1030,7 +1030,7 @@ template<class P> void StartPlay<P>::entry() {
 template<class P> void StartPlay<P>::react(command_e const &cmd_e) {
   commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
   if (timer.isActive()) {
-    if (timer.isExpired()) {
+    if (mp3.isPlaying() || timer.isExpired()) {
       LOG(state_log, s_debug, str_StartPlay(), str_to(), str_Play());
       if (is_same_type<P, Play>::value && (settings.pauseWhenCardRemoved==1) && chip_card.isCardRemoved() && tonuino.playingCard())
         transit<Pause>();
@@ -1670,14 +1670,14 @@ void Admin_Allow::react(command_e const &cmd_e) {
 //    current_subState = play_match_intro;
 //    break;
 //  case play_match_intro    :
-//    if (timer.isExpired() && not mp3.isPlaying()) {
+//    if (timer.isExpired() || not mp3.isPlayingMp3()) {
 //      mp3.enqueueMp3FolderTrack(av);
 //      timer.start(dfPlayer_timeUntilStarts);
 //      current_subState = play_match_a;
 //    }
 //    break;
 //  case play_match_a        :
-//    if (timer.isExpired() && not mp3.isPlaying()) {
+//    if (timer.isExpired() || not mp3.isPlayingMp3()) {
 //      if (random(1, 3) == 2) {
 //        cv = av + bv;
 //        mp3.enqueueMp3FolderTrack(mp3Tracks::t_993_admin_calc);
@@ -1691,14 +1691,14 @@ void Admin_Allow::react(command_e const &cmd_e) {
 //    }
 //    break;
 //  case play_match_operation:
-//    if (timer.isExpired() && not mp3.isPlaying()) {
+//    if (timer.isExpired() || not mp3.isPlayingMp3()) {
 //      mp3.enqueueMp3FolderTrack(bv);
 //      timer.start(dfPlayer_timeUntilStarts);
 //      current_subState = play_match_b;
 //    }
 //    break;
 //  case play_match_b        :
-//    if (timer.isExpired() && not mp3.isPlaying()) {
+//    if (timer.isExpired() || not mp3.isPlayingMp3()) {
 //      numberOfOptions   = 255;
 //      startMessage      = mp3Tracks::t_0;
 //      messageOffset     = mp3Tracks::t_0;
@@ -1872,7 +1872,7 @@ void Admin_NewCard::react(command_e const &cmd_e) {
   }
   switch (current_subState) {
   case wait_track:
-    if (timer.isExpired() and not mp3.isPlaying())
+    if (timer.isExpired() || not mp3.isPlayingMp3())
       current_subState = start_setupCard;
     break;
   case start_setupCard:
@@ -2226,7 +2226,7 @@ void Admin_CardsForFolder::react(command_e const &cmd_e) {
     break;
 
   case prepare_writeCard:
-    if (timer.isExpired() && not mp3.isPlaying() && chip_card.isCardRemoved()) {
+    if ((timer.isExpired() || not mp3.isPlayingMp3()) && chip_card.isCardRemoved()) {
       if (special > special2) {
         LOG(state_log, s_debug, str_Admin_CardsForFolder(), str_to(), str_Idle());
         transit<Admin_End>();
@@ -2240,7 +2240,7 @@ void Admin_CardsForFolder::react(command_e const &cmd_e) {
     }
     break;
   case start_writeCard:
-    if (timer.isExpired() && not mp3.isPlaying() && chip_card.isCardRemoved()) {
+    if ((timer.isExpired() || not mp3.isPlayingMp3()) && chip_card.isCardRemoved()) {
       SM_writeCard::folder = folder;
       SM_writeCard::start();
       current_subState = run_writeCard;
@@ -2472,7 +2472,7 @@ void Admin_MemoryGameCards::react(command_e const &cmd_e) {
 
   switch (current_subState) {
   case prepare_writeCard:
-    if (timer.isExpired() && not mp3.isPlaying() && chip_card.isCardRemoved()) {
+    if ((timer.isExpired() || not mp3.isPlayingMp3()) && chip_card.isCardRemoved()) {
       if (folder.special == 255) {
         LOG(state_log, s_debug, str_Admin_MemoryGameCards(), str_to(), str_Idle());
         transit<Admin_End>();
@@ -2485,7 +2485,7 @@ void Admin_MemoryGameCards::react(command_e const &cmd_e) {
     }
     break;
   case start_writeCard:
-    if (timer.isExpired() && not mp3.isPlaying() && chip_card.isCardRemoved()) {
+    if ((timer.isExpired() || not mp3.isPlaying()) && chip_card.isCardRemoved()) {
       SM_writeCard::folder = folder;
       SM_writeCard::start();
       current_subState = run_writeCard;
