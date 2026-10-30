@@ -119,7 +119,7 @@ void Mp3::waitForTrackToStart() {
 #ifdef UNIT_TESTS
     pin_value[dfPlayer_busyPin] = (dfPlayer_busyPinType == levelType::activeLow) ? LOW : HIGH;
 #endif
-  } while (!isPlaying() && not timer.isExpired());
+  } while (!isPlayingDebounced() && not timer.isExpired());
   LOG(mp3_log, s_debug, F("waitForTrackToStart End "), isPlaying());
 }
 
@@ -162,13 +162,6 @@ void Mp3::playAdvertisement(uint16_t track, bool onlyIfIsPlaying) {
       Base::playFolderTrack(1, 1);
       LOG(mp3_log, s_debug, F("playFolderTrack(1,1)"));
     }
-
-#ifdef DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
-    waitForTrackToStart();
-    LOG(modifier_log, s_debug, F("MH2024K24SS_MP3_TF_16P_V3_0: additional busy"));
-    waitForTrackToFinish();
-    LOG(modifier_log, s_debug, F("MH2024K24SS_MP3_TF_16P_V3_0: additional busy finished"));
-#endif
 
     waitForTrackToStart(); // origin track starts
     LOG(mp3_log, s_debug, F("origin track started"));
@@ -269,6 +262,9 @@ void Mp3::playCurrent() {
       LOG(mp3_log, s_info, F("play mp3 "), mp3_track);
       Mp3Notify::ResetLastTrackFinished(); // maybe the same mp3 track is played twice
       LOG(mp3_log, s_debug, F("playMp3FolderTrack: "), mp3_track);
+#ifdef DFMiniMp3_T_CHIP_JL_WITHOUT_ONPLAYERFINISHED
+      simulatePlayingOff();
+#endif
       Base::playMp3FolderTrack(mp3_track);
       isPause = false;
       startTrack();
@@ -476,13 +472,26 @@ void Mp3::loop() {
   refreshIsPlaying();
 
   if (is_playing_old != isPlaying()) {
-    is_playing_old = isPlaying();
-    LOG(mp3_log, s_info, F("isPlaying: "), isPlaying());
-    if (isPlaying()) {
-      trackStarted = true;
-      timer.stop();
+#ifdef DFMiniMp3_DEBOUNCE_BUSY
+    if (not isPlaying() || (debounceTimer.isActive() && debounceTimer.isExpired())) {
+#endif
+      is_playing_old = isPlaying();
+      LOG(mp3_log, s_info, F("isPlaying: "), isPlaying());
+      if (isPlaying()) {
+        trackStarted = true;
+        timer.stop();
+      }
+#ifdef DFMiniMp3_DEBOUNCE_BUSY
     }
+    if (not debounceTimer.isActive())
+      debounceTimer.start(100);
+#endif
   }
+#ifdef DFMiniMp3_DEBOUNCE_BUSY
+  else {
+    debounceTimer.stop();
+  }
+#endif
 
   if (not trackStarted && timer.isActive() && timer.isExpired()) {
     LOG(mp3_log, s_warning, F("track not started"));
