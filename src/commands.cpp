@@ -62,10 +62,17 @@ const command cmd_table[][4] PROGMEM = {
 /* 21 mod_from_web,   */ ,{ command::none      , command::none       , command::none       , command::none        }
 /* 22 w_card_from_web,*/ ,{ command::none      , command::none       , command::none       , command::none        }
 #endif
-#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
-/* 23 bat_volt_corr,  */ ,{ command::none , command::bat_volt_corr   , command::none       , command::none        }
+#ifdef SerialWriteCard
+/* 23 w_c_from_serial, */,{ command::none, command::write_card_from_serial        , command::none , command::none }
+/* 24 w_c_c_from_serial*/,{ command::none, command::write_card_cancel_from_serial , command::none , command::none }
 #else
-/* 23 bat_volt_corr,  */ ,{ command::none , command::none            , command::none       , command::none        }
+/* 23 w_c_from_serial, */,{ command::none      , command::none       , command::none       , command::none        }
+/* 24 w_c_c_from_serial*/,{ command::none      , command::none       , command::none       , command::none        }
+#endif
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+/* 25 bat_volt_corr,  */ ,{ command::none , command::bat_volt_corr   , command::none       , command::none        }
+#else
+/* 25 bat_volt_corr,  */ ,{ command::none , command::none            , command::none       , command::none        }
 #endif
 };
 Commands::Commands(const Settings& settings, CommandSource* source1, CommandSource* source2, CommandSource* source3, CommandSource* source4)
@@ -146,6 +153,10 @@ const __FlashStringHelper* Commands::getCommandRawStr(commandRaw cmd) {
 #ifdef TonUINO_Esp32
   case commandRaw::card_from_web : return(F("card_from_web" )); break;
 #endif
+#ifdef SerialWriteCard
+  case commandRaw::write_card_from_serial:        return(F("w_c_ser"   )); break;
+  case commandRaw::write_card_cancel_from_serial: return(F("w_c_c_ser" )); break;
+#endif
 #ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
   case commandRaw::bat_volt_corr : return(F("bat_volt_corr" )); break;
 #endif
@@ -181,6 +192,10 @@ const __FlashStringHelper* Commands::getCommandStr   (command    cmd) {
 #ifdef TonUINO_Esp32
   case command::card_from_web      : return(F("card_from_web"      )); break;
   case command::write_card_from_web: return(F("write_card_from_web")); break;
+#endif
+#ifdef SerialWriteCard
+  case command::write_card_from_serial:        return(F("w_c_ser"   )); break;
+  case command::write_card_cancel_from_serial: return(F("w_c_c_ser" )); break;
 #endif
 #ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
   case command::bat_volt_corr      : return(F("bat_volt_corr"      )); break;
