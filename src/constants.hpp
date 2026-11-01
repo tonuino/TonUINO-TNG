@@ -219,6 +219,10 @@ static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (Ton
  *              very slow
  *              bad behavior of callback OnPlayFinished - it is also called on advertise tracks
  *
+ * JL Player without OnPlayerfinish callback
+ *              no onPlayFinished callback
+ *              no busy pin release between two tracks
+ *
  * LKP Player:  no ACK for requests (this is the default, if no other define is set)
  *
  */
