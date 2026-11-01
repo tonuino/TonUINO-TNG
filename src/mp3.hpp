@@ -229,7 +229,7 @@ public:
   void init();
   bool isPlaying()          const { return is_playing_cache; }
   bool isPlayingDebounced() const { return is_playing_old; }
-#ifdef DFMiniMp3_T_CHIP_JL_WITHOUT_ONPLAYERFINISHED
+#ifdef DFMiniMp3_T_CHIP_JL_WITHOUT_ONPLAYFINISHED
   void simulatePlayingOff() { is_playing_old = false; }
 #endif
   void waitForTrackToFinish();

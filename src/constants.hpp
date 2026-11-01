@@ -230,14 +230,14 @@ static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (Ton
 //#define DFMiniMp3_T_CHIP_MH2024K16SS
 //#define DFMiniMp3_T_CHIP_LISP3
 //#define DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
-//#define DFMiniMp3_T_CHIP_JL_WITHOUT_ONPLAYERFINISHED
+//#define DFMiniMp3_T_CHIP_JL_WITHOUT_ONPLAYFINISHED
 //#define DFMiniMp3_T_CHIP_Original
 
 #if not defined(DFMiniMp3_T_CHIP_GD3200B)                     and \
     not defined(DFMiniMp3_T_CHIP_MH2024K16SS)                 and \
     not defined(DFMiniMp3_T_CHIP_LISP3)                       and \
     not defined(DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0) and \
-    not defined(DFMiniMp3_T_CHIP_JL_WITHOUT_ONPLAYERFINISHED) and \
+    not defined(DFMiniMp3_T_CHIP_JL_WITHOUT_ONPLAYFINISHED)   and \
     not defined(DFMiniMp3_T_CHIP_Mp3ChipIncongruousNoAck)     and \
     not defined(DFMiniMp3_T_CHIP_Original)
 # define DFMiniMp3_T_CHIP_Mp3ChipIncongruousNoAck
