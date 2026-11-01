@@ -21,8 +21,9 @@
 namespace {
 
 const __FlashStringHelper* str_bis      () { return F(" bis "); }
+#ifdef FOLDER_QUEUE_HOERBUCH
 const __FlashStringHelper* str_Space()  { return F(" ") ; }
-
+#endif
 } // anonymous namespace
 
 #ifdef USE_TIMER
