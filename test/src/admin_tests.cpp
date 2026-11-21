@@ -309,7 +309,7 @@ public:
     EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_400_ok));
 
     card_out();
-    execute_cycle_for_ms(dfPlayer_timeUntilStarts); // --> run_waitCardRemoved
+    //execute_cycle_for_ms(dfPlayer_timeUntilStarts); // --> run_waitCardRemoved
     getMp3().end_track();
     execute_cycle();
     execute_cycle();
@@ -1213,17 +1213,19 @@ TEST_F(admin_test_fixture, Admin_CardsForFolder) {
   EXPECT_TRUE(getMp3().is_playing_mp3());
   EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_936_batch_cards_intro));
 
+  getMp3().end_track();
+  execute_cycle(); // end mp3 track
+
   for (uint8_t track = first; track <= last; ++track) {
 
-    getMp3().end_track();
-    execute_cycle(); // end mp3 track
+    execute_cycle();
     execute_cycle_for_ms(time_check_play);
     EXPECT_TRUE(getMp3().is_playing_mp3());
     EXPECT_EQ(getMp3().df_mp3_track, track);
 
     getMp3().end_track();
     execute_cycle(); // end mp3 track
-    execute_cycle_for_ms(dfPlayer_timeUntilStarts); // end timer
+    //execute_cycle_for_ms(dfPlayer_timeUntilStarts); // end timer
 
     execute_cycle(); // --> run_writeCard
 
