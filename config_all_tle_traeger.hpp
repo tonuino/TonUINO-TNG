@@ -24,6 +24,7 @@
 //            Befehlseingabe über serielle Schnittstelle
 // -------------------------------------------------------------------------------------------------------------------------------
 //#define SerialInputAsCommand          // Befehlseingabe möglich über Konsole und TonUINO Manager
+//#define SerialWriteCard               // Direkte Schreiben einer RFID
 
 // -------------------------------------------------------------------------------------------------------------------------------
 //            Verwendung der HW-seriellen Schnittstelle zum DF.Player
