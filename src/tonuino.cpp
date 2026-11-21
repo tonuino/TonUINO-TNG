@@ -21,8 +21,9 @@
 namespace {
 
 const __FlashStringHelper* str_bis      () { return F(" bis "); }
+#ifdef FOLDER_QUEUE_HOERBUCH
 const __FlashStringHelper* str_Space()  { return F(" ") ; }
-
+#endif
 } // anonymous namespace
 
 #ifdef USE_TIMER
@@ -41,6 +42,13 @@ ISR(TIMER1_COMPA_vect){
 #endif
 
 void Tonuino::setup() {
+  pinMode(shutdownPin  , OUTPUT);
+  pin_set_inactive(shutdownPin, shutdownPinType);
+#ifdef POWER_HOLD_READY
+  pinMode(power_hold_ready_pin  , OUTPUT);
+  pin_set_active(power_hold_ready_pin, power_hold_ready_pin_type);
+#endif
+
 #ifdef USE_LED_BUTTONS
   ledManager.begin();
 #endif
@@ -56,13 +64,6 @@ void Tonuino::setup() {
   buttons.begin();
 #ifdef BUTTONS3X3
   buttons3x3.begin();
-#endif
-
-  pinMode(shutdownPin  , OUTPUT);
-  pin_set_inactive(shutdownPin, shutdownPinType);
-#ifdef POWER_HOLD_READY
-  pinMode(power_hold_ready_pin  , OUTPUT);
-  pin_set_active(power_hold_ready_pin, power_hold_ready_pin_type);
 #endif
 
   randomSeed(generateRamdomSeed());

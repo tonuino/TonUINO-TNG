@@ -231,10 +231,8 @@ TEST_F(buttons_test_fixture, all_commands) {
 
   for (state_for_command state: state_list) {
     state_for_command compare_state = state;
-#ifndef FIVEBUTTONS
     if (compare_state == state_for_command::play)
       compare_state = state_for_command::play_invert;
-#endif
     for (commandRaw raw_cmd: raw_cmd_list) {
       EXPECT_EQ(commands.getCommand(raw_cmd, state), cmd_table[static_cast<int>(raw_cmd)][static_cast<int>(compare_state)]);
     }

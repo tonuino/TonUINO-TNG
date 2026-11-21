@@ -47,17 +47,16 @@ inline void pin_set_level   (uint8_t pin, levelType pin_type, level l) { digital
 #endif
 
 template<int i> struct check_pcb {
-  enum {v = 0};
-  enum {s = v + check_pcb<i-1>::s};
-};
-template<> struct check_pcb<0> {
-  enum {s = 0};
+  static constexpr int s = check_pcb<i-1>::s;
 };
 
-#define DECL_PCB(i)           \
-template<> struct check_pcb<i> {       \
-  enum {v = 1};                  \
-  enum {s = v + check_pcb<i-1>::s};    \
+template<> struct check_pcb<0> {
+  static constexpr int s = 0;
+};
+
+#define DECL_PCB(i)                               \
+template<> struct check_pcb<i> {                  \
+  static constexpr int s = 1 + check_pcb<i-1>::s; \
 };
 
 #define SUM_PCB check_pcb<20>::s

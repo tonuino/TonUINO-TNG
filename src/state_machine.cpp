@@ -54,8 +54,10 @@ const __FlashStringHelper* str_VoiceMenu               () { return F("VMenu") ; 
 const __FlashStringHelper* str_to                      () { return F(" -> ") ; }
 const __FlashStringHelper* str_enter                   () { return F("enter ") ; }
 const __FlashStringHelper* str_abort                   () { return F(" abort") ; }
-
 }
+const __FlashStringHelper* str_WRITECARD               () { return F("WRITECARD: ") ; }
+const __FlashStringHelper* str_ERR                     () { return F("ERR") ; }
+const __FlashStringHelper* str_OK                      () { return F("OK") ; }
 
 // #######################################################
 
@@ -512,7 +514,7 @@ void WriteCard::react(command_e const &cmd_e) {
     }
     break;
   case end_writeCard:
-    if (timer.isExpired() && not mp3.isPlaying())
+    if (timer.isExpired() || not mp3.isPlayingMp3())
       current_subState = run_waitCardRemoved;
     break;
   case run_waitCardRemoved:
@@ -685,9 +687,10 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
   return false;
 }
 
-#ifdef TonUINO_Esp32
+#if defined(TonUINO_Esp32) || defined(SerialWriteCard)
 bool Base::checkForWritingCard(command cmd, command_e const &cmd_e) {
 
+#ifdef TonUINO_Esp32
   if (cmd == command::write_card_from_web) {
     if (chip_card.isCardRemoved()) {
       SM_writeCard::folder = settings.getShortCut(0);
@@ -696,10 +699,39 @@ bool Base::checkForWritingCard(command cmd, command_e const &cmd_e) {
       return true;
     }
   }
+#endif
+#ifdef SerialWriteCard
+  if (cmd == command::write_card_from_serial) {
+    if (chip_card.isCardRemoved()) {
+      SM_writeCard::folder = tonuino.getSerialWriteCard();
+      SM_writeCard::start();
+      writingCard           = true;
+      writingCardFromSerial = true;
+      return true;
+    }
+  }
+  if (cmd == command::write_card_cancel_from_serial) {
+    if (writingCard && writingCardFromSerial) {
+      SM_writeCard::dispatch(command_e{commandRaw::pauseLong}); // löst isAbort() aus, siehe SM<SMT>::isAbort()
+    }
+    else {
+      LOG(state_log, s_always, str_WRITECARD(), str_ERR());
+    }
+    return true;
+  }
+#endif
   if (writingCard) {
     SM_writeCard::dispatch(cmd_e);
-    if (SM_writeCard::is_in_state<finished_writeCard>() or SM_writeCard::is_in_state<finished_abort_writeCard>()) {
+    const bool finished       = SM_writeCard::is_in_state<finished_writeCard>();
+    const bool finished_abort = SM_writeCard::is_in_state<finished_abort_writeCard>();
+    if (finished or finished_abort) {
       writingCard = false;
+#ifdef SerialWriteCard
+      if (writingCardFromSerial) {
+        writingCardFromSerial = false;
+        LOG(state_log, s_always, str_WRITECARD(), (finished ? str_OK() : str_ERR()));
+      }
+#endif
     }
     return true;
   }
@@ -739,7 +771,7 @@ void Idle::react(command_e const &cmd_e) {
   if (checkForShortcutAndShutdown(cmd))
     return;
 
-#ifdef TonUINO_Esp32
+#if defined(TonUINO_Esp32) || defined(SerialWriteCard)
   if (checkForWritingCard(cmd, cmd_e))
     return;
 #endif
@@ -790,6 +822,12 @@ void Idle::react(command_e const &cmd_e) {
       transitToStartPlay<Play>();
       break;
 #endif
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+  case command::bat_volt_corr:
+    tonuino.getBatVoltage().setVoltageMeasurementCorrection(tonuino.getBatVoltageFromInput());
+    LOG(state_log, s_info, F("Bat Volt Corr set: "), settings.voltMeasCorrection);
+    return;
+#endif
   default:
     break;
   }
@@ -799,7 +837,7 @@ void Idle::react(card_e const &c_e) {
   if (c_e.card_ev != cardEvent::none) {
     LOG(state_log, s_debug, str_Idle(), F("::react(c) "), static_cast<int>(c_e.card_ev));
   }
-#ifdef TonUINO_Esp32
+#if defined(TonUINO_Esp32) || defined(SerialWriteCard)
   if (writingCard)
     return;
 #endif
@@ -939,7 +977,7 @@ void Pause::react(command_e const &cmd_e) {
   if (checkForShortcutAndShutdown(cmd))
     return;
 
-#ifdef TonUINO_Esp32
+#if defined(TonUINO_Esp32) || defined(SerialWriteCard)
   if (checkForWritingCard(cmd, cmd_e))
     return;
 #endif
@@ -963,6 +1001,12 @@ void Pause::react(command_e const &cmd_e) {
       transit<Play>();
     }
     return;
+#ifdef BAT_VOLTAGE_MEASUREMENT_CALIBRATION
+  case command::bat_volt_corr:
+    tonuino.getBatVoltage().setVoltageMeasurementCorrection(tonuino.getBatVoltageFromInput());
+    LOG(state_log, s_info, F("Bat Volt Corr set: "), settings.voltMeasCorrection);
+    return;
+#endif
   default:
     break;
   }
@@ -972,7 +1016,7 @@ void Pause::react(card_e const &c_e) {
   if (c_e.card_ev != cardEvent::none) {
     LOG(state_log, s_debug, str_Pause(), F("::react(c) "), static_cast<int>(c_e.card_ev));
   }
-#ifdef TonUINO_Esp32
+#if defined(TonUINO_Esp32) || defined(SerialWriteCard)
   if (writingCard)
     return;
 #endif
@@ -1018,7 +1062,7 @@ template<class P> void StartPlay<P>::entry() {
 template<class P> void StartPlay<P>::react(command_e const &cmd_e) {
   commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
   if (timer.isActive()) {
-    if (timer.isExpired()) {
+    if (mp3.isPlaying() || timer.isExpired()) {
       LOG(state_log, s_debug, str_StartPlay(), str_to(), str_Play());
       if (is_same_type<P, Play>::value && (settings.pauseWhenCardRemoved==1) && chip_card.isCardRemoved() && tonuino.playingCard())
         transit<Pause>();
@@ -1669,14 +1713,14 @@ void Admin_Allow::react(command_e const &cmd_e) {
 //    current_subState = play_match_intro;
 //    break;
 //  case play_match_intro    :
-//    if (timer.isExpired() && not mp3.isPlaying()) {
+//    if (timer.isExpired() || not mp3.isPlayingMp3()) {
 //      mp3.enqueueMp3FolderTrack(av);
 //      timer.start(dfPlayer_timeUntilStarts);
 //      current_subState = play_match_a;
 //    }
 //    break;
 //  case play_match_a        :
-//    if (timer.isExpired() && not mp3.isPlaying()) {
+//    if (timer.isExpired() || not mp3.isPlayingMp3()) {
 //      if (random(1, 3) == 2) {
 //        cv = av + bv;
 //        mp3.enqueueMp3FolderTrack(mp3Tracks::t_993_admin_calc);
@@ -1690,14 +1734,14 @@ void Admin_Allow::react(command_e const &cmd_e) {
 //    }
 //    break;
 //  case play_match_operation:
-//    if (timer.isExpired() && not mp3.isPlaying()) {
+//    if (timer.isExpired() || not mp3.isPlayingMp3()) {
 //      mp3.enqueueMp3FolderTrack(bv);
 //      timer.start(dfPlayer_timeUntilStarts);
 //      current_subState = play_match_b;
 //    }
 //    break;
 //  case play_match_b        :
-//    if (timer.isExpired() && not mp3.isPlaying()) {
+//    if (timer.isExpired() || not mp3.isPlayingMp3()) {
 //      numberOfOptions   = 255;
 //      startMessage      = mp3Tracks::t_0;
 //      messageOffset     = mp3Tracks::t_0;
@@ -1871,7 +1915,7 @@ void Admin_NewCard::react(command_e const &cmd_e) {
   }
   switch (current_subState) {
   case wait_track:
-    if (timer.isExpired() and not mp3.isPlaying())
+    if (timer.isExpired() || not mp3.isPlayingMp3())
       current_subState = start_setupCard;
     break;
   case start_setupCard:
@@ -2225,7 +2269,7 @@ void Admin_CardsForFolder::react(command_e const &cmd_e) {
     break;
 
   case prepare_writeCard:
-    if (timer.isExpired() && not mp3.isPlaying() && chip_card.isCardRemoved()) {
+    if ((timer.isExpired() || not mp3.isPlayingMp3()) && chip_card.isCardRemoved()) {
       if (special > special2) {
         LOG(state_log, s_debug, str_Admin_CardsForFolder(), str_to(), str_Idle());
         transit<Admin_End>();
@@ -2239,7 +2283,7 @@ void Admin_CardsForFolder::react(command_e const &cmd_e) {
     }
     break;
   case start_writeCard:
-    if (timer.isExpired() && not mp3.isPlaying() && chip_card.isCardRemoved()) {
+    if ((timer.isExpired() || not mp3.isPlayingMp3()) && chip_card.isCardRemoved()) {
       SM_writeCard::folder = folder;
       SM_writeCard::start();
       current_subState = run_writeCard;
@@ -2471,7 +2515,7 @@ void Admin_MemoryGameCards::react(command_e const &cmd_e) {
 
   switch (current_subState) {
   case prepare_writeCard:
-    if (timer.isExpired() && not mp3.isPlaying() && chip_card.isCardRemoved()) {
+    if ((timer.isExpired() || not mp3.isPlayingMp3()) && chip_card.isCardRemoved()) {
       if (folder.special == 255) {
         LOG(state_log, s_debug, str_Admin_MemoryGameCards(), str_to(), str_Idle());
         transit<Admin_End>();
@@ -2484,7 +2528,7 @@ void Admin_MemoryGameCards::react(command_e const &cmd_e) {
     }
     break;
   case start_writeCard:
-    if (timer.isExpired() && not mp3.isPlaying() && chip_card.isCardRemoved()) {
+    if ((timer.isExpired() || not mp3.isPlaying()) && chip_card.isCardRemoved()) {
       SM_writeCard::folder = folder;
       SM_writeCard::start();
       current_subState = run_writeCard;

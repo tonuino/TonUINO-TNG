@@ -90,7 +90,7 @@ bool Chip_card::auth(MFRC522::PICC_Type piccType) {
     byte size = sizeof(buffer);
     status = static_cast<MFRC522::StatusCode>(mfrc522.MIFARE_Read(3, buffer, &size));
     if (status != MFRC522::STATUS_OK) {
-      LOG(card_log, s_info, str_MIFARE_Read(), F("3"), str_failed(), printStatusCode(mfrc522, status));
+      LOG(card_log, s_error, str_MIFARE_Read(), F("3"), str_failed(), printStatusCode(mfrc522, status));
     }
     else {
       switch (buffer[2]) {

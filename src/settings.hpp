@@ -72,8 +72,12 @@ struct Settings {
   uint8_t     hpMaxVolume         {};
   uint8_t     hpMinVolume         {};
   uint8_t     hpInitVolume        {};
+#ifdef BAT_VOLTAGE_MEASUREMENT
+  uint16_t    voltMeasCorrection  {};
+#endif
+
 #ifdef TonUINO_Esp32
-  folderSettings cardFromWeb      {};
+  static folderSettings cardFromWeb; // should not stored on EEPROM
 #endif
 };
 
