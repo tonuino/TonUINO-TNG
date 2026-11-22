@@ -923,9 +923,7 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_out_early) {
 
   // end t_262_pling
   getMp3().end_track();
-  execute_cycle();
-  //execute_cycle_for_ms(dfPlayer_timeUntilStarts);
-  execute_cycle();
+  execute_cycle_for_ms(time_check_play);
   // should go to pause
   EXPECT_TRUE(SM_tonuino::is_in_state<Pause>());
   execute_cycle();
@@ -963,15 +961,13 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_swapped_in_start_play) {
   card_out();
   card_in(card2, track_count);
   EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay<Play>>());
+  EXPECT_TRUE(getMp3().is_playing_mp3());
 
   getMp3().end_track();
-  execute_cycle();
-  execute_cycle_for_ms(dfPlayer_timeUntilStarts);
-  execute_cycle();
+  execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
 
   // play 2-1
-  execute_cycle_for_ms(time_check_play);
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, card2.folder);
   EXPECT_EQ(getMp3().df_folder_track, 1);

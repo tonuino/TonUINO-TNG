@@ -151,7 +151,6 @@ public:
       if (df_playing_adv && --df_playing_adv_counter <= 0)
         end_adv();
 
-      pin_value[dfPlayer_busyPin] = !(df_playing && !called_end_adv);
       called_end_adv = false;
 
 
@@ -170,6 +169,7 @@ public:
         error_code = 0;
         T_NOTIFICATION_METHOD::OnError(*this, replyArg);
       }
+      pin_value[dfPlayer_busyPin] = !(df_playing && !called_end_adv);
     }
 
     // sd:/mp3/####track name

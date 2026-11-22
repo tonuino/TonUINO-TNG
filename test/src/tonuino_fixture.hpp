@@ -375,9 +375,7 @@ public:
 
     // end t_262_pling
     getMp3().end_track();
-    execute_cycle();
-    //execute_cycle_for_ms(dfPlayer_timeUntilStarts);
-    execute_cycle();
+    execute_cycle_for_ms(time_check_play);
     EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
 
     // play 1-1
@@ -461,9 +459,7 @@ public:
 
     // end t_262_pling
     getMp3().end_track();
-    execute_cycle();
-    //execute_cycle_for_ms(dfPlayer_timeUntilStarts);
-    execute_cycle();
+    execute_cycle_for_ms(time_check_play);
     EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   }
 #ifdef BUTTONS3X3

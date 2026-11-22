@@ -109,7 +109,8 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.4.0 (01.11.2026)
+## Version 3.4.0 (22.11.2026)
+- [Issue 347](https://github.com/tonuino/TonUINO-TNG/issues/347): Card swap during start of playback is not recognized
 - [Issue 349](https://github.com/tonuino/TonUINO-TNG/issues/349): Slow song start with players that don't send OnPlayFinished
 - [Issue 345](https://github.com/tonuino/TonUINO-TNG/issues/345): Write RFID cards via serial console (WRITECARD)
 - [Issue 342](https://github.com/tonuino/TonUINO-TNG/issues/342): Improve constants.hpp and configuration handling
