@@ -109,6 +109,7 @@ private:
 
   delayedSwitchOn     cardRemovedSwitch;
   bool                cardRemoved = true;
+  MFRC522::Uid        lastUid{};
 };
 
 #endif /* SRC_CHIP_CARD_HPP_ */

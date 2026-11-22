@@ -284,10 +284,15 @@ cardEvent Chip_card::getCardEvent() {
   byte bufferSize = sizeof(bufferATQA);
   MFRC522::StatusCode result = mfrc522.PICC_RequestA(bufferATQA, &bufferSize);
 
+  bool cardSwapped = false;
   if(result != mfrc522.STATUS_OK) {
     ++cardRemovedSwitch;
   } else {
-    mfrc522.PICC_ReadCardSerial();
+    if (mfrc522.PICC_ReadCardSerial()) {
+      // a card swapped faster than cardRemoveDelay is only visible by its uid
+      cardSwapped = mfrc522.uid.size != lastUid.size || memcmp(mfrc522.uid.uidByte, lastUid.uidByte, lastUid.size) != 0;
+      lastUid = mfrc522.uid;
+    }
     cardRemovedSwitch.reset();
   }
 
@@ -300,7 +305,7 @@ cardEvent Chip_card::getCardEvent() {
     }
   }
   else {
-    if (cardRemoved) {
+    if (cardRemoved || cardSwapped) {
       LOG(card_log, s_info, F("Card Ins"));
       cardRemoved = false;
       return cardEvent::inserted;
